@@ -30,6 +30,7 @@
     * FTP Service
     * Reverse Proxy
     * Repo sync
+    * Mail list
   * [Blog](https://git.ustclug.org/ustc-blog/ustc-blog/wikis/home)
   * Freeshell
   * Authority DNS
