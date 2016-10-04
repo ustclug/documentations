@@ -48,3 +48,4 @@
   * [Telegram Web](telegram-web/README.md)
   * FTP
   * USTC Life
+  * [Generate 204](generate-204/README.md)
