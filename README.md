@@ -45,6 +45,6 @@
   * PXE
   * LIIMS
   * BBS
-  * Telegram Web
+  * [Telegram Web](telegram-web/README.md)
   * FTP
   * USTC Life
