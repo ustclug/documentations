@@ -1,0 +1,44 @@
+# 开源镜像站
+
+## 历史
+
+### debian.ustc.edu.cn
+
+2000年左右，科大校内的Debian爱好者使用自己实验室的机器为大家提供Debian镜像服务。随着一届届师兄的毕业，服务器在各实验室间接力。
+
+2002年5月，Debian镜像站有了自己的域名debian.ustc.edu.cn，但服务器仍在实验室间辗转。
+
+2002年6月23日，科大Debian镜像站开始提供非官方(UO)软件仓库。2004年4月23日，提供新的UO仓库。
+
+2005年6月20日，科大LUG发起为科大Debian镜像站捐款的倡议，截至10月1日募捐活动停止，LUG共收到2922.05元捐款。10月6日新机器安装配置到位。在大家的齐心努力之下，科大Debian镜像站有了一个相对固定的“家”。
+
+2009年底，debian.ustc落户图书馆技术部。
+
+### oss.ustc.edu.cn
+
+2008年12月25日，科大开源软件(OSS)镜像站正式启用。其服务器由吴峰光师兄提供。Novell公司为我们提供了一块1.5T的硬盘。
+
+2009年12月，张成师兄为OSS镜像站提供捐赠1T硬盘。
+
+2010年6月，科大LUG使用出售版衫余下的钱为OSS镜像站添置了一块2T硬盘。
+
+### mirrors.ustc.edu.cn
+
+2011年4月8日，科大LUG从网络中心处获得了新的服务器，并申请到了mirrors.ustc的域名。debian.ustc与oss.ustc开始向mirrors.ustc迁移。
+
+同年4月15日，几大热门发行版镜像同步完毕。mirrors开始正式对外提供服务，同时debian.ustc与oss.ustc退出了历史舞台。
+
+2013年1月6日，科大LUG从网络中心处获得了新的磁盘阵列，大大缓解了mirrors因磁盘空间不足而带来的压力。
+
+## 硬件配置
+
+|    参数    |                  配置                  |
+| :------: | :----------------------------------: |
+|   CPU    | Intel(R) Xeon(R) CPU E5620 @ 2.40GHz |
+|   Mem    |                 16GB                 |
+|   Disk   |  LSI Logic MegaRAID SAS 8708EM2 x 2  |
+|          |       DFT RS-3016I-S/D30 磁盘阵列        |
+| Ethernet |  Ethernet	Intel 82574L Gigabit x 2   |
+
+
+机器型号是 曙光i620r-G [用户手册](https://ftp.ustclug.org/misc/Dawning-I620r-G.pdf)

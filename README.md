@@ -22,7 +22,7 @@
   * Google Apps
   * Mail Agent
 * Services
-  * Mirrors
+  * [Mirrors](mirrors/README.md)
     * Remote KVM
     * RAID
     * HTTP Service
