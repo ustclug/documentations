@@ -47,6 +47,6 @@
   * LIIMS
   * BBS
   * [Telegram Web](telegram-web/README.md)
-  * FTP
+  * [FTP](ftp/README.md)
   * USTC Life
   * [Generate 204](generate-204/README.md)
