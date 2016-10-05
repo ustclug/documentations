@@ -43,7 +43,7 @@
     * VPN
     * Web
   * [Light](services/light/README.md)
-  * GPG Key Server
+  * [PGP Key Server](services/pgp-key-server/README.md)
   * PXE
   * LIIMS
   * BBS
