@@ -10,7 +10,7 @@ Git Repositry:
 
 DockerHub: [ustclug/lug-vpn-web:light](https://hub.docker.com/r/ustclug/lug-vpn-web/)
 
-mail list: [[公测] 轻量级网络加速服务](https://groups.google.com/forum/#!topic/ustc_lug/EZAL7OdJa_E)
+mail list: [轻量级网络加速服务](https://groups.google.com/d/topic/ustc_lug/EZAL7OdJa_E/discussion)
 
 server:
 
