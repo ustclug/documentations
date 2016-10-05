@@ -10,7 +10,7 @@
     * slapd
     * GOSA2
     * SSH/sudo
-  * SSH Certificate Authentication
+  * [SSH Certificate Authentication](infrastructure/sshca/README.md)
   * vSphere cluster
     * ESXi
     * vCenter
