@@ -41,7 +41,7 @@
     * RADIUS
     * VPN
     * Web
-  * Light Accelerator
+  * [Light](light/README.md)
   * GPG Key Server
   * PXE
   * LIIMS
