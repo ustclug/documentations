@@ -5,7 +5,7 @@
 * Infrastructure
   * [Servers Intranet](infrastructure/intranet/README.md)
     * tinc
-    * LUGI VPN
+    * [LUGI VPN](infrastructure/intranet/lugivpn.md)
   * Servers Unified Authentication
     * slapd
     * GOSA2
