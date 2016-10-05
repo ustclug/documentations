@@ -2,7 +2,7 @@
 
 service: [FTP](ftp://ftp.ustclug.org), [HTTP](http://ftp.ustclug.org), [HTTPS](https://ftp.ustclug.org)
 
-Git Repository: [github.com/ustclug/docker-image/ftp](https://github.com/ustclug/docker-image/tree/master/ftp)
+Git Repository: [github.com/ustclug/lugftp](https://github.com/ustclug/lugftp)
 
 DockerHub: [ustclug/ftp](https://hub.docker.com/r/ustclug/ftp/)
 
