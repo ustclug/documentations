@@ -48,5 +48,5 @@
   * BBS
   * [Telegram Web](telegram-web/README.md)
   * [FTP](ftp/README.md)
-  * USTC Life
+  * [USTC Life](ustc-life/README.md)
   * [Generate 204](generate-204/README.md)
