@@ -11,7 +11,7 @@ There are two types of SSH Certificate:
 * Root certificate
 * Host certificate
 
-Root certificate can only used to issue a host certificate. Host certificate can be used for authentication on both server side and client side. But host certificate cannot issue a new certificate, it is the very difference from x509 certificate.
+Root certificate can only be used to issue a host certificate. Host certificate can be used for authentication on both server side and client side. But host certificate cannot issue a new certificate, it is the very difference from x509 certificate.
 
 Root certificate is stored in [cuihaoleo](https://github.com/cuihaoleo)'s loongson laptop. And [knight42](https://github.com/knight42) have another backup.
 
