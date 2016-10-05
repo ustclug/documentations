@@ -4,7 +4,7 @@ discussion:  [SSH升级到证书登陆方案讨论](https://groups.google.com/d/
 
 usage: [SSH证书认证的使用方法](https://groups.google.com/d/topic/lug-internal/2iQQ30qhbQ8/discussion)
 
-## Intraduction
+## Introduction
 
 There are two types of SSH Certificate:
 
