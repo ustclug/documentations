@@ -3,7 +3,7 @@
 
 
 * Infrastructure
-  * Servers Intranet
+  * [Servers Intranet](infrastructure/intranet/README.md)
     * tinc
     * LUGI VPN
   * Servers Unified Authentication
