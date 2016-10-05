@@ -22,7 +22,7 @@
   * Google Apps
   * Mail Agent
 * Services
-  * [Mirrors](mirrors/README.md)
+  * [Mirrors](services/mirrors/README.md)
     * Remote KVM
     * RAID
     * HTTP Service
@@ -30,7 +30,7 @@
     * FTP Service
     * Reverse Proxy
     * Repo sync
-    * [Mail list](mirrors/mail-list.md)
+    * [Mail list](services/mirrors/mail-list.md)
   * [Blog](https://git.ustclug.org/ustc-blog/ustc-blog/wikis/home)
   * Freeshell
   * Authority DNS
@@ -41,12 +41,12 @@
     * RADIUS
     * VPN
     * Web
-  * [Light](light/README.md)
+  * [Light](services/light/README.md)
   * GPG Key Server
   * PXE
   * LIIMS
   * BBS
-  * [Telegram Web](telegram-web/README.md)
-  * [FTP](ftp/README.md)
-  * [USTC Life](ustc-life/README.md)
-  * [Generate 204](generate-204/README.md)
+  * [Telegram Web](services/telegram-web/README.md)
+  * [FTP](services/ftp/README.md)
+  * [USTC Life](services/ustc-life/README.md)
+  * [Generate 204](services/generate-204/README.md)
