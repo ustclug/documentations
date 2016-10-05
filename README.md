@@ -19,6 +19,7 @@
   * SaltStack
   * Backup
   * Ganglia
+  * PPA
   * Google Apps
   * Mail Agent
 * Services
