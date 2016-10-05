@@ -24,7 +24,7 @@ Web Front 的 Git 仓库未配置 Webhook，所以需要更新前端的话，先
 
 ## 注意事项
 
-membership 由 [@zhsj](https://sks.ustclug.org/pks/lookup?op=vindex&search=0xCF0E265B7DFBB2F2) 维护，任何改动**请务**必事先联系。
+membership 由 [@zhsj](https://sks.ustclug.org/pks/lookup?op=vindex&search=0xCF0E265B7DFBB2F2) 维护，任何改动请**务必**事先联系。
 
 由于要和别人做 peer，所以对 sks.ustclug.org 域名的解析、docker 服务的部署有一定要求。假设 sks.ustclug.org 解析的 A 记录和 AAAA 记录
 集为 SetA，那么 container 内部访问外部的出口 ip 需在 SetA 里。这是因为做 peer 的对方会把 SetA 加入访问白名单。
