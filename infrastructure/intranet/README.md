@@ -16,7 +16,7 @@ tincVPN is a mesh VPN, which can be abstructed as a virtual Switch.
 
 vm-nfs.s.ustclug.org runs a layer 2 bridge, connecting tincVPN and SRW2024(physical switch).
 
-It is obvious that vm-nfs is a single point of failure for the communication network between tinc host and vSphere virtual machine. I tried to add another bridge node, but resulted in a broadcast storm. Maybe we can fix it by MPLS (merged in mainland kernel 4.3). But it isn't a right timing at this time.
+It is obvious that vm-nfs is a single point of failure of communicating between tinc host and vSphere virtual machine. I had tried to add another bridge node, but resulted in a broadcast storm. Maybe we can fix it by MPLS (merged in mainland kernel 4.3). But it isn't a right timing at this time.
 
 ## Network information
 
