@@ -6,10 +6,7 @@
   * [Servers Intranet](infrastructure/intranet/README.md)
     * tinc
     * [LUGI VPN](infrastructure/intranet/lugivpn.md)
-  * Servers Unified Authentication
-    * slapd
-    * GOSA2
-    * SSH/sudo
+  * [Servers Unified Authentication](infrastructure/sua/README.md)
   * [SSH Certificate Authentication](infrastructure/sshca/README.md)
   * vSphere cluster
     * ESXi
