@@ -22,10 +22,16 @@ It is obvious that vm-nfs is a single point of failure of communicating between 
 
 The network contains two subnets:
 
-* 10.254.0.0/24
+* 10.254.0.0/21
 * 10.254.10.0/24
 
-Every server binds one and only one IP address in 10.254.0.0/24, used to communicate with each other.
+Every server binds one and only one IP address in 10.254.0.0/21, used to communicate with each other.
 
 10.254.10.0/24 is used for 1to1 IP mapping. At this time, it just used between linode(10.254.10.2) and blog(10.254.10.1).
+
+### Address planning
+
+* 10.254.0.1~ 10.254.0.254: physics server and virtual machine
+* 10.254.1.1~ 10.254.1.254: docker container
+* other address: not used yet.
 
