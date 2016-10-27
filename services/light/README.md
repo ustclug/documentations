@@ -28,6 +28,8 @@ server:
   * 29980 -> light-server.d.ustclug.org:29980
 * revproxy-el.s.ustclug.org (reverse proxy)
   * light.ustclug.org -> light-web.d.ustclug.org
+* docker2.s.ustclug.org
+  * LUG FTP:  [http://ftp.ustclug.org/light/](http://ftp.ustclug.org/light/)
 
 ## deploy
 
