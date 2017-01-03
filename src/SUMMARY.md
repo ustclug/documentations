@@ -27,7 +27,7 @@
         - Reverse Proxy
         - Repo sync
         - [Mail list](services/mirrors/mail-list.md)
-    - [Blog](https://git.ustclug.org/ustc-blog/ustc-blog/wikis/home)
+    - [Blog](services/blog/blog.md)
     - Freeshell
     - Authority DNS
     - Neat DNS
