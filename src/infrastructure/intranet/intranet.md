@@ -4,7 +4,7 @@ Servers Intranet connect all the servers together, including physics servers and
 
 ## Network Topology
 
-![topology](img/topology.png)
+![topology](infrastructure/intranet/img/topology.png)
 
 The network contains three parts:
 

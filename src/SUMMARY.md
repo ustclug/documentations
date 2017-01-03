@@ -1,0 +1,49 @@
+# USTC LUG Servers Maintaining Documentation
+
+- [Infrastructure](infrastructure/infrastructure.md)
+    - [Servers Intranet](infrastructure/intranet/intranet.md)
+        - tinc
+        - [LUGI VPN](infrastructure/intranet/lugivpn.md)
+    - [Servers Unified Authentication](infrastructure/sua/sua.md)
+    - [SSH Certificate Authentication](infrastructure/sshca/sshca.md)
+    - vSphere cluster
+        - ESXi
+        - vCenter
+        - NFS
+        - VDP
+    - SaltStack
+    - Backup
+    - Ganglia
+    - PPA
+    - Google Apps
+    - Mail Agent
+- [Services](services/services.md)
+    - [Mirrors](services/mirrors/mirrors.md)
+        - Remote KVM
+        - RAID
+        - HTTP Service
+        - RSYNC Service
+        - FTP Service
+        - Reverse Proxy
+        - Repo sync
+        - [Mail list](services/mirrors/mail-list.md)
+    - [Blog](https://git.ustclug.org/ustc-blog/ustc-blog/wikis/home)
+    - Freeshell
+    - Authority DNS
+    - Neat DNS
+    - GitLab
+    - DokuWiki
+    - LUG VPN
+        - RADIUS
+        - VPN
+        - Web
+    - [Light](services/light/light.md)
+    - [PGP Key Server](services/pgp-key-server/pgp-key-server.md)
+    - PXE
+    - LIIMS
+    - BBS
+    - [Telegram Web](services/telegram-web/telegram-web.md)
+    - [FTP](services/ftp/ftp.md)
+    - [USTC Life](services/ustc-life/ustc-life.md)
+    - [Generate 204](services/generate-204/generate-204.md)
+
