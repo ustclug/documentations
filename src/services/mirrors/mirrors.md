@@ -30,15 +30,4 @@
 
 2013年1月6日，科大LUG从网络中心处获得了新的磁盘阵列，大大缓解了mirrors因磁盘空间不足而带来的压力。
 
-## 硬件配置
-
-|    参数    |                  配置                  |
-| :------: | :----------------------------------: |
-|   CPU    | Intel(R) Xeon(R) CPU E5620 @ 2.40GHz |
-|   Mem    |                 16GB                 |
-|   Disk   |  LSI Logic MegaRAID SAS 8708EM2 x 2  |
-|          |       DFT RS-3016I-S/D30 磁盘阵列        |
-| Ethernet |  Ethernet	Intel 82574L Gigabit x 2   |
-
-
-机器型号是 曙光i620r-G [用户手册](https://ftp.ustclug.org/misc/Dawning-I620r-G.pdf)
+2016年12月29日，科大LUG从网络中心处获得了新的服务器。解决了近一年来由于服务器和阵列老化带来的稳定性问题。

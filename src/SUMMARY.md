@@ -19,6 +19,7 @@
     - Mail Agent
 - [Services](services/services.md)
     - [Mirrors](services/mirrors/mirrors.md)
+        - [Hardware](services/mirrors/hardware.md)
         - Remote KVM
         - RAID
         - HTTP Service
