@@ -4,10 +4,10 @@ service: [light.ustclug.org](https://light.ustclug.org)
 
 Git Repositry: 
 
-* [github.com/ustclug/light-server](https://github.com/ustclug/light-server)
-* [github.com/ustclug/lug-vpn-web:light](https://github.com/ustclug/lug-vpn-web/tree/light)
-* [accelerate list](https://git.ustclug.org/lug-light/accelerate-list)
-* [light doc](https://git.ustclug.org/lug-light/light-doc)
+* [Server Daemon](https://github.com/ustclug/light-server)
+* [Web UI](https://github.com/ustclug/lug-vpn-web/tree/light)
+* [Accelerate list](https://github.com/ustclug/light-list)
+* [Documentation](https://git.ustclug.org/lug-light/light-doc)
 
 DockerHub: 
 
@@ -51,11 +51,4 @@ git commit -v -a
 git push origin master
 ```
 
-## Genterate PAC
-
-```sh
-git clone https://git.ustclug.org/lug-light/accelerate-list.git
-cd accelerate-list
-./tools/pac-generator.sh accelerate.list
-```
-
+Travis CI will update PAC files in LUG FTP automatically.
