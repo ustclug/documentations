@@ -10,4 +10,4 @@ server: docker2.s.ustclug.org
 
 theme: [h5ai](https://larsjung.de/h5ai/)
 
-deploy: [ftp.sls](https://git.ustclug.org/ustclug/sls/blob/master/service/ftp.sls)
+deploy: [ftp.sh](https://git.ustclug.org/ustclug/docker-run-script/blob/master/ftp/ftp.sh)
