@@ -1,6 +1,6 @@
 # LUG FTP
 
-service: [FTP](ftp://ftp.ustclug.org), [HTTP](http://ftp.ustclug.org), [HTTPS](https://ftp.ustclug.org)
+service: [FTP/FTPS](ftp://ftp.ustclug.org), [SFTP](sftp://ftp.ustclug.org), [HTTP](http://ftp.ustclug.org), [HTTPS](https://ftp.ustclug.org), [AFP](afp://ftp.ustclug.org)
 
 Git Repository: [github.com/ustclug/lugftp](https://github.com/ustclug/lugftp)
 
