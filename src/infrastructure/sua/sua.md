@@ -1,4 +1,4 @@
-# LDAP服务使用及配置说明 
+# LDAP服务使用及配置说明
 
 LDAP是轻量目录访问协议，我们用的软件是OpenLDAP。
 
@@ -6,7 +6,7 @@ LDAP的配置很麻烦，所以装了一个网页前端来配置它，网页前�
 
 ## GOsa 使用
 
-网页界面位于 [ldap.ustclug.org](http://ldap.ustclug.org)。
+网页界面位于 [ldap.ustclug.org](http://ldap.ustclug.org/gosa)。
 
 用你的账号登录进去之后，可以在右上角退出，右上角还有两个按钮分别是修改账号信息和修改密码。账号信息第一页大部分是没用的，只有一个登录名是有用的，这是你登录任何地方的用户名。
 
@@ -61,7 +61,7 @@ SUDOERS_BASE ou=sudoers,dc=lug,dc=ustc,dc=edu,dc=cn
 
 为了安全性考虑，要以ldaps的方式连接ldap服务器,同时应配置好证书(/etc/ldap/ssl/slapd-ca-cert.pem,暂时需要从其它服务器下载)
 
-#### /etc/sudo-ldap.conf 
+#### /etc/sudo-ldap.conf
 
 这个文件应该直接软链接到 /etc/ldap/ldap.conf。
 
@@ -151,7 +151,7 @@ session     optional      pam_ldap.so
     authconfig --enablecache \
            --enableldap \
            --enableldapauth \
-           --ldapserver=ldap.lug.ustc.edu.cn \
+           --ldapserver="ldaps://ldap.lug.ustc.edu.cn/" \
            --ldapbasedn="dc=lug,dc=ustc,dc=edu,dc=cn" \
            --enableshadow \
            --enablemkhomedir \
@@ -162,10 +162,10 @@ session     optional      pam_ldap.so
 Sudo 的配置是通过 sssd 实现的，参考[https://access.redhat.com/site/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Deployment_Guide/sssd-ldap-sudo.html](https://access.redhat.com/site/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Deployment_Guide/sssd-ldap-sudo.html)
 
 安装 sssd libsss_sudo
-将 /usr/share/doc/sssd-xxx/sssd-example.conf 复制到 /etc/sssd/sssd.conf 并修改权限为 600。
+将 /usr/share/doc/sssd-common-xxx/sssd-example.conf 复制到 /etc/sssd/sssd.conf 并修改权限为 600。
 
 ```
-[zguangyu@pxe ~]$ sudo diff /usr/share/doc/sssd-1.9.2/sssd-example.conf /etc/sssd/sssd.conf
+[zguangyu@pxe ~]$ sudo diff /usr/share/doc/sssd-common-1.14.0/sssd-example.conf /etc/sssd/sssd.conf
 3c3
 < services = nss, pam
 ---
@@ -188,7 +188,7 @@ Sudo 的配置是通过 sssd 实现的，参考[https://access.redhat.com/site/d
 < ; ldap_search_base = dc=mydomain,dc=org
 ---
 > ldap_schema = rfc2307
-> ldap_uri = ldap://ldap.lug.ustc.edu.cn
+> ldap_uri = ldaps://ldap.lug.ustc.edu.cn/
 > ldap_search_base = dc=lug,dc=ustc,dc=edu,dc=cn
 > ldap_sudo_search_base = ou=sudoers,dc=lug,dc=ustc,dc=edu,dc=cn
 30c31
@@ -196,6 +196,8 @@ Sudo 的配置是通过 sssd 实现的，参考[https://access.redhat.com/site/d
 ---
 > cache_credentials = true
 ```
+
+另外记得像前面在 Debian 中安装介绍到的那样修改 `/etc/nsswitch.conf` 以及 `/etc/nslcd.conf`.
 
 ### NSCD 使用说明
 
