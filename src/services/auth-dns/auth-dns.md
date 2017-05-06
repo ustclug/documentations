@@ -15,6 +15,9 @@ servers:
 * Bind Dockerfile
   https://github.com/zhsj/dockerfile/tree/master/bind9
 
+The bind configuration repository is only visible to admins since private key is
+included.
+
 ```
 # copy the ssh key https://git.ustclug.org/ustclug/auth-dns/blob/master/git_pull_key
 # to ~/.ssh/id_ed25519
@@ -35,3 +38,11 @@ docker run --restart=always -v /var/lib/bind/:/etc/bind \
 
 Just commit your change to the configuartion repository.
 More details can be found in the repository.
+
+## Webhook
+
+Please add a webhook in the configuration repository, so that the DNS record
+can be automatically updated when we commit.
+
+The webhook endpoint is http://<server_ip>:9000/hooks/bind, see
+https://git.ustclug.org/ustclug/auth-dns/settings/integrations for example.
