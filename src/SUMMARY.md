@@ -30,7 +30,7 @@
         - [Mail list](services/mirrors/mail-list.md)
     - [Blog](services/blog/blog.md)
     - Freeshell
-    - Authority DNS
+    - [Authority DNS](services/auth-dns/auth-dns.md)
     - Neat DNS
     - GitLab
     - DokuWiki
