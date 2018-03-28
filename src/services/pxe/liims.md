@@ -38,4 +38,4 @@ qemu -kernel /mnt/boot/vmlinuz-lts\
      -append "root=/dev/sda rootflags=rw"
 ```
 
-注：其中netdev中的ip端是自由选取，`device`中的设备名通过`qemu -device \?`查看后选择任一网络设备即可
+注：其中netdev中的ip段可以自由选取，`device`中的设备名通过`qemu -device \?`查看后选择任一网络设备即可
