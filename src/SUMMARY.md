@@ -41,7 +41,7 @@
     - [Light](services/light/light.md)
     - [PGP Key Server](services/pgp-key-server/pgp-key-server.md)
     - [PXE](#)
-    - [LIIMS](#)
+    - [LIIMS](services/liims/liims.md)
     - [Telegram Web](services/telegram-web/telegram-web.md)
     - [FTP](services/ftp/ftp.md)
     - [USTC Life](services/ustc-life/ustc-life.md)
