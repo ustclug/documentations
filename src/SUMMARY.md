@@ -4,7 +4,7 @@
     - [Servers Intranet](infrastructure/intranet/intranet.md)
         - [tinc](#)
         - [LUGI VPN](infrastructure/intranet/lugivpn.md)
-    - [Servers Unified Authentication](infrastructure/sua/sua.md)
+    - [Servers Unified Authentication (LDAP)](infrastructure/sua/sua.md)
     - [SSH Certificate Authentication](infrastructure/sshca/sshca.md)
     - [vSphere cluster](#)
         - [ESXi](#)
