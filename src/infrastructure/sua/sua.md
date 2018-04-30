@@ -42,7 +42,7 @@ Debian 7系统需要安装如下软件包，libnss-ldapd libpam-ldapd sudo-ldap�
 
 在安装过程中会被问一些问题（不同版本的 Debian 的问题可能不同）：
 
-- ldap 服务器地址是 ''ldap://ldap.lug.ustc.edu.cn''
+- ldap 服务器地址是 ''ldaps://ldap.lug.ustc.edu.cn''
 - Base DN为 ''dc=lug,dc=ustc,dc=edu,dc=cn''
     - 协议为版本3
     - 配置 libnss-ldapd 时有个选 “Name services to configure” 的，全部选
