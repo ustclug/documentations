@@ -1,5 +1,7 @@
 # USTC LUG Servers Maintaining Documentation
 
+- [Workflow](workflow/workflow.md)
+    - [New VM in vSphere](workflow/vSphere/new_vm.md)
 - [Infrastructure](infrastructure/infrastructure.md)
     - [Servers Intranet](infrastructure/intranet/intranet.md)
         - [tinc](#)
