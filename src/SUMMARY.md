@@ -13,7 +13,7 @@
         - [VDP](#)
     - [SaltStack](#)
     - [Backup](#)
-    - [Ganglia](#)
+    - [Monitor](infrastructure/monitor/monitor.md)
     - [PPA](#)
     - [Google Apps](#)
     - [Mail Agent](#)
