@@ -4,7 +4,9 @@ Servers Intranet connect all the servers together, including physics servers and
 
 ## Network Topology
 
-![topology](infrastructure/intranet/img/topology.png)
+![topology](http://hfs.mirrors.asia/8d51c8be9b35ce55f509bfbe79a684512148ad138f376f34df4fe8a740f38199?type=image/svg+xml)
+
+以上架构图由Hypercube在2018年5月更新。以下信息是过时的，不过有参考价值。
 
 The network contains three parts:
 
