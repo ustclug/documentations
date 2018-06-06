@@ -38,7 +38,7 @@
 
 此类限制规则位于应用程序内。由于在用户态程序中实现，因此更加灵活。
 
-### Nginx
+### Nginx LUA组件
 
 代码位于 [/etc/nginx/lua/access.lua](https://git.ustclug.org/mirrors/nginx-config/blob/master/lua/access.lua)
 
@@ -82,7 +82,26 @@
 
 限制器之间相互独立，当触发了多个限制器时，应用等待时间较长的限制器。
 
-### Rsync
+### NGINX JS 挑战
+
+代码位于[/etc/nginx/sites-available/iso.mirrors.ustc.edu.cn](https://git.ustclug.org/mirrors/nginx-config/blob/master/sites-available/iso.mirrors.ustc.edu.cn)
+
+为了抵抗“迅雷攻击”。对于特定类型的文件，开启了JS挑战。 如果客户端User-Agent为Mozilla（即浏览器），则发送一段包含JS脚本的页面，检验运行的结果。如果挑战失败，则返回错误。
+
+被保护的文件类型有：
+
+* iso
+* exe
+* dmg
+* run
+* zip
+* tar
+
+### NGINX 爬虫限制
+
+如果客户端User-Agent包含Spider、Robot关键字， 则禁止其访问仓库内容。避免由于频繁列目录带来大量IO负载。
+
+### Rsync 总连接数限制
 
 Rsync服务设置了总连接数限制。即：当建立的连接数到达某个阈值后，拒绝之后收到的连接。
 
