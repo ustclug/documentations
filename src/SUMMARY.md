@@ -28,6 +28,7 @@
         - [RSYNC Service](#)
         - [FTP Service](#)
         - [Reverse Proxy](#)
+        - [Limiter](services/mirrors/limiter.md)
         - [Repo sync](#)
         - [Mail list](services/mirrors/mail-list.md)
     - [Blog](services/blog/blog.md)
