@@ -1,1 +1,1 @@
-Refer to [Gitlab Wiki](https://git.ustclug.org/ustc-blog/ustc-blog/wikis/home).
+Refer to [Gitlab Wiki](https://git.lug.ustc.edu.cn/ustc-blog/ustc-blog/wikis/home).

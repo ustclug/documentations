@@ -7,7 +7,7 @@ Git Repositry:
 * [Server Daemon](https://github.com/ustclug/light-server)
 * [Web UI](https://github.com/ustclug/lug-vpn-web/tree/light)
 * [Accelerate list](https://github.com/ustclug/light-list)
-* [Documentation](https://git.ustclug.org/lug-light/light-doc)
+* [Documentation](https://git.lug.ustc.edu.cn/lug-light/light-doc)
 
 DockerHub: 
 
@@ -33,7 +33,7 @@ server:
 
 ## deploy
 
-deploy script: [docker-run-script/light](https://git.ustclug.org/ustclug/docker-run-script/tree/master/light)
+deploy script: [docker-run-script/light](https://git.lug.ustc.edu.cn/ustclug/docker-run-script/tree/master/light)
 
 deploy order:
 
@@ -44,7 +44,7 @@ deploy order:
 ## Add new domain
 
 ```sh
-git clone https://git.ustclug.org/lug-light/accelerate-list.git
+git clone https://git.lug.ustc.edu.cn/lug-light/accelerate-list.git
 cd accelerate-list
 ./tools/add-domain.sh accelerate.list www.example.com
 git commit -v -a

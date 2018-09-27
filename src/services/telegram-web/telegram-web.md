@@ -6,7 +6,7 @@ Repository：[github.com/ustclug/telegram-web](https://github.com/ustclug/telegr
 
 DockerHub：[ustclug/telegram-web](https://hub.docker.com/r/ustclug/telegram-web)
 
-Deployment：[telegram-web.sh](https://git.ustclug.org/ustclug/docker-run-script/blob/master/telegram-web/telegram-web.sh)
+Deployment：[telegram-web.sh](https://git.lug.ustc.edu.cn/ustclug/docker-run-script/blob/master/telegram-web/telegram-web.sh)
 
 Servers：
 

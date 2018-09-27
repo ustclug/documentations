@@ -40,7 +40,7 @@
 
 ### Nginx LUA组件
 
-代码位于 [/etc/nginx/lua/access.lua](https://git.ustclug.org/mirrors/nginx-config/blob/master/lua/access.lua)
+代码位于 [/etc/nginx/lua/access.lua](https://git.lug.ustc.edu.cn/mirrors/nginx-config/blob/master/lua/access.lua)
 
 目前使用了Nginx的lua语言扩展实现对请求的限制。主要有以下三类限制方式：
 
@@ -84,7 +84,7 @@
 
 ### NGINX JS 挑战
 
-代码位于[/etc/nginx/sites-available/iso.mirrors.ustc.edu.cn](https://git.ustclug.org/mirrors/nginx-config/blob/master/sites-available/iso.mirrors.ustc.edu.cn)
+代码位于[/etc/nginx/sites-available/iso.mirrors.ustc.edu.cn](https://git.lug.ustc.edu.cn/mirrors/nginx-config/blob/master/sites-available/iso.mirrors.ustc.edu.cn)
 
 为了抵抗“迅雷攻击”。对于特定类型的文件，开启了JS挑战。 如果客户端User-Agent为Mozilla（即浏览器），则发送一段包含JS脚本的页面，检验运行的结果。如果挑战失败，则返回错误。
 
@@ -99,7 +99,7 @@
 
 ### 爬虫限制
 
-代码位于[/etc/nginx/snippets/robots](https://git.ustclug.org/mirrors/nginx-config/blob/master/snippets/robots)
+代码位于[/etc/nginx/snippets/robots](https://git.lug.ustc.edu.cn/mirrors/nginx-config/blob/master/snippets/robots)
 
 如果客户端User-Agent包含Spider、Robot关键字， 则禁止其访问仓库内容。避免由于频繁列目录带来大量IO负载。
 
