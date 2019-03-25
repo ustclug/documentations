@@ -4,7 +4,7 @@ Servers Intranet connect all the servers together, including physics servers and
 
 ## Network Topology
 
-![topology](http://hfs.mirrors.asia/8d51c8be9b35ce55f509bfbe79a684512148ad138f376f34df4fe8a740f38199?type=image/svg+xml)
+<iframe frameborder="0" style="width:100%;height:1100px;" src="https://www.draw.io/?lightbox=1&highlight=0000ff&edit=_blank&layers=1&nav=1&title=LUG%20Network.html#Uhttps%3A%2F%2Fdrive.google.com%2Fa%2F0x01.me%2Fuc%3Fid%3D1WAROAPB8ThTkIjMyFnGvtGgbH-TV4FWh%26export%3Ddownload"></iframe>
 
 以上架构图由Hypercube在2018年5月更新。以下信息是过时的，不过有参考价值。
 
