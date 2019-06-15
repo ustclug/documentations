@@ -32,7 +32,6 @@
         - [Repo sync](#)
         - [Mail list](services/mirrors/mail-list.md)
     - [Blog](services/blog/blog.md)
-    - [Freeshell](#)
     - [Authority DNS](services/auth-dns/auth-dns.md)
     - [Neat DNS](#)
     - [GitLab](#)
@@ -49,4 +48,5 @@
     - [FTP](services/ftp/ftp.md)
     - [USTC Life](services/ustc-life/ustc-life.md)
     - [Generate 204](services/generate-204/generate-204.md)
+    - [Discontinued Services](services/discontinued/discontinued.md)
 
