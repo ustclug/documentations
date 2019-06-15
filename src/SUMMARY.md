@@ -1,4 +1,4 @@
-# USTC LUG Servers Maintaining Documentation
+# USTC LUG Service Maintenance Documentation
 
 - [Workflow](workflow/workflow.md)
     - [New VM in vSphere](workflow/vSphere/new_vm.md)
