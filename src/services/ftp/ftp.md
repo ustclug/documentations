@@ -6,7 +6,7 @@ Git Repository: [github.com/ustclug/lugftp](https://github.com/ustclug/lugftp)
 
 DockerHub: [ustclug/ftp](https://hub.docker.com/r/ustclug/ftp/)
 
-server: docker2.s.ustclug.org
+server: vdp.s.ustclug.org
 
 theme: [h5ai](https://larsjung.de/h5ai/)
 
