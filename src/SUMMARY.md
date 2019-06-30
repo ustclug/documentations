@@ -1,6 +1,8 @@
 # USTC LUG Service Maintenance Documentation
 
+- [Overview](overview/overview.md)
 - [Workflow](workflow/workflow.md)
+    - [Mirrors maintenance](workflow/mirrors/maintenance.md)
     - [New VM in vSphere](workflow/vSphere/new_vm.md)
 - [Infrastructure](infrastructure/infrastructure.md)
     - [Servers Intranet](infrastructure/intranet/intranet.md)
@@ -17,7 +19,7 @@
     - [Backup](#)
     - [Monitor](infrastructure/monitor/monitor.md)
     - [PPA](#)
-    - [Google Apps](#)
+    - [Google Apps / G Suite](#)
     - [Mail Agent](#)
 - [Services](services/services.md)
     - [Mirrors](services/mirrors/mirrors.md)
