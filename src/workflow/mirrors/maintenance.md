@@ -15,3 +15,7 @@
 ### 内核更新
 
 mirrors 使用了内核模块提供一些功能支持，如 ZFS。因此只要更新了内核，就需要手动运行 `dkms autoinstall`，以确保新内核重启时能正确加载必须的内核模块。
+
+## IPMI
+
+地址*暂无*（需要接入 LUGI VPN），一般用浏览器直接访问就行了。如果需要接入终端，Dashboard 左边的 Remote Control 有 Launch 按钮。如果浏览器不支持 Java 就会下载一个 `jviewer.jnlp`，自行解决 Java 的安全警告即可使用。
