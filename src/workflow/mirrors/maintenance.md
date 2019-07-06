@@ -19,3 +19,5 @@ mirrors 使用了内核模块提供一些功能支持，如 ZFS。因此只要�
 ## IPMI
 
 地址*暂无*（需要接入 LUGI VPN），一般用浏览器直接访问就行了。如果需要接入终端，Dashboard 左边的 Remote Control 有 Launch 按钮。如果浏览器不支持 Java 就会下载一个 `jviewer.jnlp`，自行解决 Java 的安全警告即可使用。
+
+当然如果会用 `ipmitool` 更好，那这一段的说明就交给你来补充了 :)
