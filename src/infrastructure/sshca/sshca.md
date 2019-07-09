@@ -17,7 +17,7 @@ Root certificate is stored in [cuihaoleo](https://github.com/cuihaoleo)'s loongs
 
 ## issue a server certificate
 
-copy the `/etc/ssh/ssh_host_rsa_key.pub` from target server. (salt is your frined)
+copy the `/etc/ssh/ssh_host_rsa_key.pub` from target server. (salt is your friend)
 
 Then, run `ssh-keygen` to issue a public key. For example:
 
@@ -33,7 +33,7 @@ At last, add the following line to `/etc/ssh/sshd_config`:
 HostCertificate /etc/ssh/ssh_host_rsa_key-cert.pub
 ```
 
-Certificate will take effect until ssh daemon restarted.
+Certificate will take effect after ssh daemon is restarted.
 
 ## issue a client certificate
 
