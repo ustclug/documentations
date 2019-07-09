@@ -1,12 +1,12 @@
 # LDAP服务使用及配置说明
 
-LDAP是轻量目录访问协议，我们用的软件是OpenLDAP。
+LDAP 是轻量目录访问协议，我们用的软件是 OpenLDAP。
 
-LDAP的配置很麻烦，所以装了一个网页前端来配置它，网页前端是gosa。
+LDAP 的配置很麻烦，所以装了一个网页前端来配置它，网页前端是 GOsa。
 
 ## GOsa 使用
 
-网页界面位于 [ldap.ustclug.org](http://ldap.ustclug.org/gosa)。
+网页界面位于 [ldap.lug.ustc.edu.cn](https://ldap.lug.ustc.edu.cn/gosa)。
 
 用你的账号登录进去之后，可以在右上角退出，右上角还有两个按钮分别是修改账号信息和修改密码。账号信息第一页大部分是没用的，只有一个登录名是有用的，这是你登录任何地方的用户名。
 
@@ -36,7 +36,7 @@ gosa的配置文件在/etc/gosa/gosa.conf，它是在第一次运行gosa时候�
 
 #### 软件包安装
 
-Debian 7系统需要安装如下软件包，libnss-ldapd libpam-ldapd sudo-ldap。Debian 5 中没有 libpam-ldapd，相应的软件包叫做 libpam-ldap。
+Debian 8 以上系统安装 slapd ldap-utils sudo-ldap
 
 注 ：更新这些软件包时，注意保留一个root终端，更新后可能需要重启daemon进程
 
@@ -54,16 +54,17 @@ Debian 7系统需要安装如下软件包，libnss-ldapd libpam-ldapd sudo-ldap�
 ```
 BASE dc=lug,dc=ustc,dc=edu,dc=cn
 URI ldaps://ldap.lug.ustc.edu.cn
-TLS_CACERT /etc/ldap/ssl/slapd-ca-cert.pem
+SSL yes
+TLS_CACERT /etc/ldap/slapd-ca-cert.pem
 TLS_REQCERT demand
 SUDOERS_BASE ou=sudoers,dc=lug,dc=ustc,dc=edu,dc=cn
 ```
 
-为了安全性考虑，要以ldaps的方式连接ldap服务器,同时应配置好证书(/etc/ldap/ssl/slapd-ca-cert.pem,暂时需要从其它服务器下载)
+为了安全性考虑，要以ldaps的方式连接ldap服务器,同时应配置好证书(/etc/ldap/slapd-ca-cert.pem, 从其它服务器复制一个)
 
 #### /etc/sudo-ldap.conf
 
-这个文件应该直接软链接到 /etc/ldap/ldap.conf。
+这个文件应该直接软链接到 /etc/ldap/ldap.conf，通常 dpkg 已经为你创建好了。
 
 #### /etc/nslcd.conf
 
@@ -253,7 +254,6 @@ nscd -i group
 * 从上文的规范来讲，应该从 2000 开始编号 GID，但有些组可能创建者没注意，不过后期再改就不方便了。
 * ssh\_* 这些组，是在每个主机的 sshd\_config 里只允许相应的组登陆。
 * sudo\_* 这些组，是在 LDAP sudo rules 里允许了相应的组。
-
 
 ---
 

@@ -6,7 +6,7 @@
     - [New VM in vSphere](workflow/vSphere/new_vm.md)
 - [Infrastructure](infrastructure/infrastructure.md)
     - [Servers Intranet](infrastructure/intranet/intranet.md)
-        - [tinc](#)
+        - [tinc](infrastructure/tinc/tinc.md)
         - [LUGI VPN](infrastructure/intranet/lugivpn.md)
     - [Servers Unified Authentication (LDAP)](infrastructure/sua/sua.md)
     - [SSH Certificate Authentication](infrastructure/sshca/sshca.md)
