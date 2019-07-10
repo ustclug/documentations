@@ -1,4 +1,4 @@
-FROM centos:7
+FROM debian:buster
 ARG MDBOOK_VERSION=v0.3.0
 RUN curl -sSL https://github.com/azerupi/mdBook/releases/download/${MDBOOK_VERSION}/mdBook-${MDBOOK_VERSION}-x86_64-unknown-linux-gnu.tar.gz | tar -C /usr/bin -xzf -
 ADD src /tmp/src
