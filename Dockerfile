@@ -1,6 +1,10 @@
 FROM debian:buster
 ARG MDBOOK_VERSION=v0.3.0
-RUN wget -qO - https://github.com/azerupi/mdBook/releases/download/${MDBOOK_VERSION}/mdBook-${MDBOOK_VERSION}-x86_64-unknown-linux-gnu.tar.gz | tar -C /usr/bin -xzf -
+RUN DEBIAN_FRONTEND=noninteractive && \
+  apt update && \
+  apt -y install wget && \
+  rm -rf /root/* /tmp/* /var/tmp/* /var/lib/apt/lists/* && \
+  wget -qO - https://github.com/azerupi/mdBook/releases/download/${MDBOOK_VERSION}/mdBook-${MDBOOK_VERSION}-x86_64-unknown-linux-gnu.tar.gz | tar -C /usr/bin -xzf -
 ADD src /tmp/src
 WORKDIR /tmp
 RUN mdbook build
