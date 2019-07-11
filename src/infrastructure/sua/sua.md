@@ -12,23 +12,26 @@ LDAP 的配置很麻烦，所以装了一个网页前端来配置它，网页前
 
 ### Users 和 Groups
 
-Users是用来添加和配置用户信息的地方。最主要的功能位于每个User的第二页POSIX，这里可以设置用户的家目录，UID，GID，以及所属的用户组。这里需要注意的地方如下：
+Users 是用来添加和配置用户信息的地方。最主要的功能位于每个 User 的第二页 POSIX，这里可以设置用户的家目录，UID，GID，以及所属的用户组。这里需要注意的地方如下：
 
-* UID，GID从2000开始计数，由于gosa不能对UID自动增长，所以管理员需要人工增长，GID建议不要每人一个，我们建一个member组，给大家都加进来，这样就只需要考虑UID的增长了。
-* 建账号之前先注意一下各个服务器上有没有相同的用户名，有的话把原家目录chown到新的UID，GID，删除同名用户。
+* UID，GID从2000开始计数，由于gosa不能对UID自动增长，所以管理员需要人工增长。方法是登录任意一台机器，运行 `getent passwd` 并观察输出，取最后那个 UID +1 就行了
+
+  GID 建议不要每人一个，我们建一个 member 组，给大家都加进来，这样就只需要考虑 UID 的增长了。
+
+* 建账号之前先注意一下各个服务器上有没有相同的用户名，有的话把原家目录 chown 到新的 UID GID，删除同名用户。
 
 ### Access Control
 
-这里可以配置gosa的编辑权限，现在这里面只有一个组，是完全权限的。另外，每个项可以设置专门针对这个项的ACL。
+这里可以配置 gosa 的编辑权限，现在这里面只有一个组，是完全权限的。另外，每个项可以设置专门针对这个项的 ACL。
 
 ### Sudo rules
 
-这里配置sudo权限。这里的语法和sudoers一样（请无视System trust）。特别要说的一点是通过在System中加入主机名可以针对每个主机配置权限，这里要填的是主机名而不是域名，具体范例请看里面的lugsu wikimanager等项。
+这里配置 sudo 权限。这里的语法和 sudoers 一样（请无视 System trust）。特别要说的一点是通过在 System 中加入主机名可以针对每个主机配置权限，这里要填的是主机名而不是域名，具体范例请看里面的 lugsu wikimanager 等项。
 
 其它我没提到的项我也没搞明白怎么用。。。
 
 
-gosa的配置文件在/etc/gosa/gosa.conf，它是在第一次运行gosa时候自动生成的，但在之后就只能通过手动编辑来修改。由于配置文件几乎没有文档，官方的FAQ有好多是错的，所以我基本没动:-D。
+gosa 的配置文件在 /etc/gosa/gosa.conf，它是在第一次运行 gosa 时候自动生成的，但在之后就只能通过手动编辑来修改。由于配置文件几乎没有文档，官方的 FAQ 有好多是错的，所以我基本没动:-D。
 
 ## LDAP 客户端配置
 
@@ -36,7 +39,7 @@ gosa的配置文件在/etc/gosa/gosa.conf，它是在第一次运行gosa时候�
 
 #### 软件包安装
 
-Debian 8 以上系统安装 slapd ldap-utils sudo-ldap
+Debian 7 以上系统安装 libnss-ldapd libpam-ldapd sudo-ldap
 
 注 ：更新这些软件包时，注意保留一个root终端，更新后可能需要重启daemon进程
 
@@ -103,45 +106,13 @@ sudoers:	files ldap
 1. 请做好文件备份；
 2. 请另开一个 root 终端以防万一。
 
-对于 Debian 7，只需设置一处。为了登录时自动创建家目录，在/etc/pam.d/common-session中添加下面这句：
+对于 Debian 7+，只需设置一处。为了登录时自动创建家目录，在 /etc/pam.d/common-session 中添加下面这句：
 
 ```
 session     required      pam_mkhomedir.so skel=/etc/skel umask=0022
 ```
 
-对于 Debian 5，需要手动修改 PAM 配置文件[http://www.rjsystems.nl/en/2100-openldap-client.php#pamc](http://www.rjsystems.nl/en/2100-openldap-client.php#pamc)
-
-/etc/pam.d/common-auth：
-
-```
-auth	    sufficient	  pam_unix.so	     nullok_secure
-auth	    sufficient	  pam_ldap.so	     use_first_pass
-auth	    required	  pam_deny.so
-```
-
-/etc/pam.d/common-account:
-
-```
-account     sufficient	  pam_unix.so
-account     sufficient	  pam_ldap.so
-account     required	  pam_deny.so
-```
-
-/etc/pam.d/common-password
-
-```
-password    sufficient	  pam_unix.so	     nullok obscure md5
-password    sufficient	  pam_ldap.so
-password    required	  pam_deny.so
-```
-
-/etc/pam.d/common-session
-
-```
-session     required      pam_unix.so
-session     required      pam_mkhomedir.so skel=/etc/skel umask=0022
-session     optional      pam_ldap.so
-```
+对于 Debian 5，请查阅本文档的 Git 记录。
 
 ### CentOS配置方法
 
@@ -257,4 +228,4 @@ nscd -i group
 
 ---
 
-本文档原始版本复制自LUG wiki，由张光宇、崔灏、朱晟菁、左格非撰写。
+本文档原始版本复制自 LUG wiki，由张光宇、崔灏、朱晟菁、左格非撰写。
