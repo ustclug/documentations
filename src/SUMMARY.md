@@ -25,7 +25,7 @@
     - [Mirrors](services/mirrors/mirrors.md)
         - [Hardware](services/mirrors/hardware.md)
         - [Remote KVM](#)
-        - [RAID](#)
+        - [ZFS](services/mirrors/zfs.md)
         - [HTTP Service](#)
         - [RSYNC Service](#)
         - [FTP Service](#)
