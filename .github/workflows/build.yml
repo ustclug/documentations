@@ -21,6 +21,7 @@ jobs:
         git config user.name "GitHub"
         git config user.email "noreply@github.com"
         echo -n "docs.ustclug.org" > CNAME
+        : > .nojekyll
         git add --all
         git commit --message "Auto deploy from GitHub Actions"
         git push https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/$GITHUB_REPOSITORY.git +HEAD:gh-pages
