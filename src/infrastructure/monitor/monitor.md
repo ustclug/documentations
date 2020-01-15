@@ -2,9 +2,9 @@
 
 监控系统由以下几个组件组成：
 
-- telegraf: agent，运行在每个被监控的机器上
-- influxdb: 数据库，运行在 influxdb.ustclug.org (docker2.s.ustclug.org)
-- ganglia: 可视化工具，监控报警，地址：monitor.ustclug.org (docker2.s.ustclug.org)
+- Telegraf: agent，运行在每个被监控的机器上
+- InfluxDB: 数据库，运行在 influxdb.ustclug.org (docker2.s.ustclug.org)
+- Grafana: 可视化工具，监控报警，地址：monitor.ustclug.org (docker2.s.ustclug.org)
 
 ## Configure InfluxDB
 

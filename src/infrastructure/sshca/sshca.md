@@ -11,9 +11,7 @@ There are two types of SSH Certificate:
 * Root certificate
 * Host certificate
 
-Root certificate can only be used to issue a host certificate. Host certificate can be used for authentication on both server side and client side. But host certificate cannot issue a new certificate, it is the very difference from x509 certificate.
-
-Root certificate is stored in [cuihaoleo](https://github.com/cuihaoleo)'s loongson laptop. And [knight42](https://github.com/knight42) have another backup.
+Root certificate can be used to issue a host certificate and has the same format as a regular SSH private-public key pair. Host certificate can be used for authentication on both server side and client side. But host certificate cannot issue a new certificate, it is the very difference from x509 certificate.
 
 ## Trust all LUG servers in one go
 
@@ -43,7 +41,7 @@ At last, add the following line to `/etc/ssh/sshd_config`:
 HostCertificate /etc/ssh/ssh_host_rsa_key-cert.pub
 ```
 
-Certificate will take effect after ssh daemon is restarted.
+Certificate will take effect after SSH daemon is reloaded (`systemctl reload ssh`).
 
 ## issue a client certificate
 
@@ -57,13 +55,13 @@ For example:
 ssh-keygen -s /path/to/ssh_ca -I "Yifan Gao" -n yifan -V +365d yifan.pub
 ```
 
-In general,  *certificate_identity* is user full name, and *principals* is the LDAP user name. In addition, one user can own multiply *principals* in one certificate, like:
+In general,  *certificate_identity* is user full name, and *principals* is the user name. In addition, one user can own multiply *principals* in one certificate, like:
 
 ```
 ssh-keygen -s /path/to/ssh_ca -I "Yifan Gao" -n yifan,root,liims -V +365d yifan.pub
 ```
 
-It authorizes the certificate owner to login server with yifan, root and liims username.
+It authorizes the certificate owner to login to any server with `yifan`, `root` or `liims` username.
 
 *tip: "liims" principal is used to login to library inquiring machine.*
 
