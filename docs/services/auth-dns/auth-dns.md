@@ -1,21 +1,25 @@
 # Authoritative DNS
 
-services:
+Services:
+
 * ns-a.ustclug.org
 * ns-b.ustclug.org
+* ns-c.ustclug.org
 
-servers:
+Servers:
+
 * ns-a.s.ustclug.org
 * ns-b.s.ustclug.org
+* (not ns-c)
 
 ## Deploy
 
-* Bind configuration
-  https://git.lug.ustc.edu.cn/ustclug/auth-dns
-* Bind Dockerfile
-  https://github.com/zhsj/dockerfile/tree/master/bind9
+* Bind configuration:
+  <https://github.com/ustclug/auth-dns>
+* Bind Dockerfile:
+  <https://github.com/zhsj/dockerfile/tree/master/bind9>
 
-The bind configuration repository is only visible to admins since private key is
+The bind configuration repository is only visible to admins because private key is
 included.
 
 ```
@@ -23,7 +27,7 @@ included.
 # to ~/.ssh/id_ed25519
 
 # now get the conf
-git clone git@git.lug.ustc.edu.cn:ustclug/auth-dns.git /var/lib/bind
+git clone git@github.com:ustclug/auth-dns.git /var/lib/bind
 
 # delete the ssh key
 rm ~/.ssh/id_ed25519
@@ -45,4 +49,4 @@ Please add a webhook in the configuration repository, so that the DNS record
 can be automatically updated when we commit.
 
 The webhook endpoint is http://<server_ip>:9000/hooks/bind, see
-https://git.lug.ustc.edu.cn/ustclug/auth-dns/settings/integrations for example.
+<https://github.com/ustclug/auth-dns/settings/hooks> for example.
