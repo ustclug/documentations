@@ -36,7 +36,7 @@ rm ~/.ssh/id_ed25519
 ```
 docker run --restart=always -v /var/lib/bind/:/etc/bind \
        --net host -it -d --name=auth-dns zhusj/bind9
-````
+```
 
 ## Update DNS Record
 
