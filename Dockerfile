@@ -1,15 +1,12 @@
-FROM buildpack-deps:buster-curl
-ARG MDBOOK_VERSION=v0.3.1
-RUN curl -sSL https://github.com/azerupi/mdBook/releases/download/${MDBOOK_VERSION}/mdBook-${MDBOOK_VERSION}-x86_64-unknown-linux-gnu.tar.gz | tar -C /usr/bin -xzf -
-ADD book.toml /tmp/
-ADD src /tmp/src
-WORKDIR /tmp
-RUN mdbook build
+FROM squidfunk/mkdocs-material:latest
+ADD . /docs
+WORKDIR /docs
+RUN mkdocs build
 
 
 FROM smartentry/alpine:3.4-0.3.13
 MAINTAINER Yifan Gao <docker@yfgao.com>
 WORKDIR /
-COPY --from=0 /tmp/book /var/www
+COPY --from=0 /docs/site /var/www
 ADD .docker $ASSETS_DIR
 RUN smartentry.sh build
