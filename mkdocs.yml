@@ -2,7 +2,7 @@
 site_name: 'LUG @ USTC Documentation'
 site_description: 'Documentation for LUG service maintenance'
 site_author: 'USTC Linux User Group'
-site_url: 'https://test.s.ibugone.com/'
+site_url: 'https://docs.ustclug.org/'
 
 # Repository
 repo_name: 'ustclug/documentations'
