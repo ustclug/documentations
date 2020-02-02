@@ -24,15 +24,16 @@ jobs:
     - name: Build docs
       run: |
         env/bin/mkdocs -v build
-        echo -n "docs.ustclug.org" > site/CNAME
-        : > site/.nojekyll
     - name: Deploy to GitHub Pages
+      env:
+        SSH_KEY: ${{ secrets.DEPLOY_KEY }}
       run: |
-        git clone --depth=1 --branch=gh-pages --single-branch --no-checkout \
-          "https://${GITHUB_ACTOR}:${{secrets.GITHUB_TOKEN}}@github.com/$GITHUB_REPOSITORY.git" test
-        mv test/.git site/.git && rmdir test
+        echo "$SSH_KEY" > ~/.ssh/id_ecdsa && chmod 0600 ~/.ssh/id_ecdsa
         cd site
+        git init --quiet
+        echo -n "docs.ustclug.org" > CNAME
+        : > .nojekyll
         git add --all
         git -c user.name=GitHub -c user.email=noreply@github.com \
           commit --message "Auto deploy from GitHub Actions"
-        git push
+        git push git@github.com:$GITHUB_REPOSITORY.git +HEAD:gh-pages
