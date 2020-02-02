@@ -28,6 +28,7 @@ jobs:
       env:
         SSH_KEY: ${{ secrets.DEPLOY_KEY }}
       run: |
+        mkdir -p ~/.ssh
         echo "$SSH_KEY" > ~/.ssh/id_ecdsa && chmod 0600 ~/.ssh/id_ecdsa
         cd site
         git init --quiet
