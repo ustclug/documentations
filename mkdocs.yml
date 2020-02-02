@@ -27,6 +27,9 @@ extra:
     - type: 'github'
       link: 'https://github.com/ustclug'
 
+extra_javascript:
+  - assets/js/extra.js
+
 # Extensions
 markdown_extensions:
   - admonition
