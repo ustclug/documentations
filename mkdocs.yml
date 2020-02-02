@@ -2,7 +2,7 @@
 site_name: 'LUG @ USTC Documentation'
 site_description: 'Documentation for LUG service maintenance'
 site_author: 'USTC Linux User Group'
-site_url: 'https://docs.ustclug.org/'
+site_url: 'https://test.s.ibugone.com/'
 
 # Repository
 repo_name: 'ustclug/documentations'
@@ -33,6 +33,7 @@ extra_javascript:
 # Extensions
 markdown_extensions:
   - admonition
+  - codehilite
   - footnotes
   - pymdownx.superfences
   - toc:

@@ -134,7 +134,7 @@ authconfig --enablecache \
        --enablemkhomedir \
        --enablelocauthorize \
        --update
- ```
+```
 
 注意，由于 authconfig 的 bug，上一条命令的执行环境必须是 `LC_ALL=en_US.UTF-8`
 

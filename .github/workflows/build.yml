@@ -5,22 +5,32 @@ on: push
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-      MDBOOK_VERSION: "v0.3.5"
     steps:
     - uses: actions/checkout@v1
-    - name: Install mdBook
-      run: curl -sSL https://github.com/rust-lang/mdBook/releases/download/${MDBOOK_VERSION}/mdBook-${MDBOOK_VERSION}-x86_64-unknown-linux-gnu.tar.gz | sudo tar zxf - -C /usr/local/bin
-    - name: Build book
-      run: mdbook build
+    - uses: actions/setup-python@v1
+      with:
+        python-version: 3.8
+    - name: Setup cache for PyPI
+      uses: actions/cache@v1
+      id: cache-pip
+      with:
+        path: env/
+        key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
+    - name: Create venv and Install dependencies
+      if: steps.cache-pip.outputs.cache-hit != 'true'
+      run: |
+        python3 -m venv env
+        env/bin/pip3 install -r requirements.txt
+    - name: Build docs
+      run: |
+        env/bin/mkdocs -v build
     - name: Deploy to GitHub Pages
       run: |
-        cd book
+        cd site
         git init --quiet
-        git config user.name "GitHub"
-        git config user.email "noreply@github.com"
         echo -n "docs.ustclug.org" > CNAME
         : > .nojekyll
         git add --all
-        git commit --message "Auto deploy from GitHub Actions"
+        git -c user.name=GitHub -c user.email=noreply@github.com \
+          commit --message "Auto deploy from GitHub Actions"
         git push https://${GITHUB_ACTOR}:${{secrets.GITHUB_TOKEN}}@github.com/$GITHUB_REPOSITORY.git +HEAD:gh-pages
