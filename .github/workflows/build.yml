@@ -24,13 +24,15 @@ jobs:
     - name: Build docs
       run: |
         env/bin/mkdocs -v build
+        echo -n "docs.ustclug.org" > site/CNAME
+        : > site/.nojekyll
     - name: Deploy to GitHub Pages
       run: |
+        git clone --depth=1 --branch=gh-pages --single-branch --no-checkout \
+          "https://${GITHUB_ACTOR}:${{secrets.GITHUB_TOKEN}}@github.com/$GITHUB_REPOSITORY.git" test
+        mv test/.git site/.git && rmdir test
         cd site
-        git init --quiet
-        echo -n "docs.ustclug.org" > CNAME
-        : > .nojekyll
         git add --all
         git -c user.name=GitHub -c user.email=noreply@github.com \
           commit --message "Auto deploy from GitHub Actions"
-        git push https://${GITHUB_ACTOR}:${{secrets.GITHUB_TOKEN}}@github.com/$GITHUB_REPOSITORY.git +HEAD:gh-pages
+        git push
