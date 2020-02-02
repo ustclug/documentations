@@ -48,5 +48,5 @@ More details can be found in the repository.
 Please add a webhook in the configuration repository, so that the DNS record
 can be automatically updated when we commit.
 
-The webhook endpoint is http://<server_ip>:9000/hooks/bind, see
+The webhook endpoint is http://&lt;server\_ip&gt;:9000/hooks/bind, see
 <https://github.com/ustclug/auth-dns/settings/hooks> for example.
