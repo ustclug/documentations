@@ -31,11 +31,11 @@ Users 是用来添加和配置用户信息的地方。最主要的功能位于�
 其它我没提到的项我也没搞明白怎么用。。。
 
 
-gosa 的配置文件在 /etc/gosa/gosa.conf，它是在第一次运行 gosa 时候自动生成的，但在之后就只能通过手动编辑来修改。由于配置文件几乎没有文档，官方的 FAQ 有好多是错的，所以我基本没动:-D。
+gosa 的配置文件在 `/etc/gosa/gosa.conf`，它是在第一次运行 gosa 时候自动生成的，但在之后就只能通过手动编辑来修改。由于配置文件几乎没有文档，官方的 FAQ 有好多是错的，所以我基本没动:-D。
 
 ### 维护备注
 
-如果发现更新 GOsa 之后，/gosa 没有正常工作（比如说直接显示了 PHP 的源代码），可以尝试删除 /var/spool/gosa/ 中的所有文件，详见 [Gosa broken in Debian stretch](https://github.com/gosa-project/gosa-core/issues/10)。
+如果发现更新 GOsa 之后，`/gosa` 没有正常工作（比如说直接显示了 PHP 的源代码），可以尝试删除 `/var/spool/gosa/` 中的所有文件，详见 [Gosa broken in Debian stretch](https://github.com/gosa-project/gosa-core/issues/10)。
 
 ## LDAP 客户端配置
 
@@ -49,14 +49,14 @@ Debian 7 以上系统安装 libnss-ldapd libpam-ldapd sudo-ldap
 
 在安装过程中会被问一些问题（不同版本的 Debian 的问题可能不同）：
 
-- ldap 服务器地址是 ''ldaps://ldap.lug.ustc.edu.cn''
-- Base DN为 ''dc=lug,dc=ustc,dc=edu,dc=cn''
-    - 协议为版本3
-    - 配置 libnss-ldapd 时有个选 “Name services to configure” 的，全部选
+- ldap 服务器地址是 `ldaps://ldap.lug.ustc.edu.cn`
+- Base DN 为 `dc=lug,dc=ustc,dc=edu,dc=cn`
+    - 协议为版本 3
+    - 配置 libnss-ldapd 时有个选 Name services to configure 的，全部选
 
 #### /etc/ldap/ldap.conf
 
-编辑 /etc/ldap/ldap.conf 内容如下
+编辑 `/etc/ldap/ldap.conf` 内容如下
 
 ```
 BASE dc=lug,dc=ustc,dc=edu,dc=cn
@@ -67,15 +67,15 @@ TLS_REQCERT demand
 SUDOERS_BASE ou=sudoers,dc=lug,dc=ustc,dc=edu,dc=cn
 ```
 
-为了安全性考虑，要以ldaps的方式连接ldap服务器,同时应配置好证书(/etc/ldap/slapd-ca-cert.pem, 从其它服务器复制一个)
+为了安全性考虑，要以 ldaps 的方式连接 ldap 服务器,同时应配置好证书 (`/etc/ldap/slapd-ca-cert.pem`, 从其它服务器复制一个)
 
 #### /etc/sudo-ldap.conf
 
-这个文件应该直接软链接到 /etc/ldap/ldap.conf，通常 dpkg 已经为你创建好了。
+这个文件应该直接软链接到 `/etc/ldap/ldap.conf`，通常 dpkg 已经为你创建好了。
 
 #### /etc/nslcd.conf
 
-注意检查一下此配置文件是否与/etc/ldap/ldap.conf下的内容相一致，如
+注意检查一下此配置文件是否与 `/etc/ldap/ldap.conf` 下的内容相一致，如
 
 ```
 uid nslcd
@@ -84,7 +84,7 @@ uri ldaps://ldap.lug.ustc.edu.cn
 base dc=lug,dc=ustc,dc=edu,dc=cn
 ssl on
 tls_reqcert demand
-tls_cacertfile /etc/ldap/ssl/slapd-ca-cert.pem
+tls_cacertfile /etc/ldap/slapd-ca-cert.pem
 ```
 
 #### /etc/nsswitch.conf
@@ -99,9 +99,9 @@ shadow:         compat ldap
 sudoers:	files ldap
 ```
 
-注意每一项后面的“ldap”，如果没有要手动加上。不太清楚具体含义，反正给每一项都加上“ldap”是没有问题的。
+注意每一项后面的 `ldap`，如果没有要手动加上。不太清楚具体含义，反正给每一项都加上 `ldap` 是没有问题的。
 
-此时输入getent passwd，应该可以看到比/etc/passwd更多的内容，这就说明配置正确了。如果还有问题，重启一下 nscd、nslcd 服务试试。
+重启一下 `nscd` 和 `nslcd` 服务，此时运行 `getent passwd`，应该可以看到比 `/etc/passwd` 更多的内容，这就说明配置正确了。
 
 #### PAM 配置
 
@@ -110,10 +110,10 @@ sudoers:	files ldap
 1. 请做好文件备份；
 2. 请另开一个 root 终端以防万一。
 
-对于 Debian 7+，只需设置一处。为了登录时自动创建家目录，在 /etc/pam.d/common-session 中添加下面这句：
+对于 Debian 7+，只需设置一处。为了登录时自动创建家目录，在 `/etc/pam.d/common-session` 中添加下面这句：
 
 ```
-session     required      pam_mkhomedir.so skel=/etc/skel umask=0022
+session required    pam_mkhomedir.so skel=/etc/skel umask=0022
 ```
 
 对于 Debian 5，请查阅本文档的 Git 记录。
@@ -124,21 +124,24 @@ session     required      pam_mkhomedir.so skel=/etc/skel umask=0022
 
 以 root 身份执行
 
-    authconfig --enablecache \
-           --enableldap \
-           --enableldapauth \
-           --ldapserver="ldaps://ldap.lug.ustc.edu.cn/" \
-           --ldapbasedn="dc=lug,dc=ustc,dc=edu,dc=cn" \
-           --enableshadow \
-           --enablemkhomedir \
-           --enablelocauthorize \
-           --update
-注意，由于 authconfig 的 bug，上一条命令的执行环境必须是 en_US.UTF-8
+```shell
+authconfig --enablecache \
+       --enableldap \
+       --enableldapauth \
+       --ldapserver="ldaps://ldap.lug.ustc.edu.cn/" \
+       --ldapbasedn="dc=lug,dc=ustc,dc=edu,dc=cn" \
+       --enableshadow \
+       --enablemkhomedir \
+       --enablelocauthorize \
+       --update
+ ```
 
-Sudo 的配置是通过 sssd 实现的，参考[https://access.redhat.com/site/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Deployment_Guide/sssd-ldap-sudo.html](https://access.redhat.com/site/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Deployment_Guide/sssd-ldap-sudo.html)
+注意，由于 authconfig 的 bug，上一条命令的执行环境必须是 `LC_ALL=en_US.UTF-8`
+
+Sudo 的配置是通过 sssd 实现的，参考 <https://access.redhat.com/site/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Deployment_Guide/sssd-ldap-sudo.html>
 
 安装 sssd libsss_sudo
-将 /usr/share/doc/sssd-common-xxx/sssd-example.conf 复制到 /etc/sssd/sssd.conf 并修改权限为 600。
+将 `/usr/share/doc/sssd-common-xxx/sssd-example.conf` 复制到 `/etc/sssd/sssd.conf` 并修改权限为 600。
 
 ```
 [zguangyu@pxe ~]$ sudo diff /usr/share/doc/sssd-common-1.14.0/sssd-example.conf /etc/sssd/sssd.conf
@@ -177,22 +180,22 @@ Sudo 的配置是通过 sssd 实现的，参考[https://access.redhat.com/site/d
 
 ### NSCD 使用说明
 
-NSCD是用于LDAP缓存的服务，目前在mirrors上的配置是保持30天。这导致的问题是每当ldap服务器上做出修改的时候需要在mirrors上执行 ((目前 mirrors 服务器暂未配置 LDAP 认证。))
+NSCD 是用于 LDAP 缓存的服务，目前在 mirrors 上的配置是保持 30 天。这导致的问题是每当 ldap 服务器上做出修改的时候需要在 mirrors 上执行 <s>(目前 mirrors 服务器暂未配置 LDAP 认证。)</s>
 
-```
+```shell
 nscd -i passwd
 nscd -i group
 ```
 
-参考： [https://wiki.debian.org/LDAP/NSS](https://wiki.debian.org/LDAP/NSS)
+参考：<https://wiki.debian.org/LDAP/NSS>
 
 ## 部署情况
 
-目前所有服务器均已部署LDAP
+目前所有服务器均已部署 LDAP
 
 ## 已知的 GID
 
-| GID  | 名称              | 说明         |
+| GID  | 名称            | 说明       |
 | ---- | --------------- | ---------- |
 | 2001 | ldap\_users     | 所有用户都在这个组里 |
 | 1001 | ssh\_docker2    | -          |

@@ -45,7 +45,7 @@ ifconfig 10.254.0.xxx lugvpn
 
 这时候应该能从其他机器 ping 通这个 IP。
 
-指定静态内网 IP 的正确方法是在 DNS 中添加一条这样的记录（请联系 LUG Internal）：
+指定静态内网 IP 的正确方法是在 DNS 中添加一条这样的记录：
 
 ```text
 $ORIGIN s.ustclug.org
@@ -56,14 +56,14 @@ $ORIGIN s.ustclug.org
 
 ## 配置 SSH 侦听内网地址
 
-以下配置来自 mirrors，供参考：
+配置供参考：
 
 ```text
 AddressFamily inet
 UseDNS no
 
 HostKey /etc/ssh/ssh_host_rsa_key
-HostCertificate /etc/ssh/ssh_host_rsa_crt
+HostCertificate /etc/ssh/ssh_host_rsa_key-cert.pub
 TrustedUserCAKeys /etc/ssh/ssh_user_ca
 RevokedKeys /etc/ssh/ssh_revoked_keys
 
@@ -78,16 +78,16 @@ PrintLastLog no
 PrintMotd no
 Subsystem sftp /usr/lib/openssh/sftp-server
 
-Match LocalAddress 10.254.0.26
-    AllowGroups ssh_local super_manager ssh_mirrors
+Match LocalAddress 10.254.0.0
+    AllowGroups ssh_local super_manager ssh_groupname
     PasswordAuthentication yes
     PubkeyAuthentication yes
 
-# Only on physical machine
+# Public IP access = root-only
 Match LocalAddress 202.38.95.110,202.141.160.110,202.141.176.110,218.104.71.170
-    AllowUsers  root
-    PermitRootLogin without-password
+    AllowUsers root
     PubkeyAuthentication yes
+    AuthorizedKeysFile /dev/null  # 屏蔽公钥，仅允许证书登录
 
 # For SSH Push trigger
 Match User mirror
@@ -98,4 +98,6 @@ Match User mirror
     X11Forwarding no
 ```
 
-注意 HostCertificate, TrustedUserCAKeys 和 RevokedKeys 这三个文件必须存在，否则 SSH 会出一些问题，例如不能密钥登录只能密码登录。HostCertificate 需要手动签发一个，另外两个文件从别的机器上复制就行。
+注意 HostCertificate, TrustedUserCAKeys 和 RevokedKeys 这三个文件必须存在，否则 SSH 会出一些问题，例如不能密钥登录只能密码登录。
+
+HostCertificate 需要手动签发一个，另外两个文件从别的机器上复制就行。
