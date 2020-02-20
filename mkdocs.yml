@@ -9,7 +9,7 @@ repo_name: 'ustclug/documentations'
 repo_url: 'https://github.com/ustclug/documentations'
 
 # Copyright
-copyright: 'Copyright &copy; 2020 USTC Linux User Group'
+copyright: 'Copyright &copy; 2003-2020 USTC Linux User Group'
 
 # Configuration
 theme:
@@ -46,10 +46,10 @@ nav:
   - Infrastructure:
     - Intranet:
       - Overview: 'infrastructure/intranet/intranet.md'
-      - Tinc: 'infrastructure/tinc/tinc.md'
+      - Tinc: 'infrastructure/tinc.md'
       - LUGI VPN: 'infrastructure/intranet/lugivpn.md'
-    - Servers Unified Authentication (LDAP): 'infrastructure/sua/sua.md'
-    - SSH Certificate Authentication: 'infrastructure/sshca/sshca.md'
+    - Servers Unified Authentication (LDAP): 'infrastructure/sua.md'
+    - SSH Certificate Authentication: 'infrastructure/sshca.md'
     - vSphere Cluster:
       - ESXi: '#'
       - vCenter: '#'
@@ -57,7 +57,7 @@ nav:
       - VDP: '#'
     - SaltStack: '#'
     - Backup: '#'
-    - Monitor: 'infrastructure/monitor/monitor.md'
+    - Monitor: 'infrastructure/monitor.md'
     - PPA: '#'
     - Google Apps / G Suite: '#'
     - Mail Agent: '#'
@@ -75,7 +75,7 @@ nav:
       - Repo sync: '#'
       - Mail list: 'services/mirrors/mail-list.md'
     - Blog: 'services/blog/blog.md'
-    - Authoritative DNS: 'services/auth-dns/auth-dns.md'
+    - Authoritative DNS: 'services/auth-dns.md'
     - Neat DNS: '#'
     - GitLab: '#'
     - DokuWiki: '#'
@@ -83,11 +83,11 @@ nav:
       - RADIUS: '#'
       - VPN: '#'
       - Web: '#'
-    - Light: 'services/light/light.md'
+    - Light: 'services/light.md'
     - PXE:
       - LIIMS: 'services/pxe/liims.md'
-    - Telegram Web: 'services/telegram-web/telegram-web.md'
-    - FTP: 'services/ftp/ftp.md'
-    - USTC Life: 'services/ustc-life/ustc-life.md'
-    - Generate 204: 'services/generate-204/generate-204.md'
-    - Discontinued Services: 'services/discontinued/discontinued.md'
+    - Telegram Web: 'services/telegram-web.md'
+    - FTP: 'services/ftp.md'
+    - USTC Life: 'services/ustc-life.md'
+    - Generate 204: 'services/generate-204.md'
+    - Discontinued Services: 'services/discontinued.md'
