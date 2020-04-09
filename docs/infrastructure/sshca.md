@@ -23,9 +23,13 @@ Add the following line to your `known_hosts`:
 
 And when you log in to a LUG server, it is automatically trusted. If you find a machine that does not support this setup, report it to CTO.
 
-## issue a server certificate
+## Issue a server certificate
 
-copy the `/etc/ssh/ssh_host_rsa_key.pub` from target server. (salt is your friend)
+!!! warning "Warning"
+
+    When signing certificates using OpenSSH &lt;= 8.1, add `-t rsa-sha2-256` to the `ssh-keygen` command. More details can be found here: <https://ibugone.com/p/35>
+
+Copy the file `/etc/ssh/ssh_host_rsa_key.pub` from target server. (salt is your friend)
 
 Then, run `ssh-keygen` to issue a public key. For example:
 
@@ -43,7 +47,7 @@ HostCertificate /etc/ssh/ssh_host_rsa_key-cert.pub
 
 Certificate will take effect after SSH daemon is reloaded (`systemctl reload ssh`).
 
-## issue a client certificate
+## Issue a client certificate
 
 ```sh
 ssh-keygen -s /path/to/ssh_ca -I certificate_identity -n principals -O option -V validity_interval public_key_file
