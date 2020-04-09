@@ -18,13 +18,16 @@ theme:
   palette:
     primary: 'teal'
     accent: 'teal'
+  icon:
+    logo: fontawesome/brands/linux
+    repo: octicons/mark-github
 
 # Customization
 extra:
   social:
-    - type: 'globe'
+    - icon: octicons/globe
       link: 'https://lug.ustc.edu.cn/'
-    - type: 'github'
+    - icon: octicons/mark-github
       link: 'https://github.com/ustclug'
 
 extra_javascript:
@@ -49,7 +52,7 @@ nav:
       - Tinc: 'infrastructure/tinc.md'
       - LUGI VPN: 'infrastructure/intranet/lugivpn.md'
     - Servers Unified Authentication (LDAP): 'infrastructure/sua.md'
-    - SSH Certificate Authentication: 'infrastructure/sshca.md'
+    - SSH Certificate Authority: 'infrastructure/sshca.md'
     - vSphere Cluster:
       - ESXi: '#'
       - vCenter: '#'
