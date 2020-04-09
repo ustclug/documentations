@@ -51,5 +51,5 @@ Notes:
 
 ## Configure LDAP
 
-见 [LDAP服务使用及配置说明](../../infrastructure/sua/sua.md)
+见 [LDAP服务使用及配置说明](../../infrastructure/sua.md)
 
