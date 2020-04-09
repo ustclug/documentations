@@ -70,6 +70,7 @@ nav:
       - Latest:
         - Overview: services/mirrors/4/index.md
         - Volumes: services/mirrors/4/volumes.md
+        - Repositories: services/mirrors/4/repos.md
       - Hardware: 'services/mirrors/hardware.md'
       - Remote KVM: '#'
       - ZFS: 'services/mirrors/zfs.md'
