@@ -155,9 +155,9 @@ mount /dev/lug/docker /var/lib/docker
 分区完毕后给 `/etc/fstab` 补上相关的内容并挂载：
 
 ```text
-/dev/mapper/lug-home   /home           ext4 defaults                      0 2
-/dev/mapper/lug-docker /var/lib/docker ext4 defaults                      0 2
-/dev/mapper/lug-repo   /srv            xfs  defaults,prjquota,pqnoenforce 0 2
+/dev/mapper/lug-home   /home           ext4 defaults             0 2
+/dev/mapper/lug-docker /var/lib/docker ext4 defaults             0 2
+/dev/mapper/lug-repo   /srv            xfs  defaults,pqnoenforce 0 2
 ```
 
 
