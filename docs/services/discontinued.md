@@ -14,3 +14,41 @@
 ## USTC Blog
 
 Refer to [Gitlab Wiki](https://git.lug.ustc.edu.cn/ustc-blog/ustc-blog/wikis/home).
+
+## Telegram Web
+
+Service：[telegram.ustclug.org](https://telegram.ustclug.org)
+
+Repository：[github.com/ustclug/telegram-web](https://github.com/ustclug/telegram-web)
+
+DockerHub：[ustclug/telegram-web](https://hub.docker.com/r/ustclug/telegram-web)
+
+Deployment：[telegram-web.sh](https://git.lug.ustc.edu.cn/ustclug/docker-run-script/blob/master/telegram-web/telegram-web.sh)
+
+Servers：
+
+* swarm.s.ustclug.org（Docker Container）
+* revproxy-el.s.ustclug.org（reverse proxy）
+
+
+Blog：[add-telegram-web-service](https://servers.blog.ustc.edu.cn/2016/10/add-telegram-web-service/)
+
+## USTC Life
+
+USTC Life is a navigation page, which included useful sites in USTC.
+
+!!! note "2020/04/09 更新信息"
+
+    目前，USTC Life 服务托管在 GitHub Pages 上。以下内容仅为历史记录。
+
+service: [ustc.life](http://ustc.life)
+
+Git Repository: [github.com/ustclug/ustclife](https://github.com/ustclug/ustclife)
+
+DockerHub: [ustclug/ustclife](https://hub.docker.com/r/ustclug/ustclife/builds/)
+
+server: docker2.s.ustclug.org
+
+deploy: /srv/webhook/ustclife.sh
+
+webhook from DockerHub: /srv/webhook/hooks.json
