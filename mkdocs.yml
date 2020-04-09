@@ -91,8 +91,6 @@ nav:
     - Light: 'services/light.md'
     - PXE:
       - LIIMS: 'services/pxe/liims.md'
-    - Telegram Web: 'services/telegram-web.md'
     - FTP: 'services/ftp.md'
-    - USTC Life: 'services/ustc-life.md'
     - Generate 204: 'services/generate-204.md'
     - Discontinued Services: 'services/discontinued.md'
