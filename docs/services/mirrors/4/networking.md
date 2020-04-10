@@ -1,0 +1,110 @@
+# Networking on mirrors4
+
+<s>出于好用的考虑</s>，mirrors4 上的网络使用 systemd-networkd 配置。作为入门，下面是两个参考链接：
+
+- [Systemd-networkd - Arch Wiki](https://wiki.archlinux.org/index.php/Systemd-networkd)
+- [SystemdNetworkd - Debian Wiki](https://wiki.debian.org/SystemdNetworkd)
+
+Debian 默认用的是 ifupdown，把它直接卸掉就行了。全部配置完毕之后需要 `systemctl enable systemd-networkd.service` 并且 start 一下（或者直接重启）。
+
+!!! tip "/etc/systemd/network 目录下有个 Git 仓库，方便保存与恢复"
+
+## Bond
+
+Bond 用于将多个网卡聚合当作一个使用。
+
+### 子网卡
+
+向 `/etc/systemd/network/ens41f0.network` 写入如下内容：
+
+```ini
+[Match]
+Name=ens41f0
+
+[Network]
+Bond=bond1
+
+[Link]
+RequiredForOnline=no
+```
+
+即可将其设置为 bond1 的一个子网卡。用同样方式把 ens41f1 也设为子网卡。
+
+!!! info "一个小坑"
+
+    systemd-networkd 有一个默认的 bond0 聚合网卡，模式永远是 round-robin，而且尝试设置这个网卡很容易出问题，所以我们避开这个名字，用 bond1。
+
+### bond1 聚合网卡
+
+写入 `/etc/systemd/network/bond1.netdev`：
+
+```ini
+[NetDev]
+Name=bond1
+Kind=bond
+
+[Bond]
+Mode=balance-alb
+MIIMonitorSec=1
+```
+
+然后创建 VLAN，写入 `/etc/systemd/network/bond1.network`：
+
+```ini
+[Match]
+Name=bond1
+
+[Network]
+DHCP=no
+VLAN=cernet
+VLAN=telecom
+VLAN=mobile
+VLAN=unicom
+```
+
+## VLAN
+
+NIC 机房有 4 个 VLAN，分别是
+
+- ID 95，教育网 202.38.95.0/25
+- ID 10，电信 202.141.160.0/25
+- ID 400，移动 202.141.176.0/25
+- ID 11，联通（IP 段我忘了）
+
+注意这几个网段都没有 DHCP，只有教育网 VLAN 有 IPv6 RA。
+
+下面以教育网 VLAN 为例。
+
+因为 VLAN 在物理上属于一个网卡，因此向对应网卡的 `.network` 文件的 `[Network]` 段追加一行：
+
+```ini
+VLAN=cernet
+```
+
+创建 VLAN 界面，创建 `cernet.netdev` 并写入
+
+```ini
+[NetDev]
+Name=cernet
+Kind=vlan
+
+[VLAN]
+Id=95
+```
+
+然后就可以指定 IP 地址等具体信息了，创建一个名字相同，后缀换成 `.network` 的文件并写入
+
+```ini
+[Match]
+Name=cernet
+
+[Network]
+DHCP=no
+Address=202.38.95.110/25
+Gateway=202.38.95.126
+Address=2001:da8:d800:95::110/64
+Gateway=2001:da8:d800:95::1
+IPv6AcceptRA=false
+```
+
+保存后重启 systemd-networkd.service 就可以看到效果了。

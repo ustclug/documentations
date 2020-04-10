@@ -67,9 +67,10 @@ nav:
   - Services:
     - Mirrors:
       - History: 'services/mirrors/index.md'
-      - Latest:
+      - Staging:
         - Overview: services/mirrors/4/index.md
         - Volumes: services/mirrors/4/volumes.md
+        - Networking: services/mirrors/4/networking.md
         - Repositories: services/mirrors/4/repos.md
       - Hardware: 'services/mirrors/hardware.md'
       - Remote KVM: '#'
