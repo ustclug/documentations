@@ -87,11 +87,11 @@ mkfs.xfs /dev/lug/repo
 
 ### SSD
 
-SSD 的用途为存放 Docker 数据 `/var/lib/docker`（8 GiB 就够了），剩下用作 lvmcache(7)。
+SSD 的用途为存放 Docker 数据 `/var/lib/docker`（8 GiB 就够了，但是 overlay2 的后端用 ext4 更好），剩下用作 lvmcache(7)。
 
 !!! note "iBug 备注"
 
-    虽然似乎没有这样做的必要，但是这么做一定不会出错，就这样吧。
+    虽然似乎没有这样做（先创建单独的 VG 再合并）的必要，但是这么做一定不会出错，就这样吧。
 
 在 SSD 上新建一个 VG：
 
@@ -158,7 +158,10 @@ mount /dev/lug/docker /var/lib/docker
 /dev/mapper/lug-home   /home           ext4 defaults             0 2
 /dev/mapper/lug-docker /var/lib/docker ext4 defaults             0 2
 /dev/mapper/lug-repo   /srv            xfs  defaults,pqnoenforce 0 2
+/dev/mapper/lug-log    /var/log        ext4 defaults             0 2
 ```
+
+（这个 log 分区前面没提，反正像模像样知道就行了）
 
 
   [lvm.red-hat]: https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/6/html/logical_volume_manager_administration/lvm_cache_volume_creation
