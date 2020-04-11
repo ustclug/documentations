@@ -71,7 +71,8 @@ nav:
       - Staging:
         - Overview: services/mirrors/4/index.md
         - Volumes: services/mirrors/4/volumes.md
-        - Networking: services/mirrors/4/networking.md
+        - Networking:
+          - Interfaces: services/mirrors/4/networking/index.md
         - Repositories: services/mirrors/4/repos.md
       - Hardware: 'services/mirrors/hardware.md'
       - Remote KVM: '#'
