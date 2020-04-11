@@ -69,7 +69,7 @@ nav:
     - Mirrors:
       - History: 'services/mirrors/index.md'
       - Current: 'services/mirrors/2/index.md'
-      - Supplementary: 'services/mirrors/3/index.md'
+      - Auxiliary: 'services/mirrors/3/index.md'
       - Staging:
         - Overview: services/mirrors/4/index.md
         - Volumes: services/mirrors/4/volumes.md
