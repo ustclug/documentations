@@ -36,14 +36,16 @@ zpool replace pool0 old-disk new-disk
 ### New ZFS file system
 
 ```sh
-zfs create -o mountpoint=$mountpoint $filesystem
+zfs create [-o mountpoint=$mountpoint] $filesystem
 ```
 
-example:
+Example:
 
 ```shell
 zfs create -o mountpoint=/srv/repo/debian pool0/repo/debian
 ```
+
+If mountpoint is not specified, then it's inherited from the parent with a subpath appended, e.g. when `pool0/example` is mounted on `/mnt/haha` then `pool0/example/test` will by default mount on `/mnt/haha/test`.
 
 ### Destory ZFS file system
 
@@ -51,10 +53,14 @@ zfs create -o mountpoint=/srv/repo/debian pool0/repo/debian
 zfs destroy $filesystem
 ```
 
-example:
+Example:
 
 ```shell
 zfs destroy pool0/repo/debian
 ```
 
-### 
+### Traps
+
+Do **NOT** install `zfs-dkms` and related packages from Debian backports repositories. They'll easily break when upgrading.
+
+As of Debian Buster the ZFS packages from the mainstream repository is stable and new enough for our use.

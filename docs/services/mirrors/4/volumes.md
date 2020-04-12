@@ -53,19 +53,18 @@ Device     Start        End    Sectors  Size Type
 
 ```shell
 # fdisk 分区完毕，w 写入退出
-pvcreate /dev/sda3
-pvcreate /dev/sdb3
+pvcreate /dev/sda3 /dev/sdb3
 vgcreate lug /dev/sda3 /dev/sdb3
 ```
 
-创建 rootfs，这里以 RAID1 的方式创建这个分区，这样即使 sda / sdb 坏掉一整组之后还有 rootfs 可以用。
+创建 rootfs，这里以 RAID1 的方式（`--type mirror` 或 `--type raid1`）创建这个分区，这样即使 sda / sdb 坏掉一整组之后还有 rootfs 可以用。
 
 ```shell
 lvcreate -n root -L 32G --type mirror -m 2 lug
 mkfs.ext4 /dev/lug/root
 ```
 
-创建 home，这里反正不怕坏，用 RAID0。
+创建 home，这里反正不怕坏，用 RAID0（`--type striped` 或 `--type raid0`）。
 
 ```shell
 lvcreate -n root -L 64G --type striped -i 2 lug
@@ -76,7 +75,7 @@ mkfs.ext4 /dev/lug/home
 
 !!! warning "XFS 不支持缩小"
 
-    因此我们在初装时选择为其分配 48 TiB 的空间，而不是 VG lug 的剩余全部——方便以后维护
+    因此我们在初装时选择为其分配 48 TiB 的空间，而不是 VG lug 的剩余全部——这样方便以后维护
 
 ```shell
 lvcreate -n repo -L 48T --type striped -i 2 lug
