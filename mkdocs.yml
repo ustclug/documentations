@@ -67,17 +67,19 @@ nav:
     - Mail Agent: '#'
   - Services:
     - Mirrors:
-      - History: 'services/mirrors/index.md'
-      - Current: 'services/mirrors/2/index.md'
-      - Auxiliary: 'services/mirrors/3/index.md'
+      - History: services/mirrors/index.md
+      - Current: services/mirrors/2/index.md
+      - Auxiliary: services/mirrors/3/index.md
       - Staging:
         - Overview: services/mirrors/4/index.md
         - Volumes: services/mirrors/4/volumes.md
         - Networking:
           - Interfaces: services/mirrors/4/networking/index.md
         - Repositories: services/mirrors/4/repos.md
+      - Server 1: services/mirrors/1/index.md
       - Hardware: 'services/mirrors/hardware.md'
-      - Remote KVM: '#'
+      - Docker: 'services/mirrors/docker.md'
+      - IPMI: '#'
       - ZFS: 'services/mirrors/zfs.md'
       - HTTP Service: '#'
       - RSYNC Service: '#'
