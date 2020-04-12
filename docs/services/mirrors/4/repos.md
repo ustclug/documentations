@@ -10,13 +10,18 @@ mirrors4 上的仓库和 mirrors2/3 一样，位于 `/srv/repo`。仓库容量�
 
 ```shell
 mkdir /srv/repo/example
-xfs_quota -x -c 'project -s 1111'
 ```
 
 编辑 `/etc/projects`，加入如下一行
 
 ```text
 1111:/srv/repo/example
+```
+
+然后执行：
+
+```shell
+xfs_quota -x -c 'project -s 1111'
 ```
 
 编辑 `/etc/projid`，加入如下一行
@@ -34,3 +39,11 @@ example:1111
 照着 `/home/mirror/repos` 下的现有文件自己研究一下吧，这个不难。需要注意的就一点，文件名结尾必须是 `.yaml`（而不能是 `.yml`），这是 Yuki 代码里写的。
 
 写好新仓库的配置文件之后运行 `yuki reload`，然后 `yuki sync <repo>` 就可以开始初次同步了。
+
+### 查看 quota 情况
+
+运行以下命令：
+
+```
+xfs_quota -c 'df -h'
+```
