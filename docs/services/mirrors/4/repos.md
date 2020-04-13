@@ -34,6 +34,32 @@ example:1111
 
     我们的镜像管理器 Yuki 根据镜像目录的最后一段名称（即 basename）来从 XFS 中获取容量信息，因此 `/etc/projid` 文件内容正确才能使 Yuki 得到正确的容量。
 
+#### 便捷配置脚本
+
+```shell
+#!/bin/bash
+
+# Determine largest project ID
+next_id() {
+  local PROJID=$(cut -d':' -f1 /etc/projects | sort -n | tail -1)
+  echo $((++PROJID))
+}
+
+while [[ $# -ne 0 ]]; do
+  N="${1//\//}"
+  if grep -q "$N" /etc/projects; then
+    echo "Repo $N exists, skipped." >&2
+  else
+    ID="$(next_id)"
+    echo "$ID:/srv/repo/$N" >> /etc/projects
+    echo "$N:$ID" >> /etc/projid
+    xfs_quota -x -c "project -s $ID" &>/dev/null
+    echo "Added $N (ID $ID)"
+  fi
+  shift
+done
+```
+
 ### 添加同步配置
 
 照着 `/home/mirror/repos` 下的现有文件自己研究一下吧，这个不难。需要注意的就一点，文件名结尾必须是 `.yaml`（而不能是 `.yml`），这是 Yuki 代码里写的。
