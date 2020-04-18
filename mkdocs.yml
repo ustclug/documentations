@@ -52,7 +52,7 @@ nav:
       - Overview: 'infrastructure/intranet/intranet.md'
       - Tinc: 'infrastructure/tinc.md'
       - LUGI VPN: 'infrastructure/intranet/lugivpn.md'
-    - Servers Unified Authentication (LDAP): 'infrastructure/sua.md'
+    - Servers Unified Authentication (LDAP): 'infrastructure/ldap.md'
     - SSH Certificate Authority: 'infrastructure/sshca.md'
     - vSphere Cluster:
       - ESXi: '#'

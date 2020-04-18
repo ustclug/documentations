@@ -23,9 +23,7 @@ auth-enabled = true
 
 ## Install telegraf
 
-安装方法见：
-
-https://docs.influxdata.com/telegraf/v1.6/introduction/installation
+安装方法见 <https://docs.influxdata.com/telegraf/v1.6/introduction/installation>
 
 一个典型的安装命令是：
 
@@ -65,6 +63,6 @@ sudo systemctl status telegraf
 
 ## Web
 
-Web 端监控位于： https://monitor.ustclug.org ，登陆账号同 ldap，可以在这里设置预警提示等。
+Web 端监控位于 <https://monitor.ustclug.org>，账号系统使用 LDAP，可以在这里设置预警提示等。
 
 **注意**： 配置 InfluxDB 数据源时，只能使用只读账号，否则会带来严重的安全问题。
