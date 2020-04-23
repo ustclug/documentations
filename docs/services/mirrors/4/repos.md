@@ -45,18 +45,40 @@ next_id() {
   echo $((++PROJID))
 }
 
-while [[ $# -ne 0 ]]; do
-  N="${1//\//}"
-  if grep -q "$N" /etc/projects; then
-    echo "Repo $N exists, skipped." >&2
-  else
-    ID="$(next_id)"
-    echo "$ID:/srv/repo/$N" >> /etc/projects
-    echo "$N:$ID" >> /etc/projid
-    xfs_quota -x -c "project -s $ID" &>/dev/null
-    echo "Added $N (ID $ID)"
-  fi
+BASE="/srv/repo"
+readonly BASE
+
+if [ "$1" = "-m" ]; then
+  MKDIR=yes
   shift
+fi
+
+while [ $# -ne 0 ]; do
+  N="${1//\//}"
+  shift
+  if grep -q "$BASE/$N\$" /etc/projects; then
+    echo "Repo $N exists, skipped." >&2
+    continue
+  fi
+
+  if [ ! -e "$BASE/$N" ]; then
+    if [ -n "$MKDIR" ]; then
+      echo "Path $BASE/$N does not exist, creating directory." >&2
+      mkdir -p "$BASE/$N"
+    else
+      echo "Path $BASE/$N does not exist, ignored." >&2
+      continue
+    fi
+  elif [ ! -d "$BASE/$N" ]; then
+    echo "Path $BASE/$N is not a directory, ignored." >&2
+    continue
+  fi
+
+  ID="$(next_id)"
+  echo "$ID:$BASE/$N" >> /etc/projects
+  echo "$N:$ID" >> /etc/projid
+  xfs_quota -x -c "project -s $ID" &>/dev/null
+  echo "Added $N (ID $ID)"
 done
 ```
 
