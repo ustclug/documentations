@@ -112,7 +112,7 @@ mkfs.ext4 /dev/ssd/docker
 ```shell
 lvcreate -L 16G -n mcache_meta ssd
 lvcreate -l 100%FREE -n mcache ssd
-lvreduce -l 2048 ssd/mcache
+lvreduce -l -2048 ssd/mcache
 lvconvert --type cache-pool --poolmetadata ssd/mcache_meta --cachemode passthrough -c 1M --config allocation/cache_pool_max_chunks=2000000 ssd/mcache
 ```
 
