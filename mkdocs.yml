@@ -89,6 +89,7 @@ nav:
       - Repo sync: '#'
       - Mail list: 'services/mirrors/mail-list.md'
     - Authoritative DNS: 'services/auth-dns.md'
+    - Docker2: 'services/docker2.md'
     - Neat DNS: '#'
     - GitLab: '#'
     - DokuWiki: '#'
