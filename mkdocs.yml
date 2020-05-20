@@ -66,6 +66,7 @@ nav:
     - Monitor: 'infrastructure/monitor.md'
     - PPA: '#'
     - Google Apps / G Suite: 'infrastructure/google.md'
+    - GitHub: infrastructure/github.md
     - Mail Agent: '#'
   - Services:
     - Mirrors:
