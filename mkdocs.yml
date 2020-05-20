@@ -36,8 +36,10 @@ extra_javascript:
 # Extensions
 markdown_extensions:
   - admonition
+  - attr_list
   - codehilite
   - footnotes
+  - pymdownx.details
   - pymdownx.superfences
   - markdown.extensions.def_list
   - toc:
