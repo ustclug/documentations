@@ -21,6 +21,7 @@ theme:
   icon:
     logo: fontawesome/brands/linux
     repo: octicons/mark-github
+  features: [tabs]
 
 # Customization
 extra:
@@ -46,63 +47,67 @@ markdown_extensions:
       permalink: true
 
 nav:
-  - Workflow:
-    - Mirrors maintenance: 'workflow/mirrors/maintenance.md'
-    - New VM in vSphere: 'workflow/vSphere/new_vm.md'
-  - Infrastructure:
-    - Intranet:
-      - Overview: 'infrastructure/intranet/intranet.md'
-      - Tinc: 'infrastructure/tinc.md'
-      - LUGI VPN: 'infrastructure/intranet/lugivpn.md'
-    - Servers Unified Authentication (LDAP): 'infrastructure/ldap.md'
-    - SSH Certificate Authority: 'infrastructure/sshca.md'
-    - vSphere Cluster:
-      - ESXi: '#'
-      - vCenter: '#'
-      - NFS: '#'
-      - VDP: '#'
-    - SaltStack: '#'
-    - Backup: '#'
-    - Monitor: 'infrastructure/monitor.md'
-    - PPA: '#'
-    - Google Apps / G Suite: 'infrastructure/google.md'
-    - GitHub: infrastructure/github.md
-    - Mail Agent: '#'
-  - Services:
-    - Mirrors:
-      - History: services/mirrors/index.md
-      - Current: services/mirrors/2/index.md
-      - Auxiliary: services/mirrors/3/index.md
-      - Staging:
-        - Overview: services/mirrors/4/index.md
-        - Volumes: services/mirrors/4/volumes.md
-        - Networking:
-          - Interfaces: services/mirrors/4/networking/index.md
-        - Repositories: services/mirrors/4/repos.md
-      - Server 1: services/mirrors/1/index.md
-      - Hardware: 'services/mirrors/hardware.md'
-      - Docker: 'services/mirrors/docker.md'
-      - IPMI: '#'
-      - ZFS: 'services/mirrors/zfs.md'
-      - HTTP Service: '#'
-      - RSYNC Service: '#'
-      - FTP Service: '#'
-      - Reverse Proxy: '#'
-      - Limiter: 'services/mirrors/limiter.md'
-      - Repo sync: '#'
-      - Mail list: 'services/mirrors/mail-list.md'
-    - Authoritative DNS: 'services/auth-dns.md'
-    - Docker2: 'services/docker2.md'
-    - Neat DNS: '#'
-    - GitLab: '#'
-    - DokuWiki: '#'
-    - LUG VPN:
-      - RADIUS: '#'
-      - VPN: '#'
-      - Web: '#'
-    - Light: 'services/light.md'
-    - PXE:
-      - LIIMS: 'services/pxe/liims.md'
-    - FTP: 'services/ftp.md'
-    - Generate 204: 'services/generate-204.md'
-    - Discontinued Services: 'services/discontinued.md'
+  - Main:
+    - Index: index.md
+    - Workflow:
+      - Mirrors maintenance: 'workflow/mirrors/maintenance.md'
+      - New VM in vSphere: 'workflow/vSphere/new_vm.md'
+    - Infrastructure:
+      - Intranet:
+        - Overview: 'infrastructure/intranet/intranet.md'
+        - Tinc: 'infrastructure/tinc.md'
+        - LUGI VPN: 'infrastructure/intranet/lugivpn.md'
+      - Servers Unified Authentication (LDAP): 'infrastructure/ldap.md'
+      - SSH Certificate Authority: 'infrastructure/sshca.md'
+      - vSphere Cluster:
+        - ESXi: '#'
+        - vCenter: '#'
+        - NFS: '#'
+        - VDP: '#'
+      - SaltStack: '#'
+      - Backup: '#'
+      - Monitor: 'infrastructure/monitor.md'
+      - PPA: '#'
+      - Google Apps / G Suite: 'infrastructure/google.md'
+      - GitHub: infrastructure/github.md
+      - Mail Agent: '#'
+    - Services:
+      - Mirrors:
+        - History: services/mirrors/index.md
+        - Current: services/mirrors/2/index.md
+        - Auxiliary: services/mirrors/3/index.md
+        - Staging:
+          - Overview: services/mirrors/4/index.md
+          - Volumes: services/mirrors/4/volumes.md
+          - Networking:
+            - Interfaces: services/mirrors/4/networking/index.md
+          - Repositories: services/mirrors/4/repos.md
+        - Server 1: services/mirrors/1/index.md
+        - Hardware: 'services/mirrors/hardware.md'
+        - Docker: 'services/mirrors/docker.md'
+        - IPMI: '#'
+        - ZFS: 'services/mirrors/zfs.md'
+        - HTTP Service: '#'
+        - RSYNC Service: '#'
+        - FTP Service: '#'
+        - Reverse Proxy: '#'
+        - Limiter: 'services/mirrors/limiter.md'
+        - Repo sync: '#'
+        - Mail list: 'services/mirrors/mail-list.md'
+      - Authoritative DNS: 'services/auth-dns.md'
+      - Docker2: 'services/docker2.md'
+      - Neat DNS: '#'
+      - GitLab: '#'
+      - DokuWiki: '#'
+      - LUG VPN:
+        - RADIUS: '#'
+        - VPN: '#'
+        - Web: '#'
+      - Light: 'services/light.md'
+      - PXE:
+        - LIIMS: 'services/pxe/liims.md'
+      - FTP: 'services/ftp.md'
+      - Generate 204: 'services/generate-204.md'
+      - Discontinued Services: 'services/discontinued.md'
+  - Projects:
+    - Linux 101: projects/linux101/index.md

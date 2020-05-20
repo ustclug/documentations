@@ -1,2 +1,1 @@
-mkdocs-material>=5.1.1
-pygments
+mkdocs-material>=5.1.5
