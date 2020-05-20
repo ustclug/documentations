@@ -20,7 +20,7 @@
 > > University of Science and Technology of China  
 > > Homepage: <https://lug.ustc.edu.cn/>  
 > > E-Mail: <lug@ustc.edu.cn>  
-> > Zibo Wang (王子博) <example@ustclug.org>
+> > Zibo Wang (王子博) &lt;<example@ustclug.org>&gt;
 >
 > 于“账号”标签页中“用这个地址发送邮件”内点“修改信息”，在弹出窗口中输入名称“Zibo Wang on behalf of USTC LUG”（请换成自己的名字），输入回复地址“`lug@ustc.edu.cn`”。
 >
