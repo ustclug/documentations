@@ -10,14 +10,13 @@
 >
 > 登录网页版 Gmail，在右上角点开设置，于“常规”标签页中设置“签名”为纯文本如下内容（共 5 行，将最后一行换成自己的信息）：
 >
-> > Linux User Group
-> > University of Science and Technology of China
-> > Homepage: <https://lug.ustc.edu.cn/>
-> > E-Mail: <lug@ustc.edu.cn>
+> > Linux User Group  
+> > University of Science and Technology of China  
+> > Homepage: <https://lug.ustc.edu.cn/>  
+> > E-Mail: <lug@ustc.edu.cn>  
 > > Zibo Wang (王子博) <example@ustclug.org>
 >
-> 于“账号”标签页中“用这个地址发送邮件”内点“修改信息”，在弹出窗口中输入名称“Zibo Wang on behalf of USTC
-> LUG”（请换成自己的名字），输入回复地址“`lug@ustc.edu.cn`”。
+> 于“账号”标签页中“用这个地址发送邮件”内点“修改信息”，在弹出窗口中输入名称“Zibo Wang on behalf of USTC LUG”（请换成自己的名字），输入回复地址“`lug@ustc.edu.cn`”。
 >
 > 还可以视自己需要在“转发和 POP / IMAP”标签页中配置自动转发，但请注意，如果你配置了转发到自己的常用邮箱，请不要直接从常用邮箱回复邮件，而应该登录 LUG 邮箱回复。
 >
