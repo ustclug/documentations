@@ -28,6 +28,14 @@
 
 总之，不知道怎么处理的邮件不要贸然回复。如果你认为某一封邮件需要我们处理但不知道怎么处理，请转告给其他相关同学。
 
-## 加入 lug @ ustc 列表
+## 加入 lug @ ustc 列表 {#lug-ustc-mailing-list}
 
 若要收到发往 lug A ustc.edu.cn 的邮件，需要在 [群组管理](https://admin.google.com/ac/groups) 这里将用户加入 USTC LUG Staff 组。这个群组就是 lug 和 mirrors 在学校邮箱设置的转发目标。
+
+## 设置默认地址 {#default-route}
+
+G Suite 支持将单个地址设为“默认地址”，用于接受发往不存在的地址的邮件。
+
+参考资料：<https://support.google.com/a/answer/2368153>
+
+对于中文界面，应该从 Google Admin 控制台按顺序选择 **应用** → **G Suite** → **Gmail** → **高级设置**，其中的 **无限别名地址** 就是这个选项，一般发给会长或 CTO。
