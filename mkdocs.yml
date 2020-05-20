@@ -63,7 +63,7 @@ nav:
     - Backup: '#'
     - Monitor: 'infrastructure/monitor.md'
     - PPA: '#'
-    - Google Apps / G Suite: '#'
+    - Google Apps / G Suite: 'infrastructure/google.md'
     - Mail Agent: '#'
   - Services:
     - Mirrors:
