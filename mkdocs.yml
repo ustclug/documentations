@@ -51,7 +51,7 @@ nav:
     - Index: index.md
     - Workflow:
       - Mirrors maintenance: 'workflow/mirrors/maintenance.md'
-      - New VM in vSphere: 'workflow/vSphere/new_vm.md'
+      - New VM in vSphere: 'workflow/vSphere/new-vm.md'
     - Infrastructure:
       - Intranet:
         - Overview: 'infrastructure/intranet/intranet.md'
@@ -109,5 +109,7 @@ nav:
       - FTP: 'services/ftp.md'
       - Generate 204: 'services/generate-204.md'
       - Discontinued Services: 'services/discontinued.md'
+    - Common Issues:
+      - DNS: faq/dns.md
   - Projects:
     - Linux 101: projects/linux101/index.md
