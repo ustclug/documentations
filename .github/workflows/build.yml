@@ -10,26 +10,12 @@ jobs:
     - uses: actions/setup-python@v1
       with:
         python-version: 3.8
-    - name: Setup cache for PyPI
-      uses: actions/cache@v1
-      id: cache-pip
-      with:
-        path: env/
-        key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
-    - name: Create venv and Install dependencies
-      if: steps.cache-pip.outputs.cache-hit != 'true'
-      run: |
-        python3 -m venv env
-        env/bin/pip3 install -r requirements.txt
+    - name: Install dependencies
+      run: pip3 install -Ur requirements.txt
     - name: Build docs
-      run: |
-        env/bin/mkdocs -v build
+      run: mkdocs -v build
     - name: Deploy to GitHub Pages
-      env:
-        SSH_KEY: ${{ secrets.DEPLOY_KEY }}
       run: |
-        mkdir -p ~/.ssh
-        echo "$SSH_KEY" > ~/.ssh/id_ecdsa && chmod 0600 ~/.ssh/id_ecdsa
         cd site
         git init --quiet
         echo -n "docs.ustclug.org" > CNAME
@@ -37,4 +23,4 @@ jobs:
         git add --all
         git -c user.name=GitHub -c user.email=noreply@github.com \
           commit --message "Auto deploy from GitHub Actions"
-        git push git@github.com:$GITHUB_REPOSITORY.git +HEAD:gh-pages
+        git push https://${GITHUB_ACTOR}:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY.git +HEAD:gh-pages
