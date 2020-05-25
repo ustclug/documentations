@@ -1,21 +1,38 @@
 # LIIMS
 
-perhaps short for Libray Independent Inquery Machine System
+Short for **Libray Independent Inquery Machine System**.
 
-server: pxe.s.ustclug.org
+Server: pxe.s.ustclug.org
 
 Git Repository:
 
-- [liimstrap](https://github.com/ustclug/liimstrap)
+- [liimstrap](https://github.com/ustclug/liimstrap) （注意仓库内容的更改时间，可能严重过时了）
 
+## 启动配置
 
-使用liimstrap在ArchLinux下进行构建，liimstrap使用
-方法参考仓库中的说明。
+配置文件在 `/home/pxe/tftp/grub/grub.cfg.d`，若要允许新机器启动 liims 镜像，创建一个符号链接到对应的配置文件（目前的镜像是 `liims160909`）：
 
-构建后需要推送到服务器上的/nfsroot/liims下，并设置/usr的所有者为liims。
-机器的默认pxe启动配置在/home/pxe/tftp/pxelinux.cfg/下
+```shell
+ln -s liims160909 01:23:45:67:89:ab
+```
 
-## 示例qemu调试方法
+## 启动镜像
+
+位于 `/home/pxe/nfsroot/<category>/<name>`，其中 `<name>` 就是镜像名称（例如 `liims160909`）。这是整个 rootfs，直接修改这里的文件，机器重启后就会载入。
+
+IP 白名单采用 iptables 实现，修改 rootfs 下的 `etc/iptables/*.rules` 可修改策略。
+
+## 镜像构建
+
+!!! note "iBug 备注"
+
+    此节及以下的内容可能严重过时，pxe.s 上的很多配置都被手动更新过了。
+
+使用 liimstrap 在 ArchLinux 下进行构建，liimstrap使用方法参考仓库中的说明。
+
+构建后需要推送到服务器上的 /nfsroot/liims 下，并设置 /usr 的所有者为 liims。机器的默认 pxe 启动配置在 /home/pxe/tftp/pxelinux.cfg/ 下
+
+### 示例 qemu 调试方法
 
 创建并挂载临时镜像:
 
@@ -25,11 +42,9 @@ mkfs.ext4 liims.img
 mount -o loop liims.img /mnt
 ```
 
-假设当前路径为liimstrap，修改`initcpio/mkinitcpio.conf`，
-去掉HOOKS中的`liims_root`，增加`block`（仅调试时需要）。
-使用liimstrap制作镜像`./liimstrap /mnt`。完成后使用
-qemu打开调试:
-```sh
+假设当前路径为 liimstrap，修改 `initcpio/mkinitcpio.conf`，去掉 HOOKS 中的 `liims_root`，增加 `block`（仅调试时需要）。 使用 liimstrap 制作镜像 `./liimstrap /mnt`。完成后使用 qemu 打开调试:
+
+```shell
 qemu -kernel /mnt/boot/vmlinuz-lts\
      -initrd /mnt/boot/initramfs-linux-lts.img\
      -hda liims.img\
@@ -38,4 +53,4 @@ qemu -kernel /mnt/boot/vmlinuz-lts\
      -append "root=/dev/sda rootflags=rw"
 ```
 
-注：其中netdev中的ip段可以自由选取，`device`中的设备名通过`qemu -device \?`查看后选择任一网络设备即可
+注：其中 netdev 中的 ip 段可以自由选取，`device` 中的设备名通过 `qemu -device \?` 查看后选择任一网络设备即可
