@@ -2,7 +2,11 @@
 
 LDAP 是轻量目录访问协议，我们用的软件是 OpenLDAP。
 
-LDAP 的配置很麻烦，所以装了一个网页前端来配置它，网页前端是 GOsa。
+LDAP 的配置很麻烦，所以装了一个网页前端来配置它，网页前端是 GOsa²。
+
+## 密码修改
+
+登录任意一台服务器使用 `passwd` 就可以修改密码，修改的密码在所有机器上实时生效（因为实际是存在 LDAP 数据库里的）。
 
 ## GOsa 使用
 
@@ -14,7 +18,11 @@ LDAP 的配置很麻烦，所以装了一个网页前端来配置它，网页前
 
 Users 是用来添加和配置用户信息的地方。最主要的功能位于每个 User 的第二页 POSIX，这里可以设置用户的家目录，UID，GID，以及所属的用户组。这里需要注意的地方如下：
 
-* UID，GID 从 2000 开始计数，由于 gosa 不能对 UID 自动增长，所以管理员需要人工增长。方法是登录任意一台机器，运行 `getent passwd` 并观察输出，取最后那个 UID +1 就行了
+* UID，GID 从 2000 开始计数，由于 gosa 不能对 UID 自动增长，所以管理员需要人工增长。方法是登录任意一台机器，运行 `getent passwd` 并观察输出，取最大的 UID +1 就行了。
+
+    !!! danger "坑"
+
+        小心输出的顺序，最大的 UID 不一定是最后一个（而且事实上经常不是），建议配合 sed, awk, sort 之类的命令妥善处理。
 
   GID 建议不要每人一个，我们建一个 member 组，给大家都加进来，这样就只需要考虑 UID 的增长了。
 
@@ -29,7 +37,6 @@ Users 是用来添加和配置用户信息的地方。最主要的功能位于�
 这里配置 sudo 权限。这里的语法和 sudoers 一样（请无视 System trust）。特别要说的一点是通过在 System 中加入主机名可以针对每个主机配置权限，这里要填的是主机名而不是域名，具体范例请看里面的 lugsu wikimanager 等项。
 
 其它我没提到的项我也没搞明白怎么用。。。
-
 
 gosa 的配置文件在 `/etc/gosa/gosa.conf`，它是在第一次运行 gosa 时候自动生成的，但在之后就只能通过手动编辑来修改。由于配置文件几乎没有文档，官方的 FAQ 有好多是错的，所以我基本没动:-D。
 
@@ -49,10 +56,10 @@ Debian 7 以上系统安装 libnss-ldapd libpam-ldapd sudo-ldap
 
 在安装过程中会被问一些问题（不同版本的 Debian 的问题可能不同）：
 
-- ldap 服务器地址是 `ldaps://ldap.lug.ustc.edu.cn`
+- LDAP 服务器地址是 `ldaps://ldap.lug.ustc.edu.cn`
 - Base DN 为 `dc=lug,dc=ustc,dc=edu,dc=cn`
     - 协议为版本 3
-    - 配置 libnss-ldapd 时有个选 Name services to configure 的，全部选
+    - 配置 libnss-ldapd 时有个选 Name services to configure 的，全部选上
 
 #### /etc/ldap/ldap.conf
 
@@ -96,7 +103,7 @@ passwd:         compat ldap
 group:          compat ldap
 shadow:         compat ldap
 ......
-sudoers:	files ldap
+sudoers:        files ldap
 ```
 
 注意每一项后面的 `ldap`，如果没有要手动加上。不太清楚具体含义，反正给每一项都加上 `ldap` 是没有问题的。
@@ -140,10 +147,10 @@ authconfig --enablecache \
 
 Sudo 的配置是通过 sssd 实现的，参考 <https://access.redhat.com/site/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Deployment_Guide/sssd-ldap-sudo.html>
 
-安装 sssd libsss_sudo
+安装 sssd libsss\_sudo
 将 `/usr/share/doc/sssd-common-xxx/sssd-example.conf` 复制到 `/etc/sssd/sssd.conf` 并修改权限为 600。
 
-```
+```diff
 [zguangyu@pxe ~]$ sudo diff /usr/share/doc/sssd-common-1.14.0/sssd-example.conf /etc/sssd/sssd.conf
 3c3
 < services = nss, pam
