@@ -40,9 +40,10 @@ markdown_extensions:
   - attr_list
   - codehilite
   - footnotes
+  - markdown.extensions.def_list
+  - meta
   - pymdownx.details
   - pymdownx.superfences
-  - markdown.extensions.def_list
   - toc:
       permalink: true
 
@@ -59,6 +60,7 @@ nav:
         - LUGI VPN: 'infrastructure/intranet/lugivpn.md'
       - Servers Unified Authentication (LDAP): 'infrastructure/ldap.md'
       - SSH Certificate Authority: 'infrastructure/sshca.md'
+      - DNS: 'infrastructure/dns.md'
       - vSphere Cluster:
         - ESXi: '#'
         - vCenter: '#'
