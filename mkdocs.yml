@@ -9,7 +9,7 @@ repo_name: 'ustclug/documentations'
 repo_url: 'https://github.com/ustclug/documentations'
 
 # Copyright
-copyright: 'Copyright &copy; 2003-2020 USTC Linux User Group'
+copyright: 'Copyright &copy; 2003-2020 USTC Linux User Group. <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a>.'
 
 # Configuration
 theme:
