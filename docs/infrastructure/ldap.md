@@ -14,11 +14,11 @@ LDAP 的配置很麻烦，所以装了一个网页前端来配置它，网页前
 
 用你的账号登录进去之后，可以在右上角退出，右上角还有两个按钮分别是修改账号信息和修改密码。账号信息第一页大部分是没用的，只有一个登录名是有用的，这是你登录任何地方的用户名。
 
-### Users 和 Groups
+### Users 和 Groups {#ldap-users-and-groups}
 
 Users 是用来添加和配置用户信息的地方。最主要的功能位于每个 User 的第二页 POSIX，这里可以设置用户的家目录，UID，GID，以及所属的用户组。这里需要注意的地方如下：
 
-* UID，GID 从 2000 开始计数，由于 gosa 不能对 UID 自动增长，所以管理员需要人工增长。方法是登录任意一台机器，运行 `getent passwd` 并观察输出，取最大的 UID +1 就行了。
+* UID，GID 从 2000 开始计数，由于 gosa 不能对 UID 自动增长，所以管理员需要人工增长。方法是登录任意一台机器，运行 `getent passwd` 并观察输出，取最大的 UID + 1 就行了。
 
     !!! danger "坑"
 
@@ -28,9 +28,13 @@ Users 是用来添加和配置用户信息的地方。最主要的功能位于�
         getent passwd | cut -d: -f3 | sort -n
         ```
 
-  GID 建议不要每人一个，我们建一个 member 组，给大家都加进来，这样就只需要考虑 UID 的增长了。
+        同时还有若干 UID 很大但是离散的特殊账号，很容易分辨。显然新 UID 是连续的最大 UID + 1.
+
+  GID 建议不要每人一个，我们建一个 group，给大家都加进来，这样就只需要考虑 UID 的增长了。目前该 group 为 ldap_users，GID 为 2001。
 
 * 建账号之前先注意一下各个服务器上有没有相同的用户名，有的话把原家目录 chown 到新的 UID GID，删除同名用户。
+
+Groups 中以 ssh 开头的组控制对应机器的 ssh 权限，sudo 开头同理。super_maneger 组包含所有机器的权限，以及 LDAP 的 admin 身份。加入对应的组即授予相应权限。[已知的 GID](#ldap-known-gids)
 
 ### Access Control
 
@@ -204,7 +208,9 @@ nscd -i group
 
 目前所有服务器均已部署 LDAP
 
-## 已知的 GID
+## 已知的 GID {#ldap-known-gids}
+
+GID 信息已过时，以 LDAP 实际配置为准。
 
 | GID  | 名称            | 说明       |
 | ---- | --------------- | ---------- |

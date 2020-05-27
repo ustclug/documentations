@@ -53,6 +53,7 @@ nav:
     - Workflow:
       - Mirrors maintenance: 'workflow/mirrors/maintenance.md'
       - New VM in vSphere: 'workflow/vSphere/new-vm.md'
+      - Add New Users (for admin): 'workflow/add-new-users/add-new-users.md'
     - Infrastructure:
       - Intranet:
         - Overview: 'infrastructure/intranet/intranet.md'
