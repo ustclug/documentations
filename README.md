@@ -8,4 +8,4 @@
 
 ## 许可
 
-[CC BY-NC-SA 4.0](LICENSE) 协议。
+[CC BY-NC-SA 4.0](LICENSE.md) 协议。
