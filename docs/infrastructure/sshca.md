@@ -29,6 +29,10 @@ And when you log in to a LUG server, it is automatically trusted. If you find a 
 
     When signing certificates using OpenSSH &lt;= 8.1, add `-t rsa-sha2-256` to the `ssh-keygen` command. More details can be found here: <https://ibugone.com/p/35>
 
+!!! warning "Warning 2"
+
+    Some of our servers are still running Debian Jessie, which has OpenSSH version 6.7 that does not support SHA-2 certificate algorithms. Sign with `-t ssh-rsa` instead if you want to log in to such servers.
+
 Copy the file `/etc/ssh/ssh_host_rsa_key.pub` from target server. (salt is your friend)
 
 Then, run `ssh-keygen` to issue a public key. For example:
