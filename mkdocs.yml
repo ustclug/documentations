@@ -53,7 +53,7 @@ nav:
     - Workflow:
       - Mirrors maintenance: 'workflow/mirrors/maintenance.md'
       - New VM in vSphere: 'workflow/vSphere/new-vm.md'
-      - Add New User in LDAP: 'workflow/add-new-users/add-new-user.md'
+      - Add New User in LDAP: 'workflow/ldap/add-new-user.md'
     - Infrastructure:
       - Intranet:
         - Overview: 'infrastructure/intranet/intranet.md'
@@ -100,7 +100,7 @@ nav:
       - Authoritative DNS: 'services/auth-dns.md'
       - Docker2: 'services/docker2.md'
       - Neat DNS: '#'
-      - GitLab: '#'
+      - GitLab: 'services/gitlab.md'
       - DokuWiki: '#'
       - LUG VPN:
         - RADIUS: '#'
