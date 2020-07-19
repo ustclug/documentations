@@ -4,7 +4,7 @@ Git Repository:
 - [gitlab-scripts](https://git.lug.ustc.edu.cn/ustclug/gitlab-scripts)
 
 ## 更新
-由于已经 docker 化，因此我们的更新是通过拉取[sameersbn/docker-gitlab](https://github.com/sameersbn/docker-gitlab/)的 docker image，进行数据库准备以及启动镜像实例来进行更新，Zack Zeng 学长已经写好了一套脚本系统：[gitlab-scripts](https://git.lug.ustc.edu.cn/ustclug/gitlab-scripts)，因此更新时只要跑脚本就可以了。
+由于已经 docker 化，因此我们的更新是通过拉取 [sameersbn/docker-gitlab](https://github.com/sameersbn/docker-gitlab/) 的 docker image，进行数据库准备以及启动镜像实例来进行更新，Zack Zeng 学长已经写好了一套脚本系统：[gitlab-scripts](https://git.lug.ustc.edu.cn/ustclug/gitlab-scripts)，因此更新时只要跑脚本就可以了。
 
 由于更新需要停止服务，因此请于更新前至少几小时发布更新公告（包括具体时间等）
 
@@ -22,5 +22,3 @@ Git Repository:
 更新前请先停止 gitlab 的 container
 
 更新时可以按照官网教程 [docker-postgresql](https://github.com/sameersbn/docker-postgresql/blob/master/README.md) 进行更新，可以通过拉取 latest 标签的镜像，删除原来的 container，再通过脚本 `./gitlab.sh db` 自动启动，数据库更新时可能会需要一定时间来迁移数据，请通过 `docker logs -f gitlab-postgresql` 命令来查看迁移进度，待迁移完成后再运行 GitLab 的 container。
-
-到 [vcenter](vcenter2.vm.ustclug.org/) 上对虚拟机打快照。
