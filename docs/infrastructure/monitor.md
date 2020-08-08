@@ -61,6 +61,8 @@ sudo systemctl restart telegraf
 sudo systemctl status telegraf
 ```
 
+!!! tip "建议在被监控机器上配置 NTP（可以使用 `systemd-timesyncd`，设置 NTP 服务器为 time.ustc.edu.cn），以避免时间不同步可能带来的问题。"
+
 ## Web
 
 Web 端监控位于 <https://monitor.ustclug.org>，账号系统使用 LDAP，可以在这里设置预警提示等。
