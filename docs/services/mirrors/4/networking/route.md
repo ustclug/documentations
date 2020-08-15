@@ -48,17 +48,20 @@ Table=1011
 
 注意路由表是用名称指定的，从 `/etc/iproute2/rt_tables` 中查出对应的数字 ID。这个文件本来也是 `ip` 命令所使用的（注意它的目录名叫 `iproute2`）。
 
-最后改一下 `systemd-networkd.service`，让这个脚本在 networkd 之前运行：
+最后给这个脚本配个 service，让它在 networkd 之前运行：
 
 ```ini
-# /etc/systemd/system/systemd-networkd.service.d/override.conf
-
 [Unit]
-Before=multi-user.target
+Description=Generate routes for systemd-networkd
+Before=systemd-networkd.service
 
 [Service]
-ExecStartPre=/bin/bash /usr/local/network_config/route-all.sh
-ExecStartPre=-/usr/sbin/ip rule flush
+Type=oneshot
+ExecStart=/bin/bash /usr/local/network_config/route-all.sh
+RemainAfterExit=true
+
+[Install]
+WantedBy=network.target systemd-networkd.service
 ```
 
-使用 `systemctl edit systemd-networkd.service` 命令，填入上面的内容，保存退出后重启 networkd 服务即可。
+这个文件存到 `/etc/systemd/system/route-all.service`，reload 再 enable 就可以了。
