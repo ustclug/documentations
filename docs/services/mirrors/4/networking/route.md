@@ -56,7 +56,7 @@ Before=systemd-networkd.service
 
 [Service]
 Type=oneshot
-ExecStart=/bin/bash /usr/local/network_script/route-all.sh
+ExecStart=/bin/bash /usr/local/network_config/route-all.sh
 RemainAfterExit=true
 
 [Install]
