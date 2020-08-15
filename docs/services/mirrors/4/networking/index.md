@@ -44,9 +44,11 @@ Name=bond1
 Kind=bond
 
 [Bond]
-Mode=balance-alb
+Mode=balance-tlb
 MIIMonitorSec=1
 ```
+
+关于 bond 模式（`balance-tlb` vs `balance-alb`），参考[这个 Server Fault 上的回答](https://serverfault.com/a/739550/450575)。
 
 然后创建 VLAN，写入 `/etc/systemd/network/bond1.network`：
 
@@ -75,7 +77,7 @@ NIC 机房有 4 个 VLAN，分别是
 
 下面以教育网 VLAN 为例。
 
-因为 VLAN 在物理上属于一个网卡，因此向对应网卡的 `.network` 文件的 `[Network]` 段追加一行：
+因为 VLAN 在物理上属于一个网卡，因此向对应网卡的 `.network` 文件的 `[Network]` 段追加一行（见上面一节 `bond1.network` 文件）：
 
 ```ini
 VLAN=cernet
@@ -101,10 +103,14 @@ Name=cernet
 [Network]
 DHCP=no
 Address=202.38.95.110/25
-Gateway=202.38.95.126
+#Gateway=202.38.95.126
 Address=2001:da8:d800:95::110/64
-Gateway=2001:da8:d800:95::1
+#Gateway=2001:da8:d800:95::1
 IPv6AcceptRA=false
 ```
 
-保存后重启 systemd-networkd.service 就可以看到效果了。
+保存后重启 `systemd-networkd.service` 就可以看到效果了。
+
+!!! question "为什么 Gateway 被注释掉了"
+
+    根据 [systemd 官方文档](https://www.freedesktop.org/software/systemd/man/systemd.network.html#Gateway=)，在 `[Network]` 一节出现的 `Gateway=` 等价于一个单独的、仅包含一行 `Gateway=` 的 `[Route]` 节。由于我们需要深度[自定义路由](route.md)，这里不方便采用这个过于简洁的设定（例如各种默认值 `Table=main` 等）。
