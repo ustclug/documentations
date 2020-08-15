@@ -84,6 +84,7 @@ nav:
           - Volumes: services/mirrors/4/volumes.md
           - Networking:
             - Interfaces: services/mirrors/4/networking/index.md
+            - Routing: services/mirrors/4/networking/route.md
           - Repositories: services/mirrors/4/repos.md
         - Server 1: services/mirrors/1/index.md
         - Hardware: 'services/mirrors/hardware.md'
