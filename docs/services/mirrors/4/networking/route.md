@@ -17,6 +17,7 @@ gen_route() {
   # Convert table to number
   TABLENAME="$4"
   TABLE="$(awk 'substr($0, 1, 1) != "#" && $2 == "'"$TABLENAME"'" { print $1 }' /etc/iproute2/rt_tables | head -1)"
+  PRIORITY="$5"
 
   F="$ROOT_RT/$DEV.network.d"
   mkdir -p "$F"
