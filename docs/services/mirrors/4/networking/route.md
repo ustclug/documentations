@@ -58,10 +58,16 @@ Before=systemd-networkd.service
 [Service]
 Type=oneshot
 ExecStart=/bin/bash /usr/local/network_config/route-all.sh
+ExecStart=-/usr/sbin/ip rule flush
 RemainAfterExit=true
 
 [Install]
 WantedBy=network.target systemd-networkd.service
+Wants=systemd-networkd.service
 ```
 
 这个文件存到 `/etc/systemd/system/route-all.service`，reload 再 enable 就可以了。
+
+!!! bug "不要尝试改 systemd-networkd.service"
+
+    这个自带的服务有一个 `User=systemd-networkd`，你既不能 `ip rule` 也不能写入 `/run/systemd` 等，会导致服务炸掉，然后网也炸了。。。
