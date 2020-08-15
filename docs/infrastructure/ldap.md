@@ -116,6 +116,14 @@ sudoers:        files ldap
 
 注意每一项后面的 `ldap`，如果没有要手动加上。不太清楚具体含义，反正给每一项都加上 `ldap` 是没有问题的。
 
+!!! info "Debian 10 要改一下 sudoers 那一行"
+
+    把 ldap 放前面，同时加上 `[SUCCESS=return]` 应该像下面这样：
+
+    ```
+    sudoers:        ldap [SUCCESS=return] files
+    ```
+
 重启一下 `nscd` 和 `nslcd` 服务，此时运行 `getent passwd`，应该可以看到比 `/etc/passwd` 更多的内容，这就说明配置正确了。
 
 #### PAM 配置
