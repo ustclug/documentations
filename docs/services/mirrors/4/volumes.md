@@ -116,7 +116,7 @@ lvreduce -l -2048 ssd/mcache
 lvconvert --type cache-pool --poolmetadata ssd/mcache_meta --cachemode writeback -c 1M --config allocation/cache_pool_max_chunks=2000000 ssd/mcache
 ```
 
-~~这里的缓存模式采用 passthrough，即写入动作绕过缓存直接写回原设备（当然啦，写入都是由从上游同步产生的），另外两种 writeback 和 writethrough 都会写入缓存，不是我们想要的。~~ passthrough 模式中，读写都会绕过 cache，唯一的作用是 write hit 会使得 cache 对应的块失效。
+<del>这里的缓存模式采用 passthrough，即写入动作绕过缓存直接写回原设备（当然啦，写入都是由从上游同步产生的），另外两种 writeback 和 writethrough 都会写入缓存，不是我们想要的。</del> passthrough 模式中，读写都会绕过 cache，唯一的作用是 write hit 会使得 cache 对应的块失效。
 
 这里使用 writeback 模式，因为仓库数据没了还能再同步，使用 writeback 提升性能更合适。
 
