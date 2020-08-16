@@ -2,6 +2,9 @@
 
 mirrors4 上的仓库和 mirrors2/3 一样，位于 `/srv/repo`。仓库容量使用 XFS 的 quota 功能监视。
 
+!!! todo TODO
+    需要补充：删除仓库与重命名仓库 (mv 和 rm 可能太慢了)
+
 ## 添加一个新仓库
 
 ### 创建 XFS project
