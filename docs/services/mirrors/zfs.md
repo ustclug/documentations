@@ -61,6 +61,8 @@ zfs destroy pool0/repo/debian
 
 ### Traps
 
-Do **NOT** install `zfs-dkms` and related packages from Debian backports repositories. They'll easily break when upgrading.
+<del>Do **NOT** install `zfs-dkms` and related packages from Debian backports repositories. They'll easily break when upgrading.</del>
 
-As of Debian Buster the ZFS packages from the mainstream repository is stable and new enough for our use.
+<del>As of Debian Buster the ZFS packages from the mainstream repository is stable and new enough for our use.</del>
+
+仍然建议安装 Backports 版本的 ZFS。「Stable 越往后（对 ZFS 相关软件包的）维护越弱」，从而导致 stable 的 ZFS 反而质量不如 backports 版本的。
