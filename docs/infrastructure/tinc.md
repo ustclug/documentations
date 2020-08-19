@@ -33,7 +33,7 @@ tincd -n ustclug -K
 Address = [这台机器的公网IP]
 ```
 
-把新增的这个文件提交进 Git 仓库，并在 `{ldap,board,dns}.s.ustclug.org` 三台机器上通过 `git pull` 更新。
+把新增的这个文件提交进 Git 仓库，并在 `{ldap,board,dns,gateway-el}.s.ustclug.org` 四台机器上通过 `git pull` 更新，并 `systemctl reload tinc@ustclug.service`。
 
 ### 内网 IP
 
