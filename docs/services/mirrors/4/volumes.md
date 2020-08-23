@@ -113,12 +113,14 @@ mkfs.ext4 /dev/ssd/docker
 lvcreate -L 16G -n mcache_meta ssd
 lvcreate -l 100%FREE -n mcache ssd
 lvreduce -l -2048 ssd/mcache
-lvconvert --type cache-pool --poolmetadata ssd/mcache_meta --cachemode writeback -c 1M --config allocation/cache_pool_max_chunks=2000000 ssd/mcache
+lvconvert --type cache-pool --poolmetadata ssd/mcache_meta --cachemode writethrough -c 1M --config allocation/cache_pool_max_chunks=2000000 ssd/mcache
 ```
 
 <del>这里的缓存模式采用 passthrough，即写入动作绕过缓存直接写回原设备（当然啦，写入都是由从上游同步产生的），另外两种 writeback 和 writethrough 都会写入缓存，不是我们想要的。</del> passthrough 模式中，读写都会绕过 cache，唯一的作用是 write hit 会使得 cache 对应的块失效。
 
-这里使用 writeback 模式，因为仓库数据没了还能再同步，使用 writeback 提升性能更合适。
+<del>这里使用 writeback 模式，因为仓库数据没了还能再同步，使用 writeback 提升性能更合适。</del>
+
+出于稳定考虑，使用 writethrough 模式。（我们的 Cache 太大了，writeback 可能会弄坏不少东西，如果 metadata 坏了就更麻烦了）
 
 !!! danger "坑"
 
@@ -135,6 +137,36 @@ lvconvert --type cache-pool --poolmetadata ssd/mcache_meta --cachemode writeback
 !!! danger "坑 2"
 
     缓存盘（cache pool）和被缓存的卷必须在同一个 VG 中。
+
+!!! danger "坑 3 (taoky 备注)"
+
+    LVM Cache 的底层是在内核实现的 dm-cache。目前已知的坑如下：
+
+    1. 当出现 dirty blocks（且 cache policy 为 cleaner 时），无法正常 flush。网络上可以找到的这个 [bug](https://bugzilla.redhat.com/show_bug.cgi?id=1668163) 的解决方法是增大 migration_threshold 的值（在新版本 LVM 中，migration_threshold 默认至少会是 chunk size 的 8 倍，在我们的配置下就是 16384 = 2048 * 8。这个版本的 LVM 暂时不在 Buster 中），但是经过测试，单纯增大 migration_threshold 没有任何效果。Jiahao 翻了一下 dm-cache 的源代码，发现 flush 的条件在 <https://elixir.bootlin.com/linux/latest/source/drivers/md/dm-cache-target.c#L1649>，只在状态为 IDLE 时才会 flush。IDLE 的第一个条件需要 inflight io = 0，比较苛刻，可能是无法正常 flush 的原因。
+
+        一个扭曲的解决方法是：先把 migration_threshold 设置得很大（设大小为 x），然后马上缩小，这样就能把 x 那么多大小的脏块弄掉（原理暂时不明，需要补充）。基于这个方法，可以写一个脚本来做 flush 的工作：
+
+        ```sh
+        # dirty hack
+        sudo lvchange --cachepolicy cleaner lug/repo
+        for i in `seq 1 1500`; do sudo lvchange --cachesettings migration_threshold=2113536 lug/repo && sudo lvchange --cachesettings migration_threshold=16384 && echo $i && sleep 15; done;
+        # 需要确认没有脏块。如果还有的话继续执行（次数调小一些）
+        # 如果是从 writeback 切换，需要先把模式切到 writethrough
+        # 然后再修改 cachepolicy 到 smq
+        sudo lvchange --cachepolicy smq lug/repo
+        ```
+
+        在执行时，可以查看：
+
+        ```sh
+        sudo dmsetup status lug-repo
+        # 在 "metadata2" 前面的前面的数字就是 dirty block 的数量
+        # 如果不在执行 lvchange（没有进程抢占了 LVM 的锁），可以执行以下命令确认脏块数量以及其他一些参数。
+        sudo lvs -o name,cache_policy,cache_settings,chunk_size,cache_used_blocks,cache_dirty_blocks /dev/mapper/lug-repo
+        ```
+
+    2. 每次 unclean shutdown 之后，cache 中所有块都会被标记为 dirty。尽管不太可能阻塞系统启动，这可能会给 HDD 一定的压力。
+    3. 扩大 lug/repo 的大小前需要 uncache，且 uncache 的前提条件是没有脏块。
 
 所以接下来要合并 VG，然后才能为仓库卷加上缓存。
 
