@@ -212,6 +212,34 @@ nscd -i group
 
 参考：<https://wiki.debian.org/LDAP/NSS>
 
+## LDAP CLI 工具使用说明
+
+这里以 `ldappasswd` 为例，其余 ladp-series 指令与其大致相同：
+
+LDAP 利用 dn 来定位一个用户，以下指令可以列出所有用户及其 dn：
+
+```shell
+ldapsearch -x -LLL uid=* uid
+```
+
+`-x` 指定使用 Simple authentication，即使用密码认证。
+
+如果要修改一个用户的密码，使用：
+
+```shell
+ldappasswd -x -D '<executor dn>' -W -S '<target user dn>'
+```
+
+`-D '<executor dn>'` 指定了执行者的身份，`-W`/`-S` 指定了接下来询问执行者/目标用户的密码/旧密码。
+
+需要额外注意的是，在 CLI 中添加/删除用户或更改用户密码时需要以 LDAP admin 执行，否则会有报错：
+
+```
+Insufficient access (50) additional info: no write access to parent
+```
+
+或是其他的权限不足的错误。
+
 ## 部署情况
 
 目前所有服务器均已部署 LDAP
