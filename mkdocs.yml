@@ -115,5 +115,6 @@ nav:
       - Discontinued Services: 'services/discontinued.md'
     - Common Issues:
       - DNS: faq/dns.md
+      - LDAP: faq/ldap.md
   - Projects:
     - Linux 101: projects/linux101/index.md
