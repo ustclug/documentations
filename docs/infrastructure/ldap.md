@@ -164,10 +164,10 @@ authconfig --enablecache \
 Sudo 的配置是通过 sssd 实现的，参考 <https://access.redhat.com/site/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Deployment_Guide/sssd-ldap-sudo.html>
 
 安装 sssd libsss\_sudo
-将 `/usr/share/doc/sssd-common-xxx/sssd-example.conf` 复制到 `/etc/sssd/sssd.conf` 并修改权限为 600。
+将 `/usr/share/doc/sssd-common/sssd-example.conf` 复制到 `/etc/sssd/sssd.conf` 并修改权限为 600。
 
 ```diff
-[zguangyu@pxe ~]$ sudo diff /usr/share/doc/sssd-common-1.14.0/sssd-example.conf /etc/sssd/sssd.conf
+[taoky@gateway-nic ~]$ sudo diff /usr/share/doc/sssd-common/sssd-example.conf /etc/sssd/sssd.conf
 3c3
 < services = nss, pam
 ---
@@ -176,7 +176,10 @@ Sudo 的配置是通过 sssd 实现的，参考 <https://access.redhat.com/site/
 < ; domains = LDAP
 ---
 > domains = LDAP
-15,17c15,17
+13a14,15
+> [sudo]
+>
+15,17c17,19
 < ; [domain/LDAP]
 < ; id_provider = ldap
 < ; auth_provider = ldap
@@ -184,20 +187,28 @@ Sudo 的配置是通过 sssd 实现的，参考 <https://access.redhat.com/site/
 > [domain/LDAP]
 > id_provider = ldap
 > auth_provider = ldap
-22,24c22,25
+22,24c24,27
 < ; ldap_schema = rfc2307
 < ; ldap_uri = ldap://ldap.mydomain.org
 < ; ldap_search_base = dc=mydomain,dc=org
 ---
 > ldap_schema = rfc2307
-> ldap_uri = ldaps://ldap.lug.ustc.edu.cn/
+> ldap_uri = ldaps://ldap.lug.ustc.edu.cn
 > ldap_search_base = dc=lug,dc=ustc,dc=edu,dc=cn
 > ldap_sudo_search_base = ou=sudoers,dc=lug,dc=ustc,dc=edu,dc=cn
-30c31
+30c33
 < ; cache_credentials = true
 ---
 > cache_credentials = true
+35c38
+< # you must install Microsoft Services For UNIX and map LDAP attributes onto
+---
+> # you must install Microsoft Services For Unix and map LDAP attributes onto
 ```
+
+!!! danger "坑"
+
+    需要加上 `[sudo]`，否则 sudo 配置似乎不会生效，这个配置问题导致了修改前在 gateway-nic 上用户无法使用 sudo。
 
 另外记得像前面在 Debian 中安装介绍到的那样修改 `/etc/nsswitch.conf` 以及 `/etc/nslcd.conf`.
 
