@@ -6,6 +6,10 @@ Server: docker2.s.ustclug.org
 
 ### Docker "pingd"
 
+**更新：问题已经查明为 Debian 的 Linux 内核 bug (<https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=952660>)，已经通过更新内核并重启而解决。以下内容仅作存档。**
+
+---
+
 出于未知原因有时候外部主机会无法主动连通 Docker 容器（可能与 ARP 有关），但是如果某个容器先 ping 了一下外部主机，就能双向连通了。
 
 由于我们暂未找到正常的解决方案，因此使用 “ping daemon” 作为一个 workaround，在容器中运行 ping 保持外部主机的连通性。
