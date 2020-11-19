@@ -73,7 +73,7 @@ nav:
       - PPA: '#'
       - Google Apps / G Suite: 'infrastructure/google.md'
       - GitHub: infrastructure/github.md
-      - Mail Agent: '#'
+      - Mail Agent: infrastructure/mail.md
     - Services:
       - Mirrors:
         - History: services/mirrors/index.md
