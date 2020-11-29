@@ -4,6 +4,7 @@ Git Repository:
 - [gitlab-scripts](https://git.lug.ustc.edu.cn/ustclug/gitlab-scripts)
 
 ## 更新
+
 由于已经 docker 化，因此我们的更新是通过拉取 [sameersbn/docker-gitlab](https://github.com/sameersbn/docker-gitlab/) 的 docker image，进行数据库准备以及启动镜像实例来进行更新，Zack Zeng 学长已经写好了一套脚本系统：[gitlab-scripts](https://git.lug.ustc.edu.cn/ustclug/gitlab-scripts)，因此更新时只要跑脚本就可以了。
 
 由于更新需要停止服务，因此请于更新前至少几小时发布更新公告（包括具体时间等）
@@ -17,6 +18,7 @@ Git Repository:
 由于更新可能会出现问题导致服务不可用，因此不建议通过 cron 等方式自动进行更新。
 
 ## postgresql 与 redis 的更新
+
 由于 gitlab 更新后可能对 postgresql 与 redis 的版本有要求，因此有可能需要定期更新 redis 与 postgresql。
 
 更新前请先停止 gitlab 的 container
@@ -25,4 +27,18 @@ Git Repository:
 
 ## 访问 Rails console
 
-Rails console 可以完成一些高级的维护任务。在 gitlab 容器中执行 `bin/rails console` 启动。注意 console 的启动时间很长。
+Rails console 可以完成一些高级的维护任务。在 gitlab 容器中执行 `bin/rails console` 启动。注意 console 的启动时间很长，需要有耐心。
+
+### 常用语句
+
+Hashed storage 下仓库对应的项目：
+
+```ruby
+ProjectRepository.find_by(disk_path: '@hashed/23/33/2333333333333333333333333333333333333333333333333333333333333333').project
+```
+
+如果存在，会返回类似以下的内容：
+
+```
+=> #<Project id:23333 username/project>>
+```
