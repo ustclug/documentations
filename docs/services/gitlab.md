@@ -29,9 +29,11 @@ Git Repository:
 
 Rails console 可以完成一些高级的维护任务。在 gitlab 容器中执行 `bin/rails console` 启动。注意 console 的启动时间很长，需要有耐心。
 
-### 常用语句
+可以执行的命令可参考 <https://docs.gitlab.com/ee/administration/troubleshooting/gitlab_rails_cheat_sheet.html>。
 
-Hashed storage 下仓库对应的项目：
+### 查询
+
+#### 查询 Hashed storage 下仓库对应的项目
 
 ```ruby
 ProjectRepository.find_by(disk_path: '@hashed/23/33/2333333333333333333333333333333333333333333333333333333333333333').project
@@ -41,4 +43,69 @@ ProjectRepository.find_by(disk_path: '@hashed/23/33/2333333333333333333333333333
 
 ```
 => #<Project id:23333 username/project>>
+```
+
+#### 查询无项目且邮箱满足条件的用户 (SQL `like`)
+
+```ruby
+users = User.where('id NOT IN (select distinct(user_id) from project_authorizations)')
+users = users.where('email like ?', '%.ru')
+users.count
+
+users.each do |user|
+    puts user.last_activity_on
+end
+```
+
+### 刷新某个项目的统计信息
+
+```ruby
+p = Project.find_by_full_path('<namespace>/<project>')
+pp p.statistics
+p.statistics.refresh!
+pp p.statistics
+```
+
+## 使用 Rake tasks
+
+详见 <https://github.com/sameersbn/docker-gitlab#rake-tasks>。和 Rails console 一样，初始化很慢。
+
+当前实例信息：
+
+```shell
+sudo docker exec --user git -it gitlab bundle exec rake gitlab:env:info RAILS_ENV=production
+```
+
+### 清理
+
+参考 <https://github.com/gitlabhq/gitlabhq/blob/master/doc/raketasks/cleanup.md>。
+
+不过作用有限。
+
+#### 清理上传目录
+
+查看会被清理的文件：
+
+```shell
+sudo docker exec --user git -it gitlab bundle exec rake gitlab:cleanup:project_uploads RAILS_ENV=production
+```
+
+清理（移动到 /-/project-lost-found/）：
+
+```shell
+sudo docker exec --user git -it gitlab bundle exec rake gitlab:cleanup:project_uploads RAILS_ENV=production DRY_RUN=false
+```
+
+#### 清理过期 artifact 文件
+
+查看会被清理的 artifact 数量：
+
+```shell
+sudo docker exec --user git -it gitlab bundle exec rake gitlab:cleanup:orphan_job_artifact_files RAILS_ENV=production
+```
+
+清理：
+
+```shell
+sudo docker exec --user git -it gitlab bundle exec rake gitlab:cleanup:orphan_job_artifact_files RAILS_ENV=production DRY_RUN=false
 ```
