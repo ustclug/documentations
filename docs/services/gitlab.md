@@ -66,6 +66,16 @@ p.statistics.refresh!
 pp p.statistics
 ```
 
+### 获取所有包含 LFS 的项目 ID
+
+```ruby
+LfsObject.all.each do |lo|
+    puts LfsObjectsProject.find_by_lfs_object_id(lo.id).project_id
+end
+```
+
+输出较多。可以使用 `rails r xxx.rb` 运行，重定向到文件，去重后查看所有包含 LFS 的项目。
+
 ## 使用 Rake tasks
 
 详见 <https://github.com/sameersbn/docker-gitlab#rake-tasks>。和 Rails console 一样，初始化很慢。
@@ -109,3 +119,13 @@ sudo docker exec --user git -it gitlab bundle exec rake gitlab:cleanup:orphan_jo
 ```shell
 sudo docker exec --user git -it gitlab bundle exec rake gitlab:cleanup:orphan_job_artifact_files RAILS_ENV=production DRY_RUN=false
 ```
+
+#### 清理无效的 LFS reference
+
+```shell
+for i in `cat projectid_lfs`; do sudo docker exec --user git -it gitlab bundle exec rake gitlab:cleanup:orphan_lfs_file_references PROJECT_ID=$i RAILS_ENV=production DRY_RUN=false; done
+```
+
+`projectid_lfs` 是上文中「获取所有包含 LFS 的项目 ID」的去重后的输出。
+
+无 reference 的 LFS 文件每日 GitLab 会自动清除。如果需要立刻删除，可以使用 `gitlab:cleanup:orphan_lfs_files`。
