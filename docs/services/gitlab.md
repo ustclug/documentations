@@ -106,7 +106,7 @@ sudo docker exec --user git -it gitlab bundle exec rake gitlab:cleanup:project_u
 sudo docker exec --user git -it gitlab bundle exec rake gitlab:cleanup:project_uploads RAILS_ENV=production DRY_RUN=false
 ```
 
-#### 清理过期 artifact 文件
+#### 清理未被引用的 artifact 文件
 
 查看会被清理的 artifact 数量：
 
@@ -119,6 +119,8 @@ sudo docker exec --user git -it gitlab bundle exec rake gitlab:cleanup:orphan_jo
 ```shell
 sudo docker exec --user git -it gitlab bundle exec rake gitlab:cleanup:orphan_job_artifact_files RAILS_ENV=production DRY_RUN=false
 ```
+
+注意，新设置的 expire 期限不会影响以前的 artifact，这里的命令也无法清理。
 
 #### 清理无效的 LFS reference
 
