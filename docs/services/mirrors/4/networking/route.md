@@ -72,6 +72,88 @@ Wants=systemd-networkd.service
 
     这个自带的服务有一个 `User=systemd-networkd`，你既不能 `ip rule` 也不能写入 `/run/systemd` 等，会导致服务炸掉，然后网也炸了。。。
 
-## 添加 IP 到 special 列表
+## Special routing
 
-对于需要特殊处理的 IP，编辑 `/usr/local/network_config/special.sh` 添加后，重启 `route-all.service`。
+部分 IP 需要配置特殊路由规则时（而不是使用默认），编辑 `/usr/local/network_config/special.yml`，其格式如下：
+
+```yaml
+routes:                    # Root key，保留
+  lugvpn:                  # /etc/systemd/network 中对应的 .network 文件名
+    # 下面是一个路由文件的配置，一个文件共享一个 table 和 gateway 设置
+    - name: route-special  # 将要创建的 .conf 文件名，可以随意
+      table: Special       # 路由表，即 ip route add table 后面的参数，数字或表名
+      gateway: false       # 是否包含网关，或者 ip route 的 via 参数
+      routes:              # 所有的路由条目
+        - 1.2.3.4
+        - 5.6.7.8/28
+        - 2001:db8::2333/64
+    
+  cernet:                  # 更多的配置
+    - ...
+```
+
+修改 `special.yml` 之后重启 `route-all.service`。该服务会自动导致 `systemd-networkd.service` 重启并载入新的路由配置信息。
+
+??? special.rb 处理脚本（放在这备份）
+
+    ```ruby
+    #!/usr/bin/ruby
+
+    require 'fileutils'
+    require 'yaml'
+
+    BASEDIR = '/run/systemd/network'
+    RT_TABLES = '/etc/iproute2/rt_tables'
+
+    rt_tables = Hash.new
+    File.readlines(RT_TABLES).each do |l|
+      next if l =~ /^\s*#/
+      id, name = l.split
+      rt_tables[name] = id
+    end
+
+    data = YAML.load_file File.join(__dir__, 'special.yml')
+    data['routes'].each do |fn, setups|
+      confdir = File.join(BASEDIR, "#{fn}.network.d")
+      FileUtils.mkdir_p confdir
+
+      setups.each do |config|
+        table = config['table']
+        gateway = config['gateway']
+        File.open File.join(confdir, "#{config['name']}.conf"), 'w' do |f|
+          config['routes'].each do |dst|
+            t = "[Route]\nDestination=#{dst}\n"
+            t += "Table=#{rt_tables.fetch table, table}\n" if table
+            t += "Gateway=#{gateway}\n" if gateway
+            f.write t + "\n"
+          end
+        end
+      end
+    end
+    ```
+
+!!! bug "route-all.service 有很多注意事项"
+
+    为了清理开机自动产生的 32766 和 32767 两条路由规则，`route-all.service` 包括执行 `ip rule flush`，因此该服务重启之后必须立刻重启 systemd-networkd。
+
+    目前做法是在 `route-all.service` 中添加 `RequiredBy=systemd-networkd.service` 制造依赖关系，让 systemd 完成“牵连重启”。
+
+    完整 service 文件：
+
+    ```ini
+    [Unit]
+    Description=Generate routes for systemd-networkd
+    Before=systemd-networkd.service
+
+    [Service]
+    Type=oneshot
+    ExecStart=/bin/bash /usr/local/network_config/route-all.sh
+    ExecStart=/usr/local/network_config/special.rb
+    ExecStart=-/usr/sbin/ip rule flush
+    RemainAfterExit=true
+
+    [Install]
+    WantedBy=network.target systemd-networkd.service
+    RequiredBy=systemd-networkd.service
+    Wants=systemd-networkd.service
+    ```
