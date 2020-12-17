@@ -71,3 +71,7 @@ Wants=systemd-networkd.service
 !!! bug "不要尝试改 systemd-networkd.service"
 
     这个自带的服务有一个 `User=systemd-networkd`，你既不能 `ip rule` 也不能写入 `/run/systemd` 等，会导致服务炸掉，然后网也炸了。。。
+
+## 添加 IP 到 special 列表
+
+对于需要特殊处理的 IP，编辑 `/usr/local/network_config/special.sh` 添加后，重启 `route-all.service`。
