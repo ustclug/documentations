@@ -5,3 +5,5 @@
 ## 常用命令
 
 从队列中删除邮件：`sudo postsuper -d <邮件 ID>`（邮件 ID 可以日志中看到）
+
+更新 `virtual` 表映射：`sudo postmap /etc/postfix/virtual` 后重启 `postfix` 服务。
