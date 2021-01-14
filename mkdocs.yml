@@ -116,5 +116,6 @@ nav:
     - Common Issues:
       - DNS: faq/dns.md
       - LDAP: faq/ldap.md
+      - Nginx: faq/nginx.md
   - Projects:
     - Linux 101: projects/linux101/index.md
