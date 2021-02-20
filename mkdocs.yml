@@ -85,7 +85,9 @@ nav:
             - Routing: services/mirrors/4/networking/route.md
           - Repositories: services/mirrors/4/repos.md
         - Auxiliary (3): services/mirrors/3/index.md
-        - Auxiliary (2): services/mirrors/2/index.md
+        - Auxiliary (2):
+          - Overview: services/mirrors/2/index.md
+          - Networking: services/mirrors/2/networking.md
         - Obsolete (1): services/mirrors/1/index.md
         - Hardware: 'services/mirrors/hardware.md'
         - Docker: 'services/mirrors/docker.md'
