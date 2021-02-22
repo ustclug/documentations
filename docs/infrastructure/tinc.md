@@ -40,7 +40,7 @@ Address = [这台机器的公网IP]
 **测试的时候**，你可以直接用 `ifconfig` 指定一个临时的 IP，注意不要与已有的内网 IP 冲突：
 
 ```shell
-ifconfig 10.254.0.xxx lugvpn
+ifconfig 10.254.0.xxx ustclug
 ```
 
 这时候应该能从其他机器 ping 通这个 IP。
