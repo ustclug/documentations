@@ -33,14 +33,14 @@ tincd -n ustclug -K
 Address = [这台机器的公网IP]
 ```
 
-把新增的这个文件提交进 Git 仓库，并在 `{ldap,board,dns,gateway-el}.s.ustclug.org` 四台机器上通过 `git pull` 更新，并 `systemctl reload tinc@ustclug.service`。
+把新增的这个文件提交进 Git 仓库，并在 `{ldap,board,gateway-el}.s.ustclug.org` 等台机器上通过 `git pull` 更新，并 `systemctl reload tinc@ustclug.service`。
 
 ### 内网 IP
 
 **测试的时候**，你可以直接用 `ifconfig` 指定一个临时的 IP，注意不要与已有的内网 IP 冲突：
 
 ```shell
-ifconfig 10.254.0.xxx ustclug
+ifconfig 10.254.0.xxx/21 ustclug
 ```
 
 这时候应该能从其他机器 ping 通这个 IP。
