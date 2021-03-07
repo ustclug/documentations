@@ -131,3 +131,25 @@ for i in `cat projectid_lfs`; do sudo docker exec --user git -it gitlab bundle e
 `projectid_lfs` 是上文中「获取所有包含 LFS 的项目 ID」的去重后的输出。
 
 无 reference 的 LFS 文件每日 GitLab 会自动清除。如果需要立刻删除，可以使用 `gitlab:cleanup:orphan_lfs_files`。
+
+## 紧急操作
+
+### 设置为只读
+
+https://docs.gitlab.com/ee/administration/read_only_gitlab.html
+
+```console
+# docker exec --user git -it gitlab bin/rails console
+```
+
+之后执行
+
+```ruby
+Project.all.find_each { |project| puts project.name; project.update!(repository_read_only: true) }
+```
+
+将所有仓库设置为只读。如果中间出现错误（特殊的项目名可能会导致运行中断），重命名最后输出对应的项目。
+
+在设置前，需要添加 Messages 通知用户。
+
+此时数据库仍然可写入。如果需要数据库只读，参考以上链接配置。
