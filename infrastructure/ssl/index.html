@@ -1358,6 +1358,18 @@ _acme-challenge.proxy.ustclug.org  -&gt;  lug.ssl-digitalocean.ustclug.org
 _acme-challenge.mirrors.ustc.edu.cn  -&gt;  mirrors.ssl-digitalocean.ustclug.org
 </code></pre></div>
 <p>Individual machines that use SSL certificates should pull from the said repository (branch <code>cert</code>) and load certificates from there (possibly via symbolic links). The update task is managed by cron.</p>
+<p>Update script for reference:</p>
+<div class="highlight"><pre><span></span><code><span class="ch">#!/bin/sh</span>
+
+<span class="nb">cd</span> <span class="s2">&quot;/etc/ssl/private&quot;</span>
+
+git remote update
+<span class="k">if</span> <span class="o">[</span> <span class="s2">&quot;</span><span class="k">$(</span>git rev-parse HEAD<span class="k">)</span><span class="s2">&quot;</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="k">$(</span>git rev-parse <span class="s1">&#39;@{u}&#39;</span><span class="k">)</span><span class="s2">&quot;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+  <span class="nb">echo</span> <span class="s2">&quot;No update required.&quot;</span>
+  <span class="nb">exit</span> <span class="m">0</span>
+<span class="k">fi</span>
+systemctl reload openresty.service
+</code></pre></div>
 <p>The DigitalOcean account we use is owned by iBug and has nothing else running.</p>
                 
               
