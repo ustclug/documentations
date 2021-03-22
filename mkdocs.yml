@@ -91,7 +91,7 @@ nav:
         - Obsolete (1): services/mirrors/1/index.md
         - Hardware: 'services/mirrors/hardware.md'
         - Docker: 'services/mirrors/docker.md'
-        - IPMI: '#'
+        - IPMI: 'services/mirrors/ipmi.md'
         - ZFS: 'services/mirrors/zfs.md'
         - HTTP Service: '#'
         - RSYNC Service: '#'
