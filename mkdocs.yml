@@ -62,6 +62,7 @@ nav:
       - Servers Unified Authentication (LDAP): 'infrastructure/ldap.md'
       - SSH Certificate Authority: 'infrastructure/sshca.md'
       - DNS: 'infrastructure/dns.md'
+      - SSL Certificates: 'infrastructure/ssl.md'
       - vSphere Cluster:
         - ESXi: '#'
         - vCenter: '#'
