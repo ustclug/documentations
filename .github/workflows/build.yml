@@ -20,6 +20,9 @@ jobs:
         git init --quiet
         echo -n "docs.ustclug.org" > CNAME
         : > .nojekyll
+        git remote add origin https://${GITHUB_ACTOR}:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY.git
+        git fetch --depth=1 origin gh-pages
+        git reset --soft FETCH_HEAD
         git add --all
         git -c user.name=GitHub -c user.email=noreply@github.com \
           commit --message "Auto deploy from GitHub Actions"
