@@ -16,4 +16,19 @@ _acme-challenge.mirrors.ustc.edu.cn  ->  mirrors.ssl-digitalocean.ustclug.org
 
 Individual machines that use SSL certificates should pull from the said repository (branch `cert`) and load certificates from there (possibly via symbolic links). The update task is managed by cron.
 
+Update script for reference:
+
+```shell
+#!/bin/sh
+
+cd "/etc/ssl/private"
+
+git remote update
+if [ "$(git rev-parse HEAD)" = "$(git rev-parse '@{u}')" ]; then
+  echo "No update required."
+  exit 0
+fi
+systemctl reload openresty.service
+```
+
 The DigitalOcean account we use is owned by iBug and has nothing else running.
