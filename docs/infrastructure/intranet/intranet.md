@@ -4,9 +4,9 @@ Servers Intranet connect all the servers together, including physics servers and
 
 ## Network Topology
 
-<iframe frameborder="0" style="width:100%;height:500px;" src="https://www.draw.io/?lightbox=1&highlight=0000ff&edit=_blank&layers=1&nav=1&title=LUG%20Network.html#Uhttps%3A%2F%2Fdrive.google.com%2Fa%2F0x01.me%2Fuc%3Fid%3D1WAROAPB8ThTkIjMyFnGvtGgbH-TV4FWh%26export%3Ddownload"></iframe>
+<iframe frameborder="0" style="width:100%;height:500px;" src="https://www.draw.io/?lightbox=1&highlight=0000ff&edit=_blank&layers=1&nav=1&title=LUG%20Network.html#Uhttps%3A%2F%2Fdrive.google.com%2Fa%2F0x01.me%2Fuc%3Fid%3D1WAROAPB8ThTkIjMyFnGvtGgbH-TV4FWh%26export%3Ddownload" />
 
-以上架构图由Hypercube在2018年5月更新。以下信息是过时的，不过有参考价值。
+以上架构图由 Hypercube 在 2018 年 5 月更新。以下信息是过时的，不过有参考价值。
 
 The network contains three parts:
 
@@ -33,7 +33,9 @@ Every server binds one and only one IP address in 10.254.0.0/21, used to communi
 
 ### Address planning
 
-* 10.254.0.1~ 10.254.0.254: physics server and virtual machine
-* 10.254.1.1~ 10.254.1.254: docker container
+* 10.254.0.0/24: physical server and virtual machine
+* 10.254.1.0/24: docker container
+* 10.254.6.0/24: LUGi emergency entrypoint (managed by yzf)
+* 10.254.7.0/24: LUGi entrypoint (via board.s)
 * other address: not used yet.
 
