@@ -32,6 +32,14 @@ wget https://dl.influxdata.com/telegraf/releases/telegraf_1.6.1-1_amd64.deb
 sudo dpkg -i telegraf_1.6.1-1_amd64.deb
 ```
 
+或者
+
+```shell
+curl -sL https://repos.influxdata.com/influxdb.key | sudo apt-key add -
+echo "deb https://mirrors.ustc.edu.cn/influxdata/debian buster stable" | sudo tee /etc/apt/sources.list.d/influxdb.list
+sudo apt-get update && sudo apt-get install telegraf
+```
+
 ## Configure telegraf
 
 配置文件在 `/etc/telegraf/` 目录下，用 root 权限修改：
