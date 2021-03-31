@@ -52,3 +52,16 @@ git push origin master
 ```
 
 Travis CI will update PAC files in LUG FTP automatically.
+
+## Database maintenance
+
+Example:
+
+```sql
+select count(*) from radacct where acctstoptime < '2021-01-01 00:00:00';
+insert into radacct_backup select * from radacct where acctstoptime < '2021-01-01 00:00:00';
+delete from radacct where acctstoptime < '2021-01-01 00:00:00';
+delete from radacct_backup where acctstoptime < '2020-06-01 00:00:00';
+optimize table radacct;
+optimize table radacct_backup;
+```
