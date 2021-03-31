@@ -1165,9 +1165,38 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          FTP
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         FTP
       </a>
+      
+        
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#notes" class="md-nav__link">
+    Notes
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -1332,6 +1361,21 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#notes" class="md-nav__link">
+    Notes
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -1354,6 +1398,14 @@
 <p>server: vdp.s.ustclug.org</p>
 <p>theme: <a href="https://larsjung.de/h5ai/">h5ai</a></p>
 <p>deploy: <a href="https://git.lug.ustc.edu.cn/ustclug/docker-run-script/blob/master/ftp/ftp.sh">ftp.sh</a></p>
+<h2 id="notes">Notes<a class="headerlink" href="#notes" title="Permanent link">&para;</a></h2>
+<ol>
+<li>SSL cert is required when running lugftp.</li>
+<li><code>ssh-keygen -A</code> is required to be manually run when initializing.</li>
+<li>About directory permission:</li>
+<li>Public folder root: set owner to root:root, permission to dr-xr-xr-x</li>
+<li>Subfolders: set owner to 1000:1000. <code>_h5ai</code> and <code>wp-content</code> needs to be set to a different owner (misconfigured?)</li>
+</ol>
                 
               
               
