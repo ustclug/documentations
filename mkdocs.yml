@@ -64,17 +64,17 @@ nav:
       - DNS: 'infrastructure/dns.md'
       - SSL Certificates: 'infrastructure/ssl.md'
       - vSphere Cluster:
-        - ESXi: '#'
-        - vCenter: '#'
-        - NFS: '#'
-        - VDP: '#'
-      - SaltStack: '#'
+        - ESXi: 'infrastructure/vsphere/esxi.md'
+        - vCenter: 'infrastructure/vsphere/vcenter.md'
+        - NFS: 'infrastructure/vsphere/nfs.md'
+        - VDP: 'infrastructure/vsphere/vdp.md'
       - Backup: '#'
       - Monitor: 'infrastructure/monitor.md'
       - PPA: '#'
       - Google Apps / G Suite: 'infrastructure/google.md'
       - GitHub: infrastructure/github.md
       - Mail Agent: infrastructure/mail.md
+      - Discontinued Infrastructure: 'infrastructure/discontinued.md'
     - Services:
       - Mirrors:
         - History: services/mirrors/index.md
