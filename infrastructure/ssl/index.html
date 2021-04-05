@@ -1373,6 +1373,10 @@ systemctl reload openresty.service
 <span class="c1"># Other `cp -a` or `docker restart` commands, etc.</span>
 </code></pre></div>
 <p>The DigitalOcean account we use is owned by iBug and has nothing else running.</p>
+<div class="admonition note">
+<p class="admonition-title">Plan B</p>
+<p>Hurricane Electric provides <a href="https://dns.he.net/">hosted DNS</a> zones <strong>for free</strong>, which is also <a href="https://github.com/acmesh-official/acme.sh/wiki/dnsapi">supported by <code>acme.sh</code></a>. This makes HE DNS a feasible alternative should our current Dependency (DigitalOcean) fails for whatever reason.</p>
+</div>
                 
               
               
