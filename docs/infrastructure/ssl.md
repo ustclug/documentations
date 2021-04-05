@@ -14,7 +14,7 @@ _acme-challenge.proxy.ustclug.org  ->  lug.ssl-digitalocean.ustclug.org
 _acme-challenge.mirrors.ustc.edu.cn  ->  mirrors.ssl-digitalocean.ustclug.org
 ```
 
-Individual machines that use SSL certificates should pull from the said repository (branch `cert`) and load certificates from there (possibly via symbolic links). The update task is managed by cron.
+Individual machines that use SSL certificates should pull from the said repository (branch `cert`). Certificates may be loaded via symbolic links (for processes running on the host system directly), or copied around from within the updater script (when there are path constraints, e.g. in a Docker container). The update task is managed by cron.
 
 Update script for reference:
 
@@ -28,7 +28,9 @@ if [ "$(git rev-parse HEAD)" = "$(git rev-parse '@{u}')" ]; then
   echo "No update required."
   exit 0
 fi
+
 systemctl reload openresty.service
+# Other `cp -a` or `docker restart` commands, etc.
 ```
 
 The DigitalOcean account we use is owned by iBug and has nothing else running.
