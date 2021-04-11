@@ -1365,12 +1365,12 @@ _acme-challenge.mirrors.ustc.edu.cn  -&gt;  mirrors.ssl-digitalocean.ustclug.org
 
 <span class="nb">cd</span> <span class="s2">&quot;/etc/ssl/private&quot;</span>
 
-git remote update
+git remote update &gt; /dev/null
 <span class="k">if</span> <span class="o">[</span> <span class="s2">&quot;</span><span class="k">$(</span>git rev-parse HEAD<span class="k">)</span><span class="s2">&quot;</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="k">$(</span>git rev-parse <span class="s1">&#39;@{u}&#39;</span><span class="k">)</span><span class="s2">&quot;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
-  <span class="nb">echo</span> <span class="s2">&quot;No update required.&quot;</span>
   <span class="nb">exit</span> <span class="m">0</span>
 <span class="k">fi</span>
 
+<span class="nb">echo</span> <span class="s2">&quot;Cert has been updated.&quot;</span>
 systemctl reload openresty.service
 <span class="c1"># Other `cp -a` or `docker restart` commands, etc.</span>
 </code></pre></div>
