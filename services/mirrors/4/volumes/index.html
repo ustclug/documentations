@@ -16,7 +16,7 @@
         <link rel="canonical" href="https://docs.ustclug.org/services/mirrors/4/volumes/">
       
       <link rel="icon" href="../../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-7.1.0">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-7.1.1">
     
     
       
@@ -24,7 +24,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../../assets/stylesheets/main.33e2939f.min.css">
+      <link rel="stylesheet" href="../../../../assets/stylesheets/main.9299cb39.min.css">
       
         
         <link rel="stylesheet" href="../../../../assets/stylesheets/palette.ef6f36e2.min.css">
@@ -1577,6 +1577,11 @@ sudo lvs -o name,cache_policy,cache_settings,chunk_size,cache_used_blocks,cache_
 <li>扩大 lug/repo 的大小前需要 uncache，且 uncache 的前提条件是没有脏块。</li>
 </ol>
 </div>
+<div class="admonition danger">
+<p class="admonition-title">坑 4</p>
+<p>修改 <code>migration_threshold</code> 等设置会导致目前版本的 GRUB 无法正确识别 LVM 元数据。</p>
+<p>临时修复版本：<a href="https://github.com/taoky/grub/releases/tag/2.02%2Bdfsg1-20%2Bdeb10u4taoky3_amd64">https://github.com/taoky/grub/releases/tag/2.02%2Bdfsg1-20%2Bdeb10u4taoky3_amd64</a>。目前已部署，且设置了 <code>apt hold</code>。</p>
+</div>
 <p>所以接下来要合并 VG，然后才能为仓库卷加上缓存。</p>
 <div class="highlight"><pre><span></span><code>lvchange -a n ssd/docker
 vgmerge lug ssd
@@ -1691,7 +1696,7 @@ mount /dev/lug/docker /var/lib/docker
     <script id="__config" type="application/json">{"base": "../../../..", "features": ["tabs"], "translations": {"clipboard.copy": "\u590d\u5236", "clipboard.copied": "\u5df2\u590d\u5236", "search.config.lang": "ja", "search.config.pipeline": "trimmer, stemmer", "search.config.separator": "[\\uff0c\\u3002]+", "search.placeholder": "\u641c\u7d22", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}, "search": "../../../../assets/javascripts/workers/search.fe42c31b.min.js", "version": null}</script>
     
     
-      <script src="../../../../assets/javascripts/bundle.d892486b.min.js"></script>
+      <script src="../../../../assets/javascripts/bundle.7353b375.min.js"></script>
       
         <script src="../../../../assets/js/extra.js"></script>
       
