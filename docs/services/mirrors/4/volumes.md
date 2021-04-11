@@ -168,6 +168,12 @@ lvconvert --type cache-pool --poolmetadata ssd/mcache_meta --cachemode writethro
     2. 每次 unclean shutdown 之后，cache 中所有块都会被标记为 dirty。尽管不太可能阻塞系统启动，这可能会给 HDD 一定的压力。
     3. 扩大 lug/repo 的大小前需要 uncache，且 uncache 的前提条件是没有脏块。
 
+!!! danger "坑 4"
+
+    修改 `migration_threshold` 等设置会导致目前版本的 GRUB 无法正确识别 LVM 元数据。
+    
+    临时修复版本：<https://github.com/taoky/grub/releases/tag/2.02%2Bdfsg1-20%2Bdeb10u4taoky3_amd64>。目前已部署，且设置了 `apt hold`。
+
 所以接下来要合并 VG，然后才能为仓库卷加上缓存。
 
 ```shell
