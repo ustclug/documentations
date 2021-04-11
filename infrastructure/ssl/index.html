@@ -1365,12 +1365,23 @@ _acme-challenge.mirrors.ustc.edu.cn  -&gt;  mirrors.ssl-digitalocean.ustclug.org
 
 <span class="nb">cd</span> <span class="s2">&quot;/etc/ssl/private&quot;</span>
 
-git remote update &gt; /dev/null
+git fetch -q
 <span class="k">if</span> <span class="o">[</span> <span class="s2">&quot;</span><span class="k">$(</span>git rev-parse HEAD<span class="k">)</span><span class="s2">&quot;</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="k">$(</span>git rev-parse <span class="s1">&#39;@{u}&#39;</span><span class="k">)</span><span class="s2">&quot;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
   <span class="nb">exit</span> <span class="m">0</span>
 <span class="k">fi</span>
+git reset --hard <span class="s1">&#39;@{u}&#39;</span>
 
-<span class="nb">echo</span> <span class="s2">&quot;Cert has been updated.&quot;</span>
+<span class="c1"># Display certificate dates. This section is optional</span>
+<span class="k">if</span> <span class="nb">command</span> -v openssl &gt;/dev/null <span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span><span class="p">;</span> <span class="k">then</span>
+  <span class="nb">echo</span> <span class="s2">&quot;Cert has been updated. New expiry:&quot;</span>
+  <span class="k">for</span> f <span class="k">in</span> */cert.pem<span class="p">;</span> <span class="k">do</span>
+    <span class="nb">echo</span> <span class="s2">&quot;</span><span class="nv">$f</span><span class="s2">:&quot;</span>
+    openssl x509 -in <span class="s2">&quot;</span><span class="nv">$f</span><span class="s2">&quot;</span> -noout -dates
+  <span class="k">done</span>
+<span class="k">else</span>
+  <span class="nb">echo</span> <span class="s2">&quot;Cert has been updated.&quot;</span>
+<span class="k">fi</span>
+
 systemctl reload openresty.service
 <span class="c1"># Other `cp -a` or `docker restart` commands, etc.</span>
 </code></pre></div>
