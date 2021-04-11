@@ -23,12 +23,12 @@ Update script for reference:
 
 cd "/etc/ssl/private"
 
-git remote update
+git remote update > /dev/null
 if [ "$(git rev-parse HEAD)" = "$(git rev-parse '@{u}')" ]; then
-  echo "No update required."
   exit 0
 fi
 
+echo "Cert has been updated."
 systemctl reload openresty.service
 # Other `cp -a` or `docker restart` commands, etc.
 ```
