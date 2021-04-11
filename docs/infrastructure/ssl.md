@@ -23,12 +23,23 @@ Update script for reference:
 
 cd "/etc/ssl/private"
 
-git remote update > /dev/null
+git fetch -q
 if [ "$(git rev-parse HEAD)" = "$(git rev-parse '@{u}')" ]; then
   exit 0
 fi
+git reset --hard '@{u}'
 
-echo "Cert has been updated."
+# Display certificate dates. This section is optional
+if command -v openssl >/dev/null 2>&1; then
+  echo "Cert has been updated. New expiry:"
+  for f in */cert.pem; do
+    echo "$f:"
+    openssl x509 -in "$f" -noout -dates
+  done
+else
+  echo "Cert has been updated."
+fi
+
 systemctl reload openresty.service
 # Other `cp -a` or `docker restart` commands, etc.
 ```
