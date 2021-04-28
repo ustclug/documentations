@@ -1408,8 +1408,10 @@
 <li>SSL cert is required when running lugftp.</li>
 <li><code>ssh-keygen -A</code> is required to be manually run when initializing.</li>
 <li>About directory permission:</li>
+<li>It is strongly suggested to keep permission &amp; owner metadata when backuping/restoring.</li>
 <li>Public folder root: set owner to root:root, permission to dr-xr-xr-x</li>
 <li>Subfolders: set owner to 1000:1000. <code>_h5ai</code> and <code>wp-content</code> needs to be set to a different owner (misconfigured?). And <code>Incoming</code> shall be set to drwxrwxr-x.</li>
+<li>Do not use Google DNS in host, as mobile network may drop the UDP packet to 8.8.8.8. A misconfigured DNS may lead to LDAP in container broken.</li>
 </ol>
                 
               
