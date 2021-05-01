@@ -77,6 +77,7 @@ nav:
       - Google Apps / G Suite: 'infrastructure/google.md'
       - GitHub: infrastructure/github.md
       - Mail Agent: infrastructure/mail.md
+      - RAID: infrastructure/raid.md
       - Discontinued Infrastructure: 'infrastructure/discontinued.md'
     - Services:
       - Mirrors:
