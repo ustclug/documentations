@@ -11,11 +11,13 @@ Git Repository:
 
 更新前请先提前于 [VCenter](https://vcenter2.vm.ustclug.org/) 上对虚拟机打快照（打快照时服务会暂时停止）
 
-打完快照之后使用脚本进行更新，首先使用 `./gitlab.sh db` 进行数据库的准备工作。之后可以通过 `./gitlab.sh run <版本号>` 来进行 docker container 的替换。更换前脚本会自动拉取相应版本号的 docker 镜像，如果担心拉取时间过长可以在打快照前提前通过 `docker pull sameersbn/gitlab:<版本号>` 来拉取相应的镜像。
+打完快照之后使用脚本进行更新（目前脚本位于 `/home/sirius/gitlab-scripts`），首先使用 `./gitlab.sh db` 进行数据库的准备工作。之后可以通过 `./gitlab.sh run <版本号>` 来进行 docker container 的替换。更换前脚本会自动拉取相应版本号的 docker 镜像，如果担心拉取时间过长可以在打快照前提前通过 `docker pull sameersbn/gitlab:<版本号>` 来拉取相应的镜像。
 
 一般情况下经以上操作后更新就正常结束，如果长时间无法启动，可以通过 `docker logs gitlab` 查看日志，如果发现更新后的启动出现问题，可以到 [sameersbn/docker-gitlab](https://github.com/sameersbn/docker-gitlab/) 的 issue 区等地查看相关 issue，以及通过对出错日志进行 Google 可能会发现是 gitlab 上游等出现的问题。如果有解决办法，可以按照相应解决办法解决，如果没有。可以通过找到有相应问题前的正常版本号，回滚快照，之后更到表现正常的版本。（最近的更新会在启动之后短暂出现 502 的情况，但很快就会恢复，遇到这种情况时不要惊慌）。
 
 由于更新可能会出现问题导致服务不可用，因此不建议通过 cron 等方式自动进行更新。
+
+**建议在更新完成 72 小时内删除快照，详见 [关于快照](/infrastructure/vsphere/esxi/#about-snapshot)。**
 
 ## postgresql 与 redis 的更新
 
