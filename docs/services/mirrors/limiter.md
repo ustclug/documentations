@@ -30,7 +30,7 @@
 
     连接数限制仅限制瞬时并发（connlimit）。
 
-请注意，同组内的连接共享连接数配额。如： 
+请注意，同组内的连接共享连接数配额。如：
 
 - 10.0.0.1 与 10.0.0.2 共享 HTTP 限额
 - 1.1.1.1 发起的 HTTP 与 HTTPS 连接共享 12 个连接数限额
@@ -120,7 +120,15 @@ Rsync 服务设置了总连接数限制。即：当建立的连接数到达某�
 
 特别的，科大 IP 地址受到 rsync 连接数限制。
 
+## 网络接口级别限制
 
+mirrors 常态下没有网络接口限制，但在需要临时对某一接口进行限制时，可以使用 tc 来完成。
 
+例如可以参考这份回答：[iptables - Limiting interface bandwidth with tc under Linux - Server Fault](https://serverfault.com/questions/452829/limiting-interface-bandwidth-with-tc-under-linux)，使用如下指令限制某一接口的网络速率为 1.5Gbps：
 
+```
+tc qdisc add dev <interface> root handle 1: tbf rate 1500Mbit burst 6500 latency 14ms
+```
 
+这里使用了 TBF（令牌桶）算法，在突发时速率可能会短暂超过设置的 1.5Gbps。
+后面的 burst 和 latency 参数可以细调，具体调节规则和效果则需查阅文档了。
