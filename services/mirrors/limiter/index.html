@@ -16,7 +16,7 @@
         <link rel="canonical" href="https://docs.ustclug.org/services/mirrors/limiter/">
       
       <link rel="icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-7.1.3">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-7.1.4">
     
     
       
@@ -24,7 +24,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.e35208c4.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.bde7dde4.min.css">
       
         
         <link rel="stylesheet" href="../../../assets/stylesheets/palette.ef6f36e2.min.css">
@@ -1044,6 +1044,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    网络接口级别限制
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1489,6 +1496,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    网络接口级别限制
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1572,7 +1586,7 @@
 <p class="admonition-title">注意事项</p>
 <p>连接数限制仅限制瞬时并发（connlimit）。</p>
 </div>
-<p>请注意，同组内的连接共享连接数配额。如： </p>
+<p>请注意，同组内的连接共享连接数配额。如：</p>
 <ul>
 <li>10.0.0.1 与 10.0.0.2 共享 HTTP 限额</li>
 <li>1.1.1.1 发起的 HTTP 与 HTTPS 连接共享 12 个连接数限额</li>
@@ -1711,6 +1725,13 @@
 </ul>
 <p>在 2020 年 8 月 25 日后，由于更换了新服务器，Rsync 由单独机器提供服务，总连接数提升到了全天 60 个连接。</p>
 <p>特别的，科大 IP 地址受到 rsync 连接数限制。</p>
+<h2 id="_6">网络接口级别限制<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
+<p>mirrors 常态下没有网络接口限制，但在需要临时对某一接口进行限制时，可以使用 tc 来完成。</p>
+<p>例如可以参考这份回答：<a href="https://serverfault.com/questions/452829/limiting-interface-bandwidth-with-tc-under-linux">iptables - Limiting interface bandwidth with tc under Linux - Server Fault</a>，使用如下指令限制某一接口的网络速率为 1.5Gbps：</p>
+<div class="highlight"><pre><span></span><code>tc qdisc add dev &lt;interface&gt; root handle 1: tbf rate 1500Mbit burst 6500 latency 14ms
+</code></pre></div>
+<p>这里使用了 TBF（令牌桶）算法，在突发时速率可能会短暂超过设置的 1.5Gbps。
+后面的 burst 和 latency 参数可以细调，具体调节规则和效果则需查阅文档了。</p>
                 
               
               
@@ -1805,10 +1826,10 @@
     <div class="md-dialog" data-md-component="dialog">
       <div class="md-dialog__inner md-typeset"></div>
     </div>
-    <script id="__config" type="application/json">{"base": "../../..", "features": ["tabs"], "translations": {"clipboard.copy": "\u590d\u5236", "clipboard.copied": "\u5df2\u590d\u5236", "search.config.lang": "ja", "search.config.pipeline": "trimmer, stemmer", "search.config.separator": "[\\uff0c\\u3002]+", "search.placeholder": "\u641c\u7d22", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}, "search": "../../../assets/javascripts/workers/search.fe42c31b.min.js", "version": null}</script>
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["tabs"], "translations": {"clipboard.copy": "\u590d\u5236", "clipboard.copied": "\u5df2\u590d\u5236", "search.config.lang": "ja", "search.config.pipeline": "trimmer, stemmer", "search.config.separator": "[\\uff0c\\u3002]+", "search.placeholder": "\u641c\u7d22", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}, "search": "../../../assets/javascripts/workers/search.4fa0e4ee.min.js", "version": null}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.4ea5477f.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.1d3bfcf1.min.js"></script>
       
         <script src="../../../assets/js/extra.js"></script>
       
