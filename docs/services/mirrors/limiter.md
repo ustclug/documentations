@@ -126,9 +126,33 @@ mirrors 常态下没有网络接口限制，但在需要临时对某一接口进
 
 例如可以参考这份回答：[iptables - Limiting interface bandwidth with tc under Linux - Server Fault](https://serverfault.com/questions/452829/limiting-interface-bandwidth-with-tc-under-linux)，使用如下指令限制某一接口的网络速率为 1.5Gbps：
 
-```
+```bash
 tc qdisc add dev <interface> root handle 1: tbf rate 1500Mbit burst 6500 latency 14ms
 ```
 
 这里使用了 TBF（令牌桶）算法，在突发时速率可能会短暂超过设置的 1.5Gbps。
 后面的 burst 和 latency 参数可以细调，具体调节规则和效果则需查阅文档了。
+
+## 黑名单限制
+
+对于滥用的 IP 段，可以使用 ipset 和 iptables 实现黑名单限制。
+ipset 将某个 IP 匹配到一个集合中，iptables 再针对某一集合进行限制。
+
+ipset 和 iptables 的使用可以参考：[使用ipset工具对iptables设置黑/白名单 – 孙希栋的博客](https://www.sunxidong.com/379.html) ，例如以下案例将会阻止 10.0.0.0/8 IP 段的访问：
+
+```bash
+# 创建一个 IP set，如果没有的话
+ipset create <name> hash:net
+# 可以查看现在所有的 IP set
+ipset list
+# 增加规则
+ipset add <name> 10.0.0.0/8
+# 创建 iptables 规则
+# 可以放在 PREROUTING 链早点 DROP，有单独的作限制的链的话就放单独的限制链里
+# 不要弄混 src 和 dst
+# 区分 -A 和 -I 1，注意规则的顺序
+iptables -t nat -I PREROUTING 1 -p tcp -m set --match-set <name> src -j DROP
+# 保存 ipset 的规则
+ipset save <name> -f <filename>
+# iptables 的保存就不再提了
+```
