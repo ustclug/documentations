@@ -1051,6 +1051,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    黑名单限制
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1503,6 +1510,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    黑名单限制
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1728,10 +1742,29 @@
 <h2 id="_6">网络接口级别限制<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
 <p>mirrors 常态下没有网络接口限制，但在需要临时对某一接口进行限制时，可以使用 tc 来完成。</p>
 <p>例如可以参考这份回答：<a href="https://serverfault.com/questions/452829/limiting-interface-bandwidth-with-tc-under-linux">iptables - Limiting interface bandwidth with tc under Linux - Server Fault</a>，使用如下指令限制某一接口的网络速率为 1.5Gbps：</p>
-<div class="highlight"><pre><span></span><code>tc qdisc add dev &lt;interface&gt; root handle 1: tbf rate 1500Mbit burst 6500 latency 14ms
+<div class="highlight"><pre><span></span><code>tc qdisc add dev &lt;interface&gt; root handle <span class="m">1</span>: tbf rate 1500Mbit burst <span class="m">6500</span> latency 14ms
 </code></pre></div>
 <p>这里使用了 TBF（令牌桶）算法，在突发时速率可能会短暂超过设置的 1.5Gbps。
 后面的 burst 和 latency 参数可以细调，具体调节规则和效果则需查阅文档了。</p>
+<h2 id="_7">黑名单限制<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h2>
+<p>对于滥用的 IP 段，可以使用 ipset 和 iptables 实现黑名单限制。
+ipset 将某个 IP 匹配到一个集合中，iptables 再针对某一集合进行限制。</p>
+<p>ipset 和 iptables 的使用可以参考：<a href="https://www.sunxidong.com/379.html">使用ipset工具对iptables设置黑/白名单 – 孙希栋的博客</a> ，例如以下案例将会阻止 10.0.0.0/8 IP 段的访问：</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># 创建一个 IP set，如果没有的话</span>
+ipset create &lt;name&gt; hash:net
+<span class="c1"># 可以查看现在所有的 IP set</span>
+ipset list
+<span class="c1"># 增加规则</span>
+ipset add &lt;name&gt; <span class="m">10</span>.0.0.0/8
+<span class="c1"># 创建 iptables 规则</span>
+<span class="c1"># 可以放在 PREROUTING 链早点 DROP，有单独的作限制的链的话就放单独的限制链里</span>
+<span class="c1"># 不要弄混 src 和 dst</span>
+<span class="c1"># 区分 -A 和 -I 1，注意规则的顺序</span>
+iptables -t nat -I PREROUTING <span class="m">1</span> -p tcp -m <span class="nb">set</span> --match-set &lt;name&gt; src -j DROP
+<span class="c1"># 保存 ipset 的规则</span>
+ipset save &lt;name&gt; -f &lt;filename&gt;
+<span class="c1"># iptables 的保存就不再提了</span>
+</code></pre></div>
                 
               
               
