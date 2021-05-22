@@ -16,7 +16,7 @@
         <link rel="canonical" href="https://docs.ustclug.org/services/mirrors/limiter/">
       
       <link rel="icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-7.1.4">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-7.1.5">
     
     
       
@@ -1019,6 +1019,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    大文件下载速度限制
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#nginx-js" class="md-nav__link">
     NGINX JS 挑战
   </a>
@@ -1026,7 +1033,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
+  <a href="#_6" class="md-nav__link">
     爬虫限制
   </a>
   
@@ -1045,7 +1052,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_6" class="md-nav__link">
+  <a href="#_7" class="md-nav__link">
     网络接口级别限制
   </a>
   
@@ -1478,6 +1485,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    大文件下载速度限制
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#nginx-js" class="md-nav__link">
     NGINX JS 挑战
   </a>
@@ -1485,7 +1499,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
+  <a href="#_6" class="md-nav__link">
     爬虫限制
   </a>
   
@@ -1504,7 +1518,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_6" class="md-nav__link">
+  <a href="#_7" class="md-nav__link">
     网络接口级别限制
   </a>
   
@@ -1629,6 +1643,7 @@
 <li>文件请求速率限制器：对于非目录类型的请求，限制<strong>单文件</strong>请求速率。即：所有用户之间共享同一个配额。</li>
 <li>例外：apt/yum 仓库的索引文件不受限制。</li>
 <li>案例：曾遇到过攻击者分布式请求同一个大文件，导致 IO、网络同时过载。 基于IP地址的限制措施对于源地址池很大的攻击往往没有效果，限制单文件的请求速率能够有效缓解这类攻击。</li>
+<li>文件连接数限制器：限制单文件的同时连接数。即：所有用户之间共享同一个配额。 这是下载速度限制器的依赖，详见下一小节。</li>
 </ol>
 <p>具体参数参考下表：</p>
 <table>
@@ -1707,6 +1722,14 @@
 <td align="center">/</td>
 <td align="center">返回429错误</td>
 </tr>
+<tr>
+<td align="center">文件连接数限制器</td>
+<td align="center">条</td>
+<td align="center">100</td>
+<td align="center">0</td>
+<td align="center">/</td>
+<td align="center">返回429错误</td>
+</tr>
 </tbody>
 </table>
 <p>到达阈值后会发生什么？</p>
@@ -1715,6 +1738,13 @@
 <li>当请求速率超过阈值，且超过突发请求量时，将会在等待 5 秒后返回 HTTP 429 错误。</li>
 </ul>
 <p>限制器之间相互独立，当被触发的所有限制器产生不一致的等待时间时，应用最长的等待时间。</p>
+<h3 id="_5">大文件下载速度限制<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h3>
+<p>代码位于 <a href="https://git.lug.ustc.edu.cn/mirrors/nginx-config/blob/master/lua/header_filter.lua">/etc/nginx/lua/header_filter.lua</a></p>
+<p>针对单一大文件，同时收到来自大量请求的情形，限制总带宽为 1Gbps，以避免单一文件流量占满总带宽。</p>
+<p>注意：如果有多个文件面临高压力访问，总带宽依然可能被占满</p>
+<p>具体做法为，设置下载速度阈值 = 1Gbps / (该文件的同时连接数+1)</p>
+<p>当下载的文件无穷大时，将出现最差情形，即用户被分配到的下载速率服从类调和级数，函数发散。实际情况下，早期用户下载完成后连接释放，最终带宽将收敛到 1Gbps。</p>
+<p>注：大文件定义为 HTTP Content-Length &gt; 32M 的文件</p>
 <h3 id="nginx-js">NGINX JS 挑战<a class="headerlink" href="#nginx-js" title="Permanent link">&para;</a></h3>
 <p>代码位于 <a href="https://git.lug.ustc.edu.cn/mirrors/nginx-config/blob/master/sites-available/iso.mirrors.ustc.edu.cn">/etc/nginx/sites-available/iso.mirrors.ustc.edu.cn</a></p>
 <p>为了抵抗“迅雷攻击”。对于特定类型的文件，开启了JS挑战。 如果客户端 User-Agent 为 Mozilla（即浏览器），则发送一段包含 JS 脚本的页面，检验运行的结果。如果挑战失败，则返回错误。</p>
@@ -1727,7 +1757,7 @@
 <li>zip</li>
 <li>tar</li>
 </ul>
-<h3 id="_5">爬虫限制<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h3>
+<h3 id="_6">爬虫限制<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h3>
 <p>代码位于 <a href="https://git.lug.ustc.edu.cn/mirrors/nginx-config/blob/master/snippets/robots">/etc/nginx/snippets/robots</a></p>
 <p>如果客户端 User-Agent 包含 Spider、Robot 关键字， 则禁止其访问仓库内容。避免由于频繁列目录带来大量 IO 负载。</p>
 <h3 id="rsync">Rsync 总连接数限制<a class="headerlink" href="#rsync" title="Permanent link">&para;</a></h3>
@@ -1739,7 +1769,7 @@
 </ul>
 <p>在 2020 年 8 月 25 日后，由于更换了新服务器，Rsync 由单独机器提供服务，总连接数提升到了全天 60 个连接。</p>
 <p>特别的，科大 IP 地址受到 rsync 连接数限制。</p>
-<h2 id="_6">网络接口级别限制<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
+<h2 id="_7">网络接口级别限制<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h2>
 <p>mirrors 常态下没有网络接口限制，但在需要临时对某一接口进行限制时，可以使用 tc 来完成。</p>
 <p>例如可以参考这份回答：<a href="https://serverfault.com/questions/452829/limiting-interface-bandwidth-with-tc-under-linux">iptables - Limiting interface bandwidth with tc under Linux - Server Fault</a>，使用如下指令限制某一接口的网络速率为 1.5Gbps：</p>
 <div class="highlight"><pre><span></span><code>tc qdisc add dev &lt;interface&gt; root handle <span class="m">1</span>: tbf rate 1500Mbit burst <span class="m">6500</span> latency 14ms
@@ -1848,10 +1878,10 @@ ipset 将某个 IP 匹配到一个集合中，iptables 再针对某一集合进�
     <div class="md-dialog" data-md-component="dialog">
       <div class="md-dialog__inner md-typeset"></div>
     </div>
-    <script id="__config" type="application/json">{"base": "../../..", "features": ["tabs"], "translations": {"clipboard.copy": "\u590d\u5236", "clipboard.copied": "\u5df2\u590d\u5236", "search.config.lang": "ja", "search.config.pipeline": "trimmer, stemmer", "search.config.separator": "[\\uff0c\\u3002]+", "search.placeholder": "\u641c\u7d22", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}, "search": "../../../assets/javascripts/workers/search.4fa0e4ee.min.js", "version": null}</script>
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["tabs"], "translations": {"clipboard.copy": "\u590d\u5236", "clipboard.copied": "\u5df2\u590d\u5236", "search.config.lang": "ja", "search.config.pipeline": "trimmer, stemmer", "search.config.separator": "[\\uff0c\\u3002]+", "search.placeholder": "\u641c\u7d22", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}, "search": "../../../assets/javascripts/workers/search.d351de03.min.js", "version": null}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.1d3bfcf1.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.a1609d9a.min.js"></script>
       
         <script src="../../../assets/js/extra.js"></script>
       
