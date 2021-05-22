@@ -1741,7 +1741,10 @@
 <h3 id="_5">大文件下载速度限制<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h3>
 <p>代码位于 <a href="https://git.lug.ustc.edu.cn/mirrors/nginx-config/blob/master/lua/header_filter.lua">/etc/nginx/lua/header_filter.lua</a></p>
 <p>针对单一大文件，同时收到来自大量请求的情形，限制总带宽为 1Gbps，以避免单一文件流量占满总带宽。</p>
-<p>注意：如果有多个文件面临高压力访问，总带宽依然可能被占满</p>
+<div class="admonition warning">
+<p class="admonition-title">注意事项</p>
+<p>如果有多个文件面临高压力访问，总带宽依然可能被占满</p>
+</div>
 <p>具体做法为，设置下载速度阈值 = 1Gbps / (该文件的同时连接数+1)</p>
 <p>当下载的文件无穷大时，将出现最差情形，即用户被分配到的下载速率服从类调和级数，函数发散。实际情况下，早期用户下载完成后连接释放，最终带宽将收敛到 1Gbps。</p>
 <p>注：大文件定义为 HTTP Content-Length &gt; 32M 的文件</p>
