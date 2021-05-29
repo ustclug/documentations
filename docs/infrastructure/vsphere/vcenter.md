@@ -10,14 +10,16 @@ vCenter 为维护人员提供了方便的管理所有 ESXi 服务器的界面。
 
 当出现严重的 CVE 且无法简单 workaround 时，建议安装 patch，大致方法：
 
-1. 前往 <https://my.vmware.com/group/vmware/patch> 下载最新版 patch ISO 文件（分类为 VC，需要注册免费账号）；
-2. 上传 ISO 文件到 esxi-5 某个 datastore 中，将 ISO 挂载到 VMware vCenter Server Appliance 虚拟机中；
-3. 登录 esxi-5 管理界面（不是 vcenter 界面，因为更新的时候 vcenter 会下线），进入 vcenter console。
-4. `software-packages stage --iso` 加载补丁文件（实质是一堆 rpm）。
-5. `software-packages install --iso` 安装补丁文件。
-6. `shell` 进入 bash，`reboot` 重启。
-7. 重启后如果进入 5480 端口发现服务状态为未知，手动重启所有服务：`service-control --start --all`
-8. 等待一段时间（比较长），期间可能 503/显示服务正在加载中，等等，之后就应该正常了。
+1. 打快照，最好能手动备份一下。
+2. 前往 <https://my.vmware.com/group/vmware/patch> 下载最新版 patch ISO 文件（分类为 VC，需要注册免费账号）；
+3. 上传 ISO 文件到 esxi-5 某个 datastore 中，将 ISO 挂载到 VMware vCenter Server Appliance 虚拟机中；
+4. 登录 esxi-5 管理界面（不是 vcenter 界面，因为更新的时候 vcenter 会下线），进入 vcenter console。
+5. `software-packages stage --iso` 加载补丁文件（实质是一堆 rpm）。
+6. `software-packages install --iso` 安装补丁文件。
+7. `shell` 进入 bash，`reboot` 重启。
+8. 重启后如果进入 5480 端口发现服务状态为未知，手动重启所有服务：`service-control --start --all`
+9. 等待一段时间（比较长），期间可能 503/显示服务正在加载中，等等，之后就应该正常了。
+10. 别忘了手动备份。
 
 升级时遇到的问题：
 1. 无法识别 ISO 为更新的版本：<https://kb.vmware.com/s/article/59659?lang=zh_CN>
