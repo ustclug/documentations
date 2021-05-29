@@ -1420,6 +1420,7 @@
 <h2 id="patch">安装 patch<a class="headerlink" href="#patch" title="Permanent link">&para;</a></h2>
 <p>当出现严重的 CVE 且无法简单 workaround 时，建议安装 patch，大致方法：</p>
 <ol>
+<li>打快照，最好能手动备份一下。</li>
 <li>前往 <a href="https://my.vmware.com/group/vmware/patch">https://my.vmware.com/group/vmware/patch</a> 下载最新版 patch ISO 文件（分类为 VC，需要注册免费账号）；</li>
 <li>上传 ISO 文件到 esxi-5 某个 datastore 中，将 ISO 挂载到 VMware vCenter Server Appliance 虚拟机中；</li>
 <li>登录 esxi-5 管理界面（不是 vcenter 界面，因为更新的时候 vcenter 会下线），进入 vcenter console。</li>
@@ -1428,6 +1429,7 @@
 <li><code>shell</code> 进入 bash，<code>reboot</code> 重启。</li>
 <li>重启后如果进入 5480 端口发现服务状态为未知，手动重启所有服务：<code>service-control --start --all</code></li>
 <li>等待一段时间（比较长），期间可能 503/显示服务正在加载中，等等，之后就应该正常了。</li>
+<li>别忘了手动备份。</li>
 </ol>
 <p>升级时遇到的问题：
 1. 无法识别 ISO 为更新的版本：<a href="https://kb.vmware.com/s/article/59659?lang=zh_CN">https://kb.vmware.com/s/article/59659?lang=zh_CN</a>
