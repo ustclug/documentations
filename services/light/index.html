@@ -1173,6 +1173,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#shutdown" class="md-nav__link">
+    Shutdown
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1419,6 +1426,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#shutdown" class="md-nav__link">
+    Shutdown
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1491,6 +1505,11 @@ git push origin master
 <span class="n">optimize</span> <span class="k">table</span> <span class="n">radacct</span><span class="p">;</span>
 <span class="n">optimize</span> <span class="k">table</span> <span class="n">radacct_backup</span><span class="p">;</span>
 </code></pre></div>
+<h2 id="shutdown">Shutdown<a class="headerlink" href="#shutdown" title="Permanent link">&para;</a></h2>
+<ol>
+<li>Stop two containers: <code>light-server</code> &amp; <code>light-socks</code></li>
+<li>Set restart policy to <code>no</code> (See <a href="https://docs.docker.com/config/containers/start-containers-automatically/#use-a-restart-policy">https://docs.docker.com/config/containers/start-containers-automatically/#use-a-restart-policy</a>)</li>
+</ol>
                 
               
               
