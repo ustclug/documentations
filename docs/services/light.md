@@ -65,3 +65,9 @@ delete from radacct_backup where acctstoptime < '2020-06-01 00:00:00';
 optimize table radacct;
 optimize table radacct_backup;
 ```
+
+## Shutdown
+
+1. Stop two containers: `light-server` & `light-socks`
+2. Set restart policy to `no` (See <https://docs.docker.com/config/containers/start-containers-automatically/#use-a-restart-policy>)
+
