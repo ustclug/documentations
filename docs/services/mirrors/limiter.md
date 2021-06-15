@@ -158,10 +158,27 @@ ipset 将某个 IP 匹配到一个集合中，iptables 再针对某一集合进�
 
 ipset 和 iptables 的使用可以参考：[使用ipset工具对iptables设置黑/白名单 – 孙希栋的博客](https://www.sunxidong.com/379.html) 。
 
-我们已在 mirrors4 上配置了 `blacklist` 集合（IPv4），若要封禁某个 IP 或网段，可以直接将该网段加入集合：
+我们已在 mirrors4 上配置了 `blacklist` 和 `blacklist6` 集合，若要封禁某个 IP 或网段，可以直接将该网段加入集合，例如：
 
 ```bash
 ipset add blacklist 192.0.2.0/24
+ipset add blacklist6 2001:db8:114:514::/64
 ```
 
 与 iptables 类似，ipset 也需要持久化。封禁名单的文件位于（mirrors4）`/usr/local/network_config/ipset-blacklist.list`，可以在运行完 ipset 命令后手动编辑该文件添加相关条目，以确保服务器重启后相同的表项能够被载入。
+
+### ipset 持久化
+
+我们使用软件源里的 `ipset-persistent` 包来帮助 ipset 在开机时自动恢复，该软件包会在开机加载 iptables 前先从 `/etc/iptables/ipsets` 中恢复 ipset 以确保 iptables 中的引用能正确处理。
+
+因为 ipset-persistent 在开机时自动加载，我们选择仅加载一个较小的子集，包含必要配置（create set）和较少发生变化的内容（如 ustcnet 的网段）。目前 `/etc/iptables/ipsets` 包含以下内容：
+
+```shell
+create ustcnet hash:net family inet hashsize 1024 maxelem 65536
+create f2b-sshd hash:ip family inet hashsize 1024 maxelem 65536 timeout 3600
+create blacklist hash:net family inet hashsize 1024 maxelem 65536
+create blacklist6 hash:net family inet6 hashsize 1024 maxelem 65536
+
+add ustcnet 202.38.64.0/19
+# more ustcnet entries...
+```
