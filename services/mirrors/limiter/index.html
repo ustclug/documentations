@@ -16,7 +16,7 @@
         <link rel="canonical" href="https://docs.ustclug.org/services/mirrors/limiter/">
       
       <link rel="icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-7.1.6">
+      <meta name="generator" content="mkdocs-1.2.1, mkdocs-material-7.1.8">
     
     
       
@@ -24,7 +24,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.875de78c.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.ca7ac06f.min.css">
       
         
         <link rel="stylesheet" href="../../../assets/stylesheets/palette.f1a3b89f.min.css">
@@ -50,6 +50,8 @@
     
     
       
+
+
     
     
   </head>
@@ -1063,6 +1065,19 @@
     IP 黑名单限制
   </a>
   
+    <nav class="md-nav" aria-label="IP 黑名单限制">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ipset" class="md-nav__link">
+    ipset 持久化
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
     </ul>
@@ -1529,6 +1544,19 @@
     IP 黑名单限制
   </a>
   
+    <nav class="md-nav" aria-label="IP 黑名单限制">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ipset" class="md-nav__link">
+    ipset 持久化
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
     </ul>
@@ -1783,10 +1811,22 @@
 <p>对于滥用的 IP 段，可以使用 ipset 和 iptables 实现黑名单限制。
 ipset 将某个 IP 匹配到一个集合中，iptables 再针对某一集合进行限制。</p>
 <p>ipset 和 iptables 的使用可以参考：<a href="https://www.sunxidong.com/379.html">使用ipset工具对iptables设置黑/白名单 – 孙希栋的博客</a> 。</p>
-<p>我们已在 mirrors4 上配置了 <code>blacklist</code> 集合（IPv4），若要封禁某个 IP 或网段，可以直接将该网段加入集合：</p>
+<p>我们已在 mirrors4 上配置了 <code>blacklist</code> 和 <code>blacklist6</code> 集合，若要封禁某个 IP 或网段，可以直接将该网段加入集合，例如：</p>
 <div class="highlight"><pre><span></span><code>ipset add blacklist <span class="m">192</span>.0.2.0/24
+ipset add blacklist6 <span class="m">2001</span>:db8:114:514::/64
 </code></pre></div>
 <p>与 iptables 类似，ipset 也需要持久化。封禁名单的文件位于（mirrors4）<code>/usr/local/network_config/ipset-blacklist.list</code>，可以在运行完 ipset 命令后手动编辑该文件添加相关条目，以确保服务器重启后相同的表项能够被载入。</p>
+<h3 id="ipset">ipset 持久化<a class="headerlink" href="#ipset" title="Permanent link">&para;</a></h3>
+<p>我们使用软件源里的 <code>ipset-persistent</code> 包来帮助 ipset 在开机时自动恢复，该软件包会在开机加载 iptables 前先从 <code>/etc/iptables/ipsets</code> 中恢复 ipset 以确保 iptables 中的引用能正确处理。</p>
+<p>因为 ipset-persistent 在开机时自动加载，我们选择仅加载一个较小的子集，包含必要配置（create set）和较少发生变化的内容（如 ustcnet 的网段）。目前 <code>/etc/iptables/ipsets</code> 包含以下内容：</p>
+<div class="highlight"><pre><span></span><code>create ustcnet hash:net family inet hashsize <span class="m">1024</span> maxelem <span class="m">65536</span>
+create f2b-sshd hash:ip family inet hashsize <span class="m">1024</span> maxelem <span class="m">65536</span> timeout <span class="m">3600</span>
+create blacklist hash:net family inet hashsize <span class="m">1024</span> maxelem <span class="m">65536</span>
+create blacklist6 hash:net family inet6 hashsize <span class="m">1024</span> maxelem <span class="m">65536</span>
+
+add ustcnet <span class="m">202</span>.38.64.0/19
+<span class="c1"># more ustcnet entries...</span>
+</code></pre></div>
                 
               
               
@@ -1805,7 +1845,8 @@ ipset 将某个 IP 匹配到一个集合中，iptables 再针对某一集合进�
   
     <nav class="md-footer__inner md-grid" aria-label="Footer">
       
-        <a href="../zfs/" class="md-footer__link md-footer__link--prev" rel="prev">
+        
+        <a href="../zfs/" class="md-footer__link md-footer__link--prev" aria-label="上一页: ZFS" rel="prev">
           <div class="md-footer__button md-icon">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
           </div>
@@ -1820,7 +1861,8 @@ ipset 将某个 IP 匹配到一个集合中，iptables 再针对某一集合进�
         </a>
       
       
-        <a href="../mail-list/" class="md-footer__link md-footer__link--next" rel="next">
+        
+        <a href="../mail-list/" class="md-footer__link md-footer__link--next" aria-label="下一页: Mail list" rel="next">
           <div class="md-footer__title">
             <div class="md-ellipsis">
               <span class="md-footer__direction">
@@ -1881,10 +1923,10 @@ ipset 将某个 IP 匹配到一个集合中，iptables 再针对某一集合进�
     <div class="md-dialog" data-md-component="dialog">
       <div class="md-dialog__inner md-typeset"></div>
     </div>
-    <script id="__config" type="application/json">{"base": "../../..", "features": ["tabs"], "translations": {"clipboard.copy": "\u590d\u5236", "clipboard.copied": "\u5df2\u590d\u5236", "search.config.lang": "ja", "search.config.pipeline": "trimmer, stemmer", "search.config.separator": "[\\uff0c\\u3002]+", "search.placeholder": "\u641c\u7d22", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}, "search": "../../../assets/javascripts/workers/search.d351de03.min.js", "version": null}</script>
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["tabs"], "translations": {"clipboard.copy": "\u590d\u5236", "clipboard.copied": "\u5df2\u590d\u5236", "search.config.lang": "ja", "search.config.pipeline": "trimmer, stemmer", "search.config.separator": "[\\uff0c\\u3002]+", "search.placeholder": "\u641c\u7d22", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../../assets/javascripts/workers/search.b0710199.min.js", "version": null}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.34eae1b6.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.76f349be.min.js"></script>
       
         <script src="../../../assets/js/extra.js"></script>
       
