@@ -19,6 +19,10 @@ Git Repository:
 
 **建议在更新完成 72 小时内删除快照，详见 [关于快照](/infrastructure/vsphere/esxi/#about-snapshot)。**
 
+!!! warning "升级至 GitLab 14 的注意事项"
+
+    目前我们仍然使用 GitLab 13.x，但是已知升级到 GitLab 14（可能要到 GitLab 14.3 生效？）中影响我们的 breaking changes 是：仓库 storage 类型需要是 hashed storage (而不是 legacy storage)，新的仓库都已经使用了 hashed storage，但是旧的仓库没有被搬走。所以可能需要参考 <https://docs.gitlab.com/ee/administration/raketasks/storage.html#migrate-to-hashed-storage> 进行迁移。
+
 ## postgresql 与 redis 的更新
 
 由于 gitlab 更新后可能对 postgresql 与 redis 的版本有要求，因此有可能需要定期更新 redis 与 postgresql。
