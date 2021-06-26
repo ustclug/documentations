@@ -16,7 +16,7 @@
         <link rel="canonical" href="https://docs.ustclug.org/services/gitlab/">
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.2.1, mkdocs-material-7.1.8">
+      <meta name="generator" content="mkdocs-1.2.1, mkdocs-material-7.1.9">
     
     
       
@@ -1678,6 +1678,10 @@ Git Repository:
 <p>一般情况下经以上操作后更新就正常结束，如果长时间无法启动，可以通过 <code>docker logs gitlab</code> 查看日志，如果发现更新后的启动出现问题，可以到 <a href="https://github.com/sameersbn/docker-gitlab/">sameersbn/docker-gitlab</a> 的 issue 区等地查看相关 issue，以及通过对出错日志进行 Google 可能会发现是 gitlab 上游等出现的问题。如果有解决办法，可以按照相应解决办法解决，如果没有。可以通过找到有相应问题前的正常版本号，回滚快照，之后更到表现正常的版本。（最近的更新会在启动之后短暂出现 502 的情况，但很快就会恢复，遇到这种情况时不要惊慌）。</p>
 <p>由于更新可能会出现问题导致服务不可用，因此不建议通过 cron 等方式自动进行更新。</p>
 <p><strong>建议在更新完成 72 小时内删除快照，详见 <a href="/infrastructure/vsphere/esxi/#about-snapshot">关于快照</a>。</strong></p>
+<div class="admonition warning">
+<p class="admonition-title">升级至 GitLab 14 的注意事项</p>
+<p>目前我们仍然使用 GitLab 13.x，但是已知升级到 GitLab 14（可能要到 GitLab 14.3 生效？）中影响我们的 breaking changes 是：仓库 storage 类型需要是 hashed storage (而不是 legacy storage)，新的仓库都已经使用了 hashed storage，但是旧的仓库没有被搬走。所以可能需要参考 <a href="https://docs.gitlab.com/ee/administration/raketasks/storage.html#migrate-to-hashed-storage">https://docs.gitlab.com/ee/administration/raketasks/storage.html#migrate-to-hashed-storage</a> 进行迁移。</p>
+</div>
 <h2 id="postgresql-redis">postgresql 与 redis 的更新<a class="headerlink" href="#postgresql-redis" title="Permanent link">&para;</a></h2>
 <p>由于 gitlab 更新后可能对 postgresql 与 redis 的版本有要求，因此有可能需要定期更新 redis 与 postgresql。</p>
 <p>更新前请先停止 gitlab 的 container</p>
@@ -1848,10 +1852,10 @@ Git Repository:
     <div class="md-dialog" data-md-component="dialog">
       <div class="md-dialog__inner md-typeset"></div>
     </div>
-    <script id="__config" type="application/json">{"base": "../..", "features": ["tabs"], "translations": {"clipboard.copy": "\u590d\u5236", "clipboard.copied": "\u5df2\u590d\u5236", "search.config.lang": "ja", "search.config.pipeline": "trimmer, stemmer", "search.config.separator": "[\\uff0c\\u3002]+", "search.placeholder": "\u641c\u7d22", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../assets/javascripts/workers/search.b0710199.min.js", "version": null}</script>
+    <script id="__config" type="application/json">{"base": "../..", "features": ["tabs"], "translations": {"clipboard.copy": "\u590d\u5236", "clipboard.copied": "\u5df2\u590d\u5236", "search.config.lang": "ja", "search.config.pipeline": "trimmer, stemmer", "search.config.separator": "[\\uff0c\\u3002]+", "search.placeholder": "\u641c\u7d22", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../assets/javascripts/workers/search.477d984a.min.js", "version": null}</script>
     
     
-      <script src="../../assets/javascripts/bundle.76f349be.min.js"></script>
+      <script src="../../assets/javascripts/bundle.82b56eb2.min.js"></script>
       
         <script src="../../assets/js/extra.js"></script>
       
