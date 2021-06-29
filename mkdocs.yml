@@ -117,6 +117,7 @@ nav:
       - Light: 'services/light.md'
       - PXE:
         - LIIMS: 'services/pxe/liims.md'
+        - PXE: 'services/pxe/pxe.md'
       - FTP: 'services/ftp.md'
       - Generate 204: 'services/generate-204.md'
       - Discontinued Services: 'services/discontinued.md'
@@ -124,5 +125,5 @@ nav:
       - DNS: faq/dns.md
       - LDAP: faq/ldap.md
       - Nginx: faq/nginx.md
-  - Projects:
-    - Linux 101: projects/linux101/index.md
+  # - Projects:
+    # - Linux 101: projects/linux101/index.md
