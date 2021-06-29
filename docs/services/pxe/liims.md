@@ -54,3 +54,9 @@ qemu -kernel /mnt/boot/vmlinuz-lts\
 ```
 
 注：其中 netdev 中的 ip 段可以自由选取，`device` 中的设备名通过 `qemu -device \?` 查看后选择任一网络设备即可
+
+## 查询机监控
+
+<http://pxe.ustc.edu.cn:3000/>
+
+提供服务的是一个容器。
