@@ -9,7 +9,7 @@
 1. `sudo systemctl edit nginx.service`（部分机器上的服务名可能为 `openresty.service`）
 2. 在打开的 override 文件的 `[Service]` 下方添加 `LimitNOFILE=524288`（视情况这个值可以相应调整）
 
-##
+## 关于 gateway 配置中的 `/tmp/mem` 路径
 
 错误表现是 `systemctl start nginx.service` 失败，使用 status 或 journalctl 可以看到以下信息：
 
