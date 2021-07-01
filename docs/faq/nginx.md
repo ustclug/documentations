@@ -6,5 +6,17 @@
 
 解决方法：
 
-1. `sudo systemctl edit nginx.service`
+1. `sudo systemctl edit nginx.service`（部分机器上的服务名可能为 `openresty.service`）
 2. 在打开的 override 文件的 `[Service]` 下方添加 `LimitNOFILE=524288`（视情况这个值可以相应调整）
+
+##
+
+错误表现是 `systemctl start nginx.service` 失败，使用 status 或 journalctl 可以看到以下信息：
+
+    [emerg] mkdir() "/tmp/mem/nginx_temp" failed (2: No such file or directory)
+
+这是因为[我们的 `nginx.conf`](https://git.lug.ustc.edu.cn/ustclug/nginx-config/-/blob/d6f9bf7443117b4d6ebe0a566dc6bb48753a8f58/nginx.conf#L34) 中钦点了 `proxy_temp /tmp/mem/nginx_temp`，而 `/tmp/mem` 是我们自己建的一个 tmpfs 挂载点，它不是任何发行版的默认配置，所以新装的系统如果直接 pull 了这份 nginx config 就会报以上错误。
+
+正确的解决方法是补上对应的 fstab 行：
+
+    tmpfs   /tmp/mem    tmpfs   0   0
