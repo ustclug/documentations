@@ -1311,6 +1311,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1363,6 +1370,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1385,9 +1399,18 @@
 <p>在默认设置中，nginx 的最大文件打开数上限并不大。当有大量访问时，文件打开数可能会超过限额，导致网站响应缓慢。在新配置服务器时，这一项设置很容易被忽略掉。</p>
 <p>解决方法：</p>
 <ol>
-<li><code>sudo systemctl edit nginx.service</code></li>
+<li><code>sudo systemctl edit nginx.service</code>（部分机器上的服务名可能为 <code>openresty.service</code>）</li>
 <li>在打开的 override 文件的 <code>[Service]</code> 下方添加 <code>LimitNOFILE=524288</code>（视情况这个值可以相应调整）</li>
 </ol>
+<h2 id="_2"><a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<p>错误表现是 <code>systemctl start nginx.service</code> 失败，使用 status 或 journalctl 可以看到以下信息：</p>
+<div class="codehilite"><pre><span></span><code><span class="o">[</span><span class="n">emerg</span><span class="o">]</span><span class="w"> </span><span class="n">mkdir</span><span class="p">()</span><span class="w"> </span><span class="ss">&quot;/tmp/mem/nginx_temp&quot;</span><span class="w"> </span><span class="n">failed</span><span class="w"> </span><span class="p">(</span><span class="mi">2</span><span class="err">:</span><span class="w"> </span><span class="k">No</span><span class="w"> </span><span class="n">such</span><span class="w"> </span><span class="k">file</span><span class="w"> </span><span class="ow">or</span><span class="w"> </span><span class="n">directory</span><span class="p">)</span><span class="w"></span>
+</code></pre></div>
+
+<p>这是因为<a href="https://git.lug.ustc.edu.cn/ustclug/nginx-config/-/blob/d6f9bf7443117b4d6ebe0a566dc6bb48753a8f58/nginx.conf#L34">我们的 <code>nginx.conf</code></a> 中钦点了 <code>proxy_temp /tmp/mem/nginx_temp</code>，而 <code>/tmp/mem</code> 是我们自己建的一个 tmpfs 挂载点，它不是任何发行版的默认配置，所以新装的系统如果直接 pull 了这份 nginx config 就会报以上错误。</p>
+<p>正确的解决方法是补上对应的 fstab 行：</p>
+<div class="codehilite"><pre><span></span><code>tmpfs   /tmp/mem    tmpfs   0   0
+</code></pre></div>
                 
               
               
