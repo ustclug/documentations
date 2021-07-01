@@ -1301,8 +1301,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
-    
+  <a href="#gateway-tmpmem" class="md-nav__link">
+    关于 gateway 配置中的 /tmp/mem 路径
   </a>
   
 </li>
@@ -1354,8 +1354,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
-    
+  <a href="#gateway-tmpmem" class="md-nav__link">
+    关于 gateway 配置中的 /tmp/mem 路径
   </a>
   
 </li>
@@ -1385,7 +1385,7 @@
 <li><code>sudo systemctl edit nginx.service</code>（部分机器上的服务名可能为 <code>openresty.service</code>）</li>
 <li>在打开的 override 文件的 <code>[Service]</code> 下方添加 <code>LimitNOFILE=524288</code>（视情况这个值可以相应调整）</li>
 </ol>
-<h2 id="_2"><a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<h2 id="gateway-tmpmem">关于 gateway 配置中的 <code>/tmp/mem</code> 路径<a class="headerlink" href="#gateway-tmpmem" title="Permanent link">&para;</a></h2>
 <p>错误表现是 <code>systemctl start nginx.service</code> 失败，使用 status 或 journalctl 可以看到以下信息：</p>
 <div class="codehilite"><pre><span></span><code><span class="o">[</span><span class="n">emerg</span><span class="o">]</span><span class="w"> </span><span class="n">mkdir</span><span class="p">()</span><span class="w"> </span><span class="ss">&quot;/tmp/mem/nginx_temp&quot;</span><span class="w"> </span><span class="n">failed</span><span class="w"> </span><span class="p">(</span><span class="mi">2</span><span class="err">:</span><span class="w"> </span><span class="k">No</span><span class="w"> </span><span class="n">such</span><span class="w"> </span><span class="k">file</span><span class="w"> </span><span class="ow">or</span><span class="w"> </span><span class="n">directory</span><span class="p">)</span><span class="w"></span>
 </code></pre></div>
