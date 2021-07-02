@@ -17,6 +17,8 @@
 
 这是因为[我们的 `nginx.conf`](https://git.lug.ustc.edu.cn/ustclug/nginx-config/-/blob/d6f9bf7443117b4d6ebe0a566dc6bb48753a8f58/nginx.conf#L34) 中钦点了 `proxy_temp /tmp/mem/nginx_temp`，而 `/tmp/mem` 是我们自己建的一个 tmpfs 挂载点，它不是任何发行版的默认配置，所以新装的系统如果直接 pull 了这份 nginx config 就会报以上错误。
 
+（使用 `/tmp/mem` 的原因是，由于 nginx 反代需要频繁读写临时文件，为了减少磁盘 IO 占用，故将其临时文件放入内存中）
+
 正确的解决方法是补上对应的 fstab 行：
 
     tmpfs   /tmp/mem    tmpfs   0   0
