@@ -121,6 +121,7 @@ nav:
     - Generate 204: 'services/generate-204.md'
     - Discontinued Services: 'services/discontinued.md'
   - Common Issues:
+    - Get Started: faq/get-started.md
     - DNS: faq/dns.md
     - LDAP: faq/ldap.md
     - Nginx: faq/nginx.md
