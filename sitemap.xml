@@ -2,247 +2,247 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://docs.ustclug.org/</loc>
-         <lastmod>2021-07-02</lastmod>
+         <lastmod>2021-07-24</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.ustclug.org/faq/dns/</loc>
-         <lastmod>2021-07-02</lastmod>
+         <lastmod>2021-07-24</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.ustclug.org/faq/ldap/</loc>
-         <lastmod>2021-07-02</lastmod>
+         <lastmod>2021-07-24</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.ustclug.org/faq/nginx/</loc>
-         <lastmod>2021-07-02</lastmod>
+         <lastmod>2021-07-24</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.ustclug.org/infrastructure/discontinued/</loc>
-         <lastmod>2021-07-02</lastmod>
+         <lastmod>2021-07-24</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.ustclug.org/infrastructure/dns/</loc>
-         <lastmod>2021-07-02</lastmod>
+         <lastmod>2021-07-24</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.ustclug.org/infrastructure/github/</loc>
-         <lastmod>2021-07-02</lastmod>
+         <lastmod>2021-07-24</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.ustclug.org/infrastructure/google/</loc>
-         <lastmod>2021-07-02</lastmod>
+         <lastmod>2021-07-24</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.ustclug.org/infrastructure/ldap/</loc>
-         <lastmod>2021-07-02</lastmod>
+         <lastmod>2021-07-24</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.ustclug.org/infrastructure/mail/</loc>
-         <lastmod>2021-07-02</lastmod>
+         <lastmod>2021-07-24</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.ustclug.org/infrastructure/monitor/</loc>
-         <lastmod>2021-07-02</lastmod>
+         <lastmod>2021-07-24</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.ustclug.org/infrastructure/raid/</loc>
-         <lastmod>2021-07-02</lastmod>
+         <lastmod>2021-07-24</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.ustclug.org/infrastructure/sshca/</loc>
-         <lastmod>2021-07-02</lastmod>
+         <lastmod>2021-07-24</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.ustclug.org/infrastructure/ssl/</loc>
-         <lastmod>2021-07-02</lastmod>
+         <lastmod>2021-07-24</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.ustclug.org/infrastructure/tinc/</loc>
-         <lastmod>2021-07-02</lastmod>
+         <lastmod>2021-07-24</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.ustclug.org/infrastructure/intranet/intranet/</loc>
-         <lastmod>2021-07-02</lastmod>
+         <lastmod>2021-07-24</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.ustclug.org/infrastructure/intranet/lugivpn/</loc>
-         <lastmod>2021-07-02</lastmod>
+         <lastmod>2021-07-24</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.ustclug.org/infrastructure/vsphere/esxi/</loc>
-         <lastmod>2021-07-02</lastmod>
+         <lastmod>2021-07-24</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.ustclug.org/infrastructure/vsphere/nfs/</loc>
-         <lastmod>2021-07-02</lastmod>
+         <lastmod>2021-07-24</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.ustclug.org/infrastructure/vsphere/vcenter/</loc>
-         <lastmod>2021-07-02</lastmod>
+         <lastmod>2021-07-24</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.ustclug.org/infrastructure/vsphere/vdp/</loc>
-         <lastmod>2021-07-02</lastmod>
+         <lastmod>2021-07-24</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.ustclug.org/services/auth-dns/</loc>
-         <lastmod>2021-07-02</lastmod>
+         <lastmod>2021-07-24</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.ustclug.org/services/discontinued/</loc>
-         <lastmod>2021-07-02</lastmod>
+         <lastmod>2021-07-24</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.ustclug.org/services/docker2/</loc>
-         <lastmod>2021-07-02</lastmod>
+         <lastmod>2021-07-24</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.ustclug.org/services/ftp/</loc>
-         <lastmod>2021-07-02</lastmod>
+         <lastmod>2021-07-24</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.ustclug.org/services/generate-204/</loc>
-         <lastmod>2021-07-02</lastmod>
+         <lastmod>2021-07-24</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.ustclug.org/services/gitlab/</loc>
-         <lastmod>2021-07-02</lastmod>
+         <lastmod>2021-07-24</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.ustclug.org/services/light/</loc>
-         <lastmod>2021-07-02</lastmod>
+         <lastmod>2021-07-24</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.ustclug.org/services/mirrors/</loc>
-         <lastmod>2021-07-02</lastmod>
+         <lastmod>2021-07-24</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.ustclug.org/services/mirrors/docker/</loc>
-         <lastmod>2021-07-02</lastmod>
+         <lastmod>2021-07-24</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.ustclug.org/services/mirrors/hardware/</loc>
-         <lastmod>2021-07-02</lastmod>
+         <lastmod>2021-07-24</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.ustclug.org/services/mirrors/ipmi/</loc>
-         <lastmod>2021-07-02</lastmod>
+         <lastmod>2021-07-24</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.ustclug.org/services/mirrors/limiter/</loc>
-         <lastmod>2021-07-02</lastmod>
+         <lastmod>2021-07-24</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.ustclug.org/services/mirrors/mail-list/</loc>
-         <lastmod>2021-07-02</lastmod>
+         <lastmod>2021-07-24</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.ustclug.org/services/mirrors/zfs/</loc>
-         <lastmod>2021-07-02</lastmod>
+         <lastmod>2021-07-24</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.ustclug.org/services/mirrors/1/</loc>
-         <lastmod>2021-07-02</lastmod>
+         <lastmod>2021-07-24</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.ustclug.org/services/mirrors/2/</loc>
-         <lastmod>2021-07-02</lastmod>
+         <lastmod>2021-07-24</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.ustclug.org/services/mirrors/2/networking/</loc>
-         <lastmod>2021-07-02</lastmod>
+         <lastmod>2021-07-24</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.ustclug.org/services/mirrors/3/</loc>
-         <lastmod>2021-07-02</lastmod>
+         <lastmod>2021-07-24</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.ustclug.org/services/mirrors/4/</loc>
-         <lastmod>2021-07-02</lastmod>
+         <lastmod>2021-07-24</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.ustclug.org/services/mirrors/4/repos/</loc>
-         <lastmod>2021-07-02</lastmod>
+         <lastmod>2021-07-24</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.ustclug.org/services/mirrors/4/volumes/</loc>
-         <lastmod>2021-07-02</lastmod>
+         <lastmod>2021-07-24</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.ustclug.org/services/mirrors/4/networking/</loc>
-         <lastmod>2021-07-02</lastmod>
+         <lastmod>2021-07-24</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.ustclug.org/services/mirrors/4/networking/route/</loc>
-         <lastmod>2021-07-02</lastmod>
+         <lastmod>2021-07-24</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.ustclug.org/services/pxe/liims/</loc>
-         <lastmod>2021-07-02</lastmod>
+         <lastmod>2021-07-24</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.ustclug.org/services/pxe/pxe/</loc>
-         <lastmod>2021-07-02</lastmod>
+         <lastmod>2021-07-24</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.ustclug.org/workflow/ldap/add-new-user/</loc>
-         <lastmod>2021-07-02</lastmod>
+         <lastmod>2021-07-24</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.ustclug.org/workflow/mirrors/maintenance/</loc>
-         <lastmod>2021-07-02</lastmod>
+         <lastmod>2021-07-24</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.ustclug.org/workflow/vSphere/new-vm/</loc>
-         <lastmod>2021-07-02</lastmod>
+         <lastmod>2021-07-24</lastmod>
          <changefreq>daily</changefreq>
     </url>
 </urlset>
