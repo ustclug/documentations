@@ -39,6 +39,6 @@ plugin /usr/lib/openvpn/openvpn-auth-ldap.so /etc/openvpn/auth-ldap.conf
 Servers intranet is a layer 2 network without default gateway. So NAT is needed:
 
 ```sh
-iptables -t nat -A POSTROUTING -s 10.254.248.0/22 -d 10.254.0.0/21 -j MASQUERAD
+iptables -t nat -A POSTROUTING -s 10.254.248.0/22 -d 10.254.0.0/21 -j MASQUERADE
 ```
 
