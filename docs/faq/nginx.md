@@ -22,3 +22,5 @@
 正确的解决方法是补上对应的 fstab 行：
 
     tmpfs   /tmp/mem    tmpfs   0   0
+
+如果创建/挂载了 /tmp/mem 后，启动仍然出错，则需要检查 openresty.service/nginx.service 文件中是否包含 `PrivateTmp=yes`。如果包含，则需要 `systemctl edit`，将此项设置为 `false`。
