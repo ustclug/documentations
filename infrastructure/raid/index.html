@@ -614,6 +614,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    监控
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1350,6 +1357,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    监控
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1373,6 +1387,11 @@
 <div class="highlight"><pre><span></span><code>sudo /opt/MegaRAID/MegaCli/MegaCli64 -adpallinfo -aAll  # 查看所有信息
 sudo /opt/MegaRAID/MegaCli/MegaCli64 -pdlist -aall  # 查看物理盘信息
 </code></pre></div>
+<h2 id="_1">监控<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<p>现在部署的方案是由 telegraf 执行解析脚本，将数据发送到 influxdb，由 grafana 报警。</p>
+<p>脚本：
+- 解析 megacli &amp; storcli <a href="https://github.com/taoky/raid-telegraf">https://github.com/taoky/raid-telegraf</a>
+- 解析 zpool <a href="https://github.com/taoky/telegraf-exec-zpool-status/releases">https://github.com/taoky/telegraf-exec-zpool-status/releases</a></p>
                 
               
               
