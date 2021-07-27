@@ -16,7 +16,7 @@
         <link rel="canonical" href="https://docs.ustclug.org/faq/nginx/">
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.2.2, mkdocs-material-7.2.0">
+      <meta name="generator" content="mkdocs-1.2.2, mkdocs-material-7.2.1">
     
     
       
@@ -24,7 +24,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.fe914879.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.1118c9be.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.ba0d045b.min.css">
@@ -1399,6 +1399,8 @@
 <p>正确的解决方法是补上对应的 fstab 行：</p>
 <div class="codehilite"><pre><span></span><code>tmpfs   /tmp/mem    tmpfs   0   0
 </code></pre></div>
+
+<p>如果创建/挂载了 /tmp/mem 后，启动仍然出错，则需要检查 openresty.service/nginx.service 文件中是否包含 <code>PrivateTmp=yes</code>。如果包含，则需要 <code>systemctl edit</code>，将此项设置为 <code>false</code>。</p>
                 
               
               
