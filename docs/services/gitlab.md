@@ -18,7 +18,7 @@ GitLab 维护者需要订阅：
 
 由于已经 docker 化，因此我们的更新是通过拉取 [sameersbn/docker-gitlab](https://github.com/sameersbn/docker-gitlab/) 的 docker image，进行数据库准备以及启动镜像实例来进行更新，Zack Zeng 学长已经写好了一套脚本系统：[gitlab-scripts](https://git.lug.ustc.edu.cn/ustclug/gitlab-scripts)，因此更新时只要跑脚本就可以了。
 
-由于更新需要停止服务，因此请于更新前至少几小时发布更新公告（包括具体时间等）
+由于更新需要停止服务，因此请于更新前至少几小时发布更新公告（包括具体时间等），并检查 Admin -> Monitoring -> Background Migrations 中所有 migration 是否都已经成功完成。
 
 更新前请先提前于 [VCenter](https://vcenter2.vm.ustclug.org/) 上对虚拟机打快照（打快照时服务会暂时停止）
 
