@@ -3,6 +3,15 @@ Server: gitlab.s.ustclug.org (ssh Port 2222)
 Git Repository:
 - [gitlab-scripts](https://git.lug.ustc.edu.cn/ustclug/gitlab-scripts)
 
+## GitLab & Security
+
+GitLab 维护者需要订阅：
+
+1. GitLab Security Notices 邮件列表 (<https://about.gitlab.com/company/contact/> 右侧 "Sign up for security notices")
+2. sameersbn/docker-gitlab releases (GitHub <https://github.com/sameersbn/docker-gitlab/releases> Watch -> Custom -> Releases)
+
+在 GitLab 有 Security Release 且 docker-gitlab 发布新版本之后需要安排时间更新。尤其 Critical Security Release 需要尽快找时间更新。
+
 ## 更新
 
 （建议阅读 <https://docs.gitlab.com/ee/update/index.html>）
@@ -20,10 +29,6 @@ Git Repository:
 由于更新可能会出现问题导致服务不可用，因此不建议通过 cron 等方式自动进行更新。
 
 **建议在更新完成 72 小时内删除快照，详见 [关于快照](/infrastructure/vsphere/esxi/#about-snapshot)。**
-
-!!! warning "升级至 GitLab 14 的注意事项"
-
-    目前我们仍然使用 GitLab 13.x，但是已知升级到 GitLab 14（可能要到 GitLab 14.3 生效？）中影响我们的 breaking changes 是：仓库 storage 类型需要是 hashed storage (而不是 legacy storage)，新的仓库都已经使用了 hashed storage，但是旧的仓库没有被搬走。所以可能需要参考 <https://docs.gitlab.com/ee/administration/raketasks/storage.html#migrate-to-hashed-storage> 进行迁移。
 
 ## postgresql 与 redis 的更新
 
