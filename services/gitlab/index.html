@@ -1651,7 +1651,7 @@ Git Repository:
 <h2 id="_1">更新<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <p>（建议阅读 <a href="https://docs.gitlab.com/ee/update/index.html">https://docs.gitlab.com/ee/update/index.html</a>）</p>
 <p>由于已经 docker 化，因此我们的更新是通过拉取 <a href="https://github.com/sameersbn/docker-gitlab/">sameersbn/docker-gitlab</a> 的 docker image，进行数据库准备以及启动镜像实例来进行更新，Zack Zeng 学长已经写好了一套脚本系统：<a href="https://git.lug.ustc.edu.cn/ustclug/gitlab-scripts">gitlab-scripts</a>，因此更新时只要跑脚本就可以了。</p>
-<p>由于更新需要停止服务，因此请于更新前至少几小时发布更新公告（包括具体时间等）</p>
+<p>由于更新需要停止服务，因此请于更新前至少几小时发布更新公告（包括具体时间等），并检查 Admin -&gt; Monitoring -&gt; Background Migrations 中所有 migration 是否都已经成功完成。</p>
 <p>更新前请先提前于 <a href="https://vcenter2.vm.ustclug.org/">VCenter</a> 上对虚拟机打快照（打快照时服务会暂时停止）</p>
 <p>打完快照之后使用脚本进行更新（目前脚本位于 <code>/home/sirius/gitlab-scripts</code>），首先使用 <code>./gitlab.sh db</code> 进行数据库的准备工作。之后可以通过 <code>./gitlab.sh run &lt;版本号&gt;</code> 来进行 docker container 的替换。更换前脚本会自动拉取相应版本号的 docker 镜像，如果担心拉取时间过长可以在打快照前提前通过 <code>docker pull sameersbn/gitlab:&lt;版本号&gt;</code> 来拉取相应的镜像。</p>
 <p>一般情况下经以上操作后更新就正常结束，如果长时间无法启动，可以通过 <code>docker logs gitlab</code> 查看日志，如果发现更新后的启动出现问题，可以到 <a href="https://github.com/sameersbn/docker-gitlab/">sameersbn/docker-gitlab</a> 的 issue 区等地查看相关 issue，以及通过对出错日志进行 Google 可能会发现是 gitlab 上游等出现的问题。如果有解决办法，可以按照相应解决办法解决，如果没有。可以通过找到有相应问题前的正常版本号，回滚快照，之后更到表现正常的版本。（最近的更新会在启动之后短暂出现 502 的情况，但很快就会恢复，遇到这种情况时不要惊慌）。</p>
