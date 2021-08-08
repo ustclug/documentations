@@ -33,6 +33,8 @@ theme:
   icon:
     logo: fontawesome/brands/linux
     repo: octicons/mark-github-16
+  features:
+    - navigation.top
 
 # Customization
 extra:
