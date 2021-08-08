@@ -16,12 +16,23 @@ theme:
   name: 'material'
   language: 'zh'
   palette:
-    primary: 'teal'
-    accent: 'teal'
+    - scheme: default
+      media: "(prefers-color-scheme: light)"
+      primary: teal
+      accent: teal
+      toggle:
+        icon: material/lightbulb-off-outline
+        name: Switch to dark mode
+    - scheme: slate
+      media: "(prefers-color-scheme: dark)"
+      primary: green
+      accent: green
+      toggle:
+        icon: material/lightbulb-on-outline
+        name: Switch to light mode
   icon:
     logo: fontawesome/brands/linux
     repo: octicons/mark-github-16
-  features: [tabs]
 
 # Customization
 extra:
