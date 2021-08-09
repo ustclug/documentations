@@ -643,6 +643,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#esxi" class="md-nav__link">
+    ESXi
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1386,6 +1393,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#esxi" class="md-nav__link">
+    ESXi
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1414,6 +1428,12 @@ sudo /opt/MegaRAID/MegaCli/MegaCli64 -pdlist -aall  # 查看物理盘信息
 <p>脚本：
 - 解析 megacli &amp; storcli <a href="https://github.com/taoky/raid-telegraf">https://github.com/taoky/raid-telegraf</a>
 - 解析 zpool <a href="https://github.com/taoky/telegraf-exec-zpool-status/releases">https://github.com/taoky/telegraf-exec-zpool-status/releases</a></p>
+<h2 id="esxi">ESXi<a class="headerlink" href="#esxi" title="Permanent link">&para;</a></h2>
+<p><a href="https://docs.broadcom.com/docs-and-downloads/raid-controllers/raid-controllers-common-files/8-07-07_MegaCLI.zip">https://docs.broadcom.com/docs-and-downloads/raid-controllers/raid-controllers-common-files/8-07-07_MegaCLI.zip</a></p>
+<p>ESXi 5 的 binary 和 ESXi 6.0 兼容。</p>
+<div class="highlight"><pre><span></span><code>esxcli software vib install -v=/tmp/vmware-esx-MegaCli-8.07.07.vib --no-sig-check
+</code></pre></div>
+<p>然后进入 <code>/opt/lsi/MegaCLI</code> 目录执行 <code>MegaCli</code>.</p>
                 
               
               
