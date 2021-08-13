@@ -137,3 +137,4 @@ nav:
     - DNS: faq/dns.md
     - LDAP: faq/ldap.md
     - Nginx: faq/nginx.md
+    - systemd-timer: faq/systemd-timer.md
