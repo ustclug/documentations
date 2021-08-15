@@ -59,6 +59,7 @@ markdown_extensions:
   - markdown.extensions.def_list
   - meta
   - pymdownx.details
+  - pymdownx.tilde
   - pymdownx.superfences
   - toc:
       permalink: true
