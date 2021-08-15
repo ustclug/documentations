@@ -1492,6 +1492,24 @@ Stack trace:
 <li>重启 <code>slapd</code>，如果启动失败，看 <code>systemctl status slapd</code> 的日志输出 debug。</li>
 <li>恢复数据库：<code>slapadd -l dump.ldif</code>。注意，mdb <strong>没有事务</strong>！如果中间出错了，排查问题后，清空 <code>/var/lib/ldap</code>，重启 <code>slapd</code> 重来。</li>
 </ol>
+<p>恢复成功后，有些配置需要手动设置：</p>
+<ol>
+<li>TLS/SSL</li>
+</ol>
+<div class="highlight"><pre><span></span><code># ldapmodify -H ldapi:/// -Y EXTERNAL &lt;&lt; EOF
+&gt; dn: cn=config
+&gt; changetype: modify
+&gt; replace: olcTLSCertificateFile
+&gt; olcTLSCertificateFile: /etc/ldap/ssl/slapd-server.crt
+&gt; -
+&gt; replace: olcTLSCACertificateFile
+&gt; olcTLSCACertificateFile: /etc/ldap/ssl/slapd-ca-cert.pem
+&gt; -
+&gt; replace: olcTLSCertificateKeyFile
+&gt; olcTLSCertificateKeyFile: /etc/ldap/ssl/slapd-server.key
+&gt;
+&gt; EOF
+</code></pre></div>
                 
               
               
