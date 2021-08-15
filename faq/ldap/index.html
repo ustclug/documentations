@@ -1314,6 +1314,26 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#slapd" class="md-nav__link">
+    Slapd
+  </a>
+  
+    <nav class="md-nav" aria-label="Slapd">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#migrate-hdb-to-mdb" class="md-nav__link">
+    Migrate hdb to mdb
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1384,6 +1404,26 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#slapd" class="md-nav__link">
+    Slapd
+  </a>
+  
+    <nav class="md-nav" aria-label="Slapd">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#migrate-hdb-to-mdb" class="md-nav__link">
+    Migrate hdb to mdb
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1421,6 +1461,29 @@ Stack trace:
 <p>这是因为 GOsa 无法读取到用户密码的 Hash，而 LDAP 却允许用户没有密码。
 只需为新的用户设置密码或删除新的用户即可。</p>
 </div>
+<h2 id="slapd">Slapd<a class="headerlink" href="#slapd" title="Permanent link">&para;</a></h2>
+<p>Slapd 是 openldap 的服务端 daemon。正常情况下不需要碰，但是如果要碰的时候，你会发现它的配置极其复杂麻烦。</p>
+<p><strong>修改前一定要先打虚拟机快照！！！</strong></p>
+<p>~~小心延毕~~</p>
+<h3 id="migrate-hdb-to-mdb">Migrate hdb to mdb<a class="headerlink" href="#migrate-hdb-to-mdb" title="Permanent link">&para;</a></h3>
+<p><code>slapd-hdb</code> 在 Debian 11 即将被 deprecate，所以在 2021/08/15 组织了一次 migrate。</p>
+<p>网上资料很少，参考了：</p>
+<ol>
+<li><a href="https://github.com/osixia/docker-openldap/issues/97">https://github.com/osixia/docker-openldap/issues/97</a></li>
+<li><a href="https://gist.github.com/wenzhixin/4705697206cdbf61bc88">https://gist.github.com/wenzhixin/4705697206cdbf61bc88</a></li>
+</ol>
+<p>步骤：</p>
+<ol>
+<li>虚拟机快照打好。</li>
+<li>备份数据库：<code>slapcat -v -l dump.ldif</code></li>
+<li>备份 <code>/etc/ldap</code> 以及 <code>/var/lib/ldap</code></li>
+<li>把 <code>/etc/ldap/slapd.d</code> 以及 <code>/var/lib/ldap</code> 删掉（或者改名）</li>
+<li>运行 <code>dpkg-reconfigure slapd</code></li>
+<li>创建 <code>/tmp/ldapconvert</code> 目录，运行 <code>slaptest -f /etc/ldap/convert.conf -F /tmp/ldapconvert</code></li>
+<li>清空 <code>/etc/ldap/slapd.d/cn=config/cn=schema/</code> 下的文件，将 <code>/tmp/ldapconvert/slapd.d/cn=config/cn=schema/</code> 下的文件复制到 <code>/etc/ldap/slapd.d/cn=config/cn=schema/</code>，并且修改 owner 为 <code>openldap:openldap</code></li>
+<li>重启 <code>slapd</code>，如果启动失败，看 <code>systemctl status slapd</code> 的日志输出 debug。</li>
+<li>恢复数据库：<code>slapadd -l dump.ldif</code>。注意，mdb <strong>没有事务</strong>！如果中间出错了，排查问题后，清空 <code>/var/lib/ldap</code>，重启 <code>slapd</code> 重来。</li>
+</ol>
                 
               
               

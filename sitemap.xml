@@ -21,11 +21,6 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://docs.ustclug.org/faq/slapd/</loc>
-         <lastmod>2021-08-15</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
          <loc>https://docs.ustclug.org/faq/systemd-timer/</loc>
          <lastmod>2021-08-15</lastmod>
          <changefreq>daily</changefreq>
