@@ -51,3 +51,23 @@ Slapd 是 openldap 的服务端 daemon。正常情况下不需要碰，但是如
 6. 清空 `/etc/ldap/slapd.d/cn=config/cn=schema/` 下的文件，将 `/tmp/ldapconvert/slapd.d/cn=config/cn=schema/` 下的文件复制到 `/etc/ldap/slapd.d/cn=config/cn=schema/`，并且修改 owner 为 `openldap:openldap`
 7. 重启 `slapd`，如果启动失败，看 `systemctl status slapd` 的日志输出 debug。
 8. 恢复数据库：`slapadd -l dump.ldif`。注意，mdb **没有事务**！如果中间出错了，排查问题后，清空 `/var/lib/ldap`，重启 `slapd` 重来。
+
+恢复成功后，有些配置需要手动设置：
+
+1. TLS/SSL
+
+```
+# ldapmodify -H ldapi:/// -Y EXTERNAL << EOF
+> dn: cn=config
+> changetype: modify
+> replace: olcTLSCertificateFile
+> olcTLSCertificateFile: /etc/ldap/ssl/slapd-server.crt
+> -
+> replace: olcTLSCACertificateFile
+> olcTLSCACertificateFile: /etc/ldap/ssl/slapd-ca-cert.pem
+> -
+> replace: olcTLSCertificateKeyFile
+> olcTLSCertificateKeyFile: /etc/ldap/ssl/slapd-server.key
+>
+> EOF
+```
