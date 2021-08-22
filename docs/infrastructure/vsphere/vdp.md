@@ -21,7 +21,7 @@ vdp2 挂接在 esxi-5 上，esxi-5 源于老 mirrors（mirrors2 之前的一代�
 目前的备份计划如下：
 
 - 东图除 gitlab 以外的虚拟机，esxi-5 活跃的虚拟机，以及 hackergame web 虚拟机每日备份一次。
-- gitlab 每周备份一次。（因为它太大了）
+- gitlab 和 vcenter 每周备份一次。（因为它们太大了）
 
 ## 高级命令
 
