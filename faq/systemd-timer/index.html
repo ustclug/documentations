@@ -1406,10 +1406,14 @@ Unit=m4log.service
 [Install]
 WantedBy=timer.target
 </code></pre></div>
-<p>启用：<code>systemctl enable m4log.timer</code></p>
-<p>调试：<code>systemctl start m4log.service</code></p>
-<p>查看日志：<code>systemctl status m4log.service</code></p>
-<p>查看目前 timer：<code>systemctl list-timers</code></p>
+<p>关于 OnCalendar 的触发时间，可以用 <code>systemd-analyze calendar</code> 来检验正确性，也可以用 <code>systemctl list-timers</code> 观察 Timer 下次触发的时间是否符合预期</p>
+<p>下面是一些常用命令：</p>
+<ul>
+<li>开机启用计时器：<code>systemctl enable m4log.timer</code></li>
+<li>激活计时器：<code>systemctl start m4log.timer</code></li>
+<li>手动运行服务：<code>systemctl start m4log.service</code></li>
+<li>查看服务状态：<code>systemctl status m4log.service</code></li>
+</ul>
                 
               
               
