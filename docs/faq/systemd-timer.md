@@ -48,10 +48,11 @@ Unit=m4log.service
 WantedBy=timer.target
 ```
 
-启用：`systemctl enable m4log.timer`
+关于 OnCalendar 的触发时间，可以用 `systemd-analyze calendar` 来检验正确性，也可以用 `systemctl list-timers` 观察 Timer 下次触发的时间是否符合预期
 
-调试：`systemctl start m4log.service`
+下面是一些常用命令：
 
-查看日志：`systemctl status m4log.service`
-
-查看目前 timer：`systemctl list-timers`
+- 开机启用计时器：`systemctl enable m4log.timer`
+- 激活计时器：`systemctl start m4log.timer`
+- 手动运行服务：`systemctl start m4log.service`
+- 查看服务状态：`systemctl status m4log.service`
