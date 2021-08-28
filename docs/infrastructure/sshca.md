@@ -1,15 +1,15 @@
 # SSH Certificate Authentication
 
-discussion:  [SSH升级到证书登陆方案讨论](https://groups.google.com/d/topic/lug-internal/K7bDLKTGHXw/discussion)
+discussion: [SSH 升级到证书登陆方案讨论](https://groups.google.com/d/topic/lug-internal/K7bDLKTGHXw/discussion)
 
-usage: [SSH证书认证的使用方法](https://groups.google.com/d/topic/lug-internal/2iQQ30qhbQ8/discussion)
+usage: [SSH 证书认证的使用方法](https://groups.google.com/d/topic/lug-internal/2iQQ30qhbQ8/discussion)
 
 ## Introduction
 
 There are two types of SSH Certificate:
 
-* Root certificate
-* Host certificate
+- Root certificate
+- Host certificate
 
 Root certificate can be used to issue a host certificate and has the same format as a regular SSH private-public key pair. Host certificate can be used for authentication on both server side and client side. But host certificate cannot issue a new certificate, it is the very difference from x509 certificate.
 
@@ -33,7 +33,7 @@ And when you log in to a LUG server, it is automatically trusted. If you find a 
 
     Some of our servers are still running Debian Jessie, which has OpenSSH version 6.7 that does not support SHA-2 certificate algorithms. Sign with `-t ssh-rsa` instead if you want to log in to such servers.
 
-Copy the file `/etc/ssh/ssh_host_rsa_key.pub` from target server. (salt is your friend)
+Copy the file `/etc/ssh/ssh_host_rsa_key.pub` from target server.
 
 Then, run `ssh-keygen` to issue a public key. For example:
 
@@ -63,7 +63,7 @@ For example:
 ssh-keygen -s /path/to/ssh_ca -I "Yifan Gao" -n yifan -V +365d yifan.pub
 ```
 
-In general,  *certificate_identity* is user full name, and *principals* is the user name. In addition, one user can own multiply *principals* in one certificate, like:
+In general, _certificate_identity_ is user full name, and _principals_ is the user name. In addition, one user can own multiply _principals_ in one certificate, like:
 
 ```
 ssh-keygen -s /path/to/ssh_ca -I "Yifan Gao" -n yifan,root,liims -V +365d yifan.pub
@@ -71,5 +71,4 @@ ssh-keygen -s /path/to/ssh_ca -I "Yifan Gao" -n yifan,root,liims -V +365d yifan.
 
 It authorizes the certificate owner to login to any server with `yifan`, `root` or `liims` username.
 
-*tip: "liims" principal is used to login to library inquiring machine.*
-
+_tip: "liims" principal is used to login to library inquiring machine._

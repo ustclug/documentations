@@ -6,7 +6,7 @@ vCenter 地址：vcenter2.vm.ustclug.org
 
 按照提示创建虚拟机
 
-- Step 7: Customize hardware 
+- Step 7: Customize hardware
   - Network:
     - ustclug: intranet
     - ustclug-bridge: 没有 MAC 源地址检查
@@ -37,10 +37,10 @@ Notes:
   - edit interface coonfig files
   - ifup
 - 更改虚拟机的 DNS 和 domain/search：
-  - DNS: 
+  - DNS:
     - neat-dns (10.254.0.253)
     - dns backup (202.38.93.94)
-  - domain/search: 
+  - domain/search:
     - s.ustclug.org
 
 ## Install tools
@@ -49,6 +49,6 @@ Notes:
 - 安装 open-vm tools
 - 安装 openssh
 
-## Configure LDAP
+## Configure LDAP and SSH CA
 
-见 [LDAP服务使用及配置说明](../../infrastructure/ldap.md)
+见 [LDAP 服务使用及配置说明](../../infrastructure/ldap.md) 和 [为服务器设置 SSH CA](../../infrastructure/sshca/#issue-a-server-certificate)
