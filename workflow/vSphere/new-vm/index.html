@@ -16,7 +16,7 @@
         <link rel="canonical" href="https://docs.ustclug.org/workflow/vSphere/new-vm/">
       
       <link rel="icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.2.2, mkdocs-material-7.2.4">
+      <meta name="generator" content="mkdocs-1.2.2, mkdocs-material-7.2.5">
     
     
       
@@ -24,7 +24,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.f7f47774.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.be71726b.min.css">
       
         
         <link rel="stylesheet" href="../../../assets/stylesheets/palette.3f5d1f46.min.css">
@@ -348,8 +348,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#configure-ldap" class="md-nav__link">
-    Configure LDAP
+  <a href="#configure-ldap-and-ssh-ca" class="md-nav__link">
+    Configure LDAP and SSH CA
   </a>
   
 </li>
@@ -1442,8 +1442,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#configure-ldap" class="md-nav__link">
-    Configure LDAP
+  <a href="#configure-ldap-and-ssh-ca" class="md-nav__link">
+    Configure LDAP and SSH CA
   </a>
   
 </li>
@@ -1470,7 +1470,7 @@
 <p>vCenter 地址：vcenter2.vm.ustclug.org</p>
 <p>按照提示创建虚拟机</p>
 <ul>
-<li>Step 7: Customize hardware </li>
+<li>Step 7: Customize hardware</li>
 <li>Network:<ul>
 <li>ustclug: intranet</li>
 <li>ustclug-bridge: 没有 MAC 源地址检查</li>
@@ -1502,12 +1502,12 @@
 <li>edit interface coonfig files</li>
 <li>ifup</li>
 <li>更改虚拟机的 DNS 和 domain/search：</li>
-<li>DNS: <ul>
+<li>DNS:<ul>
 <li>neat-dns (10.254.0.253)</li>
 <li>dns backup (202.38.93.94)</li>
 </ul>
 </li>
-<li>domain/search: <ul>
+<li>domain/search:<ul>
 <li>s.ustclug.org</li>
 </ul>
 </li>
@@ -1518,8 +1518,8 @@
 <li>安装 open-vm tools</li>
 <li>安装 openssh</li>
 </ul>
-<h2 id="configure-ldap">Configure LDAP<a class="headerlink" href="#configure-ldap" title="Permanent link">&para;</a></h2>
-<p>见 <a href="../../../infrastructure/ldap/">LDAP服务使用及配置说明</a></p>
+<h2 id="configure-ldap-and-ssh-ca">Configure LDAP and SSH CA<a class="headerlink" href="#configure-ldap-and-ssh-ca" title="Permanent link">&para;</a></h2>
+<p>见 <a href="../../../infrastructure/ldap/">LDAP 服务使用及配置说明</a> 和 <a href="../../infrastructure/sshca/#issue-a-server-certificate">为服务器设置 SSH CA</a></p>
                 
               
               
@@ -1621,10 +1621,10 @@
     <div class="md-dialog" data-md-component="dialog">
       <div class="md-dialog__inner md-typeset"></div>
     </div>
-    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.top", "navigation.sections"], "translations": {"clipboard.copy": "\u590d\u5236", "clipboard.copied": "\u5df2\u590d\u5236", "search.config.lang": "ja", "search.config.pipeline": "trimmer, stemmer", "search.config.separator": "[\\uff0c\\u3002]+", "search.placeholder": "\u641c\u7d22", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../../assets/javascripts/workers/search.709b4209.min.js", "version": null}</script>
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.top", "navigation.sections"], "translations": {"clipboard.copy": "\u590d\u5236", "clipboard.copied": "\u5df2\u590d\u5236", "search.config.lang": "ja", "search.config.pipeline": "trimmer, stemmer", "search.config.separator": "[\\uff0c\\u3002]+", "search.placeholder": "\u641c\u7d22", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../../assets/javascripts/workers/search.409db549.min.js", "version": null}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.febc23d1.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.56a63758.min.js"></script>
       
     
   </body>
