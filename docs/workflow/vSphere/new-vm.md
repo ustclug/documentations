@@ -51,4 +51,4 @@ Notes:
 
 ## Configure LDAP and SSH CA
 
-见 [LDAP 服务使用及配置说明](../../infrastructure/ldap.md) 和 [为服务器设置 SSH CA](../../infrastructure/sshca/#issue-a-server-certificate)
+见 [LDAP 服务使用及配置说明](/infrastructure/ldap) 和 [为服务器设置 SSH CA](/infrastructure/sshca/#issue-a-server-certificate)
