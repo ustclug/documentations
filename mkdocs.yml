@@ -9,7 +9,7 @@ repo_name: 'ustclug/documentations'
 repo_url: 'https://github.com/ustclug/documentations'
 
 # Copyright
-copyright: 'Copyright &copy; 2003-2021 USTC Linux User Group. <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a>.'
+copyright: 'Copyright &copy; 2003-2020 USTC Linux User Group. <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a>.'
 
 # Configuration
 theme:
@@ -36,7 +36,6 @@ theme:
   features:
     - navigation.top
     - navigation.sections
-  custom_dir: 'overrides/'
 
 # Customization
 extra:
@@ -138,12 +137,3 @@ nav:
     - LDAP: faq/ldap.md
     - Nginx: faq/nginx.md
     - systemd-timer: faq/systemd-timer.md
-
-plugins:
-  - search
-  - git-revision-date-localized:
-      fallback_to_build_date: true
-  - git-authors:
-      show_contribution: true
-      show_line_count: true
-      fallback_to_empty: true
