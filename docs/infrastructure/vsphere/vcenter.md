@@ -22,5 +22,6 @@ vCenter 为维护人员提供了方便的管理所有 ESXi 服务器的界面。
 10. 别忘了手动备份。
 
 升级时遇到的问题：
+
 1. 无法识别 ISO 为更新的版本：<https://kb.vmware.com/s/article/59659?lang=zh_CN>
-2. 「环境尚未准备好更新」：使用 console 的 `software-packages` 更新，查看原因。如果是 root 密码过期，进入 bash，使用 passwd 先重置成新的（，再改回来），使用 `chage -I -1 -m 0 -M 99999 -E -1 root` 设置永不过期。
+2. 「环境尚未准备好更新」：使用 console 的 `software-packages` 更新，查看原因。如果是 root 密码过期，进入 bash，使用 passwd 先重置成新的（然后再改回来），使用 `chage -I -1 -m 0 -M 99999 -E -1 root` 设置永不过期。
