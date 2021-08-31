@@ -6,9 +6,11 @@ server: board.s.ustclug.org
 
 ## Introduction
 
-Server intranet is a closed network, which cannot be accessed from Internet.  LUGI VPN helps maintainer get access to intranet temporarily.
+Server intranet is a closed network, which cannot be accessed from Internet. LUGI VPN helps maintainer get access to intranet temporarily.
 
-LUGI VPN is running in Banana Pi, the only ARM architecture device we owned. Using OpenVPN protocal, authorizing via LDAP.
+LUGI VPN is running in ~~Banana Pi~~ Raspberry Pi 3B+, the only ARM architecture device we owned. Using OpenVPN protocal, authorizing via LDAP.
+
+The original Banana Pi was down in April 2021.
 
 ## Configuration
 
@@ -41,4 +43,3 @@ Servers intranet is a layer 2 network without default gateway. So NAT is needed:
 ```sh
 iptables -t nat -A POSTROUTING -s 10.254.248.0/22 -d 10.254.0.0/21 -j MASQUERADE
 ```
-
