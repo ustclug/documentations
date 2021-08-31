@@ -1429,8 +1429,9 @@
 <p>service: intranet.ustclug.org</p>
 <p>server: board.s.ustclug.org</p>
 <h2 id="introduction">Introduction<a class="headerlink" href="#introduction" title="Permanent link">&para;</a></h2>
-<p>Server intranet is a closed network, which cannot be accessed from Internet.  LUGI VPN helps maintainer get access to intranet temporarily.</p>
-<p>LUGI VPN is running in Banana Pi, the only ARM architecture device we owned. Using OpenVPN protocal, authorizing via LDAP.</p>
+<p>Server intranet is a closed network, which cannot be accessed from Internet. LUGI VPN helps maintainer get access to intranet temporarily.</p>
+<p>LUGI VPN is running in <del>Banana Pi</del> Raspberry Pi 3B+, the only ARM architecture device we owned. Using OpenVPN protocal, authorizing via LDAP.</p>
+<p>The original Banana Pi was down in April 2021.</p>
 <h2 id="configuration">Configuration<a class="headerlink" href="#configuration" title="Permanent link">&para;</a></h2>
 <p>OpenVPN LDAP auth plugin config <code>/etc/openvpn/auth-ldap.conf</code>:</p>
 <div class="highlight"><pre><span></span><code>&lt;LDAP&gt;
@@ -1514,7 +1515,7 @@ plugin /usr/lib/openvpn/openvpn-auth-ldap.so /etc/openvpn/auth-ldap.conf
       <div class="md-footer-copyright">
         
           <div class="md-footer-copyright__highlight">
-            Copyright &copy; 2003-2020 USTC Linux User Group. <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a>.
+            Copyright &copy; 2003-2021 USTC Linux User Group. <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a>.
           </div>
         
         Made with
