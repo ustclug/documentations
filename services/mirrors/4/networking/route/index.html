@@ -428,8 +428,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../../infrastructure/dns/" class="md-nav__link">
-        DNS
+      <a href="../../../../../infrastructure/auth-dns/" class="md-nav__link">
+        Authoritative DNS
       </a>
     </li>
   
@@ -1063,18 +1063,6 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../auth-dns/" class="md-nav__link">
-        Authoritative DNS
-      </a>
-    </li>
-  
-
-          
-            
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../../../../docker2/" class="md-nav__link">
         Docker2
       </a>
@@ -1126,14 +1114,14 @@
     <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_7" type="checkbox" id="__nav_4_7" >
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_6" type="checkbox" id="__nav_4_6" >
       
-      <label class="md-nav__link" for="__nav_4_7">
+      <label class="md-nav__link" for="__nav_4_6">
         LUG VPN
         <span class="md-nav__icon md-icon"></span>
       </label>
       <nav class="md-nav" aria-label="LUG VPN" data-md-level="2">
-        <label class="md-nav__title" for="__nav_4_7">
+        <label class="md-nav__title" for="__nav_4_6">
           <span class="md-nav__icon md-icon"></span>
           LUG VPN
         </label>
@@ -1201,14 +1189,14 @@
     <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_9" type="checkbox" id="__nav_4_9" >
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_8" type="checkbox" id="__nav_4_8" >
       
-      <label class="md-nav__link" for="__nav_4_9">
+      <label class="md-nav__link" for="__nav_4_8">
         PXE
         <span class="md-nav__icon md-icon"></span>
       </label>
       <nav class="md-nav" aria-label="PXE" data-md-level="2">
-        <label class="md-nav__title" for="__nav_4_9">
+        <label class="md-nav__title" for="__nav_4_8">
           <span class="md-nav__icon md-icon"></span>
           PXE
         </label>
@@ -1477,59 +1465,56 @@ gen_route china.txt <span class="m">218</span>.104.71.161 unicom China <span cla
 </div>
 <h2 id="special-routing">Special routing<a class="headerlink" href="#special-routing" title="Permanent link">&para;</a></h2>
 <p>部分 IP 需要配置特殊路由规则时（而不是使用默认），编辑 <code>/usr/local/network_config/special.yml</code>，其格式如下：</p>
-<div class="highlight"><pre><span></span><code><span class="nt">routes</span><span class="p">:</span>                    <span class="c1"># Root key，保留</span>
-  <span class="nt">lugvpn</span><span class="p">:</span>                  <span class="c1"># /etc/systemd/network 中对应的 .network 文件名</span>
+<div class="highlight"><pre><span></span><code><span class="nt">routes</span><span class="p">:</span> <span class="c1"># Root key，保留</span>
+  <span class="nt">lugvpn</span><span class="p">:</span> <span class="c1"># /etc/systemd/network 中对应的 .network 文件名</span>
     <span class="c1"># 下面是一个路由文件的配置，一个文件共享一个 table 和 gateway 设置</span>
-    <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">route-special</span>  <span class="c1"># 将要创建的 .conf 文件名，可以随意</span>
-      <span class="nt">table</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Special</span>       <span class="c1"># 路由表，即 ip route add table 后面的参数，数字或表名</span>
-      <span class="nt">gateway</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span>       <span class="c1"># 是否包含网关，或者 ip route 的 via 参数</span>
-      <span class="nt">routes</span><span class="p">:</span>              <span class="c1"># 所有的路由条目</span>
+    <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">route-special</span> <span class="c1"># 将要创建的 .conf 文件名，可以随意</span>
+      <span class="nt">table</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Special</span> <span class="c1"># 路由表，即 ip route add table 后面的参数，数字或表名</span>
+      <span class="nt">gateway</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span> <span class="c1"># 是否包含网关，或者 ip route 的 via 参数</span>
+      <span class="nt">routes</span><span class="p">:</span> <span class="c1"># 所有的路由条目</span>
         <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">1.2.3.4</span>
         <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">5.6.7.8/28</span>
         <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">2001:db8::2333/64</span>
 
-  <span class="nt">cernet</span><span class="p">:</span>                  <span class="c1"># 更多的配置</span>
+  <span class="nt">cernet</span><span class="p">:</span> <span class="c1"># 更多的配置</span>
     <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">...</span>
 </code></pre></div>
 <p>修改 <code>special.yml</code> 之后重启 <code>route-all.service</code>。该服务会自动导致 <code>systemd-networkd.service</code> 重启并载入新的路由配置信息。</p>
-<p>??? special.rb 处理脚本（放在这备份）</p>
-<div class="codehilite"><pre><span></span><code><span class="err">```</span><span class="n">ruby</span><span class="w"></span>
-<span class="err">#!</span><span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">bin</span><span class="o">/</span><span class="n">ruby</span><span class="w"></span>
+<details class="tips"><summary>special.rb 处理脚本（放在这备份）</summary><div class="highlight"><pre><span></span><code><span class="ch">#!/usr/bin/ruby</span>
 
-<span class="n">require</span><span class="w"> </span><span class="s1">&#39;fileutils&#39;</span><span class="w"></span>
-<span class="n">require</span><span class="w"> </span><span class="s1">&#39;yaml&#39;</span><span class="w"></span>
+<span class="nb">require</span> <span class="s1">&#39;fileutils&#39;</span>
+<span class="nb">require</span> <span class="s1">&#39;yaml&#39;</span>
 
-<span class="n">BASEDIR</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;/run/systemd/network&#39;</span><span class="w"></span>
-<span class="n">RT_TABLES</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;/etc/iproute2/rt_tables&#39;</span><span class="w"></span>
+<span class="no">BASEDIR</span> <span class="o">=</span> <span class="s1">&#39;/run/systemd/network&#39;</span>
+<span class="no">RT_TABLES</span> <span class="o">=</span> <span class="s1">&#39;/etc/iproute2/rt_tables&#39;</span>
 
-<span class="n">rt_tables</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Hash</span><span class="p">.</span><span class="k">new</span><span class="w"></span>
-<span class="k">File</span><span class="p">.</span><span class="n">readlines</span><span class="p">(</span><span class="n">RT_TABLES</span><span class="p">).</span><span class="k">each</span><span class="w"> </span><span class="n">do</span><span class="w"> </span><span class="o">|</span><span class="n">l</span><span class="o">|</span><span class="w"></span>
-<span class="w">  </span><span class="k">next</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">l</span><span class="w"> </span><span class="o">=~</span><span class="w"> </span><span class="o">/^</span><span class="err">\</span><span class="n">s</span><span class="o">*</span><span class="err">#</span><span class="o">/</span><span class="w"></span>
-<span class="w">  </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">l</span><span class="p">.</span><span class="n">split</span><span class="w"></span>
-<span class="w">  </span><span class="n">rt_tables</span><span class="o">[</span><span class="n">name</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">id</span><span class="w"></span>
-<span class="k">end</span><span class="w"></span>
+<span class="n">rt_tables</span> <span class="o">=</span> <span class="no">Hash</span><span class="o">.</span><span class="n">new</span>
+<span class="no">File</span><span class="o">.</span><span class="n">readlines</span><span class="p">(</span><span class="no">RT_TABLES</span><span class="p">)</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">l</span><span class="o">|</span>
+  <span class="k">next</span> <span class="k">if</span> <span class="n">l</span> <span class="o">=~</span> <span class="sr">/^\s*#/</span>
+  <span class="nb">id</span><span class="p">,</span> <span class="nb">name</span> <span class="o">=</span> <span class="n">l</span><span class="o">.</span><span class="n">split</span>
+  <span class="n">rt_tables</span><span class="o">[</span><span class="nb">name</span><span class="o">]</span> <span class="o">=</span> <span class="nb">id</span>
+<span class="k">end</span>
 
-<span class="k">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">YAML</span><span class="p">.</span><span class="n">load_file</span><span class="w"> </span><span class="k">File</span><span class="p">.</span><span class="k">join</span><span class="p">(</span><span class="n">__dir__</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;special.yml&#39;</span><span class="p">)</span><span class="w"></span>
-<span class="k">data</span><span class="o">[</span><span class="n">&#39;routes&#39;</span><span class="o">]</span><span class="p">.</span><span class="k">each</span><span class="w"> </span><span class="n">do</span><span class="w"> </span><span class="o">|</span><span class="n">fn</span><span class="p">,</span><span class="w"> </span><span class="n">setups</span><span class="o">|</span><span class="w"></span>
-<span class="w">  </span><span class="n">confdir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">File</span><span class="p">.</span><span class="k">join</span><span class="p">(</span><span class="n">BASEDIR</span><span class="p">,</span><span class="w"> </span><span class="ss">&quot;#{fn}.network.d&quot;</span><span class="p">)</span><span class="w"></span>
-<span class="w">  </span><span class="n">FileUtils</span><span class="p">.</span><span class="n">mkdir_p</span><span class="w"> </span><span class="n">confdir</span><span class="w"></span>
+<span class="n">data</span> <span class="o">=</span> <span class="no">YAML</span><span class="o">.</span><span class="n">load_file</span> <span class="no">File</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">__dir__</span><span class="p">,</span> <span class="s1">&#39;special.yml&#39;</span><span class="p">)</span>
+<span class="n">data</span><span class="o">[</span><span class="s1">&#39;routes&#39;</span><span class="o">].</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">fn</span><span class="p">,</span> <span class="n">setups</span><span class="o">|</span>
+  <span class="n">confdir</span> <span class="o">=</span> <span class="no">File</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="no">BASEDIR</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">fn</span><span class="si">}</span><span class="s2">.network.d&quot;</span><span class="p">)</span>
+  <span class="no">FileUtils</span><span class="o">.</span><span class="n">mkdir_p</span> <span class="n">confdir</span>
 
-<span class="w">  </span><span class="n">setups</span><span class="p">.</span><span class="k">each</span><span class="w"> </span><span class="n">do</span><span class="w"> </span><span class="o">|</span><span class="n">config</span><span class="o">|</span><span class="w"></span>
-<span class="w">    </span><span class="nc">table</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">config</span><span class="o">[</span><span class="n">&#39;table&#39;</span><span class="o">]</span><span class="w"></span>
-<span class="w">    </span><span class="n">gateway</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">config</span><span class="o">[</span><span class="n">&#39;gateway&#39;</span><span class="o">]</span><span class="w"></span>
-<span class="w">    </span><span class="k">File</span><span class="p">.</span><span class="k">open</span><span class="w"> </span><span class="k">File</span><span class="p">.</span><span class="k">join</span><span class="p">(</span><span class="n">confdir</span><span class="p">,</span><span class="w"> </span><span class="ss">&quot;#{config[&#39;name&#39;]}.conf&quot;</span><span class="p">),</span><span class="w"> </span><span class="s1">&#39;w&#39;</span><span class="w"> </span><span class="n">do</span><span class="w"> </span><span class="o">|</span><span class="n">f</span><span class="o">|</span><span class="w"></span>
-<span class="w">      </span><span class="n">config</span><span class="o">[</span><span class="n">&#39;routes&#39;</span><span class="o">]</span><span class="p">.</span><span class="k">each</span><span class="w"> </span><span class="n">do</span><span class="w"> </span><span class="o">|</span><span class="n">dst</span><span class="o">|</span><span class="w"></span>
-<span class="w">        </span><span class="n">t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ss">&quot;[Route]\nDestination=#{dst}\n&quot;</span><span class="w"></span>
-<span class="w">        </span><span class="n">t</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="ss">&quot;Table=#{rt_tables.fetch table, table}\n&quot;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="nc">table</span><span class="w"></span>
-<span class="w">        </span><span class="n">t</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="ss">&quot;Gateway=#{gateway}\n&quot;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">gateway</span><span class="w"></span>
-<span class="w">        </span><span class="n">f</span><span class="p">.</span><span class="k">write</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="ss">&quot;\n&quot;</span><span class="w"></span>
-<span class="w">      </span><span class="k">end</span><span class="w"></span>
-<span class="w">    </span><span class="k">end</span><span class="w"></span>
-<span class="w">  </span><span class="k">end</span><span class="w"></span>
-<span class="k">end</span><span class="w"></span>
-<span class="err">```</span><span class="w"></span>
+  <span class="n">setups</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">config</span><span class="o">|</span>
+    <span class="n">table</span> <span class="o">=</span> <span class="n">config</span><span class="o">[</span><span class="s1">&#39;table&#39;</span><span class="o">]</span>
+    <span class="n">gateway</span> <span class="o">=</span> <span class="n">config</span><span class="o">[</span><span class="s1">&#39;gateway&#39;</span><span class="o">]</span>
+    <span class="no">File</span><span class="o">.</span><span class="n">open</span> <span class="no">File</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">confdir</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">config</span><span class="o">[</span><span class="s1">&#39;name&#39;</span><span class="o">]</span><span class="si">}</span><span class="s2">.conf&quot;</span><span class="p">),</span> <span class="s1">&#39;w&#39;</span> <span class="k">do</span> <span class="o">|</span><span class="n">f</span><span class="o">|</span>
+      <span class="n">config</span><span class="o">[</span><span class="s1">&#39;routes&#39;</span><span class="o">].</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">dst</span><span class="o">|</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="s2">&quot;[Route]</span><span class="se">\n</span><span class="s2">Destination=</span><span class="si">#{</span><span class="n">dst</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="n">t</span> <span class="o">+=</span> <span class="s2">&quot;Table=</span><span class="si">#{</span><span class="n">rt_tables</span><span class="o">.</span><span class="n">fetch</span> <span class="n">table</span><span class="p">,</span> <span class="n">table</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="k">if</span> <span class="n">table</span>
+        <span class="n">t</span> <span class="o">+=</span> <span class="s2">&quot;Gateway=</span><span class="si">#{</span><span class="n">gateway</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="k">if</span> <span class="n">gateway</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span> <span class="n">t</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+      <span class="k">end</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+<span class="k">end</span>
 </code></pre></div>
-
+</details>
 <div class="admonition bug">
 <p class="admonition-title">route-all.service 有很多注意事项</p>
 <p>为了清理开机自动产生的 32766 和 32767 两条路由规则，<code>route-all.service</code> 包括执行 <code>ip rule flush</code>，因此该服务重启之后必须立刻重启 systemd-networkd。</p>
