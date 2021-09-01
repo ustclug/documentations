@@ -77,24 +77,24 @@ Wants=systemd-networkd.service
 部分 IP 需要配置特殊路由规则时（而不是使用默认），编辑 `/usr/local/network_config/special.yml`，其格式如下：
 
 ```yaml
-routes:                    # Root key，保留
-  lugvpn:                  # /etc/systemd/network 中对应的 .network 文件名
+routes: # Root key，保留
+  lugvpn: # /etc/systemd/network 中对应的 .network 文件名
     # 下面是一个路由文件的配置，一个文件共享一个 table 和 gateway 设置
-    - name: route-special  # 将要创建的 .conf 文件名，可以随意
-      table: Special       # 路由表，即 ip route add table 后面的参数，数字或表名
-      gateway: false       # 是否包含网关，或者 ip route 的 via 参数
-      routes:              # 所有的路由条目
+    - name: route-special # 将要创建的 .conf 文件名，可以随意
+      table: Special # 路由表，即 ip route add table 后面的参数，数字或表名
+      gateway: false # 是否包含网关，或者 ip route 的 via 参数
+      routes: # 所有的路由条目
         - 1.2.3.4
         - 5.6.7.8/28
         - 2001:db8::2333/64
-    
-  cernet:                  # 更多的配置
+
+  cernet: # 更多的配置
     - ...
 ```
 
 修改 `special.yml` 之后重启 `route-all.service`。该服务会自动导致 `systemd-networkd.service` 重启并载入新的路由配置信息。
 
-??? special.rb 处理脚本（放在这备份）
+??? tips "special.rb 处理脚本（放在这备份）"
 
     ```ruby
     #!/usr/bin/ruby
