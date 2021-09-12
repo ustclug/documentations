@@ -1794,13 +1794,27 @@
 </code></pre></div>
 <p>这里使用了 TBF（令牌桶）算法，后面的 burst 和 latency 参数意义可以参见 <code>man tc-tbf</code>。
 具体而言，latency 没有推荐值，但 burst 要求至少为 <code>rate / HZ</code>，HZ = 100 时 10Mbps 至少约 10MB。
-HZ 的值需要从内核参数中查看：<code>egrep '^CONFIG_HZ_[0-9]+' /boot/config-`uname -r`</code>。在 mirrors4 上这个值应该为 250。</p>
-<p>参考资料: <a href="https://unix.stackexchange.com/questions/100785/bucket-size-in-tbf/100797#100797">https://unix.stackexchange.com/questions/100785/bucket-size-in-tbf/100797#100797</a></p>
+HZ 的值需要从内核的编译参数中查看：<code>egrep '^CONFIG_HZ_[0-9]+' /boot/config-`uname -r`</code>。现代发行版提供的内核中这个值都为 250。</p>
+<p>参考资料: <a href="https://unix.stackexchange.com/a/100797/211239">Bucket size in tbf</a></p>
 <p>目前部署的限制有：</p>
 <ul>
 <li>unicom 1500Mbit（校带宽 2Gbps）</li>
 <li>telecom 2500Mbit（校带宽 5Gbps）</li>
 </ul>
+<p>在 mirrors4 上该配置的开机自启分别位于 <code>tc-unicom.service</code> 和 <code>tc-telecom.service</code> 两个服务中，其中 <code>tc-unicom.service</code> 配置如下：</p>
+<div class="highlight"><pre><span></span><code><span class="k">[Unit]</span>
+<span class="na">Description</span><span class="o">=</span><span class="s">Rate Limiting for Unicom Interface</span>
+
+<span class="k">[Service]</span>
+<span class="na">Type</span><span class="o">=</span><span class="s">oneshot</span>
+<span class="na">RemainAfterExit</span><span class="o">=</span><span class="s">true</span>
+<span class="na">ExecStart</span><span class="o">=</span><span class="s">/usr/sbin/tc qdisc replace dev unicom root handle 1: tbf rate 1500Mbit burst 750K latency 14ms</span>
+<span class="na">ExecStop</span><span class="o">=</span><span class="s">/usr/sbin/tc qdisc delete dev unicom root handle 1</span>
+
+<span class="k">[Install]</span>
+<span class="na">WantedBy</span><span class="o">=</span><span class="s">sys-subsystem-net-devices-unicom.device</span>
+</code></pre></div>
+<p>Install 部分的 WantedBy 使用这种写法可以使该服务依赖于名为 <code>unicom</code> 的网口，详细回答可以看 <a href="https://serverfault.com/a/869916/450575">What is the systemd-networkd equivalent of post-up?</a>。</p>
 <h2 id="ip">IP 黑名单限制<a class="headerlink" href="#ip" title="Permanent link">&para;</a></h2>
 <p>对于滥用的 IP 段，可以使用 ipset 和 iptables 实现黑名单限制。
 ipset 将某个 IP 匹配到一个集合中，iptables 再针对某一集合进行限制。</p>
