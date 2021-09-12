@@ -150,14 +150,32 @@ tc qdisc add dev <interface> root handle 1: tbf rate 1500Mbit burst 750K latency
 
 这里使用了 TBF（令牌桶）算法，后面的 burst 和 latency 参数意义可以参见 `man tc-tbf`。
 具体而言，latency 没有推荐值，但 burst 要求至少为 `rate / HZ`，HZ = 100 时 10Mbps 至少约 10MB。
-HZ 的值需要从内核参数中查看：``egrep '^CONFIG_HZ_[0-9]+' /boot/config-`uname -r` ``。在 mirrors4 上这个值应该为 250。
+HZ 的值需要从内核的编译参数中查看：``egrep '^CONFIG_HZ_[0-9]+' /boot/config-`uname -r` ``。现代发行版提供的内核中这个值都为 250。
 
-参考资料: <https://unix.stackexchange.com/questions/100785/bucket-size-in-tbf/100797#100797>
+参考资料: [Bucket size in tbf](https://unix.stackexchange.com/a/100797/211239)
 
 目前部署的限制有：
 
 - unicom 1500Mbit（校带宽 2Gbps）
 - telecom 2500Mbit（校带宽 5Gbps）
+
+在 mirrors4 上该配置的开机自启分别位于 `tc-unicom.service` 和 `tc-telecom.service` 两个服务中，其中 `tc-unicom.service` 配置如下：
+
+```ini
+[Unit]
+Description=Rate Limiting for Unicom Interface
+
+[Service]
+Type=oneshot
+RemainAfterExit=true
+ExecStart=/usr/sbin/tc qdisc replace dev unicom root handle 1: tbf rate 1500Mbit burst 750K latency 14ms
+ExecStop=/usr/sbin/tc qdisc delete dev unicom root handle 1
+
+[Install]
+WantedBy=sys-subsystem-net-devices-unicom.device
+```
+
+Install 部分的 WantedBy 使用这种写法可以使该服务依赖于名为 `unicom` 的网口，详细回答可以看 [What is the systemd-networkd equivalent of post-up?](https://serverfault.com/a/869916/450575)。
 
 ## IP 黑名单限制
 
