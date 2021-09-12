@@ -51,6 +51,7 @@ Table=1011
 最后给这个脚本配个 service，让它在 networkd 之前运行：
 
 ```ini
+# WARNING: This is NOT the final configuration file!
 [Unit]
 Description=Generate routes for systemd-networkd
 Before=systemd-networkd.service
@@ -58,7 +59,6 @@ Before=systemd-networkd.service
 [Service]
 Type=oneshot
 ExecStart=/bin/bash /usr/local/network_config/route-all.sh
-ExecStart=-/usr/sbin/ip rule flush
 RemainAfterExit=true
 
 [Install]
@@ -68,9 +68,11 @@ Wants=systemd-networkd.service
 
 这个文件存到 `/etc/systemd/system/route-all.service`，reload 再 enable 就可以了。
 
-!!! bug "不要尝试改 systemd-networkd.service"
+!!! bug "改 systemd-networkd.service 需要额外注意"
 
-    这个自带的服务有一个 `User=systemd-networkd`，你既不能 `ip rule` 也不能写入 `/run/systemd` 等，会导致服务炸掉，然后网也炸了。。。
+    这个自带的服务有一个 `User=systemd-networkd`，<s>你既不能 `ip rule` 也不能写入 `/run/systemd` 等，会导致服务炸掉，然后网也炸了。。。</s>
+
+    如果要改 networkd 服务操作 `ip rule` 的话，需要在命令行前面加一个 `+` 表示该命令不受 `User=` 等权限设置影响，详细解释见 [systemd.service 文档][ExecStart]。
 
 ## Special routing
 
@@ -137,8 +139,9 @@ routes: # Root key，保留
     为了清理开机自动产生的 32766 和 32767 两条路由规则，我们同时为 `systemd-networkd.service` 添加了两个 `ExecStartPre` 如下：
 
     ```ini
-    ExecStartPre=-/sbin/ip rule delete from all table main pref 32766
-    ExecStartPre=-/sbin/ip rule delete from all table default pref 32767
+    [Service]
+    ExecStartPre=-+/sbin/ip rule delete from all table main pref 32766
+    ExecStartPre=-+/sbin/ip rule delete from all table default pref 32767
     ```
 
     另附完整的 `route-all.service` 文件：
@@ -158,3 +161,5 @@ routes: # Root key，保留
     WantedBy=network.target systemd-networkd.service
     Wants=systemd-networkd.service
     ```
+
+  [ExecStart]: https://www.freedesktop.org/software/systemd/man/systemd.service.html#ExecStart=
