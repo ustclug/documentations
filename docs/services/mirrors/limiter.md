@@ -150,6 +150,9 @@ tc qdisc add dev <interface> root handle 1: tbf rate 1500Mbit burst 750K latency
 
 这里使用了 TBF（令牌桶）算法，后面的 burst 和 latency 参数意义可以参见 `man tc-tbf`。
 具体而言，latency 没有推荐值，但 burst 要求至少为 `rate / HZ`，HZ = 100 时 10Mbps 至少约 10MB。
+HZ 的值需要从内核参数中查看：``egrep '^CONFIG_HZ_[0-9]+' /boot/config-`uname -r` ``。在 mirrors4 上这个值应该为 250。
+
+参考资料: <https://unix.stackexchange.com/questions/100785/bucket-size-in-tbf/100797#100797>
 
 目前部署的限制有：
 
