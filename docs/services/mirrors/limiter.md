@@ -145,11 +145,11 @@ mirrors 常态下没有网络接口限制，但在需要临时对某一接口进
 例如可以参考这份回答：[iptables - Limiting interface bandwidth with tc under Linux - Server Fault](https://serverfault.com/questions/452829/limiting-interface-bandwidth-with-tc-under-linux)，使用如下指令限制某一接口的网络速率为 1.5Gbps：
 
 ```bash
-tc qdisc add dev <interface> root handle 1: tbf rate 1500Mbit burst 6500 latency 14ms
+tc qdisc add dev <interface> root handle 1: tbf rate 1500Mbit burst 750K latency 14ms
 ```
 
-这里使用了 TBF（令牌桶）算法，在突发时速率可能会短暂超过设置的 1.5Gbps。
-后面的 burst 和 latency 参数可以细调，具体调节规则和效果则需查阅文档了。
+这里使用了 TBF（令牌桶）算法，后面的 burst 和 latency 参数意义可以参见 `man tc-tbf`。
+具体而言，latency 没有推荐值，但 burst 要求至少为 `rate / HZ`，HZ = 100 时 10Mbps 至少约 10MB。
 
 目前部署的限制有：
 
