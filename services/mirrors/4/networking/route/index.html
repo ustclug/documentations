@@ -1444,14 +1444,14 @@ gen_route china.txt <span class="m">218</span>.104.71.161 unicom China <span cla
 <p>这样一个 <code>[Route]</code> 节对应<strong>一条</strong>路由规则，整个 txt 的转换结果输出到 <code>/run/systemd/network/cernet.network.d/route-example.conf</code>。其中 <code>cernet.network.d/*.conf</code> 用于向现有的配置中添加内容（与 systemd service 类似），而 <code>/run</code> 目录（按理来说）重启会清空，适合放置这些用于动态生成的内容。另外由于路由规则（<code>ip rule</code>）也由 networkd 管理和生成了，因此每个 <code>route-xxx.conf</code> 开头会包含一个 <code>[RoutingPolicyRule]</code> 节用于生成路由表对应的路由规则。</p>
 <p>注意路由表是用名称指定的，从 <code>/etc/iproute2/rt_tables</code> 中查出对应的数字 ID。这个文件本来也是 <code>ip</code> 命令所使用的（注意它的目录名叫 <code>iproute2</code>）。</p>
 <p>最后给这个脚本配个 service，让它在 networkd 之前运行：</p>
-<div class="highlight"><pre><span></span><code><span class="k">[Unit]</span>
+<div class="highlight"><pre><span></span><code><span class="c1"># WARNING: This is NOT the final configuration file!</span>
+<span class="k">[Unit]</span>
 <span class="na">Description</span><span class="o">=</span><span class="s">Generate routes for systemd-networkd</span>
 <span class="na">Before</span><span class="o">=</span><span class="s">systemd-networkd.service</span>
 
 <span class="k">[Service]</span>
 <span class="na">Type</span><span class="o">=</span><span class="s">oneshot</span>
 <span class="na">ExecStart</span><span class="o">=</span><span class="s">/bin/bash /usr/local/network_config/route-all.sh</span>
-<span class="na">ExecStart</span><span class="o">=</span><span class="s">-/usr/sbin/ip rule flush</span>
 <span class="na">RemainAfterExit</span><span class="o">=</span><span class="s">true</span>
 
 <span class="k">[Install]</span>
@@ -1460,8 +1460,9 @@ gen_route china.txt <span class="m">218</span>.104.71.161 unicom China <span cla
 </code></pre></div>
 <p>这个文件存到 <code>/etc/systemd/system/route-all.service</code>，reload 再 enable 就可以了。</p>
 <div class="admonition bug">
-<p class="admonition-title">不要尝试改 systemd-networkd.service</p>
-<p>这个自带的服务有一个 <code>User=systemd-networkd</code>，你既不能 <code>ip rule</code> 也不能写入 <code>/run/systemd</code> 等，会导致服务炸掉，然后网也炸了。。。</p>
+<p class="admonition-title">改 systemd-networkd.service 需要额外注意</p>
+<p>这个自带的服务有一个 <code>User=systemd-networkd</code>，<s>你既不能 <code>ip rule</code> 也不能写入 <code>/run/systemd</code> 等，会导致服务炸掉，然后网也炸了。。。</s></p>
+<p>如果要改 networkd 服务操作 <code>ip rule</code> 的话，需要在命令行前面加一个 <code>+</code> 表示该命令不受 <code>User=</code> 等权限设置影响，详细解释见 <a href="https://www.freedesktop.org/software/systemd/man/systemd.service.html#ExecStart=">systemd.service 文档</a>。</p>
 </div>
 <h2 id="special-routing">Special routing<a class="headerlink" href="#special-routing" title="Permanent link">&para;</a></h2>
 <p>部分 IP 需要配置特殊路由规则时（而不是使用默认），编辑 <code>/usr/local/network_config/special.yml</code>，其格式如下：</p>
@@ -1518,8 +1519,9 @@ gen_route china.txt <span class="m">218</span>.104.71.161 unicom China <span cla
 <div class="admonition bug">
 <p class="admonition-title">route-all.service 有很多注意事项</p>
 <p>为了清理开机自动产生的 32766 和 32767 两条路由规则，我们同时为 <code>systemd-networkd.service</code> 添加了两个 <code>ExecStartPre</code> 如下：</p>
-<div class="highlight"><pre><span></span><code><span class="na">ExecStartPre</span><span class="o">=</span><span class="s">-/sbin/ip rule delete from all table main pref 32766</span>
-<span class="na">ExecStartPre</span><span class="o">=</span><span class="s">-/sbin/ip rule delete from all table default pref 32767</span>
+<div class="highlight"><pre><span></span><code><span class="k">[Service]</span>
+<span class="na">ExecStartPre</span><span class="o">=</span><span class="s">-+/sbin/ip rule delete from all table main pref 32766</span>
+<span class="na">ExecStartPre</span><span class="o">=</span><span class="s">-+/sbin/ip rule delete from all table default pref 32767</span>
 </code></pre></div>
 <p>另附完整的 <code>route-all.service</code> 文件：</p>
 <div class="highlight"><pre><span></span><code><span class="k">[Unit]</span>
