@@ -151,6 +151,11 @@ tc qdisc add dev <interface> root handle 1: tbf rate 1500Mbit burst 6500 latency
 这里使用了 TBF（令牌桶）算法，在突发时速率可能会短暂超过设置的 1.5Gbps。
 后面的 burst 和 latency 参数可以细调，具体调节规则和效果则需查阅文档了。
 
+目前部署的限制有：
+
+- unicom 1500Mbit（校带宽 2Gbps）
+- telecom 2500Mbit（校带宽 5Gbps）
+
 ## IP 黑名单限制
 
 对于滥用的 IP 段，可以使用 ipset 和 iptables 实现黑名单限制。
