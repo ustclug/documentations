@@ -134,11 +134,14 @@ routes: # Root key，保留
 
 !!! bug "route-all.service 有很多注意事项"
 
-    为了清理开机自动产生的 32766 和 32767 两条路由规则，`route-all.service` 包括执行 `ip rule flush`，因此该服务重启之后必须立刻重启 systemd-networkd。
+    为了清理开机自动产生的 32766 和 32767 两条路由规则，我们同时为 `systemd-networkd.service` 添加了两个 `ExecStartPre` 如下：
 
-    目前做法是在 `route-all.service` 中添加 `RequiredBy=systemd-networkd.service` 制造依赖关系，让 systemd 完成“牵连重启”。
+    ```ini
+    ExecStartPre=-/sbin/ip rule delete from all table main pref 32766
+    ExecStartPre=-/sbin/ip rule delete from all table default pref 32767
+    ```
 
-    完整 service 文件：
+    另附完整的 `route-all.service` 文件：
 
     ```ini
     [Unit]
@@ -149,11 +152,9 @@ routes: # Root key，保留
     Type=oneshot
     ExecStart=/bin/bash /usr/local/network_config/route-all.sh
     ExecStart=/usr/local/network_config/special.rb
-    ExecStart=-/usr/sbin/ip rule flush
     RemainAfterExit=true
 
     [Install]
     WantedBy=network.target systemd-networkd.service
-    RequiredBy=systemd-networkd.service
     Wants=systemd-networkd.service
     ```
