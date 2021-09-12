@@ -1517,9 +1517,11 @@ gen_route china.txt <span class="m">218</span>.104.71.161 unicom China <span cla
 </details>
 <div class="admonition bug">
 <p class="admonition-title">route-all.service 有很多注意事项</p>
-<p>为了清理开机自动产生的 32766 和 32767 两条路由规则，<code>route-all.service</code> 包括执行 <code>ip rule flush</code>，因此该服务重启之后必须立刻重启 systemd-networkd。</p>
-<p>目前做法是在 <code>route-all.service</code> 中添加 <code>RequiredBy=systemd-networkd.service</code> 制造依赖关系，让 systemd 完成“牵连重启”。</p>
-<p>完整 service 文件：</p>
+<p>为了清理开机自动产生的 32766 和 32767 两条路由规则，我们同时为 <code>systemd-networkd.service</code> 添加了两个 <code>ExecStartPre</code> 如下：</p>
+<div class="highlight"><pre><span></span><code><span class="na">ExecStartPre</span><span class="o">=</span><span class="s">-/sbin/ip rule delete from all table main pref 32766</span>
+<span class="na">ExecStartPre</span><span class="o">=</span><span class="s">-/sbin/ip rule delete from all table default pref 32767</span>
+</code></pre></div>
+<p>另附完整的 <code>route-all.service</code> 文件：</p>
 <div class="highlight"><pre><span></span><code><span class="k">[Unit]</span>
 <span class="na">Description</span><span class="o">=</span><span class="s">Generate routes for systemd-networkd</span>
 <span class="na">Before</span><span class="o">=</span><span class="s">systemd-networkd.service</span>
@@ -1528,12 +1530,10 @@ gen_route china.txt <span class="m">218</span>.104.71.161 unicom China <span cla
 <span class="na">Type</span><span class="o">=</span><span class="s">oneshot</span>
 <span class="na">ExecStart</span><span class="o">=</span><span class="s">/bin/bash /usr/local/network_config/route-all.sh</span>
 <span class="na">ExecStart</span><span class="o">=</span><span class="s">/usr/local/network_config/special.rb</span>
-<span class="na">ExecStart</span><span class="o">=</span><span class="s">-/usr/sbin/ip rule flush</span>
 <span class="na">RemainAfterExit</span><span class="o">=</span><span class="s">true</span>
 
 <span class="k">[Install]</span>
 <span class="na">WantedBy</span><span class="o">=</span><span class="s">network.target systemd-networkd.service</span>
-<span class="na">RequiredBy</span><span class="o">=</span><span class="s">systemd-networkd.service</span>
 <span class="na">Wants</span><span class="o">=</span><span class="s">systemd-networkd.service</span>
 </code></pre></div>
 </div>
