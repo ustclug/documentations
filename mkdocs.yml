@@ -73,6 +73,7 @@ nav:
           - Overview: "infrastructure/intranet/intranet.md"
           - Tinc: "infrastructure/tinc.md"
           - LUGI VPN: "infrastructure/intranet/lugivpn.md"
+          - Gateway: "infrastructure/intranet/gateway.md"
       - Servers Unified Authentication (LDAP): "infrastructure/ldap.md"
       - SSH Certificate Authority: "infrastructure/sshca.md"
       - Authoritative DNS: "infrastructure/auth-dns.md"
