@@ -182,7 +182,7 @@ Install 部分的 WantedBy 使用这种写法可以使该服务依赖于名为 `
 对于滥用的 IP 段，可以使用 ipset 和 iptables 实现黑名单限制。
 ipset 将某个 IP 匹配到一个集合中，iptables 再针对某一集合进行限制。
 
-ipset 和 iptables 的使用可以参考：[使用ipset工具对iptables设置黑/白名单 – 孙希栋的博客](https://www.sunxidong.com/379.html) 。
+ipset 和 iptables 的使用可以参考：[Ipset - Arch Wiki](https://wiki.archlinux.org/title/Ipset_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)) 。
 
 我们已在 mirrors4 上配置了 `blacklist` 和 `blacklist6` 集合，若要封禁某个 IP 或网段，可以直接将该网段加入集合，例如：
 
