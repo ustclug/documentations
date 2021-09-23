@@ -14,5 +14,5 @@ GitHub Actions 对公开仓库免费，对私有仓库每月有 3000 分钟的�
 
 - GitHub 不支持 +86 手机号认证，但是可能可以通过修改前端绕过限制。
 - 使用 Authenticator：南大的 Yao Ge 老师整理了在移动设备（iOS 与 Android）可以使用的 TOTP 客户端，内容参见：<https://doc.nju.edu.cn/books/efe93/page/b1a59>。
-  - 国区 App Store 的 iOS 设备可以使用 Google Authenticator 或 Microsoft Authenticator。
-  - 无法访问 Google Play 的 Android 设备可以使用 FreeOTP Plus, andOTP, Aegis Authenticator, Red Hat FreeOTP, OTP Authenticator。
+    - 国区 App Store 的 iOS 设备可以使用 Google Authenticator 或 Microsoft Authenticator。
+    - 无法访问 Google Play 的 Android 设备可以使用 FreeOTP Plus, andOTP, Aegis Authenticator, Red Hat FreeOTP, OTP Authenticator。
