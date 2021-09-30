@@ -1644,6 +1644,10 @@
                 
                 <h1 id="gateway-troubleshooting">Gateway troubleshooting<a class="headerlink" href="#gateway-troubleshooting" title="Permanent link">&para;</a></h1>
 <h2 id="gateway-el"><code>gateway-el</code><a class="headerlink" href="#gateway-el" title="Permanent link">&para;</a></h2>
+<div class="admonition todo todo">
+<p class="admonition-title">Todo</p>
+<p>Currently <code>systemctl restart networking</code> is required after a reboot to set up tunnel. This bug should be fixed.</p>
+</div>
 <h3 id="tunnelmonitor">tunnelmonitor<a class="headerlink" href="#tunnelmonitor" title="Permanent link">&para;</a></h3>
 <p>The tunnels used by <code>gateway-el</code> is mainly maintained by <a href="https://github.com/ustclug/tunnelmonitor">tunnelmonitor</a>. Its config files are in <code>/etc/tunnelmonitor</code>, service is <code>tunnelmonitor.service</code>, and log is <code>/var/log/tunnel_monitor.log</code>.</p>
 <p>When starting, <code>netfilter-persistent.service</code> should be run before <code>tunnelmonitor</code>. <code>tunnelmonitor</code> generates new mangle chains when starting, and pings all tunnels periodically and selects all available tunnels, and generates <code>statistc</code> rules.</p>
