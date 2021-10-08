@@ -27,11 +27,11 @@ And when you log in to a LUG server, it is automatically trusted. If you find a 
 
 !!! warning "Warning"
 
-    When signing certificates using OpenSSH &lt;= 8.1, add `-t rsa-sha2-256` to the `ssh-keygen` command. More details can be found here: <https://ibugone.com/p/35>
+    When signing certificates using OpenSSH &lt;= 8.1, add `-t rsa-sha2-512` to the `ssh-keygen` command. More details can be found here: <https://ibug.io/p/35>
 
 !!! warning "Warning 2"
 
-    Some of our servers are still running Debian Jessie, which has OpenSSH version 6.7 that does not support SHA-2 certificate algorithms. Sign with `-t ssh-rsa` instead if you want to log in to such servers.
+    Some of our servers are still running Debian Jessie, which has OpenSSH version 6.7 that does not support SHA-2 certificate algorithms (OpenSSH 7.2 required). Sign with `-t ssh-rsa` instead if you want to log in to such servers.
 
 Copy the file `/etc/ssh/ssh_host_rsa_key.pub` from target server.
 
@@ -43,9 +43,10 @@ ssh-keygen -s /path/to/ssh_ca -I blog -h -n blog.s.ustclug.org,blog.p.ustclug.or
 
 Then, copy the certificate file `ssh_host_rsa_key-cert.pub` back to target server.
 
-At last, add the following line to `/etc/ssh/sshd_config`:
+At last, add the following lines to `/etc/ssh/sshd_config`:
 
 ```con
+HostKey /etc/ssh/ssh_host_rsa_key
 HostCertificate /etc/ssh/ssh_host_rsa_key-cert.pub
 ```
 
@@ -63,7 +64,7 @@ For example:
 ssh-keygen -s /path/to/ssh_ca -I "Yifan Gao" -n yifan -V +365d yifan.pub
 ```
 
-In general, _certificate_identity_ is user full name, and _principals_ is the user name. In addition, one user can own multiply _principals_ in one certificate, like:
+In general, _certificate\_identity_ is user full name, and _principals_ is the user name. In addition, one user can own multiply _principals_ in one certificate, like:
 
 ```
 ssh-keygen -s /path/to/ssh_ca -I "Yifan Gao" -n yifan,root,liims -V +365d yifan.pub
@@ -71,4 +72,6 @@ ssh-keygen -s /path/to/ssh_ca -I "Yifan Gao" -n yifan,root,liims -V +365d yifan.
 
 It authorizes the certificate owner to login to any server with `yifan`, `root` or `liims` username.
 
-_tip: "liims" principal is used to login to library inquiring machine._
+!!! tip
+
+    `liims` principal is used to login to library inquiring machine.
