@@ -214,7 +214,7 @@ Sudo 的配置是通过 sssd 实现的，参考 <https://access.redhat.com/site/
 
 ### NSCD 使用说明
 
-NSCD 是用于 LDAP 缓存的服务，目前在 mirrors 上的配置是保持 30 天。这导致的问题是每当 ldap 服务器上做出修改的时候需要在 mirrors 上执行 <s>(目前 mirrors 服务器暂未配置 LDAP 认证。)</s>
+NSCD 是用于 LDAP 缓存的服务，目前在 mirrors 上的配置是保持 30 天。这导致的问题是每当 ldap 服务器上做出修改的时候需要在 mirrors 上执行，清除指定类型的缓存<s>(目前 mirrors 服务器暂未配置 LDAP 认证。)</s>
 
 ```shell
 nscd -i passwd

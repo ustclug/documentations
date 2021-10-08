@@ -13,9 +13,4 @@ POSIX > Group membership > Add：根据需要添加的权限选择对应的组�
 
 ??? info "LDAP 缓存"
 
-    若发现用户无法登陆等情况，可能是缓存服务 NSCD 导致的，用以下命令清除指定类型缓存：
-
-    ```shell
-    nscd -i passwd
-    nscd -i group
-    ```
+    若发现用户无法登陆等情况，可能是缓存服务 NSCD 导致的，具体参考 [LDAP Users 和 Groups](../../infrastructure/ldap.md#nscd)：
