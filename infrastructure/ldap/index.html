@@ -2045,7 +2045,7 @@ sudoers:        files ldap
 </div>
 <p>另外记得像前面在 Debian 中安装介绍到的那样修改 <code>/etc/nsswitch.conf</code> 以及 <code>/etc/nslcd.conf</code>.</p>
 <h3 id="nscd">NSCD 使用说明<a class="headerlink" href="#nscd" title="Permanent link">&para;</a></h3>
-<p>NSCD 是用于 LDAP 缓存的服务，目前在 mirrors 上的配置是保持 30 天。这导致的问题是每当 ldap 服务器上做出修改的时候需要在 mirrors 上执行 <s>(目前 mirrors 服务器暂未配置 LDAP 认证。)</s></p>
+<p>NSCD 是用于 LDAP 缓存的服务，目前在 mirrors 上的配置是保持 30 天。这导致的问题是每当 ldap 服务器上做出修改的时候需要在 mirrors 上执行，清除指定类型的缓存<s>(目前 mirrors 服务器暂未配置 LDAP 认证。)</s></p>
 <div class="highlight"><pre><span></span><code>nscd -i passwd
 nscd -i group
 </code></pre></div>
