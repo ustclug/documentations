@@ -1617,15 +1617,18 @@
                 <h1 id="ldap">在 LDAP 中添加新用户<a class="headerlink" href="#ldap" title="Permanent link">&para;</a></h1>
 <h2 id="ldap_1">新建 LDAP 用户<a class="headerlink" href="#ldap_1" title="Permanent link">&para;</a></h2>
 <ol>
-<li>登陆<a href="http://ldap.lug.ustc.edu.cn">网页界面</a></li>
+<li>登陆<a href="http://ldap.lug.ustc.edu.cn/gosa">网页界面</a></li>
 <li>Users &gt; Actions &gt; Create &gt; User</li>
 <li>Generic: 输入 Last name，First name，Login（登录名）</li>
 <li>POSIX &gt; Generic：输入 Home directory。使用 Force UID/GID ，具体说明详见 <a href="../../../infrastructure/ldap/#ldap-users-and-groups">LDAP Users 和 Groups</a></li>
 </ol>
 <h2 id="ldap_2">添加 LDAP 用户权限<a class="headerlink" href="#ldap_2" title="Permanent link">&para;</a></h2>
-<ol>
-<li>POSIX &gt; Group membership &gt; Add：根据需要添加的权限选择对应的组，具体说明详见 <a href="../../../infrastructure/ldap/#ldap-users-and-groups">LDAP Users 和 Groups</a></li>
-</ol>
+<p>POSIX &gt; Group membership &gt; Add：根据需要添加的权限选择对应的组，具体说明详见 <a href="../../../infrastructure/ldap/#ldap-users-and-groups">LDAP Users 和 Groups</a></p>
+<details class="info"><summary>LDAP 缓存</summary><p>若发现用户无法登陆等情况，可能是缓存服务 NSCD 导致的，用以下命令清除指定类型缓存：</p>
+<div class="highlight"><pre><span></span><code>nscd -i passwd
+nscd -i group
+</code></pre></div>
+</details>
                 
               
               
