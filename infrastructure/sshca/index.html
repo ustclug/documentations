@@ -16,7 +16,7 @@
         <link rel="canonical" href="https://docs.ustclug.org/infrastructure/sshca/">
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.2.2, mkdocs-material-7.3.0">
+      <meta name="generator" content="mkdocs-1.2.2, mkdocs-material-7.3.2">
     
     
       
@@ -24,7 +24,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.8b42a75e.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.24c991ad.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.3f5d1f46.min.css">
@@ -1660,19 +1660,20 @@
 <h2 id="issue-a-server-certificate">Issue a server certificate<a class="headerlink" href="#issue-a-server-certificate" title="Permanent link">&para;</a></h2>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>When signing certificates using OpenSSH &lt;= 8.1, add <code>-t rsa-sha2-256</code> to the <code>ssh-keygen</code> command. More details can be found here: <a href="https://ibugone.com/p/35">https://ibugone.com/p/35</a></p>
+<p>When signing certificates using OpenSSH &lt;= 8.1, add <code>-t rsa-sha2-512</code> to the <code>ssh-keygen</code> command. More details can be found here: <a href="https://ibug.io/p/35">https://ibug.io/p/35</a></p>
 </div>
 <div class="admonition warning">
 <p class="admonition-title">Warning 2</p>
-<p>Some of our servers are still running Debian Jessie, which has OpenSSH version 6.7 that does not support SHA-2 certificate algorithms. Sign with <code>-t ssh-rsa</code> instead if you want to log in to such servers.</p>
+<p>Some of our servers are still running Debian Jessie, which has OpenSSH version 6.7 that does not support SHA-2 certificate algorithms (OpenSSH 7.2 required). Sign with <code>-t ssh-rsa</code> instead if you want to log in to such servers.</p>
 </div>
 <p>Copy the file <code>/etc/ssh/ssh_host_rsa_key.pub</code> from target server.</p>
 <p>Then, run <code>ssh-keygen</code> to issue a public key. For example:</p>
 <div class="highlight"><pre><span></span><code>ssh-keygen -s /path/to/ssh_ca -I blog -h -n blog.s.ustclug.org,blog.p.ustclug.org,10.254.0.15,202.141.176.98,202.141.160.98 ssh_host_rsa_key.pub
 </code></pre></div>
 <p>Then, copy the certificate file <code>ssh_host_rsa_key-cert.pub</code> back to target server.</p>
-<p>At last, add the following line to <code>/etc/ssh/sshd_config</code>:</p>
-<div class="highlight"><pre><span></span><code>HostCertificate /etc/ssh/ssh_host_rsa_key-cert.pub
+<p>At last, add the following lines to <code>/etc/ssh/sshd_config</code>:</p>
+<div class="highlight"><pre><span></span><code>HostKey /etc/ssh/ssh_host_rsa_key
+HostCertificate /etc/ssh/ssh_host_rsa_key-cert.pub
 </code></pre></div>
 <p>Certificate will take effect after SSH daemon is reloaded (<code>systemctl reload ssh</code>).</p>
 <h2 id="issue-a-client-certificate">Issue a client certificate<a class="headerlink" href="#issue-a-client-certificate" title="Permanent link">&para;</a></h2>
@@ -1685,7 +1686,10 @@
 <div class="highlight"><pre><span></span><code>ssh-keygen -s /path/to/ssh_ca -I &quot;Yifan Gao&quot; -n yifan,root,liims -V +365d yifan.pub
 </code></pre></div>
 <p>It authorizes the certificate owner to login to any server with <code>yifan</code>, <code>root</code> or <code>liims</code> username.</p>
-<p><em>tip: "liims" principal is used to login to library inquiring machine.</em></p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p><code>liims</code> principal is used to login to library inquiring machine.</p>
+</div>
                 
               
               
@@ -1789,10 +1793,10 @@
     <div class="md-dialog" data-md-component="dialog">
       <div class="md-dialog__inner md-typeset"></div>
     </div>
-    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.top", "navigation.sections"], "translations": {"clipboard.copy": "\u590d\u5236", "clipboard.copied": "\u5df2\u590d\u5236", "search.config.lang": "ja", "search.config.pipeline": "trimmer, stemmer", "search.config.separator": "[\\uff0c\\u3002]+", "search.placeholder": "\u641c\u7d22", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../assets/javascripts/workers/search.f8263e09.min.js", "version": null}</script>
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.top", "navigation.sections"], "translations": {"clipboard.copy": "\u590d\u5236", "clipboard.copied": "\u5df2\u590d\u5236", "search.config.lang": "ja", "search.config.pipeline": "trimmer, stemmer", "search.config.separator": "[\\uff0c\\u3002]+", "search.placeholder": "\u641c\u7d22", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../assets/javascripts/workers/search.e99e714c.min.js", "version": null}</script>
     
     
-      <script src="../../assets/javascripts/bundle.4fc53ad4.min.js"></script>
+      <script src="../../assets/javascripts/bundle.bc35569b.min.js"></script>
       
     
   </body>
