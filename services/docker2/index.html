@@ -16,7 +16,7 @@
         <link rel="canonical" href="https://docs.ustclug.org/services/docker2/">
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.2.2, mkdocs-material-7.3.2">
+      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-7.3.3">
     
     
       
@@ -24,7 +24,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.24c991ad.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.5143246d.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.3f5d1f46.min.css">
@@ -1218,6 +1218,13 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#wordpress" class="md-nav__link">
+    WordPress 升级
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1604,6 +1611,13 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#wordpress" class="md-nav__link">
+    WordPress 升级
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1656,6 +1670,25 @@
 </code></pre></div>
 <p>使用方式：<code>systemctl enable docker-pingd@container:host.service</code>，<code>container</code> 换成容器名，<code>host</code> 换成 ping 的目标。</p>
 <p>Trick 介绍：Systemd service 配置暂不支持多个模板参数 <code>%i</code>，因此调用 shell 来解析参数。Ref: <a href="https://github.com/systemd/systemd/issues/14895#issuecomment-612270690">https://github.com/systemd/systemd/issues/14895#issuecomment-612270690</a></p>
+<h3 id="wordpress">WordPress 升级<a class="headerlink" href="#wordpress" title="Permanent link">&para;</a></h3>
+<p>tky: 很麻烦，建议 lug 以后再也别用（别开新的）wordpress 了。</p>
+<p>servers 与旧 planet 使用 WordPress，托管在 docker2 上。因为 docker2 现在磁盘 IO 很慢，所以可能会出现一些额外的问题。</p>
+<p>推荐使用 https://wp-cli.org/#installing。命令：</p>
+<div class="highlight"><pre><span></span><code>chmod +x wp-cli.phar
+mv wp-cli.phar /usr/local/bin/wp
+cd /var/www/public/
+sudo -u www-data -- wp core update --version=5.8.1 /tmp/wordpress-5.8.1.zip
+</code></pre></div>
+<p>容器里 sudo 要手动装。</p>
+<p>以下内容仅供参考。</p>
+<p>尝试升级时如果未出现升级提示，可以修改：</p>
+<ul>
+<li>文件 <code>wp-includes/update.php</code>，将函数 <code>wp_version_check()</code> 中 <code>$doing_cron ? 3 : 30</code> 修改为 <code>$doing_cron ? 30 : 30</code>。</li>
+<li>文件 <code>wp-admin/includes/update.php</code>，将函数 <code>get_core_checksums()</code> 中对应的部分修改为 <code>$doing_cron ? 30 : 30</code>。</li>
+</ul>
+<p>如果出现「另一更新正在运行」，且确认不在更新，可以在数据库的 <code>wordpress</code> 表中执行：</p>
+<div class="highlight"><pre><span></span><code><span class="k">delete</span> <span class="k">from</span> <span class="n">wp_options</span> <span class="k">where</span> <span class="n">option_name</span><span class="o">=</span><span class="s1">&#39;core_updater.lock&#39;</span><span class="p">;</span>
+</code></pre></div>
                 
               
               
@@ -1759,10 +1792,10 @@
     <div class="md-dialog" data-md-component="dialog">
       <div class="md-dialog__inner md-typeset"></div>
     </div>
-    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.top", "navigation.sections"], "translations": {"clipboard.copy": "\u590d\u5236", "clipboard.copied": "\u5df2\u590d\u5236", "search.config.lang": "ja", "search.config.pipeline": "trimmer, stemmer", "search.config.separator": "[\\uff0c\\u3002]+", "search.placeholder": "\u641c\u7d22", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../assets/javascripts/workers/search.e99e714c.min.js", "version": null}</script>
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.top", "navigation.sections"], "translations": {"clipboard.copy": "\u590d\u5236", "clipboard.copied": "\u5df2\u590d\u5236", "search.config.lang": "ja", "search.config.pipeline": "trimmer, stemmer", "search.config.separator": "[\\uff0c\\u3002]+", "search.placeholder": "\u641c\u7d22", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../assets/javascripts/workers/search.8397ff9e.min.js", "version": null}</script>
     
     
-      <script src="../../assets/javascripts/bundle.bc35569b.min.js"></script>
+      <script src="../../assets/javascripts/bundle.f89c2efe.min.js"></script>
       
     
   </body>
