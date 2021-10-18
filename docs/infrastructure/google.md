@@ -44,6 +44,22 @@ tky:
 
 总之，不知道怎么处理的邮件不要贸然回复。如果你认为某一封邮件需要我们处理但不知道怎么处理，请转告给其他相关同学。
 
+### 使用 Thunderbird 配置不同的身份
+
+(written by taoky)
+
+在某些情况下，需要设置新的发件人名称和回复地址（例如 hackergame staff 需要一套不同的设置）。由于 Gmail 网页端修改配置很麻烦（而且很容易忘记改回来），强烈建议使用邮件客户端。个人使用的是 Thunderbird，下面也以它为例子。
+
+在账号加上邮箱之后，点击右键 -> 属性，默认配置（LUG Staff）如图：
+
+![Thunderbird - 1](./img/thunderbird-1.jpg)
+
+需要添加新身份时，点击右下角「管理标识」，添加对应的标识。对于 hackergame，可以配置如下：
+
+![Thunderbird - 2](./img/thunderbird-2.png)
+
+配置完成后，在编写邮件时，就可以选择新的标识了，并且发件人名称、回复地址和签名都会自动设置好（抄送还是要自己设置，别忘了！）
+
 ## 加入 lug @ ustc 列表 {#lug-ustc-mailing-list}
 
 若要收到发往 lug A ustc.edu.cn 的邮件，需要在 [群组管理](https://admin.google.com/ac/groups) 这里将用户加入 USTC LUG Staff 组。这个群组就是 lug 和 mirrors 在学校邮箱设置的转发目标。
