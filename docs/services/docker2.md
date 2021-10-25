@@ -71,3 +71,10 @@ sudo -u www-data -- wp core update --version=5.8.1 /tmp/wordpress-5.8.1.zip
 delete from wp_options where option_name='core_updater.lock';
 ```
 
+### 看起来正在运行但是没有进程的 Docker 容器
+
+2021/10/25 发现某容器显示正在运行，但是实际没有进程。后发现为 Docker 的 bug，在容器进程被 cgroups 干掉之后可能会出现此情况。
+
+对应 issue：<https://github.com/moby/moby/issues/38501>
+
+解决方法：将容器 ID 对应的 `containerd-shim` 杀死即可让 Docker 更新其状态为已停止，然后重新开启即可。
