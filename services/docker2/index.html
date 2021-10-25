@@ -1225,6 +1225,13 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#docker" class="md-nav__link">
+    看起来正在运行但是没有进程的 Docker 容器
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1618,6 +1625,13 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#docker" class="md-nav__link">
+    看起来正在运行但是没有进程的 Docker 容器
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1689,6 +1703,10 @@ sudo -u www-data -- wp core update --version=5.8.1 /tmp/wordpress-5.8.1.zip
 <p>如果出现「另一更新正在运行」，且确认不在更新，可以在数据库的 <code>wordpress</code> 表中执行：</p>
 <div class="highlight"><pre><span></span><code><span class="k">delete</span> <span class="k">from</span> <span class="n">wp_options</span> <span class="k">where</span> <span class="n">option_name</span><span class="o">=</span><span class="s1">&#39;core_updater.lock&#39;</span><span class="p">;</span>
 </code></pre></div>
+<h3 id="docker">看起来正在运行但是没有进程的 Docker 容器<a class="headerlink" href="#docker" title="Permanent link">&para;</a></h3>
+<p>2021/10/25 发现某容器显示正在运行，但是实际没有进程。后发现为 Docker 的 bug，在容器进程被 cgroups 干掉之后可能会出现此情况。</p>
+<p>对应 issue：<a href="https://github.com/moby/moby/issues/38501">https://github.com/moby/moby/issues/38501</a></p>
+<p>解决方法：将容器 ID 对应的 <code>containerd-shim</code> 杀死即可让 Docker 更新其状态为已停止，然后重新开启即可。</p>
                 
               
               
