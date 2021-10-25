@@ -6,6 +6,10 @@
 
 	Currently `systemctl restart networking` is required after a reboot to set up tunnel. This bug should be fixed.
 
+### IP Virtual Server
+
+gateway-el uses IPVS to send requests from one port to other machines directly. IPVS is a Linux kernel feature. Use `ipvsadm -Ln` to get its status.
+
 ### tunnelmonitor
 
 The tunnels used by `gateway-el` is mainly maintained by [tunnelmonitor](https://github.com/ustclug/tunnelmonitor). Its config files are in `/etc/tunnelmonitor`, service is `tunnelmonitor.service`, and log is `/var/log/tunnel_monitor.log`.
