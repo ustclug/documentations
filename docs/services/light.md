@@ -71,3 +71,8 @@ optimize table radacct_backup;
 1. Stop two containers: `light-server` & `light-socks`
 2. Set restart policy to `no` (See <https://docs.docker.com/config/containers/start-containers-automatically/#use-a-restart-policy>)
 
+## Log
+
+Proxy related log is under `/srv/docker/light/log`. Container log (stdout & stderr) is under `/srv/docker/docker/containers/<container id>/*.log*`.
+
+Logrotate is configured to save logs for 180 days. Please manually backup logs when removing the container.
