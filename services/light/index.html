@@ -1364,6 +1364,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#log" class="md-nav__link">
+    Log
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1629,6 +1636,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#log" class="md-nav__link">
+    Log
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1706,6 +1720,9 @@ git push origin master
 <li>Stop two containers: <code>light-server</code> &amp; <code>light-socks</code></li>
 <li>Set restart policy to <code>no</code> (See <a href="https://docs.docker.com/config/containers/start-containers-automatically/#use-a-restart-policy">https://docs.docker.com/config/containers/start-containers-automatically/#use-a-restart-policy</a>)</li>
 </ol>
+<h2 id="log">Log<a class="headerlink" href="#log" title="Permanent link">&para;</a></h2>
+<p>Proxy related log is under <code>/srv/docker/light/log</code>. Container log (stdout &amp; stderr) is under <code>/srv/docker/docker/containers/&lt;container id&gt;/*.log*</code>.</p>
+<p>Logrotate is configured to save logs for 180 days. Please manually backup logs when removing the container.</p>
                 
               
               
