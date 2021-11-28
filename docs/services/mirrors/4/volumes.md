@@ -189,6 +189,50 @@ lvchange -a y lug/docker
 mount /dev/lug/docker /var/lib/docker
 ```
 
+### repo 扩容
+
+查看当前逻辑卷信息：
+
+```
+# lvs -a -o +devices
+  LV              VG  Attr       LSize   Pool     Origin       Data%  Meta%  Move Log         Cpy%Sync Convert Devices
+  backup          lug -wi-ao----   8.00g                                                                       /dev/sda3(6307840)
+  docker          lug -wi-ao----  64.00g                                                                       /dev/sdc1(0)
+  docker2         lug -wi-a----- 300.00g                                                                       /dev/sda3(7925248)
+  home            lug -wi-ao----  64.00g                                                                       /dev/sda3(8192),/dev/sdb3(8193)
+  log             lug -wi-ao---- 300.00g                                                                       /dev/sda3(6309888),/dev/sdb3(6307841)
+  log             lug -wi-ao---- 300.00g                                                                       /dev/sda3(7888896),/dev/sdb3(7882753)
+  [lvol0_pmspare] lug ewi-------  16.00g                                                                       /dev/sda3(7884800)
+  [mcache]        lug Cwi---C---   1.50t                       99.99  0.12                    0.00             mcache_cdata(0)
+  [mcache_cdata]  lug Cwi-ao----   1.50t                                                                       /dev/sdc1(20480)
+  [mcache_cmeta]  lug ewi-ao----  16.00g                                                                       /dev/sdc1(16384)
+  repo            lug Cwi-aoC---  60.00t [mcache] [repo_corig] 99.99  0.12                    0.00             repo_corig(0)
+  [repo_corig]    lug owi-aoC---  60.00t                                                                       /dev/sda3(16384),/dev/sdb3(16385)
+  [repo_corig]    lug owi-aoC---  60.00t                                                                       /dev/sda3(6311936),/dev/sdb3(6309889)
+  root            lug mwi-aom---  32.00g                                          [root_mlog] 100.00           root_mimage_0(0),root_mimage_1(0)
+  [root_mimage_0] lug iwi-aom---  32.00g                                                                       /dev/sda3(0)
+  [root_mimage_1] lug iwi-aom---  32.00g                                                                       /dev/sdb3(0)
+  [root_mlog]     lug lwi-aom---   4.00m                                                                       /dev/sdb3(8192)
+```
+
+然后 uncache、扩容：
+
+```
+# lvconvert --uncache lug/repo
+# lvextend -L +5T lug/repo
+# xfs_growfs /srv
+```
+
+然后恢复 cache（参考上面 mcache_meta 和 mcache 逻辑卷的配置，**请注意在理解命令后再执行**！）：
+
+```
+# lvcreate -L 16G -n mcache_meta lug /dev/sdc1
+# lvcreate -l 100%FREE -n mcache lug /dev/sdc1
+# lvreduce -l -2048 lug/mcache
+# lvconvert --type cache-pool --poolmetadata lug/mcache_meta --cachemode writethrough -c 1M --config allocation/cache_pool_max_chunks=2000000 lug/mcache
+# lvconvert --type cache --cachepool lug/mcache lug/repo
+```
+
 ## fstab
 
 分区完毕后给 `/etc/fstab` 补上相关的内容并挂载：
