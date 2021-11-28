@@ -1688,7 +1688,9 @@ gen_route china.txt <span class="m">218</span>.104.71.161 unicom China <span cla
     <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">...</span>
 </code></pre></div>
 <p>修改 <code>special.yml</code> 之后重启 <code>route-all.service</code>。该服务会自动导致 <code>systemd-networkd.service</code> 重启并载入新的路由配置信息。</p>
-<details class="tips"><summary>special.rb 处理脚本（放在这备份）</summary><div class="highlight"><pre><span></span><code><span class="ch">#!/usr/bin/ruby</span>
+<details class="tips">
+<summary>special.rb 处理脚本（放在这备份）</summary>
+<div class="highlight"><pre><span></span><code><span class="ch">#!/usr/bin/ruby</span>
 
 <span class="nb">require</span> <span class="s1">&#39;fileutils&#39;</span>
 <span class="nb">require</span> <span class="s1">&#39;yaml&#39;</span>
