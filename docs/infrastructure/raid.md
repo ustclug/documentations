@@ -14,6 +14,7 @@ sudo /opt/MegaRAID/MegaCli/MegaCli64 -pdlist -aall  # 查看物理盘信息
 现在部署的方案是由 telegraf 执行解析脚本，将数据发送到 influxdb，由 grafana 报警。
 
 脚本：
+
 - 解析 megacli & storcli <https://github.com/taoky/raid-telegraf>
 - 解析 zpool <https://github.com/taoky/telegraf-exec-zpool-status/releases>
 
