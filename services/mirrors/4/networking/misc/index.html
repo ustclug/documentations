@@ -12,14 +12,14 @@
         <meta name="author" content="USTC Linux User Group">
       
       
-        <link rel="canonical" href="https://docs.ustclug.org/services/mirrors/4/networking/route/">
+        <link rel="canonical" href="https://docs.ustclug.org/services/mirrors/4/networking/misc/">
       
       <link rel="icon" href="../../../../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.1.3">
     
     
       
-        <title>Routing - LUG @ USTC</title>
+        <title>Misc - LUG @ USTC</title>
       
     
     
@@ -70,7 +70,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#routing-on-mirrors4" class="md-skip">
+        <a href="#mirrors" class="md-skip">
           跳转至
         </a>
       
@@ -103,7 +103,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Routing
+              Misc
             
           </span>
         </div>
@@ -878,6 +878,20 @@
               
   
   
+  
+    <li class="md-nav__item">
+      <a href="../route/" class="md-nav__link">
+        Routing
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
     
   
   
@@ -890,12 +904,12 @@
       
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
-          Routing
+          Misc
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <a href="./" class="md-nav__link md-nav__link--active">
-        Routing
+        Misc
       </a>
       
         
@@ -914,9 +928,22 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#special-routing" class="md-nav__link">
-    Special routing
+  <a href="#sniproxy" class="md-nav__link">
+    sniproxy
   </a>
+  
+    <nav class="md-nav" aria-label="sniproxy">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    配置
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -924,20 +951,6 @@
   
 </nav>
       
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../misc/" class="md-nav__link">
-        Misc
-      </a>
     </li>
   
 
@@ -1594,9 +1607,22 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#special-routing" class="md-nav__link">
-    Special routing
+  <a href="#sniproxy" class="md-nav__link">
+    sniproxy
   </a>
+  
+    <nav class="md-nav" aria-label="sniproxy">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    配置
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -1612,149 +1638,60 @@
             <article class="md-content__inner md-typeset">
               
                 
-<a href="https://github.com/ustclug/documentations/edit/master/docs/services/mirrors/4/networking/route.md" title="编辑此页" class="md-content__button md-icon">
+<a href="https://github.com/ustclug/documentations/edit/master/docs/services/mirrors/4/networking/misc.md" title="编辑此页" class="md-content__button md-icon">
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
 </a>
 
 
-<h1 id="routing-on-mirrors4">Routing on mirrors4<a class="headerlink" href="#routing-on-mirrors4" title="Permanent link">&para;</a></h1>
-<p>由于 mirrors4 没有使用 ifupdown 作为网络管理系统，而是采用 systemd-networkd，因此我们没有 <code>pre-up</code>, <code>up</code>, <code>down</code>, <code>post-down</code> 等运行命令的方式，所以 mirrors2 上使用的那套脚本（<code>ip-route.sh</code> 等）无法直接在 mirrors4 上继续使用。</p>
-<p>好在我们使用 <code>up</code> 等运行命令只是为了配置路由，因此换了个办法，整了个新脚本把 IP 地址列表（来自 <a href="https://github.com/gaoyifan/china-operator-ip">gaoyifan/china-operator-ip</a>）转换成 networkd 所使用的配置文件格式。代码不长：</p>
-<div class="highlight"><pre><span></span><code><span class="ch">#!/bin/bash</span>
-
-<span class="nv">ROOT_IP_LIST</span><span class="o">=</span>/usr/local/network_config/iplist
-<span class="nv">ROOT_RT</span><span class="o">=</span>/run/systemd/network
-
-gen_route<span class="o">()</span> <span class="o">{</span>
-  <span class="nv">IPLIST</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$ROOT_IP_LIST</span><span class="s2">/</span><span class="nv">$1</span><span class="s2">&quot;</span>
-  <span class="nv">GW</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$2</span><span class="s2">&quot;</span>
-  <span class="nv">DEV</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$3</span><span class="s2">&quot;</span>
-  <span class="c1"># Convert table to number</span>
-  <span class="nv">TABLENAME</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$4</span><span class="s2">&quot;</span>
-  <span class="nv">TABLE</span><span class="o">=</span><span class="s2">&quot;</span><span class="k">$(</span>awk <span class="s1">&#39;substr($0, 1, 1) != &quot;#&quot; &amp;&amp; $2 == &quot;&#39;</span><span class="s2">&quot;</span><span class="nv">$TABLENAME</span><span class="s2">&quot;</span><span class="s1">&#39;&quot; { print $1 }&#39;</span> /etc/iproute2/rt_tables <span class="p">|</span> head -1<span class="k">)</span><span class="s2">&quot;</span>
-  <span class="nv">PRIORITY</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$5</span><span class="s2">&quot;</span>
-
-  <span class="nv">F</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$ROOT_RT</span><span class="s2">/</span><span class="nv">$DEV</span><span class="s2">.network.d&quot;</span>
-  mkdir -p <span class="s2">&quot;</span><span class="nv">$F</span><span class="s2">&quot;</span>
-  <span class="nv">F</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$F</span><span class="s2">/route-</span><span class="si">${</span><span class="nv">TABLENAME</span><span class="p">,,</span><span class="si">}</span><span class="s2">.conf&quot;</span>
-
-  <span class="nb">echo</span> -e <span class="s2">&quot;[RoutingPolicyRule]\nTable=</span><span class="nv">$TABLE</span><span class="s2">\nPriority=</span><span class="nv">$PRIORITY</span><span class="s2">\n&quot;</span> &gt; <span class="s2">&quot;</span><span class="nv">$F</span><span class="s2">&quot;</span>
-  awk <span class="s1">&#39;{ print &quot;[Route]\nDestination=&quot; $1 &quot;\nGateway=&#39;</span><span class="s2">&quot;</span><span class="nv">$GW</span><span class="s2">&quot;</span><span class="s1">&#39;\nTable=&#39;</span><span class="s2">&quot;</span><span class="nv">$TABLE</span><span class="s2">&quot;</span><span class="s1">&#39;\n&quot; }&#39;</span> <span class="s2">&quot;</span><span class="nv">$IPLIST</span><span class="s2">&quot;</span> &gt;&gt; <span class="s2">&quot;</span><span class="nv">$F</span><span class="s2">&quot;</span>
-<span class="o">}</span>
-
-gen_route ustcnet.txt <span class="m">202</span>.38.95.126 cernet Ustcnet <span class="m">5</span>
-gen_route cernet.txt <span class="m">202</span>.38.95.126 cernet Cernet <span class="m">6</span>
-gen_route telecom.txt <span class="m">202</span>.141.160.126 telecom Telecom <span class="m">6</span>
-gen_route mobile.txt <span class="m">202</span>.141.176.126 mobile Mobile <span class="m">6</span>
-gen_route unicom.txt <span class="m">218</span>.104.71.161 unicom Unicom <span class="m">6</span>
-gen_route china.txt <span class="m">218</span>.104.71.161 unicom China <span class="m">7</span>
+<h1 id="mirrors">mirrors 网络配置杂项<a class="headerlink" href="#mirrors" title="Permanent link">&para;</a></h1>
+<h2 id="sniproxy">sniproxy<a class="headerlink" href="#sniproxy" title="Permanent link">&para;</a></h2>
+<p>Sniproxy 用于为 Docker 容器提供方便的 HTTP(S) 网络分流。目前在 mirrors 上用于为 dockerhub 容器提供（到 Cloudflare 的）IPv6 接入（Docker 做 IPv6 NAT 非常不方便，所以以此为权宜之举），以提高校内访问时的速度。</p>
+<h3 id="_1">配置<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h3>
+<p>安装 sniproxy，并且 mask 原服务配置（我们自己写一个）：</p>
+<div class="highlight"><pre><span></span><code>sudo apt install sniproxy
+sudo mkdir -p /etc/sniproxy
+sudo systemctl mask sniproxy.service
 </code></pre></div>
-<p>这个仓库里有很多个 txt 文件，每个文件对应一个 ISP 的地址列表，每行一个 CIDR。脚本中的 <code>gen_route</code> 函数根据参数读取文件，并转换成下面这样的格式：</p>
-<div class="highlight"><pre><span></span><code><span class="k">[Route]</span>
-<span class="na">Destination</span><span class="o">=</span><span class="s">1.0.0.0/24</span>
-<span class="na">Gateway</span><span class="o">=</span><span class="s">202.38.95.126</span>
-<span class="na">Table</span><span class="o">=</span><span class="s">1011</span>
+<p>创建 <code>/etc/systemd/system/sniproxy@.service</code>：</p>
+<div class="highlight"><pre><span></span><code>[Unit]
+Description=SNIProxy (%i.conf)
+After=network.target network-online.target
+StartLimitIntervalSec=1
+
+[Service]
+Type=simple
+ExecStart=/usr/sbin/sniproxy -f -c /etc/sniproxy/%i.conf
+Restart=on-failure
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target
 </code></pre></div>
-<p>这样一个 <code>[Route]</code> 节对应<strong>一条</strong>路由规则，整个 txt 的转换结果输出到 <code>/run/systemd/network/cernet.network.d/route-example.conf</code>。其中 <code>cernet.network.d/*.conf</code> 用于向现有的配置中添加内容（与 systemd service 类似），而 <code>/run</code> 目录（按理来说）重启会清空，适合放置这些用于动态生成的内容。另外由于路由规则（<code>ip rule</code>）也由 networkd 管理和生成了，因此每个 <code>route-xxx.conf</code> 开头会包含一个 <code>[RoutingPolicyRule]</code> 节用于生成路由表对应的路由规则。</p>
-<p>注意路由表是用名称指定的，从 <code>/etc/iproute2/rt_tables</code> 中查出对应的数字 ID。这个文件本来也是 <code>ip</code> 命令所使用的（注意它的目录名叫 <code>iproute2</code>）。</p>
-<p>最后给这个脚本配个 service，让它在 networkd 之前运行：</p>
-<div class="highlight"><pre><span></span><code><span class="c1"># WARNING: This is NOT the final configuration file!</span>
-<span class="k">[Unit]</span>
-<span class="na">Description</span><span class="o">=</span><span class="s">Generate routes for systemd-networkd</span>
-<span class="na">Before</span><span class="o">=</span><span class="s">systemd-networkd.service</span>
+<p>在 <code>/etc/sniproxy</code> 中创建配置。以下为 IPv6 + TLS (443) only 的配置例子：</p>
+<div class="highlight"><pre><span></span><code>resolver {
+    nameserver 2001:da8:d800::1
+    mode ipv6_only
+}
 
-<span class="k">[Service]</span>
-<span class="na">Type</span><span class="o">=</span><span class="s">oneshot</span>
-<span class="na">ExecStart</span><span class="o">=</span><span class="s">/bin/bash /usr/local/network_config/route-all.sh</span>
-<span class="na">RemainAfterExit</span><span class="o">=</span><span class="s">true</span>
+access_log {
+    filename /dev/null
+}
 
-<span class="k">[Install]</span>
-<span class="na">WantedBy</span><span class="o">=</span><span class="s">network.target systemd-networkd.service</span>
-<span class="na">Wants</span><span class="o">=</span><span class="s">systemd-networkd.service</span>
+listen &lt;Bind 到的 IP 地址&gt;:443 {
+    proto tls
+    reuseport yes
+    table all
+    source &lt;IPv6 出口地址&gt;
+}
+
+table all {
+    .* *
+}
 </code></pre></div>
-<p>这个文件存到 <code>/etc/systemd/system/route-all.service</code>，reload 再 enable 就可以了。</p>
-<div class="admonition bug">
-<p class="admonition-title">改 systemd-networkd.service 需要额外注意</p>
-<p>这个自带的服务有一个 <code>User=systemd-networkd</code>，<s>你既不能 <code>ip rule</code> 也不能写入 <code>/run/systemd</code> 等，会导致服务炸掉，然后网也炸了。。。</s></p>
-<p>如果要改 networkd 服务操作 <code>ip rule</code> 的话，需要在命令行前面加一个 <code>+</code> 表示该命令不受 <code>User=</code> 等权限设置影响，详细解释见 <a href="https://www.freedesktop.org/software/systemd/man/systemd.service.html#ExecStart=">systemd.service 文档</a>。</p>
-</div>
-<h2 id="special-routing">Special routing<a class="headerlink" href="#special-routing" title="Permanent link">&para;</a></h2>
-<p>部分 IP 需要配置特殊路由规则时（而不是使用默认），编辑 <code>/usr/local/network_config/special.yml</code>，其格式如下：</p>
-<div class="highlight"><pre><span></span><code><span class="nt">routes</span><span class="p">:</span> <span class="c1"># Root key，保留</span>
-  <span class="nt">lugvpn</span><span class="p">:</span> <span class="c1"># /etc/systemd/network 中对应的 .network 文件名</span>
-    <span class="c1"># 下面是一个路由文件的配置，一个文件共享一个 table 和 gateway 设置</span>
-    <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">route-special</span> <span class="c1"># 将要创建的 .conf 文件名，可以随意</span>
-      <span class="nt">table</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Special</span> <span class="c1"># 路由表，即 ip route add table 后面的参数，数字或表名</span>
-      <span class="nt">gateway</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span> <span class="c1"># 是否包含网关，或者 ip route 的 via 参数</span>
-      <span class="nt">routes</span><span class="p">:</span> <span class="c1"># 所有的路由条目</span>
-        <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">1.2.3.4</span>
-        <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">5.6.7.8/28</span>
-        <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">2001:db8::2333/64</span>
-
-  <span class="nt">cernet</span><span class="p">:</span> <span class="c1"># 更多的配置</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">...</span>
+<p>最后启动服务：</p>
+<div class="highlight"><pre><span></span><code>sudo systemctl enable sniproxy@配置文件名.service
+sudo systemctl start sniproxy@配置文件名.service
 </code></pre></div>
-<p>修改 <code>special.yml</code> 之后重启 <code>route-all.service</code>。该服务会自动导致 <code>systemd-networkd.service</code> 重启并载入新的路由配置信息。</p>
-<details class="tips">
-<summary>special.rb 处理脚本（放在这备份）</summary>
-<div class="highlight"><pre><span></span><code><span class="ch">#!/usr/bin/ruby</span>
-
-<span class="nb">require</span> <span class="s1">&#39;fileutils&#39;</span>
-<span class="nb">require</span> <span class="s1">&#39;yaml&#39;</span>
-
-<span class="no">BASEDIR</span> <span class="o">=</span> <span class="s1">&#39;/run/systemd/network&#39;</span>
-<span class="no">RT_TABLES</span> <span class="o">=</span> <span class="s1">&#39;/etc/iproute2/rt_tables&#39;</span>
-
-<span class="n">rt_tables</span> <span class="o">=</span> <span class="no">Hash</span><span class="o">.</span><span class="n">new</span>
-<span class="no">File</span><span class="o">.</span><span class="n">readlines</span><span class="p">(</span><span class="no">RT_TABLES</span><span class="p">)</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">l</span><span class="o">|</span>
-  <span class="k">next</span> <span class="k">if</span> <span class="n">l</span> <span class="o">=~</span> <span class="sr">/^\s*#/</span>
-  <span class="nb">id</span><span class="p">,</span> <span class="nb">name</span> <span class="o">=</span> <span class="n">l</span><span class="o">.</span><span class="n">split</span>
-  <span class="n">rt_tables</span><span class="o">[</span><span class="nb">name</span><span class="o">]</span> <span class="o">=</span> <span class="nb">id</span>
-<span class="k">end</span>
-
-<span class="n">data</span> <span class="o">=</span> <span class="no">YAML</span><span class="o">.</span><span class="n">load_file</span> <span class="no">File</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">__dir__</span><span class="p">,</span> <span class="s1">&#39;special.yml&#39;</span><span class="p">)</span>
-<span class="n">data</span><span class="o">[</span><span class="s1">&#39;routes&#39;</span><span class="o">].</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">fn</span><span class="p">,</span> <span class="n">setups</span><span class="o">|</span>
-  <span class="n">confdir</span> <span class="o">=</span> <span class="no">File</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="no">BASEDIR</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">fn</span><span class="si">}</span><span class="s2">.network.d&quot;</span><span class="p">)</span>
-  <span class="no">FileUtils</span><span class="o">.</span><span class="n">mkdir_p</span> <span class="n">confdir</span>
-
-  <span class="n">setups</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">config</span><span class="o">|</span>
-    <span class="n">table</span> <span class="o">=</span> <span class="n">config</span><span class="o">[</span><span class="s1">&#39;table&#39;</span><span class="o">]</span>
-    <span class="n">gateway</span> <span class="o">=</span> <span class="n">config</span><span class="o">[</span><span class="s1">&#39;gateway&#39;</span><span class="o">]</span>
-    <span class="no">File</span><span class="o">.</span><span class="n">open</span> <span class="no">File</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">confdir</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">config</span><span class="o">[</span><span class="s1">&#39;name&#39;</span><span class="o">]</span><span class="si">}</span><span class="s2">.conf&quot;</span><span class="p">),</span> <span class="s1">&#39;w&#39;</span> <span class="k">do</span> <span class="o">|</span><span class="n">f</span><span class="o">|</span>
-      <span class="n">config</span><span class="o">[</span><span class="s1">&#39;routes&#39;</span><span class="o">].</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">dst</span><span class="o">|</span>
-        <span class="n">t</span> <span class="o">=</span> <span class="s2">&quot;[Route]</span><span class="se">\n</span><span class="s2">Destination=</span><span class="si">#{</span><span class="n">dst</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
-        <span class="n">t</span> <span class="o">+=</span> <span class="s2">&quot;Table=</span><span class="si">#{</span><span class="n">rt_tables</span><span class="o">.</span><span class="n">fetch</span> <span class="n">table</span><span class="p">,</span> <span class="n">table</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="k">if</span> <span class="n">table</span>
-        <span class="n">t</span> <span class="o">+=</span> <span class="s2">&quot;Gateway=</span><span class="si">#{</span><span class="n">gateway</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="k">if</span> <span class="n">gateway</span>
-        <span class="n">f</span><span class="o">.</span><span class="n">write</span> <span class="n">t</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
-      <span class="k">end</span>
-    <span class="k">end</span>
-  <span class="k">end</span>
-<span class="k">end</span>
-</code></pre></div>
-</details>
-<div class="admonition bug">
-<p class="admonition-title">route-all.service 有很多注意事项</p>
-<p>为了清理开机自动产生的 32766 和 32767 两条路由规则，我们同时为 <code>systemd-networkd.service</code> 添加了两个 <code>ExecStartPre</code> 如下：</p>
-<div class="highlight"><pre><span></span><code><span class="k">[Service]</span>
-<span class="na">ExecStartPre</span><span class="o">=</span><span class="s">-+/sbin/ip rule delete from all table main pref 32766</span>
-<span class="na">ExecStartPre</span><span class="o">=</span><span class="s">-+/sbin/ip rule delete from all table default pref 32767</span>
-</code></pre></div>
-<p>另附完整的 <code>route-all.service</code> 文件：</p>
-<div class="highlight"><pre><span></span><code><span class="k">[Unit]</span>
-<span class="na">Description</span><span class="o">=</span><span class="s">Generate routes for systemd-networkd</span>
-<span class="na">Before</span><span class="o">=</span><span class="s">systemd-networkd.service</span>
-
-<span class="k">[Service]</span>
-<span class="na">Type</span><span class="o">=</span><span class="s">oneshot</span>
-<span class="na">ExecStart</span><span class="o">=</span><span class="s">/bin/bash /usr/local/network_config/route-all.sh</span>
-<span class="na">ExecStart</span><span class="o">=</span><span class="s">/usr/local/network_config/special.rb</span>
-<span class="na">RemainAfterExit</span><span class="o">=</span><span class="s">true</span>
-
-<span class="k">[Install]</span>
-<span class="na">WantedBy</span><span class="o">=</span><span class="s">network.target systemd-networkd.service</span>
-<span class="na">Wants</span><span class="o">=</span><span class="s">systemd-networkd.service</span>
-</code></pre></div>
-</div>
 
               
             </article>
@@ -1773,7 +1710,7 @@ gen_route china.txt <span class="m">218</span>.104.71.161 unicom China <span cla
     <nav class="md-footer__inner md-grid" aria-label="页脚">
       
         
-        <a href="../" class="md-footer__link md-footer__link--prev" aria-label="上一页: Interfaces" rel="prev">
+        <a href="../route/" class="md-footer__link md-footer__link--prev" aria-label="上一页: Routing" rel="prev">
           <div class="md-footer__button md-icon">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
           </div>
@@ -1782,20 +1719,20 @@ gen_route china.txt <span class="m">218</span>.104.71.161 unicom China <span cla
               <span class="md-footer__direction">
                 上一页
               </span>
-              Interfaces
+              Routing
             </div>
           </div>
         </a>
       
       
         
-        <a href="../misc/" class="md-footer__link md-footer__link--next" aria-label="下一页: Misc" rel="next">
+        <a href="../../repos/" class="md-footer__link md-footer__link--next" aria-label="下一页: Repositories" rel="next">
           <div class="md-footer__title">
             <div class="md-ellipsis">
               <span class="md-footer__direction">
                 下一页
               </span>
-              Misc
+              Repositories
             </div>
           </div>
           <div class="md-footer__button md-icon">
