@@ -100,6 +100,7 @@ nav:
               - Networking:
                   - Interfaces: services/mirrors/4/networking/index.md
                   - Routing: services/mirrors/4/networking/route.md
+                  - Misc: services/mirrors/4/networking/misc.md
               - Repositories: services/mirrors/4/repos.md
           - Auxiliary (3): services/mirrors/3/index.md
           - Auxiliary (2):
