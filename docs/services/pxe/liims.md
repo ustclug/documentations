@@ -60,3 +60,5 @@ qemu -kernel /mnt/boot/vmlinuz-lts\
 <http://pxe.ustc.edu.cn:3000/>
 
 提供服务的是一个容器。
+
+添加新机器：修改 <https://github.com/ustclug/liimstrap/blob/master/monitor/clients.json> 后，在 pxe 上 clone 并在当前目录 build。使用 docker-run-script 中对应脚本执行容器即可。
