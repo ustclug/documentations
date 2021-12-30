@@ -48,4 +48,4 @@ The DigitalOcean account we use is owned by iBug and has nothing else running.
 
 !!! note "Plan B"
 
-    Hurricane Electric provides [hosted DNS](https://dns.he.net/) zones **for free**, which is also [supported by `acme.sh`](https://github.com/acmesh-official/acme.sh/wiki/dnsapi). This makes HE DNS a feasible alternative should our current Dependency (DigitalOcean) fails for whatever reason.
+    Hurricane Electric provides [hosted DNS](https://dns.he.net/) zones **for free**, which is also [supported by `acme.sh`](https://github.com/acmesh-official/acme.sh/wiki/dnsapi). This makes HE DNS a feasible alternative should our current dependency (DigitalOcean) fails for whatever reason.
