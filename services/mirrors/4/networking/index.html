@@ -1685,14 +1685,14 @@
 <p>Bond 用于将多个网卡聚合当作一个使用。</p>
 <h3 id="_1">子网卡<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h3>
 <p>向 <code>/etc/systemd/network/ens41f0.network</code> 写入如下内容：</p>
-<div class="highlight"><pre><span></span><code><span class="k">[Match]</span>
-<span class="na">Name</span><span class="o">=</span><span class="s">ens41f0</span>
+<div class="highlight"><pre><span></span><code><span class="k">[Match]</span><span class="w"></span>
+<span class="na">Name</span><span class="o">=</span><span class="s">ens41f0</span><span class="w"></span>
 
-<span class="k">[Network]</span>
-<span class="na">Bond</span><span class="o">=</span><span class="s">bond1</span>
+<span class="k">[Network]</span><span class="w"></span>
+<span class="na">Bond</span><span class="o">=</span><span class="s">bond1</span><span class="w"></span>
 
-<span class="k">[Link]</span>
-<span class="na">RequiredForOnline</span><span class="o">=</span><span class="s">no</span>
+<span class="k">[Link]</span><span class="w"></span>
+<span class="na">RequiredForOnline</span><span class="o">=</span><span class="s">no</span><span class="w"></span>
 </code></pre></div>
 <p>即可将其设置为 bond1 的一个子网卡。用同样方式把 ens41f1 也设为子网卡。</p>
 <div class="admonition info">
@@ -1701,25 +1701,25 @@
 </div>
 <h3 id="bond1">bond1 聚合网卡<a class="headerlink" href="#bond1" title="Permanent link">&para;</a></h3>
 <p>写入 <code>/etc/systemd/network/bond1.netdev</code>：</p>
-<div class="highlight"><pre><span></span><code><span class="k">[NetDev]</span>
-<span class="na">Name</span><span class="o">=</span><span class="s">bond1</span>
-<span class="na">Kind</span><span class="o">=</span><span class="s">bond</span>
+<div class="highlight"><pre><span></span><code><span class="k">[NetDev]</span><span class="w"></span>
+<span class="na">Name</span><span class="o">=</span><span class="s">bond1</span><span class="w"></span>
+<span class="na">Kind</span><span class="o">=</span><span class="s">bond</span><span class="w"></span>
 
-<span class="k">[Bond]</span>
-<span class="na">Mode</span><span class="o">=</span><span class="s">balance-tlb</span>
-<span class="na">MIIMonitorSec</span><span class="o">=</span><span class="s">1</span>
+<span class="k">[Bond]</span><span class="w"></span>
+<span class="na">Mode</span><span class="o">=</span><span class="s">balance-tlb</span><span class="w"></span>
+<span class="na">MIIMonitorSec</span><span class="o">=</span><span class="s">1</span><span class="w"></span>
 </code></pre></div>
 <p>关于 bond 模式（<code>balance-tlb</code> vs <code>balance-alb</code>），参考<a href="https://serverfault.com/a/739550/450575">这个 Server Fault 上的回答</a>。</p>
 <p>然后创建 VLAN，写入 <code>/etc/systemd/network/bond1.network</code>：</p>
-<div class="highlight"><pre><span></span><code><span class="k">[Match]</span>
-<span class="na">Name</span><span class="o">=</span><span class="s">bond1</span>
+<div class="highlight"><pre><span></span><code><span class="k">[Match]</span><span class="w"></span>
+<span class="na">Name</span><span class="o">=</span><span class="s">bond1</span><span class="w"></span>
 
-<span class="k">[Network]</span>
-<span class="na">DHCP</span><span class="o">=</span><span class="s">no</span>
-<span class="na">VLAN</span><span class="o">=</span><span class="s">cernet</span>
-<span class="na">VLAN</span><span class="o">=</span><span class="s">telecom</span>
-<span class="na">VLAN</span><span class="o">=</span><span class="s">mobile</span>
-<span class="na">VLAN</span><span class="o">=</span><span class="s">unicom</span>
+<span class="k">[Network]</span><span class="w"></span>
+<span class="na">DHCP</span><span class="o">=</span><span class="s">no</span><span class="w"></span>
+<span class="na">VLAN</span><span class="o">=</span><span class="s">cernet</span><span class="w"></span>
+<span class="na">VLAN</span><span class="o">=</span><span class="s">telecom</span><span class="w"></span>
+<span class="na">VLAN</span><span class="o">=</span><span class="s">mobile</span><span class="w"></span>
+<span class="na">VLAN</span><span class="o">=</span><span class="s">unicom</span><span class="w"></span>
 </code></pre></div>
 <h2 id="vlan">VLAN<a class="headerlink" href="#vlan" title="Permanent link">&para;</a></h2>
 <p>NIC 机房有 4 个 VLAN，分别是</p>
@@ -1732,27 +1732,27 @@
 <p>注意这几个网段都没有 DHCP，只有教育网 VLAN 有 IPv6 RA。</p>
 <p>下面以教育网 VLAN 为例。</p>
 <p>因为 VLAN 在物理上属于一个网卡，因此向对应网卡的 <code>.network</code> 文件的 <code>[Network]</code> 段追加一行（见上面一节 <code>bond1.network</code> 文件）：</p>
-<div class="highlight"><pre><span></span><code><span class="na">VLAN</span><span class="o">=</span><span class="s">cernet</span>
+<div class="highlight"><pre><span></span><code><span class="na">VLAN</span><span class="o">=</span><span class="s">cernet</span><span class="w"></span>
 </code></pre></div>
 <p>创建 VLAN 界面，创建 <code>cernet.netdev</code> 并写入</p>
-<div class="highlight"><pre><span></span><code><span class="k">[NetDev]</span>
-<span class="na">Name</span><span class="o">=</span><span class="s">cernet</span>
-<span class="na">Kind</span><span class="o">=</span><span class="s">vlan</span>
+<div class="highlight"><pre><span></span><code><span class="k">[NetDev]</span><span class="w"></span>
+<span class="na">Name</span><span class="o">=</span><span class="s">cernet</span><span class="w"></span>
+<span class="na">Kind</span><span class="o">=</span><span class="s">vlan</span><span class="w"></span>
 
-<span class="k">[VLAN]</span>
-<span class="na">Id</span><span class="o">=</span><span class="s">95</span>
+<span class="k">[VLAN]</span><span class="w"></span>
+<span class="na">Id</span><span class="o">=</span><span class="s">95</span><span class="w"></span>
 </code></pre></div>
 <p>然后就可以指定 IP 地址等具体信息了，创建一个名字相同，后缀换成 <code>.network</code> 的文件并写入</p>
-<div class="highlight"><pre><span></span><code><span class="k">[Match]</span>
-<span class="na">Name</span><span class="o">=</span><span class="s">cernet</span>
+<div class="highlight"><pre><span></span><code><span class="k">[Match]</span><span class="w"></span>
+<span class="na">Name</span><span class="o">=</span><span class="s">cernet</span><span class="w"></span>
 
-<span class="k">[Network]</span>
-<span class="na">DHCP</span><span class="o">=</span><span class="s">no</span>
-<span class="na">Address</span><span class="o">=</span><span class="s">202.38.95.110/25</span>
-<span class="c1">#Gateway=202.38.95.126</span>
-<span class="na">Address</span><span class="o">=</span><span class="s">2001:da8:d800:95::110/64</span>
-<span class="c1">#Gateway=2001:da8:d800:95::1</span>
-<span class="na">IPv6AcceptRA</span><span class="o">=</span><span class="s">false</span>
+<span class="k">[Network]</span><span class="w"></span>
+<span class="na">DHCP</span><span class="o">=</span><span class="s">no</span><span class="w"></span>
+<span class="na">Address</span><span class="o">=</span><span class="s">202.38.95.110/25</span><span class="w"></span>
+<span class="c1">#Gateway=202.38.95.126</span><span class="w"></span>
+<span class="na">Address</span><span class="o">=</span><span class="s">2001:da8:d800:95::110/64</span><span class="w"></span>
+<span class="c1">#Gateway=2001:da8:d800:95::1</span><span class="w"></span>
+<span class="na">IPv6AcceptRA</span><span class="o">=</span><span class="s">false</span><span class="w"></span>
 </code></pre></div>
 <p>保存后重启 <code>systemd-networkd.service</code> 就可以看到效果了。</p>
 <div class="admonition question">

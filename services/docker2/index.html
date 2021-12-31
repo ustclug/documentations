@@ -1674,24 +1674,24 @@
 <p>出于未知原因有时候外部主机会无法主动连通 Docker 容器（可能与 ARP 有关），但是如果某个容器先 ping 了一下外部主机，就能双向连通了。</p>
 <p>由于我们暂未找到正常的解决方案，因此使用 “ping daemon” 作为一个 workaround，在容器中运行 ping 保持外部主机的连通性。</p>
 <p>Systemd 服务 <code>docker-pingd@.service</code>:</p>
-<div class="highlight"><pre><span></span><code><span class="k">[Unit]</span>
-<span class="na">Description</span><span class="o">=</span><span class="s">Docker pingd service %I</span>
-<span class="na">Documentation</span><span class="o">=</span><span class="s">man:ping(8)</span>
-<span class="na">After</span><span class="o">=</span><span class="s">network.target</span>
-<span class="na">StartLimitIntervalSec</span><span class="o">=</span><span class="s">0</span>
+<div class="highlight"><pre><span></span><code><span class="k">[Unit]</span><span class="w"></span>
+<span class="na">Description</span><span class="o">=</span><span class="s">Docker pingd service %I</span><span class="w"></span>
+<span class="na">Documentation</span><span class="o">=</span><span class="s">man:ping(8)</span><span class="w"></span>
+<span class="na">After</span><span class="o">=</span><span class="s">network.target</span><span class="w"></span>
+<span class="na">StartLimitIntervalSec</span><span class="o">=</span><span class="s">0</span><span class="w"></span>
 
-<span class="k">[Service]</span>
-<span class="na">Type</span><span class="o">=</span><span class="s">simple</span>
-<span class="na">User</span><span class="o">=</span><span class="s">root</span>
-<span class="na">Group</span><span class="o">=</span><span class="s">root</span>
-<span class="na">ExecStart</span><span class="o">=</span><span class="s">/bin/sh -c &#39;IVAR=&quot;%i&quot;; exec /usr/bin/docker exec &quot;$${IVAR%:*}&quot; ping -q -s 32 &quot;$${IVAR#*:}&quot;&#39;</span>
-<span class="na">ExecStop</span><span class="o">=</span><span class="s">/bin/kill -s INT $MAINPID</span>
-<span class="na">Restart</span><span class="o">=</span><span class="s">on-failure</span>
-<span class="na">RestartSec</span><span class="o">=</span><span class="s">3</span>
+<span class="k">[Service]</span><span class="w"></span>
+<span class="na">Type</span><span class="o">=</span><span class="s">simple</span><span class="w"></span>
+<span class="na">User</span><span class="o">=</span><span class="s">root</span><span class="w"></span>
+<span class="na">Group</span><span class="o">=</span><span class="s">root</span><span class="w"></span>
+<span class="na">ExecStart</span><span class="o">=</span><span class="s">/bin/sh -c &#39;IVAR=&quot;%i&quot;; exec /usr/bin/docker exec &quot;$${IVAR%:*}&quot; ping -q -s 32 &quot;$${IVAR#*:}&quot;&#39;</span><span class="w"></span>
+<span class="na">ExecStop</span><span class="o">=</span><span class="s">/bin/kill -s INT $MAINPID</span><span class="w"></span>
+<span class="na">Restart</span><span class="o">=</span><span class="s">on-failure</span><span class="w"></span>
+<span class="na">RestartSec</span><span class="o">=</span><span class="s">3</span><span class="w"></span>
 
-<span class="k">[Install]</span>
-<span class="na">WantedBy</span><span class="o">=</span><span class="s">multi-user.target</span>
-<span class="na">Alias</span><span class="o">=</span><span class="s">docker-ping@.service</span>
+<span class="k">[Install]</span><span class="w"></span>
+<span class="na">WantedBy</span><span class="o">=</span><span class="s">multi-user.target</span><span class="w"></span>
+<span class="na">Alias</span><span class="o">=</span><span class="s">docker-ping@.service</span><span class="w"></span>
 </code></pre></div>
 <p>使用方式：<code>systemctl enable docker-pingd@container:host.service</code>，<code>container</code> 换成容器名，<code>host</code> 换成 ping 的目标。</p>
 <p>Trick 介绍：Systemd service 配置暂不支持多个模板参数 <code>%i</code>，因此调用 shell 来解析参数。Ref: <a href="https://github.com/systemd/systemd/issues/14895#issuecomment-612270690">https://github.com/systemd/systemd/issues/14895#issuecomment-612270690</a></p>
@@ -1712,7 +1712,7 @@ sudo -u www-data -- wp core update --version=5.8.1 /tmp/wordpress-5.8.1.zip
 <li>文件 <code>wp-admin/includes/update.php</code>，将函数 <code>get_core_checksums()</code> 中对应的部分修改为 <code>$doing_cron ? 30 : 30</code>。</li>
 </ul>
 <p>如果出现「另一更新正在运行」，且确认不在更新，可以在数据库的 <code>wordpress</code> 表中执行：</p>
-<div class="highlight"><pre><span></span><code><span class="k">delete</span> <span class="k">from</span> <span class="n">wp_options</span> <span class="k">where</span> <span class="n">option_name</span><span class="o">=</span><span class="s1">&#39;core_updater.lock&#39;</span><span class="p">;</span>
+<div class="highlight"><pre><span></span><code><span class="k">delete</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">wp_options</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">option_name</span><span class="o">=</span><span class="s1">&#39;core_updater.lock&#39;</span><span class="p">;</span><span class="w"></span>
 </code></pre></div>
 <h3 id="docker">看起来正在运行但是没有进程的 Docker 容器<a class="headerlink" href="#docker" title="Permanent link">&para;</a></h3>
 <p>2021/10/25 发现某容器显示正在运行，但是实际没有进程。后发现为 Docker 的 bug，在容器进程被 cgroups 干掉之后可能会出现此情况。</p>

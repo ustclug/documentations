@@ -2012,43 +2012,43 @@ sudoers:        files ldap
 <p>Sudo 的配置是通过 sssd 实现的，参考 <a href="https://access.redhat.com/site/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Deployment_Guide/sssd-ldap-sudo.html">https://access.redhat.com/site/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Deployment_Guide/sssd-ldap-sudo.html</a></p>
 <p>安装 sssd libsss_sudo
 将 <code>/usr/share/doc/sssd-common/sssd-example.conf</code> 复制到 <code>/etc/sssd/sssd.conf</code> 并修改权限为 600。</p>
-<div class="highlight"><pre><span></span><code>[taoky@gateway-nic ~]$ sudo diff /usr/share/doc/sssd-common/sssd-example.conf /etc/sssd/sssd.conf
-3c3
-&lt; services = nss, pam
-<span class="gd">---</span>
-&gt; services = nss, pam, sudo
-8c8
-&lt; ; domains = LDAP
-<span class="gd">---</span>
-&gt; domains = LDAP
-13a14,15
-&gt; [sudo]
-&gt;
-15,17c17,19
-&lt; ; [domain/LDAP]
-&lt; ; id_provider = ldap
-&lt; ; auth_provider = ldap
-<span class="gd">---</span>
-&gt; [domain/LDAP]
-&gt; id_provider = ldap
-&gt; auth_provider = ldap
-22,24c24,27
-&lt; ; ldap_schema = rfc2307
-&lt; ; ldap_uri = ldap://ldap.mydomain.org
-&lt; ; ldap_search_base = dc=mydomain,dc=org
-<span class="gd">---</span>
-&gt; ldap_schema = rfc2307
-&gt; ldap_uri = ldaps://ldap.lug.ustc.edu.cn
-&gt; ldap_search_base = dc=lug,dc=ustc,dc=edu,dc=cn
-&gt; ldap_sudo_search_base = ou=sudoers,dc=lug,dc=ustc,dc=edu,dc=cn
-30c33
-&lt; ; cache_credentials = true
-<span class="gd">---</span>
-&gt; cache_credentials = true
-35c38
-&lt; # you must install Microsoft Services For UNIX and map LDAP attributes onto
-<span class="gd">---</span>
-&gt; # you must install Microsoft Services For Unix and map LDAP attributes onto
+<div class="highlight"><pre><span></span><code><span class="w">[taoky@gateway-nic ~]$ sudo diff /usr/share/doc/sssd-common/sssd-example.conf /etc/sssd/sssd.conf</span>
+<span class="w">3c3</span>
+<span class="w">&lt; services = nss, pam</span>
+<span class="gd">---</span><span class="w"></span>
+<span class="w">&gt; services = nss, pam, sudo</span>
+<span class="w">8c8</span>
+<span class="w">&lt; ; domains = LDAP</span>
+<span class="gd">---</span><span class="w"></span>
+<span class="w">&gt; domains = LDAP</span>
+<span class="w">13a14,15</span>
+<span class="w">&gt; [sudo]</span>
+<span class="w">&gt;</span>
+<span class="w">15,17c17,19</span>
+<span class="w">&lt; ; [domain/LDAP]</span>
+<span class="w">&lt; ; id_provider = ldap</span>
+<span class="w">&lt; ; auth_provider = ldap</span>
+<span class="gd">---</span><span class="w"></span>
+<span class="w">&gt; [domain/LDAP]</span>
+<span class="w">&gt; id_provider = ldap</span>
+<span class="w">&gt; auth_provider = ldap</span>
+<span class="w">22,24c24,27</span>
+<span class="w">&lt; ; ldap_schema = rfc2307</span>
+<span class="w">&lt; ; ldap_uri = ldap://ldap.mydomain.org</span>
+<span class="w">&lt; ; ldap_search_base = dc=mydomain,dc=org</span>
+<span class="gd">---</span><span class="w"></span>
+<span class="w">&gt; ldap_schema = rfc2307</span>
+<span class="w">&gt; ldap_uri = ldaps://ldap.lug.ustc.edu.cn</span>
+<span class="w">&gt; ldap_search_base = dc=lug,dc=ustc,dc=edu,dc=cn</span>
+<span class="w">&gt; ldap_sudo_search_base = ou=sudoers,dc=lug,dc=ustc,dc=edu,dc=cn</span>
+<span class="w">30c33</span>
+<span class="w">&lt; ; cache_credentials = true</span>
+<span class="gd">---</span><span class="w"></span>
+<span class="w">&gt; cache_credentials = true</span>
+<span class="w">35c38</span>
+<span class="w">&lt; # you must install Microsoft Services For UNIX and map LDAP attributes onto</span>
+<span class="gd">---</span><span class="w"></span>
+<span class="w">&gt; # you must install Microsoft Services For Unix and map LDAP attributes onto</span>
 </code></pre></div>
 <div class="admonition danger">
 <p class="admonition-title">坑</p>
