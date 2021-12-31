@@ -20,7 +20,7 @@ docker2 原先使用 QEMU 直接运行在 mirrors2 上，下层存储为 ZFS Zvo
 
 迁移时需要保证完整性的主要内容就是虚拟机内的业务，因此需要在主机间传输的内容就是虚拟磁盘，其他配置（CPU、内存、网卡等）都可以直接在新平台上创建新虚拟机时修改。原本我们打算使用 rsync 或者 dd 的方式复制磁盘，但是考虑到两边都是 ZFS，使用 `zfs send` 是一个更好的方案。
 
-我们在 pve-5 上运行 `nc -l -p 9999 </dev/null | pv | zfs recv rpool/data/docker2`，然后在 mirrors2 上对 zvol 先打个快照，运行 `zfs send pool0/qemu/docker2@20211230 > /dev/tcp/{pve-5}/9999` 将快照内容发送到 pve-5 上（300 GiB 的数据花费了 16 小时），然后再将 docker2 关机并增量传输，`zfs send -i @20211230 pool0/qemu/docker2 > /dev/tcp/{pve-5}/9999`。同时我们在 Proxmox 的 web 界面上创建一个新虚拟机，配好 CPU 内存网卡等，分配 300 GiB 的硬盘。
+我们在 pve-5 上运行 `nc -l -p 9999 </dev/null | pv | zfs recv rpool/data/docker2`，然后在 mirrors2 上对 zvol 先打个快照，运行 `zfs send pool0/qemu/docker2@20211230 > /dev/tcp/{pve-5}/9999` 将快照内容发送到 pve-5 上（300 GiB 的数据花费了 16 小时），然后再将 docker2 关机并增量传输，`zfs send -i @20211230 pool0/qemu/docker2 > /dev/tcp/{pve-5}/9999`（增量传输只发送了 10 GB 数据）。同时我们在 Proxmox 的 web 界面上创建一个新虚拟机，配好 CPU 内存网卡等，分配 300 GiB 的硬盘。
 
 由于 zfs send 是原样发送的，因此接收到的 zvol 硬盘占用量仍然有 712 GB。Proxmox 新建的 zvol 参数就比较合理（`volblocksize=16k`），没有严重放大的问题，因此我们再将接收到的 zvol 给 dd 进新虚拟机的 zvol 而不是直接使用。dd 结果约 345 GiB（十分合理），开机进系统运行 fstrim 之后占用量约为 240 GiB（更加合理了）。
 
