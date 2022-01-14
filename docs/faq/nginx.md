@@ -24,3 +24,7 @@
     tmpfs   /tmp/mem    tmpfs   0   0
 
 如果创建/挂载了 /tmp/mem 后，启动仍然出错，则需要检查 openresty.service/nginx.service 文件中是否包含 `PrivateTmp=yes`。如果包含，则需要 `systemctl edit`，将此项设置为 `false`。
+
+!! warning "fstab 与 systemd"
+
+    调整 fstab 之后，需要执行 `systemctl daemon-reload`，否则 systemd 可能会在第二日凌晨挂载已被注释的磁盘项。
