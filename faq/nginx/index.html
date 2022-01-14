@@ -1645,9 +1645,10 @@
 </code></pre></div>
 
 <p>如果创建/挂载了 /tmp/mem 后，启动仍然出错，则需要检查 openresty.service/nginx.service 文件中是否包含 <code>PrivateTmp=yes</code>。如果包含，则需要 <code>systemctl edit</code>，将此项设置为 <code>false</code>。</p>
-<p>!! warning "fstab 与 systemd"</p>
-<div class="codehilite"><pre><span></span><code><span class="err">调整</span><span class="w"> </span><span class="n">fstab</span><span class="w"> </span><span class="err">之后，需要执行</span><span class="w"> </span><span class="err">`</span><span class="n">systemctl</span><span class="w"> </span><span class="n">daemon</span><span class="o">-</span><span class="n">reload</span><span class="err">`，否则</span><span class="w"> </span><span class="n">systemd</span><span class="w"> </span><span class="err">可能会在第二日凌晨挂载已被注释的磁盘项。</span><span class="w"></span>
-</code></pre></div>
+<div class="admonition warning">
+<p class="admonition-title">fstab 与 systemd</p>
+<p>调整 fstab 之后，需要执行 <code>systemctl daemon-reload</code>，否则 systemd 可能会在第二日凌晨挂载已被注释的磁盘项。</p>
+</div>
 
               
             </article>
