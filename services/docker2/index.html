@@ -1222,6 +1222,20 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#network-interfaces" class="md-nav__link">
+    Network interfaces
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#docker-daemon-service" class="md-nav__link">
+    Docker daemon service
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#docker-pingd" class="md-nav__link">
     Docker "pingd"
   </a>
@@ -1623,6 +1637,20 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#network-interfaces" class="md-nav__link">
+    Network interfaces
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#docker-daemon-service" class="md-nav__link">
+    Docker daemon service
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#docker-pingd" class="md-nav__link">
     Docker "pingd"
   </a>
@@ -1668,9 +1696,26 @@
 <h1 id="docker-services">Docker services<a class="headerlink" href="#docker-services" title="Permanent link">&para;</a></h1>
 <p>Server: docker2.s.ustclug.org</p>
 <h2 id="special-configurations">Special configurations<a class="headerlink" href="#special-configurations" title="Permanent link">&para;</a></h2>
+<h3 id="network-interfaces">Network interfaces<a class="headerlink" href="#network-interfaces" title="Permanent link">&para;</a></h3>
+<p>We use udev rules to assign consistent names to network interfaces, identified by their MAC addresses.</p>
+<div class="highlight"><span class="filename">/etc/udev/rules.d/70-persistent-net.rules</span><pre><span></span><code><span class="na">SUBSYSTEM</span><span class="o">=</span><span class="s">=&quot;net&quot;, ACTION==&quot;add&quot;, DRIVERS==&quot;?*&quot;, ATTR{address}==&quot;00:50:56:9f:00:22&quot;, NAME=&quot;Telecom&quot;</span><span class="w"></span>
+<span class="na">SUBSYSTEM</span><span class="o">=</span><span class="s">=&quot;net&quot;, ACTION==&quot;add&quot;, DRIVERS==&quot;?*&quot;, ATTR{address}==&quot;00:50:56:9f:00:5b&quot;, NAME=&quot;Mobile&quot;</span><span class="w"></span>
+<span class="na">SUBSYSTEM</span><span class="o">=</span><span class="s">=&quot;net&quot;, ACTION==&quot;add&quot;, DRIVERS==&quot;?*&quot;, ATTR{address}==&quot;00:50:56:9f:00:5d&quot;, NAME=&quot;Policy&quot;</span><span class="w"></span>
+</code></pre></div>
+<h3 id="docker-daemon-service">Docker daemon service<a class="headerlink" href="#docker-daemon-service" title="Permanent link">&para;</a></h3>
+<p>docker2 上面的 Docker 使用 macvlan 来将虚拟机接入 lugi 内网，因此将 macvlan 的主端口 Policy 配置为 <code>docker.service</code> 的强依赖。</p>
+<p><code>systemctl edit docker.service</code> 内容：</p>
+<div class="highlight"><pre><span></span><code><span class="k">[Unit]</span><span class="w"></span>
+<span class="na">After</span><span class="o">=</span><span class="s">sys-subsystem-net-devices-Policy.device</span><span class="w"></span>
+<span class="na">BindsTo</span><span class="o">=</span><span class="s">sys-subsystem-net-devices-Policy.device</span><span class="w"></span>
+</code></pre></div>
+<p>实际上 <code>After=network-online.target</code> 就够了，但是出于历史原因使用了 <code>BindsTo</code>，这是因为 docker2 曾经单独运行 tinc 接入内网，而 tinc 的端口只在 tinc 启动后才会出现（才能分出 macvlan 子端口），因此使用 <code>BindsTo</code> 保证 docker 随该端口的出现和消失而启动/停止。</p>
+<p>2022 年 1 月 15 日以后 docker2 与其他虚拟机一样通过 gateway-nic 桥接的 tinc 接入内网，不再单独运行 tinc。</p>
 <h3 id="docker-pingd">Docker "pingd"<a class="headerlink" href="#docker-pingd" title="Permanent link">&para;</a></h3>
-<p><strong>更新：问题已经查明为 Debian 的 Linux 内核 bug (<a href="https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=952660">https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=952660</a>)，已经通过更新内核并重启而解决。以下内容仅作存档。</strong></p>
-<hr />
+<div class="admonition tip">
+<p class="admonition-title">更新</p>
+<p>问题已经查明为 Debian 的 Linux 内核 bug (<a href="https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=952660">https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=952660</a>)，已经通过更新内核并重启而解决。<strong>以下内容仅作存档。</strong></p>
+</div>
 <p>出于未知原因有时候外部主机会无法主动连通 Docker 容器（可能与 ARP 有关），但是如果某个容器先 ping 了一下外部主机，就能双向连通了。</p>
 <p>由于我们暂未找到正常的解决方案，因此使用 “ping daemon” 作为一个 workaround，在容器中运行 ping 保持外部主机的连通性。</p>
 <p>Systemd 服务 <code>docker-pingd@.service</code>:</p>
@@ -1701,8 +1746,8 @@
 <p>推荐使用 https://wp-cli.org/#installing。命令：</p>
 <div class="highlight"><pre><span></span><code>chmod +x wp-cli.phar
 mv wp-cli.phar /usr/local/bin/wp
-cd /var/www/public/
-sudo -u www-data -- wp core update --version=5.8.1 /tmp/wordpress-5.8.1.zip
+<span class="nb">cd</span> /var/www/public/
+sudo -u www-data -- wp core update --version<span class="o">=</span><span class="m">5</span>.8.1 /tmp/wordpress-5.8.1.zip
 </code></pre></div>
 <p>容器里 sudo 要手动装。</p>
 <p>以下内容仅供参考。</p>
@@ -1712,7 +1757,7 @@ sudo -u www-data -- wp core update --version=5.8.1 /tmp/wordpress-5.8.1.zip
 <li>文件 <code>wp-admin/includes/update.php</code>，将函数 <code>get_core_checksums()</code> 中对应的部分修改为 <code>$doing_cron ? 30 : 30</code>。</li>
 </ul>
 <p>如果出现「另一更新正在运行」，且确认不在更新，可以在数据库的 <code>wordpress</code> 表中执行：</p>
-<div class="highlight"><pre><span></span><code><span class="k">delete</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">wp_options</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">option_name</span><span class="o">=</span><span class="s1">&#39;core_updater.lock&#39;</span><span class="p">;</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="k">DELETE</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">wp_options</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">option_name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;core_updater.lock&#39;</span><span class="p">;</span><span class="w"></span>
 </code></pre></div>
 <h3 id="docker">看起来正在运行但是没有进程的 Docker 容器<a class="headerlink" href="#docker" title="Permanent link">&para;</a></h3>
 <p>2021/10/25 发现某容器显示正在运行，但是实际没有进程。后发现为 Docker 的 bug，在容器进程被 cgroups 干掉之后可能会出现此情况。</p>
