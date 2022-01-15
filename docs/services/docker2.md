@@ -4,11 +4,35 @@ Server: docker2.s.ustclug.org
 
 ## Special configurations
 
+### Network interfaces
+
+We use udev rules to assign consistent names to network interfaces, identified by their MAC addresses.
+
+```ini title="/etc/udev/rules.d/70-persistent-net.rules"
+SUBSYSTEM=="net", ACTION=="add", DRIVERS=="?*", ATTR{address}=="00:50:56:9f:00:22", NAME="Telecom"
+SUBSYSTEM=="net", ACTION=="add", DRIVERS=="?*", ATTR{address}=="00:50:56:9f:00:5b", NAME="Mobile"
+SUBSYSTEM=="net", ACTION=="add", DRIVERS=="?*", ATTR{address}=="00:50:56:9f:00:5d", NAME="Policy"
+```
+
+### Docker daemon service
+
+docker2 上面的 Docker 使用 macvlan 来将虚拟机接入 lugi 内网，因此将 macvlan 的主端口 Policy 配置为 `docker.service` 的强依赖。
+
+```ini title="systemctl edit docker.service"
+[Unit]
+After=sys-subsystem-net-devices-Policy.device
+BindsTo=sys-subsystem-net-devices-Policy.device
+```
+
+实际上 `After=network-online.target` 就够了，但是出于历史原因使用了 `BindsTo`，这是因为 docker2 曾经单独运行 tinc 接入内网，而 tinc 的端口只在 tinc 启动后才会出现（才能分出 macvlan 子端口），因此使用 `BindsTo` 保证 docker 随该端口的出现和消失而启动/停止。
+
+2022 年 1 月 15 日以后 docker2 与其他虚拟机一样通过 gateway-nic 桥接的 tinc 接入内网，不再单独运行 tinc。
+
 ### Docker "pingd"
 
-**更新：问题已经查明为 Debian 的 Linux 内核 bug (<https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=952660>)，已经通过更新内核并重启而解决。以下内容仅作存档。**
+!!! tip "更新"
 
----
+    问题已经查明为 Debian 的 Linux 内核 bug (<https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=952660>)，已经通过更新内核并重启而解决。**以下内容仅作存档。**
 
 出于未知原因有时候外部主机会无法主动连通 Docker 容器（可能与 ARP 有关），但是如果某个容器先 ping 了一下外部主机，就能双向连通了。
 
@@ -49,7 +73,7 @@ servers 与旧 planet 使用 WordPress，托管在 docker2 上。因为 docker2 
 
 推荐使用 https://wp-cli.org/#installing。命令：
 
-```
+```shell
 chmod +x wp-cli.phar
 mv wp-cli.phar /usr/local/bin/wp
 cd /var/www/public/
@@ -68,7 +92,7 @@ sudo -u www-data -- wp core update --version=5.8.1 /tmp/wordpress-5.8.1.zip
 如果出现「另一更新正在运行」，且确认不在更新，可以在数据库的 `wordpress` 表中执行：
 
 ```sql
-delete from wp_options where option_name='core_updater.lock';
+DELETE FROM wp_options WHERE option_name = 'core_updater.lock';
 ```
 
 ### 看起来正在运行但是没有进程的 Docker 容器
