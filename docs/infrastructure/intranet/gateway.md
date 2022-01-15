@@ -53,8 +53,7 @@ Here `192.168.252.17` is the local server of tunnel, and `192.168.253.17` is the
 
 Let's check `/etc/network/interfaces.d`:
 
-```
-$ cat /etc/network/interfaces.d/03ExtraDemoTunnel
+``` title="/etc/network/interfaces.d/03ExtraDemoTunnel"
 auto ExtraDemoTunnel
 iface ExtraDemoTunnel inet static
 	address 192.168.252.17

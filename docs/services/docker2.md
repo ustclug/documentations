@@ -38,9 +38,7 @@ BindsTo=sys-subsystem-net-devices-Policy.device
 
 由于我们暂未找到正常的解决方案，因此使用 “ping daemon” 作为一个 workaround，在容器中运行 ping 保持外部主机的连通性。
 
-Systemd 服务 `docker-pingd@.service`:
-
-```ini
+```ini title="docker-pingd@.service"
 [Unit]
 Description=Docker pingd service %I
 Documentation=man:ping(8)
@@ -71,7 +69,7 @@ tky: 很麻烦，建议 lug 以后再也别用（别开新的）wordpress 了。
 
 servers 与旧 planet 使用 WordPress，托管在 docker2 上。因为 docker2 现在磁盘 IO 很慢，所以可能会出现一些额外的问题。
 
-推荐使用 https://wp-cli.org/#installing。命令：
+推荐使用 <https://wp-cli.org/#installing>。命令：
 
 ```shell
 chmod +x wp-cli.phar
