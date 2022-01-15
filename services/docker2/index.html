@@ -1717,8 +1717,7 @@
 </div>
 <p>出于未知原因有时候外部主机会无法主动连通 Docker 容器（可能与 ARP 有关），但是如果某个容器先 ping 了一下外部主机，就能双向连通了。</p>
 <p>由于我们暂未找到正常的解决方案，因此使用 “ping daemon” 作为一个 workaround，在容器中运行 ping 保持外部主机的连通性。</p>
-<p>Systemd 服务 <code>docker-pingd@.service</code>:</p>
-<div class="highlight"><pre><span></span><code><span class="k">[Unit]</span><span class="w"></span>
+<div class="highlight"><span class="filename">docker-pingd@.service</span><pre><span></span><code><span class="k">[Unit]</span><span class="w"></span>
 <span class="na">Description</span><span class="o">=</span><span class="s">Docker pingd service %I</span><span class="w"></span>
 <span class="na">Documentation</span><span class="o">=</span><span class="s">man:ping(8)</span><span class="w"></span>
 <span class="na">After</span><span class="o">=</span><span class="s">network.target</span><span class="w"></span>
@@ -1742,7 +1741,7 @@
 <h3 id="wordpress">WordPress 升级<a class="headerlink" href="#wordpress" title="Permanent link">&para;</a></h3>
 <p>tky: 很麻烦，建议 lug 以后再也别用（别开新的）wordpress 了。</p>
 <p>servers 与旧 planet 使用 WordPress，托管在 docker2 上。因为 docker2 现在磁盘 IO 很慢，所以可能会出现一些额外的问题。</p>
-<p>推荐使用 https://wp-cli.org/#installing。命令：</p>
+<p>推荐使用 <a href="https://wp-cli.org/#installing">https://wp-cli.org/#installing</a>。命令：</p>
 <div class="highlight"><pre><span></span><code>chmod +x wp-cli.phar
 mv wp-cli.phar /usr/local/bin/wp
 <span class="nb">cd</span> /var/www/public/

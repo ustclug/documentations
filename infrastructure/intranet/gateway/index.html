@@ -1700,8 +1700,7 @@
 </code></pre></div>
 <p>Here <code>192.168.252.17</code> is the local server of tunnel, and <code>192.168.253.17</code> is the remote server.</p>
 <p>Let's check <code>/etc/network/interfaces.d</code>:</p>
-<div class="highlight"><pre><span></span><code>$ cat /etc/network/interfaces.d/03ExtraDemoTunnel
-auto ExtraDemoTunnel
+<div class="highlight"><span class="filename">/etc/network/interfaces.d/03ExtraDemoTunnel</span><pre><span></span><code>auto ExtraDemoTunnel
 iface ExtraDemoTunnel inet static
     address 192.168.252.17
     netmask 255.255.255.255
