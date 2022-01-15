@@ -1704,8 +1704,7 @@
 </code></pre></div>
 <h3 id="docker-daemon-service">Docker daemon service<a class="headerlink" href="#docker-daemon-service" title="Permanent link">&para;</a></h3>
 <p>docker2 上面的 Docker 使用 macvlan 来将虚拟机接入 lugi 内网，因此将 macvlan 的主端口 Policy 配置为 <code>docker.service</code> 的强依赖。</p>
-<p><code>systemctl edit docker.service</code> 内容：</p>
-<div class="highlight"><pre><span></span><code><span class="k">[Unit]</span><span class="w"></span>
+<div class="highlight"><span class="filename">systemctl edit docker.service</span><pre><span></span><code><span class="k">[Unit]</span><span class="w"></span>
 <span class="na">After</span><span class="o">=</span><span class="s">sys-subsystem-net-devices-Policy.device</span><span class="w"></span>
 <span class="na">BindsTo</span><span class="o">=</span><span class="s">sys-subsystem-net-devices-Policy.device</span><span class="w"></span>
 </code></pre></div>
