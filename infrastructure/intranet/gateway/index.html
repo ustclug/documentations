@@ -70,7 +70,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#gateway-troubleshooting" class="md-skip">
+        <a href="#intranet-gateway" class="md-skip">
           跳转至
         </a>
       
@@ -437,74 +437,9 @@
         
       
       
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          Gateway
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
       <a href="./" class="md-nav__link md-nav__link--active">
         Gateway
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="目录">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      目录
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#east-campus-library-gateway-gateway-el" class="md-nav__link">
-    East Campus Library Gateway (gateway-el)
-  </a>
-  
-    <nav class="md-nav" aria-label="East Campus Library Gateway (gateway-el)">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#ip-virtual-server" class="md-nav__link">
-    IP Virtual Server
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#tunnelmonitor" class="md-nav__link">
-    tunnelmonitor
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#iptables-mangle-rt_tables-and-ip-rule" class="md-nav__link">
-    iptables mangle, rt_tables and ip rule
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#network-information-center-gateway-gateway-nic" class="md-nav__link">
-    Network Information Center Gateway (gateway-nic)
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
       
     </li>
   
@@ -1617,55 +1552,6 @@
     
   
   
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      目录
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#east-campus-library-gateway-gateway-el" class="md-nav__link">
-    East Campus Library Gateway (gateway-el)
-  </a>
-  
-    <nav class="md-nav" aria-label="East Campus Library Gateway (gateway-el)">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#ip-virtual-server" class="md-nav__link">
-    IP Virtual Server
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#tunnelmonitor" class="md-nav__link">
-    tunnelmonitor
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#iptables-mangle-rt_tables-and-ip-rule" class="md-nav__link">
-    iptables mangle, rt_tables and ip rule
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#network-information-center-gateway-gateway-nic" class="md-nav__link">
-    Network Information Center Gateway (gateway-nic)
-  </a>
-  
-</li>
-      
-    </ul>
-  
 </nav>
                   </div>
                 </div>
@@ -1681,59 +1567,20 @@
 </a>
 
 
-<h1 id="gateway-troubleshooting">Gateway troubleshooting<a class="headerlink" href="#gateway-troubleshooting" title="Permanent link">&para;</a></h1>
-<h2 id="east-campus-library-gateway-gateway-el">East Campus Library Gateway (<code>gateway-el</code>)<a class="headerlink" href="#east-campus-library-gateway-gateway-el" title="Permanent link">&para;</a></h2>
-<div class="admonition todo">
-<p class="admonition-title">Todo</p>
-<p>Currently <code>systemctl restart networking</code> is required after a reboot to set up tunnel. This bug should be fixed.</p>
-</div>
-<h3 id="ip-virtual-server">IP Virtual Server<a class="headerlink" href="#ip-virtual-server" title="Permanent link">&para;</a></h3>
-<p>gateway-el uses IPVS to send requests from one port to other machines directly. IPVS is a Linux kernel feature. Use <code>ipvsadm -Ln</code> to get its status.</p>
-<h3 id="tunnelmonitor">tunnelmonitor<a class="headerlink" href="#tunnelmonitor" title="Permanent link">&para;</a></h3>
-<p>The tunnels used by <code>gateway-el</code> is mainly maintained by <a href="https://github.com/ustclug/tunnelmonitor">tunnelmonitor</a>. Its config files are in <code>/etc/tunnelmonitor</code>, service is <code>tunnelmonitor.service</code>, and log is <code>/var/log/tunnel_monitor.log</code>.</p>
-<p>When starting, <code>netfilter-persistent.service</code> should be run before <code>tunnelmonitor</code>. <code>tunnelmonitor</code> generates new mangle chains when starting, and pings all tunnels periodically and selects all available tunnels, and generates <code>statistc</code> rules.</p>
-<p>You check check <code>/var/log/tunnel_monitor.log</code> to see if one tunnel has been down. Currently (2021/09), only one tunnel is available among all tunnel settings in <code>/etc/tunnelmonitor/tunnel.ini</code>.</p>
-<h3 id="iptables-mangle-rt_tables-and-ip-rule">iptables mangle, rt_tables and ip rule<a class="headerlink" href="#iptables-mangle-rt_tables-and-ip-rule" title="Permanent link">&para;</a></h3>
-<p><strong>The following example is for demonstration purposes only.</strong></p>
-<p>You can get current status by <code>iptables -t mangle -S</code>. It is expected to see something like this:</p>
-<div class="highlight"><pre><span></span><code>-A DemonstrateManglePrerouting -m statistic --mode nth --every 1 --packet 0 -j MARK --set-xmark 0x12345/0xffffffff
-// ...
--A PREOUT -m mark --mark 0x0 -j DemonstrateManglePrerouting
-</code></pre></div>
-<p>In this case, all packages to <code>DemonstrateManglePrerouting</code> chain will get <code>fwmark</code> <code>0x12345</code> (= <code>74565</code>).</p>
-<p>Check <code>ip rule</code> for that:</p>
-<div class="highlight"><pre><span></span><code>// ...
-10: from all fwmark 0x12345 lookup ExtraDemoTunnel
-// ...
-</code></pre></div>
-<p>You can get tunnel information in <code>ip a</code>:</p>
-<div class="highlight"><pre><span></span><code>29: ExtraDemoTunnel: &lt;POINTOPOINT,NOARP,UP,LOWER_UP&gt; mtu 1420 qdisc noqueue state UNKNOWN group default qlen 1000
-    link/none
-    inet 192.168.252.17 peer 192.168.253.17/32 brd 192.168.252.17 scope global ExtraDemoTunnel
-       valid_lft forever preferred_lft forever
-</code></pre></div>
-<p>Here <code>192.168.252.17</code> is the local server of tunnel, and <code>192.168.253.17</code> is the remote server.</p>
-<p>Let's check <code>/etc/network/interfaces.d</code>:</p>
-<div class="highlight"><span class="filename">/etc/network/interfaces.d/03ExtraDemoTunnel</span><pre><span></span><code>auto ExtraDemoTunnel
-iface ExtraDemoTunnel inet static
-    address 192.168.252.17
-    netmask 255.255.255.255
-    pre-up ip link add dev $IFACE type wireguard
-    post-down ip link del dev $IFACE
-    up wg set $IFACE listen-port 4601 private-key /etc/wireguard/privkey peer pkeypkeypkeypkeypkeypkeypkeypkeypkeypkeypkey endpoint 23.3.3.3:4600 allowed-ips 0.0.0.0/0
-    up ip route replace default dev $IFACE table $IFACE
-    up ip rule add from all fwmark 74565 table $IFACE prio 10
-    pointopoint 192.168.253.17
-</code></pre></div>
-<p>Here we know that this is a wireguard tunnel, and the endpoint is <code>23.3.3.3:4600</code>. The fwmark here is <code>74565</code> (in decimal).</p>
-<p>Why is <code>74565</code> set? Let's check <code>/etc/iproute2/rt_tables</code>!</p>
-<div class="highlight"><pre><span></span><code>// ...
-74565   ExtraDemoTunnel
-// ...
-</code></pre></div>
-<p>For wireguard, you can use <code>wg</code> to check status. If you find that the "received" is 0 in transferred, something is going wrong.</p>
-<h2 id="network-information-center-gateway-gateway-nic">Network Information Center Gateway (<code>gateway-nic</code>)<a class="headerlink" href="#network-information-center-gateway-gateway-nic" title="Permanent link">&para;</a></h2>
-<p>Previously gateway-nic used CentOS 7 to 8 to Stream, to "avoid putting all eggs in one basket". This VM was replaced by a newly setup Debian Bullseye VM on January 2022 during migration from ESXi to Proxmox VE.</p>
+<h1 id="intranet-gateway">Intranet Gateway<a class="headerlink" href="#intranet-gateway" title="Permanent link">&para;</a></h1>
+<p>We run gateways in each colocation to provide internet access to intranet-only hosts (VMs and containers).</p>
+<p>When configuring VMs and containers, set their gateway according to their colocation:</p>
+<ul>
+<li>East Campus Library (EL): gateway-el (10.254.0.254)</li>
+<li>Network Information Center (NIC): gateway-nic (10.254.0.245)</li>
+</ul>
+<p>Gateway-JP is mainly used for HTTP reverse proxy, so that we can provide HTTP services in compliance with PRC regulations.</p>
+<p>For server configuration on each gateway, refer to their corresponding documentation:</p>
+<ul>
+<li><a href="../../../services/gateway-el/">Gateway EL</a></li>
+<li><a href="../../../services/gateway-nic/">Gateway NIC</a></li>
+<li>Gateway JP (missing)</li>
+</ul>
 
               
             </article>

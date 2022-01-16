@@ -1882,9 +1882,11 @@
 
 
 <h1 id="gitlab">GitLab<a class="headerlink" href="#gitlab" title="Permanent link">&para;</a></h1>
-<p>Server: gitlab.s.ustclug.org (ssh Port 2222)
-Git Repository:
-- <a href="https://git.lug.ustc.edu.cn/ustclug/gitlab-scripts">gitlab-scripts</a></p>
+<p>Server: gitlab.s.ustclug.org (management ssh port 2222)</p>
+<p>Git Repository:</p>
+<ul>
+<li><a href="https://git.lug.ustc.edu.cn/ustclug/gitlab-scripts">gitlab-scripts</a></li>
+</ul>
 <h2 id="gitlab-security">GitLab &amp; Security<a class="headerlink" href="#gitlab-security" title="Permanent link">&para;</a></h2>
 <p>GitLab 维护者需要订阅：</p>
 <ol>
@@ -1903,7 +1905,7 @@ Git Repository:
 <p><strong>建议在更新完成 72 小时内删除快照，详见 <a href="/infrastructure/vsphere/esxi/#about-snapshot">关于快照</a>。</strong></p>
 <h2 id="postgresql-redis">postgresql 与 redis 的更新<a class="headerlink" href="#postgresql-redis" title="Permanent link">&para;</a></h2>
 <p>由于 gitlab 更新后可能对 postgresql 与 redis 的版本有要求，因此有可能需要定期更新 redis 与 postgresql。</p>
-<p>更新前请先停止 gitlab 的 container</p>
+<p>更新前请先停止 gitlab 的 container。</p>
 <p>更新时可以按照官网教程 <a href="https://github.com/sameersbn/docker-postgresql/blob/master/README.md">docker-postgresql</a> 进行更新，可以通过拉取 latest 标签的镜像，删除原来的 container，再通过脚本 <code>./gitlab.sh db</code> 自动启动，数据库更新时可能会需要一定时间来迁移数据，请通过 <code>docker logs -f gitlab-postgresql</code> 命令来查看迁移进度，待迁移完成后再运行 GitLab 的 container。</p>
 <h2 id="rails-console">访问 Rails console<a class="headerlink" href="#rails-console" title="Permanent link">&para;</a></h2>
 <p>Rails console 可以完成一些高级的维护任务。在 gitlab 容器中执行 <code>bin/rails console</code> 启动。注意 console 的启动时间很长，需要有耐心。</p>

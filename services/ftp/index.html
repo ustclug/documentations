@@ -1612,21 +1612,21 @@
 
 
 <h1 id="lug-ftp">LUG FTP<a class="headerlink" href="#lug-ftp" title="Permanent link">&para;</a></h1>
-<p>service: <a href="ftp://ftp.ustclug.org">FTP/FTPS</a>, <a href="sftp://ftp.ustclug.org">SFTP</a>, <a href="http://ftp.ustclug.org">HTTP</a>, <a href="https://ftp.ustclug.org">HTTPS</a>, <a href="afp://ftp.ustclug.org">AFP</a></p>
-<p>Git Repository: <a href="https://github.com/ustclug/lugftp">github.com/ustclug/lugftp</a></p>
-<p>DockerHub: <a href="https://hub.docker.com/r/ustclug/ftp/">ustclug/ftp</a></p>
-<p>server: vdp.s.ustclug.org</p>
-<p>theme: <a href="https://larsjung.de/h5ai/">h5ai</a></p>
-<p>deploy: <a href="https://git.lug.ustc.edu.cn/ustclug/docker-run-script/blob/master/ftp/ftp.sh">ftp.sh</a></p>
+<p>Services: <a href="ftp://ftp.ustclug.org">FTP/FTPS</a>, <a href="sftp://ftp.ustclug.org">SFTP</a>, <a href="http://ftp.ustclug.org">HTTP</a>, <a href="https://ftp.ustclug.org">HTTPS</a>, <a href="afp://ftp.ustclug.org">AFP</a></p>
+<p>Git repository: <a href="https://github.com/ustclug/lugftp">ustclug/lugftp</a></p>
+<p>Docker Hub: <a href="https://hub.docker.com/r/ustclug/ftp/">ustclug/ftp</a></p>
+<p>Server: vdp.s.ustclug.org</p>
+<p>Theme: <a href="https://larsjung.de/h5ai/">h5ai</a></p>
+<p>Deploy: <a href="https://git.lug.ustc.edu.cn/ustclug/docker-run-script/blob/master/ftp/ftp.sh">ftp.sh</a></p>
 <h2 id="notes">Notes<a class="headerlink" href="#notes" title="Permanent link">&para;</a></h2>
 <ol>
-<li>SSL cert is required when running lugftp.</li>
+<li>SSL cert is required when running LUG FTP.</li>
 <li><code>ssh-keygen -A</code> is required to be manually run when initializing.</li>
 <li>About directory permission:</li>
-<li>It is strongly suggested to keep permission &amp; owner metadata when backuping/restoring.</li>
+<li>It is strongly suggested to keep permission &amp; owner metadata when backing up/restoring.</li>
 <li>Public folder root: set owner to root:root, permission to dr-xr-xr-x</li>
 <li>Subfolders: set owner to 1000:1000. <code>_h5ai</code> and <code>wp-content</code> needs to be set to a different owner (misconfigured?). And <code>Incoming</code> shall be set to drwxrwxr-x.</li>
-<li>Do not use Google DNS in host, as mobile network may drop the UDP packet to 8.8.8.8. A misconfigured DNS may lead to LDAP in container broken.</li>
+<li>Do not use Google DNS in host, as mobile network may drop UDP packets to 8.8.8.8. A misconfigured DNS may lead to LDAP in container broken.</li>
 </ol>
 
               

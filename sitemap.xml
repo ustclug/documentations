@@ -136,6 +136,16 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
+         <loc>https://docs.ustclug.org/services/gateway-el/</loc>
+         <lastmod>2022-01-16</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://docs.ustclug.org/services/gateway-nic/</loc>
+         <lastmod>2022-01-16</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
          <loc>https://docs.ustclug.org/services/generate-204/</loc>
          <lastmod>2022-01-16</lastmod>
          <changefreq>daily</changefreq>

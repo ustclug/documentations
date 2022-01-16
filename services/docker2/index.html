@@ -1235,6 +1235,19 @@
   
 </li>
         
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#workflows-troubleshooting" class="md-nav__link">
+    Workflows &amp; Troubleshooting
+  </a>
+  
+    <nav class="md-nav" aria-label="Workflows &amp; Troubleshooting">
+      <ul class="md-nav__list">
+        
           <li class="md-nav__item">
   <a href="#docker-pingd" class="md-nav__link">
     Docker "pingd"
@@ -1650,6 +1663,19 @@
   
 </li>
         
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#workflows-troubleshooting" class="md-nav__link">
+    Workflows &amp; Troubleshooting
+  </a>
+  
+    <nav class="md-nav" aria-label="Workflows &amp; Troubleshooting">
+      <ul class="md-nav__list">
+        
           <li class="md-nav__item">
   <a href="#docker-pingd" class="md-nav__link">
     Docker "pingd"
@@ -1702,14 +1728,16 @@
 <span class="na">SUBSYSTEM</span><span class="o">=</span><span class="s">=&quot;net&quot;, ACTION==&quot;add&quot;, DRIVERS==&quot;?*&quot;, ATTR{address}==&quot;00:50:56:9f:00:5b&quot;, NAME=&quot;Mobile&quot;</span><span class="w"></span>
 <span class="na">SUBSYSTEM</span><span class="o">=</span><span class="s">=&quot;net&quot;, ACTION==&quot;add&quot;, DRIVERS==&quot;?*&quot;, ATTR{address}==&quot;00:50:56:9f:00:5d&quot;, NAME=&quot;Policy&quot;</span><span class="w"></span>
 </code></pre></div>
+<p>We then refer to these interfaces using their new names in <code>/etc/network/interfaces</code> to ensure consistent network configuration.</p>
 <h3 id="docker-daemon-service">Docker daemon service<a class="headerlink" href="#docker-daemon-service" title="Permanent link">&para;</a></h3>
 <p>docker2 上面的 Docker 使用 macvlan 来将虚拟机接入 lugi 内网，因此将 macvlan 的主端口 Policy 配置为 <code>docker.service</code> 的强依赖。</p>
 <div class="highlight"><span class="filename">systemctl edit docker.service</span><pre><span></span><code><span class="k">[Unit]</span><span class="w"></span>
 <span class="na">After</span><span class="o">=</span><span class="s">sys-subsystem-net-devices-Policy.device</span><span class="w"></span>
 <span class="na">BindsTo</span><span class="o">=</span><span class="s">sys-subsystem-net-devices-Policy.device</span><span class="w"></span>
 </code></pre></div>
-<p>实际上 <code>After=network-online.target</code> 就够了，但是出于历史原因使用了 <code>BindsTo</code>，这是因为 docker2 曾经单独运行 tinc 接入内网，而 tinc 的端口只在 tinc 启动后才会出现（才能分出 macvlan 子端口），因此使用 <code>BindsTo</code> 保证 docker 随该端口的出现和消失而启动/停止。</p>
+<p>实际上 <code>After=network-online.target</code> 就够了，但是出于历史原因使用了 <code>BindsTo</code> 强依赖内网端口，这是因为 docker2 曾经单独运行 tinc 接入内网，而 tinc 的端口只在 tinc 启动后才会出现（才能分出 macvlan 子端口），因此使用 <code>BindsTo</code> 保证 docker 随该端口的出现和消失而启动/停止。</p>
 <p>2022 年 1 月 15 日以后 docker2 与其他虚拟机一样通过 gateway-nic 桥接的 tinc 接入内网，不再单独运行 tinc。</p>
+<h2 id="workflows-troubleshooting">Workflows &amp; Troubleshooting<a class="headerlink" href="#workflows-troubleshooting" title="Permanent link">&para;</a></h2>
 <h3 id="docker-pingd">Docker "pingd"<a class="headerlink" href="#docker-pingd" title="Permanent link">&para;</a></h3>
 <div class="admonition tip">
 <p class="admonition-title">更新</p>
@@ -1739,8 +1767,11 @@
 <p>使用方式：<code>systemctl enable docker-pingd@container:host.service</code>，<code>container</code> 换成容器名，<code>host</code> 换成 ping 的目标。</p>
 <p>Trick 介绍：Systemd service 配置暂不支持多个模板参数 <code>%i</code>，因此调用 shell 来解析参数。Ref: <a href="https://github.com/systemd/systemd/issues/14895#issuecomment-612270690">https://github.com/systemd/systemd/issues/14895#issuecomment-612270690</a></p>
 <h3 id="wordpress">WordPress 升级<a class="headerlink" href="#wordpress" title="Permanent link">&para;</a></h3>
-<p>tky: 很麻烦，建议 lug 以后再也别用（别开新的）wordpress 了。</p>
-<p>servers 与旧 planet 使用 WordPress，托管在 docker2 上。因为 docker2 现在磁盘 IO 很慢，所以可能会出现一些额外的问题。</p>
+<div class="admonition note">
+<p class="admonition-title">taoky</p>
+<p>很麻烦，建议 lug 以后再也别用（别开新的）wordpress 了。</p>
+</div>
+<p>servers 与旧 planet 使用 WordPress，托管在 docker2 上。<s>因为 docker2 现在磁盘 IO 很慢，所以可能会出现一些额外的问题。</s></p>
 <p>推荐使用 <a href="https://wp-cli.org/#installing">https://wp-cli.org/#installing</a>。命令：</p>
 <div class="highlight"><pre><span></span><code>chmod +x wp-cli.phar
 mv wp-cli.phar /usr/local/bin/wp
