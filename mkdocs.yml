@@ -13,8 +13,8 @@ copyright: 'Copyright &copy; 2003-2021 USTC Linux User Group. <a href="https://c
 
 # Configuration
 theme:
-  name: "material"
-  language: "zh"
+  name: material
+  language: en
   palette:
     - scheme: default
       media: "(prefers-color-scheme: light)"
