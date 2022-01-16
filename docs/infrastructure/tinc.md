@@ -33,11 +33,11 @@ tincd -n ustclug -K
 Address = [这台机器的公网IP]
 ```
 
-把新增的这个文件提交进 Git 仓库，并在 `{ldap,board,gateway-el}.s.ustclug.org` 等台机器上通过 `git pull` 更新，并 `systemctl reload tinc@ustclug.service`。
+把新增的这个文件提交进 Git 仓库，并在 `{ldap,board,gateway-el,gateway-nic}.s.ustclug.org` 等多台机器上通过 `git pull` 更新，并 `systemctl reload tinc@ustclug.service`。
 
 ### 内网 IP
 
-**测试的时候**，你可以直接用 `ifconfig` 指定一个临时的 IP，注意不要与已有的内网 IP 冲突：
+**测试的时候**，你可以直接通过 `ifconfig` 等方式指定一个临时的 IP，注意不要与已有的内网 IP 冲突：
 
 ```shell
 ifconfig 10.254.0.xxx/21 ustclug
@@ -56,9 +56,13 @@ $ORIGIN s.ustclug.org
 
 ## 配置 SSH 侦听内网地址
 
-配置供参考：
+!!! tip
 
-```text
+    对于 Debian 11+ 的系统，建议保持 `sshd_config` 不动，将自定义的配置写入 `sshd_config.d/ustclug.conf`，以减少更新 ssh 软件包时的配置文件冲突。注意如果这么做的话需要把配置文件理的 `Subsystem sftp` 删掉，否则 sshd 会报错“重复指定了 Subsystem sshd”。
+
+以下配置供参考，复制后注意修改 `Match LocalAddress` 后面的内容（内网地址和 AllowGroups 最后的名称）：
+
+```text title="/etc/ssh/sshd_config"
 AddressFamily inet
 UseDNS no
 

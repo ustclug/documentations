@@ -11,7 +11,7 @@ There are two types of SSH Certificate:
 - Root certificate
 - Host certificate
 
-Root certificate can be used to issue a host certificate and has the same format as a regular SSH private-public key pair. Host certificate can be used for authentication on both server side and client side. But host certificate cannot issue a new certificate, it is the very difference from x509 certificate.
+Root certificate can be used to issue a host certificate and has the same format as a regular SSH private-public key pair. Host certificate can be used for authentication on both server side and client side. But certificates cannot issue new certificates (i.e. no chains), it is the very difference from X.509 certificate system.
 
 ## Trust all LUG servers in one go
 

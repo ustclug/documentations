@@ -20,7 +20,7 @@ Users 是用来添加和配置用户信息的地方。最主要的功能位于�
 
 - UID，GID 从 2000 开始计数，由于 gosa 不能对 UID 自动增长，所以管理员需要人工增长。方法是登录任意一台机器，运行 `getent passwd` 并观察输出，取最大的 UID + 1 就行了。
 
-  !!! danger "坑"
+    !!! danger "坑"
 
         小心输出的顺序，最大的 UID 不一定是最后一个（而且事实上经常不是），建议配合 sed, awk, sort 之类的命令妥善处理，例如
 
@@ -30,7 +30,7 @@ Users 是用来添加和配置用户信息的地方。最主要的功能位于�
 
         同时还有若干 UID 很大但是离散的特殊账号，很容易分辨。显然新 UID 是 2000 开始连续的最大 UID + 1.
 
-  GID 建议不要每人一个，我们建一个 group，给大家都加进来，这样就只需要考虑 UID 的增长了。目前该 group 为 ldap_users，GID 为 2001。
+    GID 建议不要每人一个，我们建一个 group，给大家都加进来，这样就只需要考虑 UID 的增长了。目前该 group 为 `ldap_users`，GID 为 2001。
 
 - 建账号之前先注意一下各个服务器上有没有相同的用户名，有的话把原家目录 chown 到新的 UID GID，删除同名用户。
 
@@ -58,9 +58,11 @@ gosa 的配置文件在 `/etc/gosa/gosa.conf`，它是在第一次运行 gosa �
 
 #### 软件包安装
 
-Debian 7 以上系统安装 libnss-ldapd libpam-ldapd sudo-ldap
+Debian 7 以上系统安装 `libnss-ldapd`、`libpam-ldapd`、`sudo-ldap`
 
-注 ：更新这些软件包时，注意保留一个 root 终端，更新后可能需要重启 daemon 进程
+!!! note
+
+    更新这些软件包时，注意保留一个 root 终端，更新后可能需要重启 daemon 进程
 
 在安装过程中会被问一些问题（不同版本的 Debian 的问题可能不同）：
 
@@ -71,9 +73,9 @@ Debian 7 以上系统安装 libnss-ldapd libpam-ldapd sudo-ldap
 
 #### /etc/ldap/ldap.conf
 
-编辑 `/etc/ldap/ldap.conf` 内容如下
+编辑内容如下：
 
-```
+``` title="/etc/ldap/ldap.conf"
 BASE dc=lug,dc=ustc,dc=edu,dc=cn
 URI ldaps://ldap.lug.ustc.edu.cn
 SSL yes
@@ -92,7 +94,7 @@ SUDOERS_BASE ou=sudoers,dc=lug,dc=ustc,dc=edu,dc=cn
 
 注意检查一下此配置文件是否与 `/etc/ldap/ldap.conf` 下的内容相一致，如
 
-```
+``` title="/etc/nslcd.conf"
 uid nslcd
 gid nslcd
 uri ldaps://ldap.lug.ustc.edu.cn

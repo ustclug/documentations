@@ -1,8 +1,8 @@
 # Gateway troubleshooting
 
-## `gateway-el`
+## East Campus Library Gateway (`gateway-el`)
 
-!!! todo TODO
+!!! todo
 
 	Currently `systemctl restart networking` is required after a reboot to set up tunnel. This bug should be fixed.
 
@@ -77,3 +77,7 @@ Why is `74565` set? Let's check `/etc/iproute2/rt_tables`!
 ```
 
 For wireguard, you can use `wg` to check status. If you find that the "received" is 0 in transferred, something is going wrong.
+
+## Network Information Center Gateway (`gateway-nic`)
+
+Previously gateway-nic used CentOS 7 to 8 to Stream, to "avoid putting all eggs in one basket". This VM was replaced by a newly setup Debian Bullseye VM on January 2022 during migration from ESXi to Proxmox VE.

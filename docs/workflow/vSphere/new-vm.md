@@ -32,10 +32,10 @@ Notes:
 
 - 增加 hostname.s.ustclug.org 的 DNS 解析。（ustclug.intranet）
 - 在 vCenter 中更改网络为 ustclug （如果不需要源 MAC 地址检查，选 ustclug-bridge）
-- 在虚拟机中重启网络接口，改为静态 IP，并更改网关 （10.254.0.254）
-  - ifdown
-  - edit interface coonfig files
-  - ifup
+- 在虚拟机中重启网络接口，改为静态 IP，并更改网关 （东图虚拟机设置为 10.254.0.254，NIC 虚拟机设置为 10.254.0.245）
+  - `ifdown -a`
+  - edit `/etc/network/interfaces`
+  - `ifup -a`
 - 更改虚拟机的 DNS 和 domain/search：
   - DNS:
     - neat-dns (10.254.0.253)
@@ -46,9 +46,11 @@ Notes:
 ## Install tools
 
 - 根据需要换源，加入安全更新源等
-- 安装 open-vm tools
+- 安装虚拟机工具
+  - 对于 Proxmox VE 的虚拟机：安装 `qemu-guest-agent`
+  - 对于 VMware vCenter 的虚拟机：安装 `open-vm-tools`
 - 安装 openssh
 
 ## Configure LDAP and SSH CA
 
-见 [LDAP 服务使用及配置说明](/infrastructure/ldap) 和 [为服务器设置 SSH CA](/infrastructure/sshca/#issue-a-server-certificate)
+见 [LDAP 服务使用及配置说明](../../infrastructure/ldap.md) 和 [为服务器设置 SSH CA](../../infrastructure/sshca.md#issue-a-server-certificate)

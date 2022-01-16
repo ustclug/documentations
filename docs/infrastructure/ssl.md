@@ -2,7 +2,7 @@
 
 Discussion: [#224](https://github.com/ustclug/discussions/issues/224)
 
-Our SSL certificates are automatically renewed on GitHub [ustclug/ssl-cert](https://github.com/ustclug/ssl-cert).
+Our SSL certificates are automatically renewed on GitHub [ustclug/ssl-cert](https://github.com/ustclug/ssl-cert) (:fontawesome-solid-lock: Private).
 
 We delegate the subdomain `ssl-digitalocean.ustclug.org` to DigitalOcean DNS hosting, and use [acme.sh DNS alias mode](https://github.com/acmesh-official/acme.sh/wiki/DNS-alias-mode) to issue certificates. For this to work, we have the following CNAME records in place:
 
@@ -18,7 +18,7 @@ Individual machines that use SSL certificates should pull from the said reposito
 
 Update script for reference:
 
-```shell
+```shell title="/etc/ssl/private/.git/update.sh"
 #!/bin/sh
 
 cd "/etc/ssl/private"
@@ -48,4 +48,4 @@ The DigitalOcean account we use is owned by iBug and has nothing else running.
 
 !!! note "Plan B"
 
-    Hurricane Electric provides [hosted DNS](https://dns.he.net/) zones **for free**, which is also [supported by `acme.sh`](https://github.com/acmesh-official/acme.sh/wiki/dnsapi). This makes HE DNS a feasible alternative should our current dependency (DigitalOcean) fails for whatever reason.
+    Hurricane Electric provides [hosted DNS](https://dns.he.net/) zones **for free**, which is also [supported by `acme.sh`](https://github.com/acmesh-official/acme.sh/wiki/dnsapi). This makes HE DNS a feasible alternative should our current dependency (DigitalOcean) fails.
