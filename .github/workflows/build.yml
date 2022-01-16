@@ -15,7 +15,9 @@ jobs:
     - name: Build docs
       run: mkdocs -v build
     - name: Deploy to GitHub Pages
+      if: "github.repository == 'ustclug/documentations' && github.ref == 'refs/heads/master'"
       run: |
+        CINFO="$(git log -1 --pretty="[%h] %an: %s")"
         cd site
         git init --quiet
         echo -n "docs.ustclug.org" > CNAME
@@ -24,6 +26,7 @@ jobs:
         git fetch --depth=1 origin gh-pages
         git reset --soft FETCH_HEAD
         git add --all
-        git -c user.name=GitHub -c user.email=noreply@github.com \
-          commit --message "Auto deploy from GitHub Actions"
-        git push https://${GITHUB_ACTOR}:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY.git +HEAD:gh-pages
+        git -c user.name=GitHub -c user.email=noreply@github.com commit \
+          -m "Auto deploy from GitHub Actions build ${GITHUB_RUN_NUMBER}" \
+          -m "$CINFO"
+        git push origin +HEAD:gh-pages
