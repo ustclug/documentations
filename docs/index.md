@@ -2,6 +2,15 @@
 
 Documentation for LUG @ USTC technical infrastructure.
 
+## Layout
+
+Our documentation is divided into these sections, as laid out on the left navigation menu:
+
+- The **Workflow** section provides guidance to (a few) common maintenance tasks.
+- The **Infrastructure** section describes our infrastructure, as well as common configurations across different servers (networking, firewalls, security, monitoring, etc.).
+- The **Services** section documents specific configurations on individual servers.
+- The **Common Issues** (a.k.a. **FAQ**) section records our troubleshooting experiences and serves partially as a "notebook" for known traps and workarounds.
+
 ## References
 
 - [LUG @ USTC homepage](https://lug.ustc.edu.cn/)
