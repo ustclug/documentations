@@ -15,7 +15,7 @@
         <link rel="canonical" href="https://docs.ustclug.org/infrastructure/monitor/">
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.1.6">
+      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.1.7">
     
     
       
@@ -1670,24 +1670,23 @@
 auth-enabled <span class="o">=</span> <span class="nb">true</span>
 </code></pre></div>
 <h2 id="install-telegraf">Install telegraf<a class="headerlink" href="#install-telegraf" title="Permanent link">&para;</a></h2>
-<p>安装方法见 <a href="https://docs.influxdata.com/telegraf/v1.6/introduction/installation">https://docs.influxdata.com/telegraf/v1.6/introduction/installation</a></p>
+<p>安装方法见 <a href="https://docs.influxdata.com/telegraf/v1.21/introduction/installation/">https://docs.influxdata.com/telegraf/v1.21/introduction/installation/</a></p>
 <p>一个典型的安装命令是：</p>
-<div class="highlight"><pre><span></span><code>wget https://dl.influxdata.com/telegraf/releases/telegraf_1.6.1-1_amd64.deb
-sudo dpkg -i telegraf_1.6.1-1_amd64.deb
+<div class="highlight"><pre><span></span><code>wget https://dl.influxdata.com/telegraf/releases/telegraf_1.21.2-1_amd64.deb
+sudo dpkg -i telegraf_1.21.2-1_amd64.deb
 </code></pre></div>
-<p>或者</p>
-<div class="highlight"><pre><span></span><code>curl -sL https://repos.influxdata.com/influxdb.key <span class="p">|</span> sudo apt-key add -
-<span class="nb">echo</span> <span class="s2">&quot;deb https://mirrors.ustc.edu.cn/influxdata/debian buster stable&quot;</span> <span class="p">|</span> sudo tee /etc/apt/sources.list.d/influxdb.list
+<p>更加<strong>推荐</strong>的做法是加入软件源后安装</p>
+<div class="highlight"><pre><span></span><code>curl -sL https://repos.influxdata.com/influxdb.key <span class="p">|</span> sudo gpg --dearmor -o /usr/share/keyrings/influxdb.gpg
+<span class="nb">echo</span> <span class="s2">&quot;deb [signed-by=/usr/share/keyrings/influxdb.gpg] https://mirrors.ustc.edu.cn/influxdata/debian buster stable&quot;</span> <span class="p">|</span> sudo tee /etc/apt/sources.list.d/influxdb.list
 sudo apt-get update <span class="o">&amp;&amp;</span> sudo apt-get install telegraf
 </code></pre></div>
 <h2 id="configure-telegraf">Configure telegraf<a class="headerlink" href="#configure-telegraf" title="Permanent link">&para;</a></h2>
 <p>配置文件在 <code>/etc/telegraf/</code> 目录下，用 root 权限修改：</p>
 <p>在 <code>/etc/telegraf/telegraf.d/</code> 下增加 <code>net.conf</code> 用来开启网络监控，内容如下：</p>
-<div class="highlight"><pre><span></span><code><span class="c1"># /etc/telegraf/telegraf.d/net.conf</span>
-<span class="o">[[</span>inputs.net<span class="o">]]</span>
+<div class="highlight"><span class="filename">/etc/telegraf/telegraf.d/net.conf</span><pre><span></span><code><span class="o">[[</span>inputs.net<span class="o">]]</span>
 </code></pre></div>
 <p>在 <code>/etc/telegraf/telegraf.conf</code> 中的<code>[[outputs.influxdb]]</code> 中<strong>增加</strong> influxdb 的地址：</p>
-<div class="highlight"><pre><span></span><code><span class="o">[[</span>outputs.influxdb<span class="o">]]</span>
+<div class="highlight"><span class="filename">/etc/telegraf/telegraf.conf</span><pre><span></span><code><span class="o">[[</span>outputs.influxdb<span class="o">]]</span>
   <span class="nv">urls</span> <span class="o">=</span> <span class="o">[</span><span class="s2">&quot;http://influxdb.ustclug.org:8086&quot;</span><span class="o">]</span>
   <span class="nv">username</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">${</span><span class="nv">INFLUX_USERNAME</span><span class="si">}</span><span class="s2">&quot;</span>
   <span class="nv">password</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">${</span><span class="nv">INFLUXDB_PASSWORD</span><span class="si">}</span><span class="s2">&quot;</span>
@@ -1802,7 +1801,7 @@ sudo systemctl status telegraf
     <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.top", "navigation.sections"], "translations": {"clipboard.copy": "\u590d\u5236", "clipboard.copied": "\u5df2\u590d\u5236", "search.config.lang": "ja", "search.config.pipeline": "trimmer, stemmer", "search.config.separator": "[\\uff0c\\u3002]+", "search.placeholder": "\u641c\u7d22", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.term.missing": "\u7f3a\u5c11", "select.version.title": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "search": "../../assets/javascripts/workers/search.22074ed6.min.js"}</script>
     
     
-      <script src="../../assets/javascripts/bundle.1514a9a0.min.js"></script>
+      <script src="../../assets/javascripts/bundle.01de222e.min.js"></script>
       
     
   </body>

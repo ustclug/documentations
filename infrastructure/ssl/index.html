@@ -15,7 +15,7 @@
         <link rel="canonical" href="https://docs.ustclug.org/infrastructure/ssl/">
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.1.6">
+      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.1.7">
     
     
       
@@ -1567,7 +1567,7 @@
 
 <h1 id="ssl-certificates">SSL Certificates<a class="headerlink" href="#ssl-certificates" title="Permanent link">&para;</a></h1>
 <p>Discussion: <a href="https://github.com/ustclug/discussions/issues/224">#224</a></p>
-<p>Our SSL certificates are automatically renewed on GitHub <a href="https://github.com/ustclug/ssl-cert">ustclug/ssl-cert</a> (:fontawesome-solid-lock: Private).</p>
+<p>Our SSL certificates are automatically renewed on GitHub <a href="https://github.com/ustclug/ssl-cert">ustclug/ssl-cert</a> (<span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M400 224h-24v-72C376 68.2 307.8 0 224 0S72 68.2 72 152v72H48c-26.5 0-48 21.5-48 48v192c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V272c0-26.5-21.5-48-48-48zm-104 0H152v-72c0-39.7 32.3-72 72-72s72 32.3 72 72v72z"/></svg></span> Private).</p>
 <p>We delegate the subdomain <code>ssl-digitalocean.ustclug.org</code> to DigitalOcean DNS hosting, and use <a href="https://github.com/acmesh-official/acme.sh/wiki/DNS-alias-mode">acme.sh DNS alias mode</a> to issue certificates. For this to work, we have the following CNAME records in place:</p>
 <div class="highlight"><pre><span></span><code>_acme-challenge.lug.ustc.edu.cn    -&gt;  lug.ssl-digitalocean.ustclug.org
 _acme-challenge.ustclug.org        -&gt;  lug.ssl-digitalocean.ustclug.org
@@ -1705,7 +1705,7 @@ systemctl reload openresty.service
     <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.top", "navigation.sections"], "translations": {"clipboard.copy": "\u590d\u5236", "clipboard.copied": "\u5df2\u590d\u5236", "search.config.lang": "ja", "search.config.pipeline": "trimmer, stemmer", "search.config.separator": "[\\uff0c\\u3002]+", "search.placeholder": "\u641c\u7d22", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.term.missing": "\u7f3a\u5c11", "select.version.title": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "search": "../../assets/javascripts/workers/search.22074ed6.min.js"}</script>
     
     
-      <script src="../../assets/javascripts/bundle.1514a9a0.min.js"></script>
+      <script src="../../assets/javascripts/bundle.01de222e.min.js"></script>
       
     
   </body>
