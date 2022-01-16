@@ -108,4 +108,4 @@ Match All #(1)
 
 注意 HostCertificate, TrustedUserCAKeys 和 RevokedKeys 这三个文件必须存在，否则 SSH 会出一些问题，例如不能密钥登录只能密码登录。
 
-HostCertificate 需要手动签发一个，另外两个文件从别的机器上复制就行。
+HostCertificate 需要[手动签发一个](sshca.md#issue-a-server-certificate)，另外两个文件从别的机器上复制就行。

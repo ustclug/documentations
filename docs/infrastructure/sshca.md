@@ -45,7 +45,7 @@ Then, copy the certificate file `ssh_host_rsa_key-cert.pub` back to target serve
 
 At last, add the following lines to `/etc/ssh/sshd_config`:
 
-```con
+```sh
 HostKey /etc/ssh/ssh_host_rsa_key
 HostCertificate /etc/ssh/ssh_host_rsa_key-cert.pub
 ```
@@ -60,18 +60,22 @@ ssh-keygen -s /path/to/ssh_ca -I certificate_identity -n principals -O option -V
 
 For example:
 
-```
-ssh-keygen -s /path/to/ssh_ca -I "Yifan Gao" -n yifan -V +365d yifan.pub
+```sh
+ssh-keygen -s /path/to/ssh_ca -I "Yifan Gao" -n yifan -V -5m:+365d yifan.pub
 ```
 
-In general, _certificate\_identity_ is user full name, and _principals_ is the user name. In addition, one user can own multiply _principals_ in one certificate, like:
+In general, _certificate\_identity_ is user full name, and _principals_ is the user name. In addition, one certificate can carry multiply _principals_, like:
 
-```
-ssh-keygen -s /path/to/ssh_ca -I "Yifan Gao" -n yifan,root,liims -V +365d yifan.pub
+```sh
+ssh-keygen -s /path/to/ssh_ca -I "Yifan Gao" -n yifan,root,liims -V -5m:+365d yifan.pub
 ```
 
 It authorizes the certificate owner to login to any server with `yifan`, `root` or `liims` username.
 
+!!! note
+
+    `liims` principal is used to login to library inquiring machines.
+
 !!! tip
 
-    `liims` principal is used to login to library inquiring machine.
+    The validity interval by default starts at the current system time. Using `-5m:+365d` creates a certificate valid from 5 minutes ago to make up for offset times on other systems. Otherwise it's not much useful to have a validity period starting from a long time ago.
