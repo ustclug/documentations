@@ -1714,9 +1714,9 @@ git reset --hard FETCH_HEAD
 <h2 id="ssh">配置 SSH 侦听内网地址<a class="headerlink" href="#ssh" title="Permanent link">&para;</a></h2>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
-<p>对于 Debian 11+ 的系统，建议保持 <code>sshd_config</code> 不动，将自定义的配置写入 <code>sshd_config.d/ustclug.conf</code>，以减少更新 ssh 软件包时的配置文件冲突。注意如果这么做的话需要把配置文件理的 <code>Subsystem sftp</code> 删掉，否则 sshd 会报错“重复指定了 Subsystem sshd”。</p>
+<p>对于 Debian 11+ 的系统，建议保持 <code>sshd_config</code> 不动，将自定义的配置写入 <code>sshd_config.d/ustclug.conf</code>，以减少更新 ssh 软件包时的配置文件冲突。注意如果这么做的话需要把配置文件里的 <code>Subsystem sftp</code> 删掉，否则 sshd 会报错“重复指定了 Subsystem sshd”。</p>
 </div>
-<p>以下配置供参考，复制后注意修改 <code>Match LocalAddress</code> 后面的内容（内网地址和 AllowGroups 最后的名称）：</p>
+<p>以下配置供参考，复制时注意修改 <code>Match LocalAddress</code> 后面的内容（内网地址和 AllowGroups 最后的名称）：</p>
 <div class="highlight"><span class="filename">/etc/ssh/sshd_config</span><pre><span></span><code>AddressFamily inet
 UseDNS no
 
@@ -1754,7 +1754,12 @@ Match User mirror
     PermitTTY no
     PermitTunnel no
     X11Forwarding no
+
+Match All # (1)
 </code></pre></div>
+<ol>
+<li>OpenSSH 6.5p1 以上可以使用 <code>Match All</code> 来结束上面的 Match 块。由于 <code>Include</code> 指令出现在 <code>/etc/ssh/sshd_config</code> 的最上面，而接下来的内容都是全局设置，因此使用 <code>Match All</code> 保证原先的内容继续作用于全局，而不是像上面这个例子一样变成 <code>Match User mirror</code> 的设置。</li>
+</ol>
 <p>注意 HostCertificate, TrustedUserCAKeys 和 RevokedKeys 这三个文件必须存在，否则 SSH 会出一些问题，例如不能密钥登录只能密码登录。</p>
 <p>HostCertificate 需要手动签发一个，另外两个文件从别的机器上复制就行。</p>
 
