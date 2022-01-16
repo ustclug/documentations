@@ -14,6 +14,8 @@ SUBSYSTEM=="net", ACTION=="add", DRIVERS=="?*", ATTR{address}=="00:50:56:9f:00:5
 SUBSYSTEM=="net", ACTION=="add", DRIVERS=="?*", ATTR{address}=="00:50:56:9f:00:5d", NAME="Policy"
 ```
 
+We then refer to these interfaces using their new names in `/etc/network/interfaces` to ensure consistent network configuration.
+
 ### Docker daemon service
 
 docker2 上面的 Docker 使用 macvlan 来将虚拟机接入 lugi 内网，因此将 macvlan 的主端口 Policy 配置为 `docker.service` 的强依赖。
@@ -24,9 +26,11 @@ After=sys-subsystem-net-devices-Policy.device
 BindsTo=sys-subsystem-net-devices-Policy.device
 ```
 
-实际上 `After=network-online.target` 就够了，但是出于历史原因使用了 `BindsTo`，这是因为 docker2 曾经单独运行 tinc 接入内网，而 tinc 的端口只在 tinc 启动后才会出现（才能分出 macvlan 子端口），因此使用 `BindsTo` 保证 docker 随该端口的出现和消失而启动/停止。
+实际上 `After=network-online.target` 就够了，但是出于历史原因使用了 `BindsTo` 强依赖内网端口，这是因为 docker2 曾经单独运行 tinc 接入内网，而 tinc 的端口只在 tinc 启动后才会出现（才能分出 macvlan 子端口），因此使用 `BindsTo` 保证 docker 随该端口的出现和消失而启动/停止。
 
 2022 年 1 月 15 日以后 docker2 与其他虚拟机一样通过 gateway-nic 桥接的 tinc 接入内网，不再单独运行 tinc。
+
+## Workflows & Troubleshooting
 
 ### Docker "pingd"
 
@@ -65,9 +69,11 @@ Trick 介绍：Systemd service 配置暂不支持多个模板参数 `%i`，因�
 
 ### WordPress 升级
 
-tky: 很麻烦，建议 lug 以后再也别用（别开新的）wordpress 了。
+!!! note "taoky"
 
-servers 与旧 planet 使用 WordPress，托管在 docker2 上。因为 docker2 现在磁盘 IO 很慢，所以可能会出现一些额外的问题。
+    很麻烦，建议 lug 以后再也别用（别开新的）wordpress 了。
+
+servers 与旧 planet 使用 WordPress，托管在 docker2 上。<s>因为 docker2 现在磁盘 IO 很慢，所以可能会出现一些额外的问题。</s>
 
 推荐使用 <https://wp-cli.org/#installing>。命令：
 

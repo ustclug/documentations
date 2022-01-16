@@ -1,23 +1,23 @@
 # LUG FTP
 
-service: [FTP/FTPS](ftp://ftp.ustclug.org), [SFTP](sftp://ftp.ustclug.org), [HTTP](http://ftp.ustclug.org), [HTTPS](https://ftp.ustclug.org), [AFP](afp://ftp.ustclug.org)
+Services: [FTP/FTPS](ftp://ftp.ustclug.org), [SFTP](sftp://ftp.ustclug.org), [HTTP](http://ftp.ustclug.org), [HTTPS](https://ftp.ustclug.org), [AFP](afp://ftp.ustclug.org)
 
-Git Repository: [github.com/ustclug/lugftp](https://github.com/ustclug/lugftp)
+Git repository: [ustclug/lugftp](https://github.com/ustclug/lugftp)
 
-DockerHub: [ustclug/ftp](https://hub.docker.com/r/ustclug/ftp/)
+Docker Hub: [ustclug/ftp](https://hub.docker.com/r/ustclug/ftp/)
 
-server: vdp.s.ustclug.org
+Server: vdp.s.ustclug.org
 
-theme: [h5ai](https://larsjung.de/h5ai/)
+Theme: [h5ai](https://larsjung.de/h5ai/)
 
-deploy: [ftp.sh](https://git.lug.ustc.edu.cn/ustclug/docker-run-script/blob/master/ftp/ftp.sh)
+Deploy: [ftp.sh](https://git.lug.ustc.edu.cn/ustclug/docker-run-script/blob/master/ftp/ftp.sh)
 
 ## Notes
 
-1. SSL cert is required when running lugftp.
+1. SSL cert is required when running LUG FTP.
 2. `ssh-keygen -A` is required to be manually run when initializing.
 3. About directory permission:
-   1. It is strongly suggested to keep permission & owner metadata when backuping/restoring.
+   1. It is strongly suggested to keep permission & owner metadata when backing up/restoring.
    2. Public folder root: set owner to root:root, permission to dr-xr-xr-x
    3. Subfolders: set owner to 1000:1000. `_h5ai` and `wp-content` needs to be set to a different owner (misconfigured?). And `Incoming` shall be set to drwxrwxr-x.
-4. Do not use Google DNS in host, as mobile network may drop the UDP packet to 8.8.8.8. A misconfigured DNS may lead to LDAP in container broken.
+4. Do not use Google DNS in host, as mobile network may drop UDP packets to 8.8.8.8. A misconfigured DNS may lead to LDAP in container broken.

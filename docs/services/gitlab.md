@@ -1,6 +1,9 @@
 # GitLab
-Server: gitlab.s.ustclug.org (ssh Port 2222)
+
+Server: gitlab.s.ustclug.org (management ssh port 2222)
+
 Git Repository:
+
 - [gitlab-scripts](https://git.lug.ustc.edu.cn/ustclug/gitlab-scripts)
 
 ## GitLab & Security
@@ -34,7 +37,7 @@ GitLab 维护者需要订阅：
 
 由于 gitlab 更新后可能对 postgresql 与 redis 的版本有要求，因此有可能需要定期更新 redis 与 postgresql。
 
-更新前请先停止 gitlab 的 container
+更新前请先停止 gitlab 的 container。
 
 更新时可以按照官网教程 [docker-postgresql](https://github.com/sameersbn/docker-postgresql/blob/master/README.md) 进行更新，可以通过拉取 latest 标签的镜像，删除原来的 container，再通过脚本 `./gitlab.sh db` 自动启动，数据库更新时可能会需要一定时间来迁移数据，请通过 `docker logs -f gitlab-postgresql` 命令来查看迁移进度，待迁移完成后再运行 GitLab 的 container。
 

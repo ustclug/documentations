@@ -1,6 +1,7 @@
 # Discontinued Services
 
 本页面记载曾经提供的服务，但是由于架构改变或服务迁移，这些服务不再以原来的形式提供，并可能在原处有残留的配置文件。
+
 通常情况下残留的配置文件可以直接删除，但是保险起见，仍然建议在 Internals 群里先询问一下再处理。
 
 ## Docker Registry
@@ -29,7 +30,6 @@ Servers：
 
 * swarm.s.ustclug.org（Docker Container）
 * revproxy-el.s.ustclug.org（reverse proxy）
-
 
 Blog：[add-telegram-web-service](https://servers.blog.ustc.edu.cn/2016/10/add-telegram-web-service/)
 
