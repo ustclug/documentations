@@ -1910,21 +1910,20 @@
 <h3 id="ldap-users-and-groups">Users 和 Groups<a class="headerlink" href="#ldap-users-and-groups" title="Permanent link">&para;</a></h3>
 <p>Users 是用来添加和配置用户信息的地方。最主要的功能位于每个 User 的第二页 POSIX，这里可以设置用户的家目录，UID，GID，以及所属的用户组。这里需要注意的地方如下：</p>
 <ul>
-<li>UID，GID 从 2000 开始计数，由于 gosa 不能对 UID 自动增长，所以管理员需要人工增长。方法是登录任意一台机器，运行 <code>getent passwd</code> 并观察输出，取最大的 UID + 1 就行了。</li>
-</ul>
-<p>!!! danger "坑"</p>
-<div class="codehilite"><pre><span></span><code>    小心输出的顺序，最大的 UID 不一定是最后一个（而且事实上经常不是），建议配合 sed, awk, sort 之类的命令妥善处理，例如
-
-    ```shell
-    getent passwd | cut -d: -f3 | sort -n
-    ```
-
-    同时还有若干 UID 很大但是离散的特殊账号，很容易分辨。显然新 UID 是 2000 开始连续的最大 UID + 1.
+<li>
+<p>UID，GID 从 2000 开始计数，由于 gosa 不能对 UID 自动增长，所以管理员需要人工增长。方法是登录任意一台机器，运行 <code>getent passwd</code> 并观察输出，取最大的 UID + 1 就行了。</p>
+<div class="admonition danger">
+<p class="admonition-title">坑</p>
+<p>小心输出的顺序，最大的 UID 不一定是最后一个（而且事实上经常不是），建议配合 sed, awk, sort 之类的命令妥善处理，例如</p>
+<div class="highlight"><pre><span></span><code>getent passwd <span class="p">|</span> cut -d: -f3 <span class="p">|</span> sort -n
 </code></pre></div>
-
-<p>GID 建议不要每人一个，我们建一个 group，给大家都加进来，这样就只需要考虑 UID 的增长了。目前该 group 为 ldap_users，GID 为 2001。</p>
-<ul>
-<li>建账号之前先注意一下各个服务器上有没有相同的用户名，有的话把原家目录 chown 到新的 UID GID，删除同名用户。</li>
+<p>同时还有若干 UID 很大但是离散的特殊账号，很容易分辨。显然新 UID 是 2000 开始连续的最大 UID + 1.</p>
+</div>
+<p>GID 建议不要每人一个，我们建一个 group，给大家都加进来，这样就只需要考虑 UID 的增长了。目前该 group 为 <code>ldap_users</code>，GID 为 2001。</p>
+</li>
+<li>
+<p>建账号之前先注意一下各个服务器上有没有相同的用户名，有的话把原家目录 chown 到新的 UID GID，删除同名用户。</p>
+</li>
 </ul>
 <p>Groups 中以 ssh 开头的组控制对应机器的 ssh 权限，sudo 开头同理。super_maneger 组包含所有机器的权限，以及 LDAP 的 admin 身份。加入对应的组即授予相应权限。<a href="#ldap-known-gids">已知的 GID</a></p>
 <h3 id="access-control">Access Control<a class="headerlink" href="#access-control" title="Permanent link">&para;</a></h3>
@@ -1938,8 +1937,11 @@
 <h2 id="ldap_1">LDAP 客户端配置<a class="headerlink" href="#ldap_1" title="Permanent link">&para;</a></h2>
 <h3 id="debian">Debian 配置方法<a class="headerlink" href="#debian" title="Permanent link">&para;</a></h3>
 <h4 id="_3">软件包安装<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h4>
-<p>Debian 7 以上系统安装 libnss-ldapd libpam-ldapd sudo-ldap</p>
-<p>注 ：更新这些软件包时，注意保留一个 root 终端，更新后可能需要重启 daemon 进程</p>
+<p>Debian 7 以上系统安装 <code>libnss-ldapd</code>、<code>libpam-ldapd</code>、<code>sudo-ldap</code></p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>更新这些软件包时，注意保留一个 root 终端，更新后可能需要重启 daemon 进程</p>
+</div>
 <p>在安装过程中会被问一些问题（不同版本的 Debian 的问题可能不同）：</p>
 <ul>
 <li>LDAP 服务器地址是 <code>ldaps://ldap.lug.ustc.edu.cn</code></li>
@@ -1948,8 +1950,8 @@
 <li>配置 libnss-ldapd 时有个选 Name services to configure 的，全部选上</li>
 </ul>
 <h4 id="etcldapldapconf">/etc/ldap/ldap.conf<a class="headerlink" href="#etcldapldapconf" title="Permanent link">&para;</a></h4>
-<p>编辑 <code>/etc/ldap/ldap.conf</code> 内容如下</p>
-<div class="highlight"><pre><span></span><code>BASE dc=lug,dc=ustc,dc=edu,dc=cn
+<p>编辑内容如下：</p>
+<div class="highlight"><span class="filename">/etc/ldap/ldap.conf</span><pre><span></span><code>BASE dc=lug,dc=ustc,dc=edu,dc=cn
 URI ldaps://ldap.lug.ustc.edu.cn
 SSL yes
 TLS_CACERT /etc/ldap/slapd-ca-cert.pem
@@ -1961,7 +1963,7 @@ SUDOERS_BASE ou=sudoers,dc=lug,dc=ustc,dc=edu,dc=cn
 <p>这个文件应该直接软链接到 <code>/etc/ldap/ldap.conf</code>，通常 dpkg 已经为你创建好了。</p>
 <h4 id="etcnslcdconf">/etc/nslcd.conf<a class="headerlink" href="#etcnslcdconf" title="Permanent link">&para;</a></h4>
 <p>注意检查一下此配置文件是否与 <code>/etc/ldap/ldap.conf</code> 下的内容相一致，如</p>
-<div class="highlight"><pre><span></span><code>uid nslcd
+<div class="highlight"><span class="filename">/etc/nslcd.conf</span><pre><span></span><code>uid nslcd
 gid nslcd
 uri ldaps://ldap.lug.ustc.edu.cn
 base dc=lug,dc=ustc,dc=edu,dc=cn

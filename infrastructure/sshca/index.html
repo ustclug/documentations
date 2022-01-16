@@ -1662,7 +1662,7 @@
 <li>Root certificate</li>
 <li>Host certificate</li>
 </ul>
-<p>Root certificate can be used to issue a host certificate and has the same format as a regular SSH private-public key pair. Host certificate can be used for authentication on both server side and client side. But host certificate cannot issue a new certificate, it is the very difference from x509 certificate.</p>
+<p>Root certificate can be used to issue a host certificate and has the same format as a regular SSH private-public key pair. Host certificate can be used for authentication on both server side and client side. But certificates cannot issue new certificates (i.e. no chains), it is the very difference from X.509 certificate system.</p>
 <h2 id="trust-all-lug-servers-in-one-go">Trust all LUG servers in one go<a class="headerlink" href="#trust-all-lug-servers-in-one-go" title="Permanent link">&para;</a></h2>
 <p>Add the following line to your <code>known_hosts</code>:</p>
 <div class="highlight"><pre><span></span><code>@cert-authority * ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC1Bxw9AXoZvc9HTe5o4f7/qOROcmzvlcO5oofoF3pewtRnhNpcd/DwmxSblqpj/cjLYkE32mSCzMYY8X0CRFyMJsgSIDC4i4LXDNU0e8PbB2NIQAAeyfJEU5m/Dn1tPw9WvPtPqHCRvgSwnRfzYngMVWROgV2Qe6pOqTTgetEYfb5gkDc2i1M7yfTp3H3ExfrDKwOKPc/9UYOADMFU6u1fJN+4epLETilHC1ubtBeVi23pn1K+LDy06Gwhq1MLljCM7gFBMrmv894HrOHU4WrzLUlfkiDt2cyXLb4qPWYqilBFLUjU92kjmiI/EwB/8pR1WmdU7FoYpdgBHNr3NT53 LUG-CA

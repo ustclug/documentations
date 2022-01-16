@@ -462,11 +462,11 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#gateway-el" class="md-nav__link">
-    gateway-el
+  <a href="#east-campus-library-gateway-gateway-el" class="md-nav__link">
+    East Campus Library Gateway (gateway-el)
   </a>
   
-    <nav class="md-nav" aria-label="gateway-el">
+    <nav class="md-nav" aria-label="East Campus Library Gateway (gateway-el)">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -492,6 +492,13 @@
         
       </ul>
     </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#network-information-center-gateway-gateway-nic" class="md-nav__link">
+    Network Information Center Gateway (gateway-nic)
+  </a>
   
 </li>
       
@@ -1617,11 +1624,11 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#gateway-el" class="md-nav__link">
-    gateway-el
+  <a href="#east-campus-library-gateway-gateway-el" class="md-nav__link">
+    East Campus Library Gateway (gateway-el)
   </a>
   
-    <nav class="md-nav" aria-label="gateway-el">
+    <nav class="md-nav" aria-label="East Campus Library Gateway (gateway-el)">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -1650,6 +1657,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#network-information-center-gateway-gateway-nic" class="md-nav__link">
+    Network Information Center Gateway (gateway-nic)
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1668,8 +1682,8 @@
 
 
 <h1 id="gateway-troubleshooting">Gateway troubleshooting<a class="headerlink" href="#gateway-troubleshooting" title="Permanent link">&para;</a></h1>
-<h2 id="gateway-el"><code>gateway-el</code><a class="headerlink" href="#gateway-el" title="Permanent link">&para;</a></h2>
-<div class="admonition todo todo">
+<h2 id="east-campus-library-gateway-gateway-el">East Campus Library Gateway (<code>gateway-el</code>)<a class="headerlink" href="#east-campus-library-gateway-gateway-el" title="Permanent link">&para;</a></h2>
+<div class="admonition todo">
 <p class="admonition-title">Todo</p>
 <p>Currently <code>systemctl restart networking</code> is required after a reboot to set up tunnel. This bug should be fixed.</p>
 </div>
@@ -1718,6 +1732,8 @@ iface ExtraDemoTunnel inet static
 // ...
 </code></pre></div>
 <p>For wireguard, you can use <code>wg</code> to check status. If you find that the "received" is 0 in transferred, something is going wrong.</p>
+<h2 id="network-information-center-gateway-gateway-nic">Network Information Center Gateway (<code>gateway-nic</code>)<a class="headerlink" href="#network-information-center-gateway-gateway-nic" title="Permanent link">&para;</a></h2>
+<p>Previously gateway-nic used CentOS 7 to 8 to Stream, to "avoid putting all eggs in one basket". This VM was replaced by a newly setup Debian Bullseye VM on January 2022 during migration from ESXi to Proxmox VE.</p>
 
               
             </article>

@@ -1567,7 +1567,7 @@
 
 <h1 id="ssl-certificates">SSL Certificates<a class="headerlink" href="#ssl-certificates" title="Permanent link">&para;</a></h1>
 <p>Discussion: <a href="https://github.com/ustclug/discussions/issues/224">#224</a></p>
-<p>Our SSL certificates are automatically renewed on GitHub <a href="https://github.com/ustclug/ssl-cert">ustclug/ssl-cert</a>.</p>
+<p>Our SSL certificates are automatically renewed on GitHub <a href="https://github.com/ustclug/ssl-cert">ustclug/ssl-cert</a> (:fontawesome-solid-lock: Private).</p>
 <p>We delegate the subdomain <code>ssl-digitalocean.ustclug.org</code> to DigitalOcean DNS hosting, and use <a href="https://github.com/acmesh-official/acme.sh/wiki/DNS-alias-mode">acme.sh DNS alias mode</a> to issue certificates. For this to work, we have the following CNAME records in place:</p>
 <div class="highlight"><pre><span></span><code>_acme-challenge.lug.ustc.edu.cn    -&gt;  lug.ssl-digitalocean.ustclug.org
 _acme-challenge.ustclug.org        -&gt;  lug.ssl-digitalocean.ustclug.org
@@ -1577,7 +1577,7 @@ _acme-challenge.mirrors.ustc.edu.cn  -&gt;  mirrors.ssl-digitalocean.ustclug.org
 </code></pre></div>
 <p>Individual machines that use SSL certificates should pull from the said repository (branch <code>cert</code>). Certificates may be loaded via symbolic links (for processes running on the host system directly), or copied around from within the updater script (when there are path constraints, e.g. in a Docker container). The update task is managed by cron.</p>
 <p>Update script for reference:</p>
-<div class="highlight"><pre><span></span><code><span class="ch">#!/bin/sh</span>
+<div class="highlight"><span class="filename">/etc/ssl/private/.git/update.sh</span><pre><span></span><code><span class="ch">#!/bin/sh</span>
 
 <span class="nb">cd</span> <span class="s2">&quot;/etc/ssl/private&quot;</span>
 
@@ -1604,7 +1604,7 @@ systemctl reload openresty.service
 <p>The DigitalOcean account we use is owned by iBug and has nothing else running.</p>
 <div class="admonition note">
 <p class="admonition-title">Plan B</p>
-<p>Hurricane Electric provides <a href="https://dns.he.net/">hosted DNS</a> zones <strong>for free</strong>, which is also <a href="https://github.com/acmesh-official/acme.sh/wiki/dnsapi">supported by <code>acme.sh</code></a>. This makes HE DNS a feasible alternative should our current dependency (DigitalOcean) fails for whatever reason.</p>
+<p>Hurricane Electric provides <a href="https://dns.he.net/">hosted DNS</a> zones <strong>for free</strong>, which is also <a href="https://github.com/acmesh-official/acme.sh/wiki/dnsapi">supported by <code>acme.sh</code></a>. This makes HE DNS a feasible alternative should our current dependency (DigitalOcean) fails.</p>
 </div>
 
               

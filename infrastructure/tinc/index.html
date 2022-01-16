@@ -1686,9 +1686,9 @@ git reset --hard FETCH_HEAD
 <p>然后在 <code>/etc/tinc/ustclug/hosts/$HOST</code> 最后补上一行：</p>
 <div class="highlight"><pre><span></span><code>Address = [这台机器的公网IP]
 </code></pre></div>
-<p>把新增的这个文件提交进 Git 仓库，并在 <code>{ldap,board,gateway-el}.s.ustclug.org</code> 等台机器上通过 <code>git pull</code> 更新，并 <code>systemctl reload tinc@ustclug.service</code>。</p>
+<p>把新增的这个文件提交进 Git 仓库，并在 <code>{ldap,board,gateway-el,gateway-nic}.s.ustclug.org</code> 等多台机器上通过 <code>git pull</code> 更新，并 <code>systemctl reload tinc@ustclug.service</code>。</p>
 <h3 id="ip">内网 IP<a class="headerlink" href="#ip" title="Permanent link">&para;</a></h3>
-<p><strong>测试的时候</strong>，你可以直接用 <code>ifconfig</code> 指定一个临时的 IP，注意不要与已有的内网 IP 冲突：</p>
+<p><strong>测试的时候</strong>，你可以直接通过 <code>ifconfig</code> 等方式指定一个临时的 IP，注意不要与已有的内网 IP 冲突：</p>
 <div class="highlight"><pre><span></span><code>ifconfig <span class="m">10</span>.254.0.xxx/21 ustclug
 </code></pre></div>
 <p>这时候应该能从其他机器 ping 通这个 IP。</p>
@@ -1698,8 +1698,12 @@ git reset --hard FETCH_HEAD
 </code></pre></div>
 <p>然后在机器上重启 <code>systemctl restart tinc@ustclug.service</code> 就能自动获取了。</p>
 <h2 id="ssh">配置 SSH 侦听内网地址<a class="headerlink" href="#ssh" title="Permanent link">&para;</a></h2>
-<p>配置供参考：</p>
-<div class="highlight"><pre><span></span><code>AddressFamily inet
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>对于 Debian 11+ 的系统，建议保持 <code>sshd_config</code> 不动，将自定义的配置写入 <code>sshd_config.d/ustclug.conf</code>，以减少更新 ssh 软件包时的配置文件冲突。注意如果这么做的话需要把配置文件理的 <code>Subsystem sftp</code> 删掉，否则 sshd 会报错“重复指定了 Subsystem sshd”。</p>
+</div>
+<p>以下配置供参考，复制后注意修改 <code>Match LocalAddress</code> 后面的内容（内网地址和 AllowGroups 最后的名称）：</p>
+<div class="highlight"><span class="filename">/etc/ssh/sshd_config</span><pre><span></span><code>AddressFamily inet
 UseDNS no
 
 HostKey /etc/ssh/ssh_host_rsa_key

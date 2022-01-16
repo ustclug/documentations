@@ -1699,10 +1699,10 @@
 <ul>
 <li>增加 hostname.s.ustclug.org 的 DNS 解析。（ustclug.intranet）</li>
 <li>在 vCenter 中更改网络为 ustclug （如果不需要源 MAC 地址检查，选 ustclug-bridge）</li>
-<li>在虚拟机中重启网络接口，改为静态 IP，并更改网关 （10.254.0.254）</li>
-<li>ifdown</li>
-<li>edit interface coonfig files</li>
-<li>ifup</li>
+<li>在虚拟机中重启网络接口，改为静态 IP，并更改网关 （东图虚拟机设置为 10.254.0.254，NIC 虚拟机设置为 10.254.0.245）</li>
+<li><code>ifdown -a</code></li>
+<li>edit <code>/etc/network/interfaces</code></li>
+<li><code>ifup -a</code></li>
 <li>更改虚拟机的 DNS 和 domain/search：</li>
 <li>DNS:<ul>
 <li>neat-dns (10.254.0.253)</li>
@@ -1717,11 +1717,13 @@
 <h2 id="install-tools">Install tools<a class="headerlink" href="#install-tools" title="Permanent link">&para;</a></h2>
 <ul>
 <li>根据需要换源，加入安全更新源等</li>
-<li>安装 open-vm tools</li>
+<li>安装虚拟机工具</li>
+<li>对于 Proxmox VE 的虚拟机：安装 <code>qemu-guest-agent</code></li>
+<li>对于 VMware vCenter 的虚拟机：安装 <code>open-vm-tools</code></li>
 <li>安装 openssh</li>
 </ul>
 <h2 id="configure-ldap-and-ssh-ca">Configure LDAP and SSH CA<a class="headerlink" href="#configure-ldap-and-ssh-ca" title="Permanent link">&para;</a></h2>
-<p>见 <a href="/infrastructure/ldap">LDAP 服务使用及配置说明</a> 和 <a href="/infrastructure/sshca/#issue-a-server-certificate">为服务器设置 SSH CA</a></p>
+<p>见 <a href="../../../infrastructure/ldap/">LDAP 服务使用及配置说明</a> 和 <a href="../../../infrastructure/sshca/#issue-a-server-certificate">为服务器设置 SSH CA</a></p>
 
               
             </article>
