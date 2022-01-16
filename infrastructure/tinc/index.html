@@ -1761,7 +1761,7 @@ Match All <span class="c1">#(1)</span>
 <li>OpenSSH 6.5p1 以上可以使用 <code>Match All</code> 来结束上面的 Match 块。由于 <code>Include</code> 指令出现在 <code>/etc/ssh/sshd_config</code> 的最上面，而接下来的内容都是全局设置，因此使用 <code>Match All</code> 保证原先的内容继续作用于全局，而不是像上面这个例子一样变成 <code>Match User mirror</code> 的设置。</li>
 </ol>
 <p>注意 HostCertificate, TrustedUserCAKeys 和 RevokedKeys 这三个文件必须存在，否则 SSH 会出一些问题，例如不能密钥登录只能密码登录。</p>
-<p>HostCertificate 需要手动签发一个，另外两个文件从别的机器上复制就行。</p>
+<p>HostCertificate 需要<a href="../sshca/#issue-a-server-certificate">手动签发一个</a>，另外两个文件从别的机器上复制就行。</p>
 
               
             </article>

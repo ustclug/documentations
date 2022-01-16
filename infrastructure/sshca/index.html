@@ -1705,15 +1705,19 @@ HostCertificate /etc/ssh/ssh_host_rsa_key-cert.pub
 <div class="highlight"><pre><span></span><code>ssh-keygen -s /path/to/ssh_ca -I certificate_identity -n principals -O option -V validity_interval public_key_file
 </code></pre></div>
 <p>For example:</p>
-<div class="highlight"><pre><span></span><code>ssh-keygen -s /path/to/ssh_ca -I &quot;Yifan Gao&quot; -n yifan -V +365d yifan.pub
+<div class="highlight"><pre><span></span><code>ssh-keygen -s /path/to/ssh_ca -I <span class="s2">&quot;Yifan Gao&quot;</span> -n yifan -V -5m:+365d yifan.pub
 </code></pre></div>
-<p>In general, <em>certificate_identity</em> is user full name, and <em>principals</em> is the user name. In addition, one user can own multiply <em>principals</em> in one certificate, like:</p>
-<div class="highlight"><pre><span></span><code>ssh-keygen -s /path/to/ssh_ca -I &quot;Yifan Gao&quot; -n yifan,root,liims -V +365d yifan.pub
+<p>In general, <em>certificate_identity</em> is user full name, and <em>principals</em> is the user name. In addition, one certificate can carry multiply <em>principals</em>, like:</p>
+<div class="highlight"><pre><span></span><code>ssh-keygen -s /path/to/ssh_ca -I <span class="s2">&quot;Yifan Gao&quot;</span> -n yifan,root,liims -V -5m:+365d yifan.pub
 </code></pre></div>
 <p>It authorizes the certificate owner to login to any server with <code>yifan</code>, <code>root</code> or <code>liims</code> username.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code>liims</code> principal is used to login to library inquiring machines.</p>
+</div>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
-<p><code>liims</code> principal is used to login to library inquiring machine.</p>
+<p>The validity interval by default starts at the current system time. Using <code>-5m:+365d</code> creates a certificate valid from 5 minutes ago to make up for offset times on other systems. Otherwise it's not much useful to have a validity period starting from a long time ago.</p>
 </div>
 
               
