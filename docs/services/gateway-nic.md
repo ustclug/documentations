@@ -80,7 +80,7 @@ ROOT_RT=/run/systemd/network
 
 gen_route() {
   DEVFILE="$1"
-  DEV="$(grep '^Name=' "$ROOT_CONF/$DEVFILE.network" | head -1 | cut -d= -f2)"
+  DEV="$(awk -F = '/^Name=/{print $2; exit}' "$ROOT_CONF/$DEVFILE.network")"
   GW="$2"
   # Convert table to number
   TABLENAME="$3"
