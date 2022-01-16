@@ -23,20 +23,20 @@ auth-enabled = true
 
 ## Install telegraf
 
-安装方法见 <https://docs.influxdata.com/telegraf/v1.6/introduction/installation>
+安装方法见 <https://docs.influxdata.com/telegraf/v1.21/introduction/installation/>
 
 一个典型的安装命令是：
 
 ```shell
-wget https://dl.influxdata.com/telegraf/releases/telegraf_1.6.1-1_amd64.deb
-sudo dpkg -i telegraf_1.6.1-1_amd64.deb
+wget https://dl.influxdata.com/telegraf/releases/telegraf_1.21.2-1_amd64.deb
+sudo dpkg -i telegraf_1.21.2-1_amd64.deb
 ```
 
-或者
+更加**推荐**的做法是加入软件源后安装
 
 ```shell
-curl -sL https://repos.influxdata.com/influxdb.key | sudo apt-key add -
-echo "deb https://mirrors.ustc.edu.cn/influxdata/debian buster stable" | sudo tee /etc/apt/sources.list.d/influxdb.list
+curl -sL https://repos.influxdata.com/influxdb.key | sudo gpg --dearmor -o /usr/share/keyrings/influxdb.gpg
+echo "deb [signed-by=/usr/share/keyrings/influxdb.gpg] https://mirrors.ustc.edu.cn/influxdata/debian buster stable" | sudo tee /etc/apt/sources.list.d/influxdb.list
 sudo apt-get update && sudo apt-get install telegraf
 ```
 
@@ -46,14 +46,13 @@ sudo apt-get update && sudo apt-get install telegraf
 
 在 `/etc/telegraf/telegraf.d/` 下增加 `net.conf` 用来开启网络监控，内容如下：
 
-```shell
-# /etc/telegraf/telegraf.d/net.conf
+```shell title="/etc/telegraf/telegraf.d/net.conf"
 [[inputs.net]]
 ```
 
 在 `/etc/telegraf/telegraf.conf` 中的`[[outputs.influxdb]]` 中**增加** influxdb 的地址：
 
-```shell
+```shell title="/etc/telegraf/telegraf.conf"
 [[outputs.influxdb]]
   urls = ["http://influxdb.ustclug.org:8086"]
   username = "${INFLUX_USERNAME}"
