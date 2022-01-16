@@ -1243,14 +1243,35 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#tinc-vpn" class="md-nav__link">
+    Tinc VPN
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#systemd-networkd-wait-onlineservice" class="md-nav__link">
     systemd-networkd-wait-online.service
   </a>
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#iptables" class="md-nav__link">
+    iptables
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fail2ban" class="md-nav__link">
+    Fail2ban
+  </a>
   
 </li>
       
@@ -1637,14 +1658,35 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#tinc-vpn" class="md-nav__link">
+    Tinc VPN
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#systemd-networkd-wait-onlineservice" class="md-nav__link">
     systemd-networkd-wait-online.service
   </a>
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#iptables" class="md-nav__link">
+    iptables
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fail2ban" class="md-nav__link">
+    Fail2ban
+  </a>
   
 </li>
       
@@ -1667,9 +1709,10 @@
 
 <h1 id="network-information-center-gateway-gateway-nic">Network Information Center Gateway (<code>gateway-nic</code>)<a class="headerlink" href="#network-information-center-gateway-gateway-nic" title="Permanent link">&para;</a></h1>
 <p>Previously gateway-nic used CentOS 7 to 8 to Stream, to "avoid putting all eggs in one basket". This VM was replaced by a newly setup Debian Bullseye VM on January 2022 during migration from ESXi to Proxmox VE.</p>
+<p>The virtual disk of the old gateway-nic was copied onto pve-5, located at ZFS Zvol <code>rpool/data/gateway-nic</code>. The current VM uses <code>rpool/data/vm-200-disk-0</code> instead (Proxmox naming convention).</p>
 <h2 id="networking">Networking<a class="headerlink" href="#networking" title="Permanent link">&para;</a></h2>
-<p>We use systemd-networkd to configure network on gateway-nic.</p>
-<div class="highlight"><span class="filename">systemctl edit systemd-networkd.service</span><pre><span></span><code><span class="k">[Service]</span><span class="w"></span>
+<p>We use systemd-networkd to configure network on gateway-nic. This replaces both <code>ifupdown</code> (config file <code>/etc/network/interfaces</code>)</p>
+<div class="highlight"><span class="filename">$ systemctl edit systemd-networkd.service</span><pre><span></span><code><span class="k">[Service]</span><span class="w"></span>
 <span class="na">ExecStartPre</span><span class="o">=</span><span class="s">-/sbin/ip -4 rule flush</span><span class="w"></span>
 <span class="na">ExecStartPre</span><span class="o">=</span><span class="s">-/sbin/ip -6 rule flush</span><span class="w"></span>
 
@@ -1705,12 +1748,12 @@
 <h3 id="routes">Routes<a class="headerlink" href="#routes" title="Permanent link">&para;</a></h3>
 <p>Outgoing connections are routed through different ISPs. We use ISP IP data from <a href="https://github.com/gaoyifan/china-operator-ip">gaoyifan/china-operator-ip</a>. Relevant files are located under <code>/usr/local/network_config</code>.</p>
 <p>The said repository (branch <code>ip-lists</code>) is cloned and we symlink select files to <code>iplist</code> directory for consumption. A custom script converts these IP data into additional systemd-networkd config files (under <code>/run/systemd</code>).</p>
-<div class="highlight"><span class="filename">/usr/local/network_config/iplist</span><pre><span></span><code>total 8
-lrwxrwxrwx cernet.txt -&gt; ../china-operator-ip/cernet.txt
+<div class="highlight"><span class="filename">$ ls -l /usr/local/network_config/iplist/</span><pre><span></span><code>lrwxrwxrwx cernet.txt -&gt; ../china-operator-ip/cernet.txt
 lrwxrwxrwx cernet6.txt -&gt; ../china-operator-ip/cernet6.txt
 lrwxrwxrwx china.txt -&gt; ../china-operator-ip/china.txt
 lrwxrwxrwx china6.txt -&gt; ../china-operator-ip/china6.txt
 lrwxrwxrwx cstnet.txt -&gt; ../china-operator-ip/cstnet.txt
+lrwxrwxrwx cstnet6.txt -&gt; ../china-operator-ip/cstnet6.txt
 lrwxrwxrwx mobile.txt -&gt; ../china-operator-ip/cmcc.txt
 lrwxrwxrwx telecom.txt -&gt; ../china-operator-ip/chinanet.txt
 lrwxrwxrwx unicom.txt -&gt; ../china-operator-ip/unicom.txt
@@ -1747,6 +1790,7 @@ gen_route<span class="o">()</span> <span class="o">{</span>
 gen_route <span class="m">12</span>-Cernet <span class="m">202</span>.38.95.126 ustcnet <span class="m">5</span> ustcnet.txt
 gen_route <span class="m">12</span>-Cernet <span class="m">2001</span>:da8:d800:95::1 ustcnet <span class="m">5</span> ustcnet6.txt
 gen_route <span class="m">12</span>-Cernet <span class="m">202</span>.38.95.126 cernet <span class="m">6</span> cernet.txt cstnet.txt
+gen_route <span class="m">12</span>-Cernet <span class="m">2001</span>:da8:d800:95::1 cernet <span class="m">6</span> cernet6.txt cstnet6.txt
 gen_route <span class="m">13</span>-Telecom <span class="m">202</span>.141.160.126 telecom <span class="m">6</span> telecom.txt unicom.txt
 gen_route <span class="m">14</span>-Mobile <span class="m">202</span>.141.176.126 mobile <span class="m">6</span> mobile.txt
 gen_route <span class="m">12</span>-Cernet <span class="m">202</span>.38.95.126 china <span class="m">7</span> china.txt
@@ -1776,7 +1820,7 @@ gen_route <span class="m">12</span>-Cernet <span class="m">2001</span>:da8:d800:
 systemctl restart route-all.service
 </code></pre></div>
 <p>The resulting routing policies look like this:</p>
-<div class="highlight"><span class="filename">ip rule</span><pre><span></span><code>0:      from all lookup local
+<div class="highlight"><span class="filename">$ ip rule</span><pre><span></span><code>0:      from all lookup local
 2:      from all lookup main suppress_prefixlength 1
 3:      from 172.16.0.2 lookup Warp
 3:      from all oif Warp lookup Warp
@@ -1798,11 +1842,35 @@ systemctl restart route-all.service
 7:      from all lookup china
 32767:  from all lookup default
 </code></pre></div>
+<h3 id="tinc-vpn">Tinc VPN<a class="headerlink" href="#tinc-vpn" title="Permanent link">&para;</a></h3>
+<p>Gateway-NIC connects to intranet with Tinc. There's no special Tinc configuration other than those described at the <a href="../../infrastructure/tinc/">Tinc VPN</a> page.</p>
+<p>Because Tinc now uses systemd services instead of System V <code>init.d</code> scripts, we need to <code>systemctl enable tinc@ustclug.service</code> to make it start on boot. Everything is managed through this templated systemd service.</p>
 <h3 id="systemd-networkd-wait-onlineservice">systemd-networkd-wait-online.service<a class="headerlink" href="#systemd-networkd-wait-onlineservice" title="Permanent link">&para;</a></h3>
 <p>We also override systemd-networkd's online detection for goodness' sake, so it doesn't block booting. Note that it may interfere with services depending on <code>network-online.target</code>, though we have yet to discover any issues.</p>
-<div class="highlight"><span class="filename">systemctl edit systemd-networkd-wait-online.service</span><pre><span></span><code><span class="k">[Service]</span><span class="w"></span>
+<div class="highlight"><span class="filename">$ systemctl edit systemd-networkd-wait-online.service</span><pre><span></span><code><span class="k">[Service]</span><span class="w"></span>
 <span class="na">ExecStart</span><span class="o">=</span><span class="w"></span>
 <span class="na">ExecStart</span><span class="o">=</span><span class="s">/bin/sleep 1</span><span class="w"></span>
+</code></pre></div>
+<h3 id="iptables">iptables<a class="headerlink" href="#iptables" title="Permanent link">&para;</a></h3>
+<p>All iptables firewall rules are managed manually. We use <code>iptables-persistent</code> to automatically load firewall rules on boot.</p>
+<p>To change the rules, manually edit <code>/root/iptables/rules.v4</code> or <code>rules.v6</code> and then run <code>apply.sh</code> to apply the changes.</p>
+<h2 id="fail2ban">Fail2ban<a class="headerlink" href="#fail2ban" title="Permanent link">&para;</a></h2>
+<p>We use fail2ban to stop SSH scanning and brute-force attempts.</p>
+<p>Because fail2ban relies on changing iptables to work, to improve its performance as well as minimize its tampering of iptables rules, we use ipsets for fail2ban.</p>
+<p>After stock installation of <code>fail2ban</code> package, remove <code>defaults-debian.conf</code> and add this file to secure SSH daemon:</p>
+<div class="highlight"><span class="filename">/etc/fail2ban/jail.d/sshd.conf</span><pre><span></span><code><span class="k">[sshd]</span><span class="w"></span>
+<span class="na">enabled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">true</span><span class="w"></span>
+<span class="na">mode</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="s">aggressive</span><span class="w"></span>
+<span class="na">filter</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="s">sshd[mode=%(mode)s]</span><span class="w"></span>
+<span class="na">logpath</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">/var/log/auth.log</span><span class="w"></span>
+<span class="na">backend</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">pyinotify</span><span class="w"></span>
+<span class="na">action</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="s">iptables-ipset-proto6[chain=&quot;fail2ban&quot;]</span><span class="w"></span>
+</code></pre></div>
+<p>We provide a pre-created empty chain named <code>fail2ban</code> for fail2ban to manipulate (see <a href="#iptables">iptables</a> above).</p>
+<p>To make sure fail2ban rules can be re-applied after reloading iptables manually, we override the systemd service so that fail2ban is restarted whenever the iptables service is restarted.</p>
+<div class="highlight"><span class="filename">$ systemctl edit fail2ban.service</span><pre><span></span><code><span class="k">[Unit]</span><span class="w"></span>
+<span class="na">BindsTo</span><span class="o">=</span><span class="s">netfilter-persistent.service</span><span class="w"></span>
+<span class="na">After</span><span class="o">=</span><span class="s">netfilter-persistent.service</span><span class="w"></span>
 </code></pre></div>
 
               
