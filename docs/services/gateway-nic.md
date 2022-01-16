@@ -2,11 +2,13 @@
 
 Previously gateway-nic used CentOS 7 to 8 to Stream, to "avoid putting all eggs in one basket". This VM was replaced by a newly setup Debian Bullseye VM on January 2022 during migration from ESXi to Proxmox VE.
 
+The virtual disk of the old gateway-nic was copied onto pve-5, located at ZFS Zvol `rpool/data/gateway-nic`. The current VM uses `rpool/data/vm-200-disk-0` instead (Proxmox naming convention).
+
 ## Networking
 
-We use systemd-networkd to configure network on gateway-nic.
+We use systemd-networkd to configure network on gateway-nic. This replaces both `ifupdown` (config file `/etc/network/interfaces`)
 
-```ini title="systemctl edit systemd-networkd.service"
+```ini title="$ systemctl edit systemd-networkd.service"
 [Service]
 ExecStartPre=-/sbin/ip -4 rule flush
 ExecStartPre=-/sbin/ip -6 rule flush
@@ -52,13 +54,13 @@ Outgoing connections are routed through different ISPs. We use ISP IP data from 
 
 The said repository (branch `ip-lists`) is cloned and we symlink select files to `iplist` directory for consumption. A custom script converts these IP data into additional systemd-networkd config files (under `/run/systemd`).
 
-```text title="/usr/local/network_config/iplist"
-total 8
+```text title="$ ls -l /usr/local/network_config/iplist/"
 lrwxrwxrwx cernet.txt -> ../china-operator-ip/cernet.txt
 lrwxrwxrwx cernet6.txt -> ../china-operator-ip/cernet6.txt
 lrwxrwxrwx china.txt -> ../china-operator-ip/china.txt
 lrwxrwxrwx china6.txt -> ../china-operator-ip/china6.txt
 lrwxrwxrwx cstnet.txt -> ../china-operator-ip/cstnet.txt
+lrwxrwxrwx cstnet6.txt -> ../china-operator-ip/cstnet6.txt
 lrwxrwxrwx mobile.txt -> ../china-operator-ip/cmcc.txt
 lrwxrwxrwx telecom.txt -> ../china-operator-ip/chinanet.txt
 lrwxrwxrwx unicom.txt -> ../china-operator-ip/unicom.txt
@@ -97,6 +99,7 @@ gen_route() {
 gen_route 12-Cernet 202.38.95.126 ustcnet 5 ustcnet.txt
 gen_route 12-Cernet 2001:da8:d800:95::1 ustcnet 5 ustcnet6.txt
 gen_route 12-Cernet 202.38.95.126 cernet 6 cernet.txt cstnet.txt
+gen_route 12-Cernet 2001:da8:d800:95::1 cernet 6 cernet6.txt cstnet6.txt
 gen_route 13-Telecom 202.141.160.126 telecom 6 telecom.txt unicom.txt
 gen_route 14-Mobile 202.141.176.126 mobile 6 mobile.txt
 gen_route 12-Cernet 202.38.95.126 china 7 china.txt
@@ -134,7 +137,7 @@ systemctl restart route-all.service
 
 The resulting routing policies look like this:
 
-```text title="ip rule"
+```text title="$ ip rule"
 0:      from all lookup local
 2:      from all lookup main suppress_prefixlength 1
 3:      from 172.16.0.2 lookup Warp
@@ -158,12 +161,52 @@ The resulting routing policies look like this:
 32767:  from all lookup default
 ```
 
+### Tinc VPN
+
+Gateway-NIC connects to intranet with Tinc. There's no special Tinc configuration other than those described at the [Tinc VPN](../infrastructure/tinc.md) page.
+
+Because Tinc now uses systemd services instead of System V `init.d` scripts, we need to `systemctl enable tinc@ustclug.service` to make it start on boot. Everything is managed through this templated systemd service.
+
 ### systemd-networkd-wait-online.service
 
 We also override systemd-networkd's online detection for goodness' sake, so it doesn't block booting. Note that it may interfere with services depending on `network-online.target`, though we have yet to discover any issues.
 
-```ini title="systemctl edit systemd-networkd-wait-online.service"
+```ini title="$ systemctl edit systemd-networkd-wait-online.service"
 [Service]
 ExecStart=
 ExecStart=/bin/sleep 1
+```
+
+### iptables
+
+All iptables firewall rules are managed manually. We use `iptables-persistent` to automatically load firewall rules on boot.
+
+To change the rules, manually edit `/root/iptables/rules.v4` or `rules.v6` and then run `apply.sh` to apply the changes.
+
+## Fail2ban
+
+We use fail2ban to stop SSH scanning and brute-force attempts.
+
+Because fail2ban relies on changing iptables to work, to improve its performance as well as minimize its tampering of iptables rules, we use ipsets for fail2ban.
+
+After stock installation of `fail2ban` package, remove `defaults-debian.conf` and add this file to secure SSH daemon:
+
+```ini title="/etc/fail2ban/jail.d/sshd.conf"
+[sshd]
+enabled = true
+mode    = aggressive
+filter  = sshd[mode=%(mode)s]
+logpath = /var/log/auth.log
+backend = pyinotify
+action  = iptables-ipset-proto6[chain="fail2ban"]
+```
+
+We provide a pre-created empty chain named `fail2ban` for fail2ban to manipulate (see [iptables](#iptables) above).
+
+To make sure fail2ban rules can be re-applied after reloading iptables manually, we override the systemd service so that fail2ban is restarted whenever the iptables service is restarted.
+
+```ini title="$ systemctl edit fail2ban.service"
+[Unit]
+BindsTo=netfilter-persistent.service
+After=netfilter-persistent.service
 ```
