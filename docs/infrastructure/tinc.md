@@ -62,7 +62,7 @@ $ORIGIN s.ustclug.org
 
 以下配置供参考，复制时注意修改 `Match LocalAddress` 后面的内容（内网地址和 AllowGroups 最后的名称）：
 
-```conf title="/etc/ssh/sshd_config"
+``` sh title="/etc/ssh/sshd_config"
 AddressFamily inet
 UseDNS no
 
@@ -101,7 +101,7 @@ Match User mirror
     PermitTunnel no
     X11Forwarding no
 
-Match All # (1)
+Match All #(1)
 ```
 
 1.  OpenSSH 6.5p1 以上可以使用 `Match All` 来结束上面的 Match 块。由于 `Include` 指令出现在 `/etc/ssh/sshd_config` 的最上面，而接下来的内容都是全局设置，因此使用 `Match All` 保证原先的内容继续作用于全局，而不是像上面这个例子一样变成 `Match User mirror` 的设置。

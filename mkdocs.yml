@@ -34,6 +34,7 @@ theme:
     logo: fontawesome/brands/linux
     repo: octicons/mark-github-16
   features:
+    - content.code.annotate
     - navigation.top
     - navigation.sections
 
