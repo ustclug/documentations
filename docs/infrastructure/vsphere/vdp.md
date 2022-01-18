@@ -37,3 +37,14 @@ vdp2 挂接在 esxi-5 上，esxi-5 源于老 mirrors（mirrors2 之前的一代�
 # dpnctl status
 # status.dpn
 ```
+
+## vSphereDataProtection on VirtIO SCSI
+
+vdp 的操作系统是 SLES 11 SP3，这个操作需要系统盘的前两个分区（`/boot` 和 `/`）。
+
+1. 参考 <https://www.suse.com/support/kb/doc/?id=000016530>，解压 initrd 到某个目录。
+2. 从 rootfs 的 `/lib/modules/3.0.101-0.47.99-default/kernel/drivers/` 里取出 virtio 的内核模块（`block` 里面一个，`virtio` 整个目录，以及 `scsi` 里面一个），放在 initrd 解压后的对应位置。
+3. rootfs 的 `/lib/modules/3.0.101-0.47.99-default/modules.dep*` 复制到 initrd 里。
+4. 修改 initrd 里的 `config/start.sh` 和 `run_all.sh`，在 `RESOLVED_INITRD_MODULES` 变量中添加 `virtio_pci virtio virtio_scsi virtio_blk`（即修改为 `RESOLVED_INITRD_MODULES='virtio_pci virtio virtio_scsi virtio_blk cifs ext2 ext3 ext4 fat nfs reiserfs ufs xfs'`）。
+5. 参考 <https://www.suse.com/support/kb/doc/?id=000016530> 重新打包，放在第一个分区 (`/boot`) 里面，建议不要覆盖原来的 initrd。
+6. 修改第一个分区里 `grub/menu.lst`，将 initrd 修改为你所打包的文件名。
