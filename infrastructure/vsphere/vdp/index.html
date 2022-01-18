@@ -620,6 +620,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#vspheredataprotection-on-virtio-scsi" class="md-nav__link">
+    vSphereDataProtection on VirtIO SCSI
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1624,6 +1631,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#vspheredataprotection-on-virtio-scsi" class="md-nav__link">
+    vSphereDataProtection on VirtIO SCSI
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1667,6 +1681,16 @@
 <div class="highlight"><pre><span></span><code># dpnctl status
 # status.dpn
 </code></pre></div>
+<h2 id="vspheredataprotection-on-virtio-scsi">vSphereDataProtection on VirtIO SCSI<a class="headerlink" href="#vspheredataprotection-on-virtio-scsi" title="Permanent link">&para;</a></h2>
+<p>vdp 的操作系统是 SLES 11 SP3，这个操作需要系统盘的前两个分区（<code>/boot</code> 和 <code>/</code>）。</p>
+<ol>
+<li>参考 <a href="https://www.suse.com/support/kb/doc/?id=000016530">https://www.suse.com/support/kb/doc/?id=000016530</a>，解压 initrd 到某个目录。</li>
+<li>从 rootfs 的 <code>/lib/modules/3.0.101-0.47.99-default/kernel/drivers/</code> 里取出 virtio 的内核模块（<code>block</code> 里面一个，<code>virtio</code> 整个目录，以及 <code>scsi</code> 里面一个），放在 initrd 解压后的对应位置。</li>
+<li>rootfs 的 <code>/lib/modules/3.0.101-0.47.99-default/modules.dep*</code> 复制到 initrd 里。</li>
+<li>修改 initrd 里的 <code>config/start.sh</code> 和 <code>run_all.sh</code>，在 <code>RESOLVED_INITRD_MODULES</code> 变量中添加 <code>virtio_pci virtio virtio_scsi virtio_blk</code>（即修改为 <code>RESOLVED_INITRD_MODULES='virtio_pci virtio virtio_scsi virtio_blk cifs ext2 ext3 ext4 fat nfs reiserfs ufs xfs'</code>）。</li>
+<li>参考 <a href="https://www.suse.com/support/kb/doc/?id=000016530">https://www.suse.com/support/kb/doc/?id=000016530</a> 重新打包，放在第一个分区 (<code>/boot</code>) 里面，建议不要覆盖原来的 initrd。</li>
+<li>修改第一个分区里 <code>grub/menu.lst</code>，将 initrd 修改为你所打包的文件名。</li>
+</ol>
 
               
             </article>
