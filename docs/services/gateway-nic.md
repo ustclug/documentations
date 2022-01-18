@@ -4,6 +4,16 @@ Previously gateway-nic used CentOS 7 to 8 to Stream, to "avoid putting all eggs 
 
 The virtual disk of the old gateway-nic was copied onto pve-5, located at ZFS Zvol `rpool/data/gateway-nic`. The current VM uses `rpool/data/vm-200-disk-0` instead (Proxmox naming convention).
 
+## Config file management
+
+Git repositories exist for these directories:
+
+```text
+/etc/nginx
+/etc/systemd/network
+/etc/tinc
+```
+
 ## Networking
 
 We use systemd-networkd to configure network on gateway-nic. This replaces both `ifupdown` (config file `/etc/network/interfaces`)
@@ -46,7 +56,77 @@ Table=253
 Priority=32767
 ```
 
-Other interfaces are configured normally, so refer to their config files for details.
+### Interfaces
+
+Systemd-networkd has built-in capability to rename interfaces, so there's no need to use udev rules.
+
+For example, to assign a name for the cernet interface, we use:
+
+```ini title="/etc/systemd/network/12-Cernet.link"
+[Match]
+PermanentMACAddress=00:50:56:a2:02:8c
+
+[Link]
+Name=Cernet
+```
+
+We then configure addresses and routing rules for this interface:
+
+!!! example "/etc/systemd/network/12-Cernet.network"
+
+    ```ini title="/etc/systemd/network/12-Cernet.network"
+    [Match]
+    Name=Cernet
+
+    [Network]
+    Address=202.38.95.102/25
+    Address=2001:da8:d800:95::102/64
+    IPv6AcceptRA=no
+
+    [Route]
+    Gateway=202.38.95.126
+    Table=253
+    Metric=2
+
+    [Route]
+    Gateway=2001:da8:d800:95::1
+    Table=253
+    Metric=2
+
+    [Route]
+    Gateway=202.38.95.126
+    Table=1002
+
+    [Route]
+    Gateway=2001:da8:d800:95::1
+    Table=1002
+
+    [RoutingPolicyRule]
+    From=202.38.95.102
+    Table=1002
+    Priority=3
+
+    [RoutingPolicyRule]
+    From=2001:da8:d800:95::102
+    Table=1002
+    Priority=3
+
+    [RoutingPolicyRule]
+    Family=both
+    OutgoingInterface=Cernet
+    Table=1002
+    Priority=3
+
+    [RoutingPolicyRule]
+    Family=both
+    FirewallMark=0x2
+    Table=1002
+    Priority=4
+    ```
+
+This config file assigns one IPv4 and one IPv6 address to the interface, as well as one IPv4 route and one IPv6 route for both the default routing table and an interface-specific routing table. It then adds three routing rules in both IPv4 and IPv6 for replying on the same interface, for sockets bound to this interfaces, and for firewall mark routing.
+
+Other interfaces are configured similarly, so just refer to their configuration files for details.
 
 ### Routes
 

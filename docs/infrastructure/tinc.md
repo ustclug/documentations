@@ -19,6 +19,8 @@ git reset --hard FETCH_HEAD
 
 注意 `git reset` 会覆盖部分文件，建议在全新安装 `tinc` 之后进行同步配置。
 
+配置完成后执行 `systemctl enable tinc@ustclug.service` 使 tinc 能够开机启动。
+
 ### 加入主机
 
 首先需要在新主机上生成密钥：
