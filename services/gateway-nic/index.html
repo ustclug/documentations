@@ -1228,12 +1228,26 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#config-file-management" class="md-nav__link">
+    Config file management
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#networking" class="md-nav__link">
     Networking
   </a>
   
     <nav class="md-nav" aria-label="Networking">
       <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#interfaces" class="md-nav__link">
+    Interfaces
+  </a>
+  
+</li>
         
           <li class="md-nav__item">
   <a href="#routes" class="md-nav__link">
@@ -1643,12 +1657,26 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#config-file-management" class="md-nav__link">
+    Config file management
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#networking" class="md-nav__link">
     Networking
   </a>
   
     <nav class="md-nav" aria-label="Networking">
       <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#interfaces" class="md-nav__link">
+    Interfaces
+  </a>
+  
+</li>
         
           <li class="md-nav__item">
   <a href="#routes" class="md-nav__link">
@@ -1710,6 +1738,12 @@
 <h1 id="network-information-center-gateway-gateway-nic">Network Information Center Gateway (<code>gateway-nic</code>)<a class="headerlink" href="#network-information-center-gateway-gateway-nic" title="Permanent link">&para;</a></h1>
 <p>Previously gateway-nic used CentOS 7 to 8 to Stream, to "avoid putting all eggs in one basket". This VM was replaced by a newly setup Debian Bullseye VM on January 2022 during migration from ESXi to Proxmox VE.</p>
 <p>The virtual disk of the old gateway-nic was copied onto pve-5, located at ZFS Zvol <code>rpool/data/gateway-nic</code>. The current VM uses <code>rpool/data/vm-200-disk-0</code> instead (Proxmox naming convention).</p>
+<h2 id="config-file-management">Config file management<a class="headerlink" href="#config-file-management" title="Permanent link">&para;</a></h2>
+<p>Git repositories exist for these directories:</p>
+<div class="highlight"><pre><span></span><code>/etc/nginx
+/etc/systemd/network
+/etc/tinc
+</code></pre></div>
 <h2 id="networking">Networking<a class="headerlink" href="#networking" title="Permanent link">&para;</a></h2>
 <p>We use systemd-networkd to configure network on gateway-nic. This replaces both <code>ifupdown</code> (config file <code>/etc/network/interfaces</code>)</p>
 <div class="highlight"><span class="filename">$ systemctl edit systemd-networkd.service</span><pre><span></span><code><span class="k">[Service]</span><span class="w"></span>
@@ -1744,7 +1778,69 @@
 <span class="na">Table</span><span class="o">=</span><span class="s">253</span><span class="w"></span>
 <span class="na">Priority</span><span class="o">=</span><span class="s">32767</span><span class="w"></span>
 </code></pre></div>
-<p>Other interfaces are configured normally, so refer to their config files for details.</p>
+<h3 id="interfaces">Interfaces<a class="headerlink" href="#interfaces" title="Permanent link">&para;</a></h3>
+<p>Systemd-networkd has built-in capability to rename interfaces, so there's no need to use udev rules.</p>
+<p>For example, to assign a name for the cernet interface, we use:</p>
+<div class="highlight"><span class="filename">/etc/systemd/network/12-Cernet.link</span><pre><span></span><code><span class="k">[Match]</span><span class="w"></span>
+<span class="na">PermanentMACAddress</span><span class="o">=</span><span class="s">00:50:56:a2:02:8c</span><span class="w"></span>
+
+<span class="k">[Link]</span><span class="w"></span>
+<span class="na">Name</span><span class="o">=</span><span class="s">Cernet</span><span class="w"></span>
+</code></pre></div>
+<p>We then configure addresses and routing rules for this interface:</p>
+<div class="admonition example">
+<p class="admonition-title">/etc/systemd/network/12-Cernet.network</p>
+<div class="highlight"><span class="filename">/etc/systemd/network/12-Cernet.network</span><pre><span></span><code><span class="k">[Match]</span><span class="w"></span>
+<span class="na">Name</span><span class="o">=</span><span class="s">Cernet</span><span class="w"></span>
+
+<span class="k">[Network]</span><span class="w"></span>
+<span class="na">Address</span><span class="o">=</span><span class="s">202.38.95.102/25</span><span class="w"></span>
+<span class="na">Address</span><span class="o">=</span><span class="s">2001:da8:d800:95::102/64</span><span class="w"></span>
+<span class="na">IPv6AcceptRA</span><span class="o">=</span><span class="s">no</span><span class="w"></span>
+
+<span class="k">[Route]</span><span class="w"></span>
+<span class="na">Gateway</span><span class="o">=</span><span class="s">202.38.95.126</span><span class="w"></span>
+<span class="na">Table</span><span class="o">=</span><span class="s">253</span><span class="w"></span>
+<span class="na">Metric</span><span class="o">=</span><span class="s">2</span><span class="w"></span>
+
+<span class="k">[Route]</span><span class="w"></span>
+<span class="na">Gateway</span><span class="o">=</span><span class="s">2001:da8:d800:95::1</span><span class="w"></span>
+<span class="na">Table</span><span class="o">=</span><span class="s">253</span><span class="w"></span>
+<span class="na">Metric</span><span class="o">=</span><span class="s">2</span><span class="w"></span>
+
+<span class="k">[Route]</span><span class="w"></span>
+<span class="na">Gateway</span><span class="o">=</span><span class="s">202.38.95.126</span><span class="w"></span>
+<span class="na">Table</span><span class="o">=</span><span class="s">1002</span><span class="w"></span>
+
+<span class="k">[Route]</span><span class="w"></span>
+<span class="na">Gateway</span><span class="o">=</span><span class="s">2001:da8:d800:95::1</span><span class="w"></span>
+<span class="na">Table</span><span class="o">=</span><span class="s">1002</span><span class="w"></span>
+
+<span class="k">[RoutingPolicyRule]</span><span class="w"></span>
+<span class="na">From</span><span class="o">=</span><span class="s">202.38.95.102</span><span class="w"></span>
+<span class="na">Table</span><span class="o">=</span><span class="s">1002</span><span class="w"></span>
+<span class="na">Priority</span><span class="o">=</span><span class="s">3</span><span class="w"></span>
+
+<span class="k">[RoutingPolicyRule]</span><span class="w"></span>
+<span class="na">From</span><span class="o">=</span><span class="s">2001:da8:d800:95::102</span><span class="w"></span>
+<span class="na">Table</span><span class="o">=</span><span class="s">1002</span><span class="w"></span>
+<span class="na">Priority</span><span class="o">=</span><span class="s">3</span><span class="w"></span>
+
+<span class="k">[RoutingPolicyRule]</span><span class="w"></span>
+<span class="na">Family</span><span class="o">=</span><span class="s">both</span><span class="w"></span>
+<span class="na">OutgoingInterface</span><span class="o">=</span><span class="s">Cernet</span><span class="w"></span>
+<span class="na">Table</span><span class="o">=</span><span class="s">1002</span><span class="w"></span>
+<span class="na">Priority</span><span class="o">=</span><span class="s">3</span><span class="w"></span>
+
+<span class="k">[RoutingPolicyRule]</span><span class="w"></span>
+<span class="na">Family</span><span class="o">=</span><span class="s">both</span><span class="w"></span>
+<span class="na">FirewallMark</span><span class="o">=</span><span class="s">0x2</span><span class="w"></span>
+<span class="na">Table</span><span class="o">=</span><span class="s">1002</span><span class="w"></span>
+<span class="na">Priority</span><span class="o">=</span><span class="s">4</span><span class="w"></span>
+</code></pre></div>
+</div>
+<p>This config file assigns one IPv4 and one IPv6 address to the interface, as well as one IPv4 route and one IPv6 route for both the default routing table and an interface-specific routing table. It then adds three routing rules in both IPv4 and IPv6 for replying on the same interface, for sockets bound to this interfaces, and for firewall mark routing.</p>
+<p>Other interfaces are configured similarly, so just refer to their configuration files for details.</p>
 <h3 id="routes">Routes<a class="headerlink" href="#routes" title="Permanent link">&para;</a></h3>
 <p>Outgoing connections are routed through different ISPs. We use ISP IP data from <a href="https://github.com/gaoyifan/china-operator-ip">gaoyifan/china-operator-ip</a>. Relevant files are located under <code>/usr/local/network_config</code>.</p>
 <p>The said repository (branch <code>ip-lists</code>) is cloned and we symlink select files to <code>iplist</code> directory for consumption. A custom script converts these IP data into additional systemd-networkd config files (under <code>/run/systemd</code>).</p>

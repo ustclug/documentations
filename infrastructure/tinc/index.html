@@ -1693,6 +1693,7 @@ git fetch origin master
 git reset --hard FETCH_HEAD
 </code></pre></div>
 <p>注意 <code>git reset</code> 会覆盖部分文件，建议在全新安装 <code>tinc</code> 之后进行同步配置。</p>
+<p>配置完成后执行 <code>systemctl enable tinc@ustclug.service</code> 使 tinc 能够开机启动。</p>
 <h3 id="_2">加入主机<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h3>
 <p>首先需要在新主机上生成密钥：</p>
 <div class="highlight"><pre><span></span><code>tincd -n ustclug -K
