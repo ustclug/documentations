@@ -411,7 +411,7 @@
   
     <li class="md-nav__item">
       <a href="../../infrastructure/intranet/lugivpn/" class="md-nav__link">
-        LUGI VPN
+        LUGi VPN
       </a>
     </li>
   
@@ -446,7 +446,7 @@
   
     <li class="md-nav__item">
       <a href="../../infrastructure/ldap/" class="md-nav__link">
-        Servers Unified Authentication (LDAP)
+        LDAP: Servers Unified Authentication
       </a>
     </li>
   
@@ -1770,19 +1770,23 @@ lrwxrwxrwx unicom.txt -&gt; ../china-operator-ip/unicom.txt
 <span class="nv">ROOT_RT</span><span class="o">=</span>/run/systemd/network
 
 gen_route<span class="o">()</span> <span class="o">{</span>
-  <span class="nv">DEVFILE</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$1</span><span class="s2">&quot;</span>
-  <span class="nv">DEV</span><span class="o">=</span><span class="s2">&quot;</span><span class="k">$(</span>awk -F <span class="o">=</span> <span class="s1">&#39;/^Name=/{print $2; exit}&#39;</span> <span class="s2">&quot;</span><span class="nv">$ROOT_CONF</span><span class="s2">/</span><span class="nv">$DEVFILE</span><span class="s2">.network&quot;</span><span class="k">)</span><span class="s2">&quot;</span>
-  <span class="nv">GW</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$2</span><span class="s2">&quot;</span>
+  <span class="nb">local</span> <span class="nv">DEVFILE</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$1</span><span class="s2">&quot;</span>
+  <span class="nb">local</span> <span class="nv">DEV</span><span class="o">=</span><span class="s2">&quot;</span><span class="k">$(</span>awk -F <span class="o">=</span> <span class="s1">&#39;/^Name=/{print $2; exit}&#39;</span> <span class="s2">&quot;</span><span class="nv">$ROOT_CONF</span><span class="s2">/</span><span class="nv">$DEVFILE</span><span class="s2">.network&quot;</span><span class="k">)</span><span class="s2">&quot;</span>
+  <span class="nb">local</span> <span class="nv">GW</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$2</span><span class="s2">&quot;</span> <span class="nv">FAMILY</span><span class="o">=</span>ipv4 V6
+  <span class="k">if</span> <span class="o">[[</span> <span class="s2">&quot;</span><span class="nv">$GW</span><span class="s2">&quot;</span> <span class="o">=</span>~ : <span class="o">]]</span><span class="p">;</span> <span class="k">then</span>
+    <span class="nv">FAMILY</span><span class="o">=</span>ipv6
+    <span class="nv">V6</span><span class="o">=</span><span class="s2">&quot;-v6&quot;</span>
+  <span class="k">fi</span>
   <span class="c1"># Convert table to number</span>
-  <span class="nv">TABLENAME</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$3</span><span class="s2">&quot;</span>
-  <span class="nv">TABLE</span><span class="o">=</span><span class="s2">&quot;</span><span class="k">$(</span>awk <span class="s1">&#39;substr($0, 1, 1) != &quot;#&quot; &amp;&amp; $2 == &quot;&#39;</span><span class="s2">&quot;</span><span class="nv">$TABLENAME</span><span class="s2">&quot;</span><span class="s1">&#39;&quot; { print $1 }&#39;</span> /etc/iproute2/rt_tables <span class="p">|</span> head -1<span class="k">)</span><span class="s2">&quot;</span>
-  <span class="nv">PRIORITY</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$4</span><span class="s2">&quot;</span>
+  <span class="nb">local</span> <span class="nv">TABLENAME</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$3</span><span class="s2">&quot;</span>
+  <span class="nb">local</span> <span class="nv">TABLE</span><span class="o">=</span><span class="s2">&quot;</span><span class="k">$(</span>awk <span class="s1">&#39;substr($0, 1, 1) != &quot;#&quot; &amp;&amp; $2 == &quot;&#39;</span><span class="s2">&quot;</span><span class="nv">$TABLENAME</span><span class="s2">&quot;</span><span class="s1">&#39;&quot; { print $1 }&#39;</span> /etc/iproute2/rt_tables <span class="p">|</span> head -1<span class="k">)</span><span class="s2">&quot;</span>
+  <span class="nb">local</span> <span class="nv">PRIORITY</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$4</span><span class="s2">&quot;</span>
   <span class="nb">shift</span> <span class="m">4</span>
 
   <span class="nv">F</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$ROOT_RT</span><span class="s2">/</span><span class="nv">$DEVFILE</span><span class="s2">.network.d&quot;</span>
   mkdir -p <span class="s2">&quot;</span><span class="nv">$F</span><span class="s2">&quot;</span>
-  <span class="nv">F</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$F</span><span class="s2">/route-</span><span class="si">${</span><span class="nv">TABLENAME</span><span class="p">,,</span><span class="si">}</span><span class="s2">.conf&quot;</span>
-  <span class="nb">echo</span> -e <span class="s2">&quot;[RoutingPolicyRule]\nFamily=both\nTable=</span><span class="nv">$TABLE</span><span class="s2">\nPriority=</span><span class="nv">$PRIORITY</span><span class="s2">\n&quot;</span> &gt; <span class="s2">&quot;</span><span class="nv">$F</span><span class="s2">&quot;</span>
+  <span class="nv">F</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$F</span><span class="s2">/route-</span><span class="si">${</span><span class="nv">TABLENAME</span><span class="p">,,</span><span class="si">}${</span><span class="nv">V6</span><span class="si">}</span><span class="s2">.conf&quot;</span>
+  <span class="nb">echo</span> -e <span class="s2">&quot;[RoutingPolicyRule]\nFamily=</span><span class="nv">$FAMILY</span><span class="s2">\nTable=</span><span class="nv">$TABLE</span><span class="s2">\nPriority=</span><span class="nv">$PRIORITY</span><span class="s2">\n&quot;</span> &gt; <span class="s2">&quot;</span><span class="nv">$F</span><span class="s2">&quot;</span>
 
   awk <span class="s1">&#39;{ print &quot;[Route]\nDestination=&quot; $1 &quot;\nGateway=&#39;</span><span class="s2">&quot;</span><span class="nv">$GW</span><span class="s2">&quot;</span><span class="s1">&#39;\nTable=&#39;</span><span class="s2">&quot;</span><span class="nv">$TABLE</span><span class="s2">&quot;</span><span class="s1">&#39;\n&quot; }&#39;</span> <span class="s2">&quot;</span><span class="si">${</span><span class="p">@/#/</span><span class="nv">$ROOT_IP_LIST</span><span class="p">/</span><span class="si">}</span><span class="s2">&quot;</span> &gt;&gt; <span class="s2">&quot;</span><span class="nv">$F</span><span class="s2">&quot;</span>
 <span class="o">}</span>
