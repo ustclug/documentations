@@ -2,6 +2,10 @@
 
 Server: docker2.s.ustclug.org
 
+Provides Docker container environment for other services. All non-system services should be run as Docker containers on this host.
+
+Methods to run individual containers are maintained in the [:fontawesome-solid-lock: ustclug/docker-run-script](https://github.com/ustclug/docker-run-script) repository.
+
 ## Special configurations
 
 ### Network interfaces
@@ -22,8 +26,8 @@ docker2 上面的 Docker 使用 macvlan 来将虚拟机接入 lugi 内网，因�
 
 ```ini title="systemctl edit docker.service"
 [Unit]
-After=sys-subsystem-net-devices-Policy.device
 BindsTo=sys-subsystem-net-devices-Policy.device
+After=sys-subsystem-net-devices-Policy.device
 ```
 
 实际上 `After=network-online.target` 就够了，但是出于历史原因使用了 `BindsTo` 强依赖内网端口，这是因为 docker2 曾经单独运行 tinc 接入内网，而 tinc 的端口只在 tinc 启动后才会出现（才能分出 macvlan 子端口），因此使用 `BindsTo` 保证 docker 随该端口的出现和消失而启动/停止。

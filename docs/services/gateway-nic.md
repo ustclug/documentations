@@ -79,19 +79,23 @@ ROOT_CONF=/etc/systemd/network
 ROOT_RT=/run/systemd/network
 
 gen_route() {
-  DEVFILE="$1"
-  DEV="$(awk -F = '/^Name=/{print $2; exit}' "$ROOT_CONF/$DEVFILE.network")"
-  GW="$2"
+  local DEVFILE="$1"
+  local DEV="$(awk -F = '/^Name=/{print $2; exit}' "$ROOT_CONF/$DEVFILE.network")"
+  local GW="$2" FAMILY=ipv4 V6
+  if [[ "$GW" =~ : ]]; then
+    FAMILY=ipv6
+    V6="-v6"
+  fi
   # Convert table to number
-  TABLENAME="$3"
-  TABLE="$(awk 'substr($0, 1, 1) != "#" && $2 == "'"$TABLENAME"'" { print $1 }' /etc/iproute2/rt_tables | head -1)"
-  PRIORITY="$4"
+  local TABLENAME="$3"
+  local TABLE="$(awk 'substr($0, 1, 1) != "#" && $2 == "'"$TABLENAME"'" { print $1 }' /etc/iproute2/rt_tables | head -1)"
+  local PRIORITY="$4"
   shift 4
 
   F="$ROOT_RT/$DEVFILE.network.d"
   mkdir -p "$F"
-  F="$F/route-${TABLENAME,,}.conf"
-  echo -e "[RoutingPolicyRule]\nFamily=both\nTable=$TABLE\nPriority=$PRIORITY\n" > "$F"
+  F="$F/route-${TABLENAME,,}${V6}.conf"
+  echo -e "[RoutingPolicyRule]\nFamily=$FAMILY\nTable=$TABLE\nPriority=$PRIORITY\n" > "$F"
 
   awk '{ print "[Route]\nDestination=" $1 "\nGateway='"$GW"'\nTable='"$TABLE"'\n" }' "${@/#/$ROOT_IP_LIST/}" >> "$F"
 }
