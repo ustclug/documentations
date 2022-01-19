@@ -4,7 +4,7 @@ PBS 现在部署在原来的 esxi-5 上面，用作备份用途。其端口号�
 
 ## 创建新用户
 
-PBS 仅与 PVE 共享 Linux PAM 用户，如果需要创建新用户，参考以下步骤：
+PBS 自己的账号体系 (@pbs) 与 PVE (@pve) 不同，如果需要创建新用户，参考以下步骤：
 
 1. `proxmox-backup-manager user create 用户名@pbs --email 邮箱地址@ustclug.org`
 2. `proxmox-backup-manager user update 用户名@pbs --password '一个临时的密码'`
