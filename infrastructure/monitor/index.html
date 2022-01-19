@@ -651,20 +651,6 @@
               
   
   
-  
-    <li class="md-nav__item">
-      <a href="#" class="md-nav__link">
-        Backup
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
     
   
   
@@ -1199,7 +1185,7 @@
   
     <li class="md-nav__item">
       <a href="#" class="md-nav__link">
-        RSYNC Service
+        Rsync Service
       </a>
     </li>
   
@@ -1725,7 +1711,7 @@
 <p><strong>特别注意</strong> ：InfluxDB 默认没有开启认证。</p>
 <p>首次运行时，创建好管理账号（<code>admin</code>），只读账号（<code>grafana</code>）和写入账号（<code>telegraf</code>）。</p>
 <p>然后修改位于 <code>/srv/docker/influxdb/conf/influxdb.conf</code> 的配置，修改以启用认证：</p>
-<div class="highlight"><pre><span></span><code><span class="o">[</span>http<span class="o">]</span>
+<div class="highlight"><span class="filename">/srv/docker/influxdb/conf/influxdb.conf</span><pre><span></span><code><span class="o">[</span>http<span class="o">]</span>
 <span class="c1"># ...</span>
 <span class="c1"># Determines whether HTTP authentication is enabled.</span>
 auth-enabled <span class="o">=</span> <span class="nb">true</span>
@@ -1762,7 +1748,10 @@ sudo systemctl status telegraf
 </div>
 <h2 id="web">Web<a class="headerlink" href="#web" title="Permanent link">&para;</a></h2>
 <p>Web 端监控位于 <a href="https://monitor.ustclug.org">https://monitor.ustclug.org</a>，账号系统使用 LDAP，可以在这里设置预警提示等。</p>
-<p><strong>注意</strong>： 配置 InfluxDB 数据源时，只能使用只读账号，否则会带来严重的安全问题。</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>配置 InfluxDB 数据源时，只能使用只读账号，否则会带来严重的安全问题。</p>
+</div>
 
               
             </article>
