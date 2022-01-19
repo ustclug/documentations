@@ -1737,7 +1737,7 @@ Stack trace:
 <li>把 <code>/etc/ldap/slapd.d</code> 以及 <code>/var/lib/ldap</code> 删掉（或者改名）</li>
 <li>运行 <code>dpkg-reconfigure slapd</code></li>
 <li><del>创建 <code>/tmp/ldapconvert</code> 目录，运行 <code>slaptest -f /etc/ldap/convert.conf -F /tmp/ldapconvert</code></del></li>
-<li><del>清空 <code>/etc/ldap/slapd.d/cn=config/cn=schema/</code> 下的文件，将 <code>/tmp/ldapconvert/slapd.d/cn=config/cn=schema/</code> 下的文件复制到 <code>/etc/ldap/slapd.d/cn=config/cn=schema/</code></del> 将 slapd.d 备份中 <code>cn=config/cn=schema/</code> 的文件复制到新的 <code>slapd.d</code> 对应的目录下，并且修改 owner 为 <code>openldap:openldap</code> </li>
+<li><del>清空 <code>/etc/ldap/slapd.d/cn=config/cn=schema/</code> 下的文件，将 <code>/tmp/ldapconvert/slapd.d/cn=config/cn=schema/</code> 下的文件复制到 <code>/etc/ldap/slapd.d/cn=config/cn=schema/</code></del> 将 slapd.d 备份中 <code>cn=config/cn=schema/</code> 的文件复制到新的 <code>slapd.d</code> 对应的目录下，并且修改 owner 为 <code>openldap:openldap</code></li>
 <li>重启 <code>slapd</code>，如果启动失败，看 <code>systemctl status slapd</code> 的日志输出 debug。</li>
 <li>恢复数据库：<code>slapadd -l dump.ldif</code>。注意，mdb <strong>没有事务</strong>！如果中间出错了，排查问题后，清空 <code>/var/lib/ldap</code>，重启 <code>slapd</code> 重来。</li>
 </ol>
