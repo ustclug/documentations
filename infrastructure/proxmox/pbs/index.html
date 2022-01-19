@@ -1677,7 +1677,7 @@
 <h1 id="proxmox-backup-server">Proxmox Backup Server<a class="headerlink" href="#proxmox-backup-server" title="Permanent link">&para;</a></h1>
 <p>PBS 现在部署在原来的 esxi-5 上面，用作备份用途。其端口号为 8007。</p>
 <h2 id="_1">创建新用户<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
-<p>PBS 仅与 PVE 共享 Linux PAM 用户，如果需要创建新用户，参考以下步骤：</p>
+<p>PBS 自己的账号体系 (@pbs) 与 PVE (@pve) 不同，如果需要创建新用户，参考以下步骤：</p>
 <ol>
 <li><code>proxmox-backup-manager user create 用户名@pbs --email 邮箱地址@ustclug.org</code></li>
 <li><code>proxmox-backup-manager user update 用户名@pbs --password '一个临时的密码'</code></li>
