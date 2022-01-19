@@ -48,7 +48,7 @@ Slapd 是 openldap 的服务端 daemon。正常情况下不需要碰，但是如
 3. 把 `/etc/ldap/slapd.d` 以及 `/var/lib/ldap` 删掉（或者改名）
 4. 运行 `dpkg-reconfigure slapd`
 5. ~~创建 `/tmp/ldapconvert` 目录，运行 `slaptest -f /etc/ldap/convert.conf -F /tmp/ldapconvert`~~
-6. ~~清空 `/etc/ldap/slapd.d/cn=config/cn=schema/` 下的文件，将 `/tmp/ldapconvert/slapd.d/cn=config/cn=schema/` 下的文件复制到 `/etc/ldap/slapd.d/cn=config/cn=schema/`~~ 将 slapd.d 备份中 `cn=config/cn=schema/` 的文件复制到新的 `slapd.d` 对应的目录下，并且修改 owner 为 `openldap:openldap` 
+6. ~~清空 `/etc/ldap/slapd.d/cn=config/cn=schema/` 下的文件，将 `/tmp/ldapconvert/slapd.d/cn=config/cn=schema/` 下的文件复制到 `/etc/ldap/slapd.d/cn=config/cn=schema/`~~ 将 slapd.d 备份中 `cn=config/cn=schema/` 的文件复制到新的 `slapd.d` 对应的目录下，并且修改 owner 为 `openldap:openldap`
 7. 重启 `slapd`，如果启动失败，看 `systemctl status slapd` 的日志输出 debug。
 8. 恢复数据库：`slapadd -l dump.ldif`。注意，mdb **没有事务**！如果中间出错了，排查问题后，清空 `/var/lib/ldap`，重启 `slapd` 重来。
 

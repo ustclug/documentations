@@ -1,6 +1,6 @@
 # Proxmox Backup Server (PBS)
 
-PBS 现在部署在原来的 esxi-5 上面，用作虚拟机备份，web 界面的端口号为 8007（HTTPS only）。
+PBS 现在部署在 esxi-5 上面，用作虚拟机备份，web 界面的端口号为 8007（HTTPS only）。
 
 !!! info
 

@@ -13,13 +13,68 @@ LUG 目前服役的 Proxmox VE 主机有：
 
 !!! warning "注意：不同主机之间的 Linux PAM 用户是不相通的"
 
+所有 Proxmox 主机的地址都记录在 DNS `<hostname>.vm.ustclug.org` 中。
+
   [mirrors-2011]: https://lug.ustc.edu.cn/news/2011/04/mirrors-ustc-edu-cn-comes/
+
+## 公用配置 {#common}
+
+出于安全考虑，PVE / PBS 主机使用 RFC 1918 段的校园网 IP，不连接公网，软件更新使用 mirrors.ustc.edu.cn 即可。
+
+- 东图可用的 IP 段为 192.168.93.0/24（网关 93.254）
+- 网络信息中心可用的 IP 段为 10.38.95.0/24（网关 95.254）
+
+### 防火墙 {#pve-firewall}
+
+我们不适用 Proxmox 自带的防火墙功能，但 pve-firewall 仍然会尝试部署或恢复防火墙设置，因此需要禁用相关设置及服务：
+
+```ini title="/etc/pve/nodes/$(hostname -s)/host.fw"
+[OPTIONS]
+enable: 0
+```
+
+```shell
+systemctl stop pve-firewall.service
+systemctl disable pve-firewall.service
+systemctl mask pve-firewall.service
+```
+
+（可选）同时安装 `iptables-persistent` 软件包，并利用 iptables 将 443 端口转发到 8006 端口方便使用。
+
+```shell
+update-alternatives --set iptables /usr/sbin/iptables-nft
+update-alternatives --set ip6tables /usr/sbin/ip6tables-nft
+```
+
+```shell title="/etc/iptables/rules.v4"
+*nat
+PREROUTING ACCEPT [0:0]
+INPUT ACCEPT [0:0]
+OUTPUT ACCEPT [0:0]
+POSTROUTING ACCEPT [0:0]
+-A PREROUTING -p tcp --dport 443 -m addrtype --dst-type LOCAL -j REDIRECT --to-ports 8006
+COMMIT
+```
+
+删掉 `rules.v6` 文件，然后运行 `systemctl restart netfilter-persistent.service` 载入 iptables 规则。
+
+### NTP 时间
+
+Proxmox 默认使用 chrony 软件和 Debian 提供的 NTP pool，这些服务器都在校外，使用校园网 IP 无法连通，需要改成校园网的 NTP 服务器：
+
+```shell title="/etc/chrony/chrony.conf"
+# Use Debian vendor zone.
+#pool 2.debian.pool.ntp.org iburst
+server time.ustc.edu.cn iburst
+```
+
+然后运行 `systemctl restart chrony.service` 重启服务。
 
 ## pve-5
 
 pve-5 位于网络中心，配置为 2× Xeon E5-2603 v4 (Broadwell 6C6T, 1.70 GHz, no HT, no Turbo Boost)，128 GB 内存和一大堆 SSD（2× 三星 240 GB SATA + 10x Intel DC S4500 1.92 TB SATA）。我们将两块 240 GB 的盘组成一个 LVM VG，分配 16 GB 的 rootfs（LVM mirror）和 8 GB 的 swap，其余空间给一个 thinpool。十块 1.92 TB 的盘组成一个 RAIDZ2 的 zpool，用于存储虚拟机等数据。
 
-出于安全考虑，主机使用 10.38 段的校园网 IP，不连接公网，软件更新使用 mirrors.ustc.edu.cn 即可。其连接的单根 10 Gbps 的光纤，桥接出 `vmbr0`（Cernet）, `vmbr2`（Telecom）, `vmbr3`（Unicom）, `vmbr4`（Mobile）四个不同 VLAN 的网桥，另有一个 `vmbr1`（Ustclug）的无头网桥用于从 [gateway-nic](../../services/gateway-nic.md) 桥接 Tinc。
+其连接的单根 10 Gbps 的光纤，桥接出 `vmbr0`（Cernet）, `vmbr2`（Telecom）, `vmbr3`（Unicom）, `vmbr4`（Mobile）四个不同 VLAN 的网桥，另有一个 `vmbr1`（Ustclug）的无头网桥用于从 [gateway-nic](../../services/gateway-nic.md) 桥接 Tinc。
 
 !!! danger "硬盘控制器不要使用 VirtIO SCSI Single 或 LSI 开头的选项"
 
@@ -29,7 +84,7 @@ pve-5 位于网络中心，配置为 2× Xeon E5-2603 v4 (Broadwell 6C6T, 1.70 G
 
 ## esxi-5
 
-esxi-5 也位于网络中心，配置为 2× Xeon E5620（Westmere-EP 4C8T, 2.40\~2.66 GHz），48 GB 内存，两块 240 GB SATA SSD 和一些不知道坏了多少的 1 TB 和 2 TB HDD（见下）。由于机身自带的 RAID 卡不支持硬盘直通（JBOD 模式），因此我们将两块 SSD 分别做成单盘“阵列”然后在系统里使用 LVM（与 pve-5 相同）
+esxi-5 也位于网络中心，配置为 2× Xeon E5620（Westmere-EP 4C8T, 2.40\~2.66 GHz），48 GB 内存，两块 240 GB SATA SSD 和一些不知道坏了多少的 1 TB 和 2 TB HDD（见下）。由于机身自带的 RAID 卡不支持硬盘直通（JBOD 模式），因此我们将两块 SSD 分别做成单盘“阵列”然后在系统里使用 LVM（LVM 规格与 pve-5 相同）
 
 顾名思义本机器曾经运行的是 VMware ESXi，在 2022 年 1 月重装为 Proxmox VE 7.1，<s>因为咱们都是纠结怪所以决定不改名</s>，还叫 esxi-5。考虑到该机器配置了多个硬盘阵列，且阵列的可用容量比 pve-5 的硬盘的原始容量还大，我们在上面加装 Proxmox Backup Server 软件，主要用作虚拟机备份，替代原先运行在 ESXi 上的 vSphereDataProtection 虚拟机。
 
@@ -48,14 +103,14 @@ ExecStart=/lib/open-iscsi/activate-storage.sh
 
 若 iSCSI 连接成功，应该可以在系统中看到一个新的硬盘，容量为 14.55 TiB，型号显示为 RS-3116I-S42-6。
 
-### rootfs 备份
+### rootfs 备份 {#rootfs-backup}
 
-尽管 esxi-5 的 rootfs 也使用了 LVM mirror 在两块 SSD 上镜像，但是我们不太信任这块 RAID 卡，因此我们将 esxi-5 的 rootfs 每天备份到 vdp2 上。为了避免在 vdp2 掉线的时候乱“备份”，我们使用一个 systemd 服务：
+尽管 esxi-5 的 rootfs 也使用了 LVM mirror 在两块 SSD 上镜像，但是我们不太信任这块 RAID 卡，因此我们将 esxi-5 的 rootfs 每天备份到 vdp2 上。为了避免在 vdp2 掉线的时候乱“备份”，我们使用一个 systemd 服务，设置了 [`RequiresMountsFor` 依赖][systemd-requiresmountsfor]：
 
 ```ini title="/etc/systemd/system/rootfs-backup.service"
 [Unit]
 Description=Backup rootfs to vdp2
-RequireMountsFor=/mnt/vdp2
+RequiresMountsFor=/mnt/vdp2
 
 [Service]
 Type=oneshot
@@ -65,6 +120,8 @@ ExecStart=/usr/bin/rsync -aHAXx --delete / /mnt/vdp2/rootfs/
 ```text title="crontab"
 21 4 * * * systemctl start rootfs-backup.service
 ```
+
+  [systemd-requiresmountsfor]: https://www.freedesktop.org/software/systemd/man/systemd.unit.html#RequiresMountsFor=
 
 ### 其他记录 {#esxi-5-others}
 
@@ -85,3 +142,9 @@ docker2 原先使用 QEMU 直接运行在 mirrors2 上，下层存储为 ZFS Zvo
 迁移过程没有遇到任何坑，仅有的注意事项就是 zvol 调参需要重新 dd 而不能直接改，以及创建网卡的顺序（会影响虚拟机内部 eth0 和 eth1 的顺序，除非虚拟机内部使用 udev persistent net 方式根据 MAC 地址将网卡改名）。
 
   [1]: https://www.reddit.com/r/zfs/comments/i2ypyy/til_zfs_ashift12_raidz2_zvol_with_4k_blocksize/
+
+### esxi-5 的 syslog 一直出现 zfs error: cannot open 'rpool': no such pool
+
+这是因为 esxi-5 上面根本就没有使用 ZFS，而加入 pve-5 的集群时虚拟机的存储信息（`/etc/pve/storage.cfg`）也从 pve-5 同步过来合并了，因此 esxi-5 在根据 pve-5 的配置尝试启用 zfs 存储。
+
+**解决办法**：由于 `/etc/pve` 下大多数内容在集群间是同步的，打开 `storage.cfg`，在 `zfspool: local-zfs` 下面加入一行，缩进一个 Tab 并加上 `nodes pve-5`，表示这个 storage 只在 pve-5 上使用。
