@@ -87,7 +87,7 @@ nav:
       - vCenter: "infrastructure/vsphere/vcenter.md"
       - NFS: "infrastructure/vsphere/nfs.md"
       - VDP: "infrastructure/vsphere/vdp.md"
-    - Proxmox:
+    - Proxmox Cluster:
       - Proxmox VE: "infrastructure/proxmox/pve.md"
       - Proxmox Backup Server: "infrastructure/proxmox/pbs.md"
     - Backup: "#"

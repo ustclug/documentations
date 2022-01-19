@@ -1,22 +1,52 @@
-# Proxmox VE
+# Proxmox Virtual Environment
 
-LUG 目前服役的 Proxmox VE 主机只有一台，是 james 在 2021 年底给我们的，命名为 `pve-5`，用于替换已运行多年的 esxi-5（因此编号为 5）。
+LUG 目前服役的 Proxmox VE 主机有：
 
-## pve-5.vm
+- pve-5 是 james 在 2021 年底给我们的，用于替换已运行多年的 esxi-5（因此编号为 5）
+- esxi-5 是 [2011 年][mirrors-2011]的 mirrors 服务器，于 2016 年退役后改装为 ESXi，现在已替换为 Proxmox VE
+    - esxi-5 上面额外加装了 Proxmox Backup Server 用于提供备份功能，详情参见 [Proxmox Backup Server](pbs.md)
+    - PVE 的 web 端口为 8006，而 PBS 的端口为 8007，安装在同一台主机上时互不冲突，访问时需要使用 HTTPS 并指定端口。
+
+这些 PVE 主机配置为一个集群，可以共享一些配置信息并互相迁移虚拟机。特别地，Proxmox VE Authentication Server（Realm 为 pve）的账号在 PVE 主机之间是共享的，并且添加的 PBS 存储后端也是共享的，即大家都可以往相同的 PBS 上备份虚拟机。
+
+  [mirrors-2011]: https://lug.ustc.edu.cn/news/2011/04/mirrors-ustc-edu-cn-comes/
+
+## pve-5
 
 pve-5 位于网络中心，配置为 2× Xeon E5-2603 v4 (Broadwell 6C6T, 1.70 GHz, no HT, no Turbo Boost)，128 GB 内存和一大堆 SSD（2× 三星 240 GB SATA + 10x Intel DC S4500 1.92 TB SATA）。我们将两块 240 GB 的盘组成一个 LVM VG，分配 16 GB 的 rootfs（LVM mirror）和 8 GB 的 swap，其余空间给一个 thinpool。十块 1.92 TB 的盘组成一个 RAIDZ2 的 zpool，用于存储虚拟机等数据。
 
-出于安全考虑，主机使用 10.38 段的校园网 IP，不连接公网，软件更新使用 mirrors.ustc.edu.cn 即可。其连接的单根 10 Gbps 的光纤，桥接出 `vmbr0`（Cernet）, `vmbr2`（Telecom）, `vmbr3`（Unicom）, `vmbr4`（Mobile）四个不同 VLAN 的网桥，另有一个 `vmbr1`（Ustclug）的无头网桥用于桥接 Tinc，因此在使用和维护上也与 esxi-5 相似。
+出于安全考虑，主机使用 10.38 段的校园网 IP，不连接公网，软件更新使用 mirrors.ustc.edu.cn 即可。其连接的单根 10 Gbps 的光纤，桥接出 `vmbr0`（Cernet）, `vmbr2`（Telecom）, `vmbr3`（Unicom）, `vmbr4`（Mobile）四个不同 VLAN 的网桥，另有一个 `vmbr1`（Ustclug）的无头网桥用于从 [gateway-nic](../../services/gateway-nic.md) 桥接 Tinc。
 
 !!! danger "硬盘控制器不要使用 VirtIO SCSI Single 或 LSI 开头的选项"
 
-    出于未知原因，使用这些模式在虚拟机重启时会导致整个 Proxmox VE 主机卡住而不得不重启。请使用 VirtIO SCSI（不带 Single）。同样原因创建虚拟机硬盘时不要勾选 iothread。
+    可能由于 ZFS 模块的 bug 或者内存条故障，使用这些模式在虚拟机重启时会导致整个 Proxmox VE 主机卡住而不得不重启。请使用 VirtIO SCSI（不带 Single）。同样原因创建虚拟机硬盘时不要勾选 iothread。
 
 主机使用 ZFS（Zvol）作为虚拟机的虚拟硬盘，在虚拟机中启用 `fstrim.timer`（systemd 的 fstrim 定时任务，由 `util-linux` 提供）可以定期腾出不用的空间，帮助 ZFS 更好地规划空间。启用 fstrim 的虚拟硬盘需要在 PVE 上启用 `discard` 选项，否则 fstrim 不起作用。该特性是由于 ZFS 是 CoW 的，与 ZFS 底层使用 SSD 没有太大关联。
 
+## esxi-5
+
+esxi-5 也位于网络中心，配置为 2× Xeon E5620（Westmere-EP 4C8T, 2.40\~2.66 GHz），48 GB 内存，两块 240 GB SATA SSD 和一些不知道坏了多少的 1 TB 和 2 TB HDD。由于机身自带的 RAID 卡不支持硬盘直通（JBOD 模式），因此我们将两块 SSD 分别做成单盘“阵列”然后在系统里使用 LVM（与 pve-5 相同）
+
+顾名思义本机器曾经运行的是 VMware ESXi，在 2022 年 1 月 19 日重装为 Proxmox VE 7.1，<s>因为咱们都是纠结怪所以决定不改名</s>，还叫 esxi-5。考虑到该机器配置了多个硬盘阵列，且阵列的可用容量比 pve-5 的硬盘的原始容量还大，我们在上面加装 Proxmox Backup Server 软件，主要用作虚拟机备份，替代原先运行在 ESXi 上的 vSphereDataProtection 虚拟机。
+
+网络配置与 pve-5 相似，其上有两个千兆网卡 enp3s0 和 enp4s0。enp3s0 连接网络中心的交换机，桥接不同的 VLAN 网络给虚拟机，并且各 vmbrX 的数字和端口与 pve-5 一致；而 enp4s0 连接一个外部阵列（vdp2），使用 iSCSI 访问该阵列。
+
+### iSCSI
+
+由于我们没有研究清楚 open-iscsi 的开机自动挂载机制，因此我们选择直接 override 对应的 service 来完成这个任务：
+
+```ini title="$ systemctl edit open-iscsi.service"
+[Service]
+ExecStart=
+ExecStart=/sbin/iscsiadm -d8 -m node -p 192.168.10.1:3260 --login
+ExecStart=/lib/open-iscsi/activate-storage.sh
+```
+
+若 iSCSI 连接成功，应该可以在系统中看到一个新的硬盘，容量为 14.55 TiB，型号显示为 RS-3116I-S42-6。
+
 ## 工作记录 {#records}
 
-### 2021-12-31 迁移 docker2
+### 2021-12-31 迁移 docker2 {#migrate-docker2}
 
 docker2 原先使用 QEMU 直接运行在 mirrors2 上，下层存储为 ZFS Zvol（`pool0/qemu/docker2`），由于 ZFS 调参不当使其占用了 3 倍的硬盘空间（见[这个 Reddit 贴子][1]），加上 mirrors2 本身对外提供 Rsync 服务，硬盘负载极高，所以长期以来 docker2 的 I/O 性能*十分*低下。正好借这次全闪的新宿主机将其迁移过去。
 
