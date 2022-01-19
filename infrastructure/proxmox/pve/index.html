@@ -1845,7 +1845,7 @@
 <li>
 <p>PVE 的 web 端口为 8006，而 PBS 的端口为 8007，因此在一台主机上同时安装 PVE 和 PBS 互不冲突，访问时需要使用 HTTPS 并指定端口。</p>
 <div class="admonition info">
-<p class="admonition-title">PVE 和 PBS 的端口都是固定的，无法更改</p>
+<p>PVE 和 PBS 的端口都是固定的，无法更改</p>
 </div>
 </li>
 </ul>
@@ -1853,7 +1853,7 @@
 </ul>
 <p>这些 PVE 主机配置为一个集群，可以共享一些配置信息并互相迁移虚拟机。特别地，Proxmox VE Authentication Server（Realm 为 pve）的账号在 PVE 主机之间是共享的，并且添加的 PBS 存储后端也是共享的，即大家都可以往相同的 PBS 上备份虚拟机。</p>
 <div class="admonition warning">
-<p class="admonition-title">注意：不同主机之间的 Linux PAM 用户是不相通的</p>
+<p class="admonition-title">不同主机之间的 Linux PAM 用户是不相通的</p>
 </div>
 <p>所有 Proxmox 主机的主机名（hostname）都设为 <code>&lt;hostname&gt;.vm.ustclug.org</code>，对应的 IP 地址记录在 DNS 中。</p>
 <h2 id="common">公用配置<a class="headerlink" href="#common" title="Permanent link">&para;</a></h2>
