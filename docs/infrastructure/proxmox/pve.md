@@ -7,26 +7,30 @@ LUG 目前服役的 Proxmox VE 主机有：
     - esxi-5 上面额外加装了 Proxmox Backup Server 用于提供备份功能，详情参见 [Proxmox Backup Server](pbs.md)
     - PVE 的 web 端口为 8006，而 PBS 的端口为 8007，因此在一台主机上同时安装 PVE 和 PBS 互不冲突，访问时需要使用 HTTPS 并指定端口。
 
-        !!! info "PVE 和 PBS 的端口都是固定的，无法更改"
+        !!! info ""
+
+            PVE 和 PBS 的端口都是固定的，无法更改
 
 这些 PVE 主机配置为一个集群，可以共享一些配置信息并互相迁移虚拟机。特别地，Proxmox VE Authentication Server（Realm 为 pve）的账号在 PVE 主机之间是共享的，并且添加的 PBS 存储后端也是共享的，即大家都可以往相同的 PBS 上备份虚拟机。
 
-!!! warning "注意：不同主机之间的 Linux PAM 用户是不相通的"
+!!! warning "不同主机之间的 Linux PAM 用户是不相通的"
 
-所有 Proxmox 主机的地址都记录在 DNS `<hostname>.vm.ustclug.org` 中。
+所有 Proxmox 主机的主机名（hostname）都设为 `<hostname>.vm.ustclug.org`，对应的 IP 地址记录在 DNS 中。
 
   [mirrors-2011]: https://lug.ustc.edu.cn/news/2011/04/mirrors-ustc-edu-cn-comes/
 
 ## 公用配置 {#common}
 
-出于安全考虑，PVE / PBS 主机使用 RFC 1918 段的校园网 IP，不连接公网，软件更新使用 mirrors.ustc.edu.cn 即可。
+安全起见，PVE / PBS 主机使用 [RFC 1918 段][rfc-1918]的校园网 IP，不连接公网，软件更新使用 mirrors.ustc.edu.cn 即可。
 
 - 东图可用的 IP 段为 192.168.93.0/24（网关 93.254）
 - 网络信息中心可用的 IP 段为 10.38.95.0/24（网关 95.254）
 
+  [rfc-1918]: https://en.wikipedia.org/wiki/Private_network#Private_IPv4_addresses
+
 ### 防火墙 {#pve-firewall}
 
-我们不适用 Proxmox 自带的防火墙功能，但 pve-firewall 仍然会尝试部署或恢复防火墙设置，因此需要禁用相关设置及服务：
+我们不使用 Proxmox 自带的防火墙功能，但 pve-firewall 仍然会尝试部署或恢复防火墙设置，因此需要禁用相关设置及服务：
 
 ```ini title="/etc/pve/nodes/$(hostname -s)/host.fw"
 [OPTIONS]
