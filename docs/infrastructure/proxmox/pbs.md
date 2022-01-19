@@ -1,6 +1,10 @@
-# Proxmox Backup Server
+# Proxmox Backup Server (PBS)
 
 PBS 现在部署在原来的 esxi-5 上面，用作虚拟机备份，web 界面的端口号为 8007（HTTPS only）。
+
+!!! info
+
+    本页面记录 Proxmox Backup Server 软件相关，以及 Proxmox VE 虚拟机相关的资料。关于 esxi-5 的系统配置信息记录在 [Proxmox VE](pve.md#esxi-5) 页面。
 
 ## 安装 PBS
 
@@ -33,6 +37,8 @@ PBS 自己的账号体系 (Realm pbs) 与 PVE (Realm pve) 互相不通，如果�
 !!! tip
 
     当然，你也可以 SSH 登录后修改 root 密码，再用 root@pam 的账号登录 web 界面进行操作。
+
+特别地，由于 PBS 和 PVE 同时安装在 esxi-5 上，因此它们可以共享 esxi-5 上的 Linux 用户（即 Linux PAM standard authentication）。
 
 ## 设置 Datastore {#pbs-add-datastore}
 

@@ -90,7 +90,6 @@ nav:
     - Proxmox Cluster:
       - Proxmox VE: "infrastructure/proxmox/pve.md"
       - Proxmox Backup Server: "infrastructure/proxmox/pbs.md"
-    - Backup: "#"
     - Monitor: "infrastructure/monitor.md"
     - Google Apps / G Suite: "infrastructure/google.md"
     - GitHub: infrastructure/github.md
@@ -118,7 +117,7 @@ nav:
       - IPMI: "services/mirrors/ipmi.md"
       - ZFS: "services/mirrors/zfs.md"
       - HTTP Service: "#"
-      - RSYNC Service: "#"
+      - Rsync Service: "#"
       - FTP Service: "#"
       - Reverse Proxy: "#"
       - Limiter: "services/mirrors/limiter.md"

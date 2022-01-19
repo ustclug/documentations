@@ -14,7 +14,7 @@
 
 然后修改位于 `/srv/docker/influxdb/conf/influxdb.conf` 的配置，修改以启用认证：
 
-```shell
+```shell title="/srv/docker/influxdb/conf/influxdb.conf"
 [http]
 # ...
 # Determines whether HTTP authentication is enabled.
@@ -74,4 +74,6 @@ sudo systemctl status telegraf
 
 Web 端监控位于 <https://monitor.ustclug.org>，账号系统使用 LDAP，可以在这里设置预警提示等。
 
-**注意**： 配置 InfluxDB 数据源时，只能使用只读账号，否则会带来严重的安全问题。
+!!! warning
+
+    配置 InfluxDB 数据源时，只能使用只读账号，否则会带来严重的安全问题。
