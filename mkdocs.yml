@@ -87,7 +87,9 @@ nav:
       - vCenter: "infrastructure/vsphere/vcenter.md"
       - NFS: "infrastructure/vsphere/nfs.md"
       - VDP: "infrastructure/vsphere/vdp.md"
-    - Proxmox VE: "infrastructure/proxmox.md"
+    - Proxmox:
+      - Proxmox VE: "infrastructure/proxmox/pve.md"
+      - Proxmox Backup Server: "infrastructure/proxmox/pbs.md"
     - Backup: "#"
     - Monitor: "infrastructure/monitor.md"
     - Google Apps / G Suite: "infrastructure/google.md"
