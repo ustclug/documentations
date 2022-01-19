@@ -12,21 +12,21 @@
         <meta name="author" content="USTC Linux User Group">
       
       
-        <link rel="canonical" href="https://docs.ustclug.org/services/ftp/">
+        <link rel="canonical" href="https://docs.ustclug.org/infrastructure/proxmox/pve/">
       
-      <link rel="icon" href="../../assets/images/favicon.png">
+      <link rel="icon" href="../../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.1.7">
     
     
       
-        <title>FTP - LUG @ USTC</title>
+        <title>Proxmox VE - LUG @ USTC</title>
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.cd566b2a.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.cd566b2a.min.css">
       
         
-        <link rel="stylesheet" href="../../assets/stylesheets/palette.e6a45f82.min.css">
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.e6a45f82.min.css">
         
       
     
@@ -42,7 +42,7 @@
     
       <link rel="stylesheet" href="https://101.ustclug.org/css/extra.css">
     
-    <script>__md_scope=new URL("../..",location),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../../..",location),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -70,7 +70,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#lug-ftp" class="md-skip">
+        <a href="#proxmox-ve" class="md-skip">
           Skip to content
         </a>
       
@@ -84,7 +84,7 @@
 
 <header class="md-header" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="../.." title="LUG @ USTC" class="md-header__button md-logo" aria-label="LUG @ USTC" data-md-component="logo">
+    <a href="../../.." title="LUG @ USTC" class="md-header__button md-logo" aria-label="LUG @ USTC" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M220.8 123.3c1 .5 1.8 1.7 3 1.7 1.1 0 2.8-.4 2.9-1.5.2-1.4-1.9-2.3-3.2-2.9-1.7-.7-3.9-1-5.5-.1-.4.2-.8.7-.6 1.1.3 1.3 2.3 1.1 3.4 1.7zm-21.9 1.7c1.2 0 2-1.2 3-1.7 1.1-.6 3.1-.4 3.5-1.6.2-.4-.2-.9-.6-1.1-1.6-.9-3.8-.6-5.5.1-1.3.6-3.4 1.5-3.2 2.9.1 1 1.8 1.5 2.8 1.4zM420 403.8c-3.6-4-5.3-11.6-7.2-19.7-1.8-8.1-3.9-16.8-10.5-22.4-1.3-1.1-2.6-2.1-4-2.9-1.3-.8-2.7-1.5-4.1-2 9.2-27.3 5.6-54.5-3.7-79.1-11.4-30.1-31.3-56.4-46.5-74.4-17.1-21.5-33.7-41.9-33.4-72C311.1 85.4 315.7.1 234.8 0 132.4-.2 158 103.4 156.9 135.2c-1.7 23.4-6.4 41.8-22.5 64.7-18.9 22.5-45.5 58.8-58.1 96.7-6 17.9-8.8 36.1-6.2 53.3-6.5 5.8-11.4 14.7-16.6 20.2-4.2 4.3-10.3 5.9-17 8.3s-14 6-18.5 14.5c-2.1 3.9-2.8 8.1-2.8 12.4 0 3.9.6 7.9 1.2 11.8 1.2 8.1 2.5 15.7.8 20.8-5.2 14.4-5.9 24.4-2.2 31.7 3.8 7.3 11.4 10.5 20.1 12.3 17.3 3.6 40.8 2.7 59.3 12.5 19.8 10.4 39.9 14.1 55.9 10.4 11.6-2.6 21.1-9.6 25.9-20.2 12.5-.1 26.3-5.4 48.3-6.6 14.9-1.2 33.6 5.3 55.1 4.1.6 2.3 1.4 4.6 2.5 6.7v.1c8.3 16.7 23.8 24.3 40.3 23 16.6-1.3 34.1-11 48.3-27.9 13.6-16.4 36-23.2 50.9-32.2 7.4-4.5 13.4-10.1 13.9-18.3.4-8.2-4.4-17.3-15.5-29.7zM223.7 87.3c9.8-22.2 34.2-21.8 44-.4 6.5 14.2 3.6 30.9-4.3 40.4-1.6-.8-5.9-2.6-12.6-4.9 1.1-1.2 3.1-2.7 3.9-4.6 4.8-11.8-.2-27-9.1-27.3-7.3-.5-13.9 10.8-11.8 23-4.1-2-9.4-3.5-13-4.4-1-6.9-.3-14.6 2.9-21.8zM183 75.8c10.1 0 20.8 14.2 19.1 33.5-3.5 1-7.1 2.5-10.2 4.6 1.2-8.9-3.3-20.1-9.6-19.6-8.4.7-9.8 21.2-1.8 28.1 1 .8 1.9-.2-5.9 5.5-15.6-14.6-10.5-52.1 8.4-52.1zm-13.6 60.7c6.2-4.6 13.6-10 14.1-10.5 4.7-4.4 13.5-14.2 27.9-14.2 7.1 0 15.6 2.3 25.9 8.9 6.3 4.1 11.3 4.4 22.6 9.3 8.4 3.5 13.7 9.7 10.5 18.2-2.6 7.1-11 14.4-22.7 18.1-11.1 3.6-19.8 16-38.2 14.9-3.9-.2-7-1-9.6-2.1-8-3.5-12.2-10.4-20-15-8.6-4.8-13.2-10.4-14.7-15.3-1.4-4.9 0-9 4.2-12.3zm3.3 334c-2.7 35.1-43.9 34.4-75.3 18-29.9-15.8-68.6-6.5-76.5-21.9-2.4-4.7-2.4-12.7 2.6-26.4v-.2c2.4-7.6.6-16-.6-23.9-1.2-7.8-1.8-15 .9-20 3.5-6.7 8.5-9.1 14.8-11.3 10.3-3.7 11.8-3.4 19.6-9.9 5.5-5.7 9.5-12.9 14.3-18 5.1-5.5 10-8.1 17.7-6.9 8.1 1.2 15.1 6.8 21.9 16l19.6 35.6c9.5 19.9 43.1 48.4 41 68.9zm-1.4-25.9c-4.1-6.6-9.6-13.6-14.4-19.6 7.1 0 14.2-2.2 16.7-8.9 2.3-6.2 0-14.9-7.4-24.9-13.5-18.2-38.3-32.5-38.3-32.5-13.5-8.4-21.1-18.7-24.6-29.9s-3-23.3-.3-35.2c5.2-22.9 18.6-45.2 27.2-59.2 2.3-1.7.8 3.2-8.7 20.8-8.5 16.1-24.4 53.3-2.6 82.4.6-20.7 5.5-41.8 13.8-61.5 12-27.4 37.3-74.9 39.3-112.7 1.1.8 4.6 3.2 6.2 4.1 4.6 2.7 8.1 6.7 12.6 10.3 12.4 10 28.5 9.2 42.4 1.2 6.2-3.5 11.2-7.5 15.9-9 9.9-3.1 17.8-8.6 22.3-15 7.7 30.4 25.7 74.3 37.2 95.7 6.1 11.4 18.3 35.5 23.6 64.6 3.3-.1 7 .4 10.9 1.4 13.8-35.7-11.7-74.2-23.3-84.9-4.7-4.6-4.9-6.6-2.6-6.5 12.6 11.2 29.2 33.7 35.2 59 2.8 11.6 3.3 23.7.4 35.7 16.4 6.8 35.9 17.9 30.7 34.8-2.2-.1-3.2 0-4.2 0 3.2-10.1-3.9-17.6-22.8-26.1-19.6-8.6-36-8.6-38.3 12.5-12.1 4.2-18.3 14.7-21.4 27.3-2.8 11.2-3.6 24.7-4.4 39.9-.5 7.7-3.6 18-6.8 29-32.1 22.9-76.7 32.9-114.3 7.2zm257.4-11.5c-.9 16.8-41.2 19.9-63.2 46.5-13.2 15.7-29.4 24.4-43.6 25.5s-26.5-4.8-33.7-19.3c-4.7-11.1-2.4-23.1 1.1-36.3 3.7-14.2 9.2-28.8 9.9-40.6.8-15.2 1.7-28.5 4.2-38.7 2.6-10.3 6.6-17.2 13.7-21.1.3-.2.7-.3 1-.5.8 13.2 7.3 26.6 18.8 29.5 12.6 3.3 30.7-7.5 38.4-16.3 9-.3 15.7-.9 22.6 5.1 9.9 8.5 7.1 30.3 17.1 41.6 10.6 11.6 14 19.5 13.7 24.6zM173.3 148.7c2 1.9 4.7 4.5 8 7.1 6.6 5.2 15.8 10.6 27.3 10.6 11.6 0 22.5-5.9 31.8-10.8 4.9-2.6 10.9-7 14.8-10.4s5.9-6.3 3.1-6.6-2.6 2.6-6 5.1c-4.4 3.2-9.7 7.4-13.9 9.8-7.4 4.2-19.5 10.2-29.9 10.2s-18.7-4.8-24.9-9.7c-3.1-2.5-5.7-5-7.7-6.9-1.5-1.4-1.9-4.6-4.3-4.9-1.4-.1-1.8 3.7 1.7 6.5z"/></svg>
@@ -103,7 +103,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              FTP
+              Proxmox VE
             
           </span>
         </div>
@@ -204,7 +204,7 @@
 
 <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../.." title="LUG @ USTC" class="md-nav__button md-logo" aria-label="LUG @ USTC" data-md-component="logo">
+    <a href="../../.." title="LUG @ USTC" class="md-nav__button md-logo" aria-label="LUG @ USTC" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M220.8 123.3c1 .5 1.8 1.7 3 1.7 1.1 0 2.8-.4 2.9-1.5.2-1.4-1.9-2.3-3.2-2.9-1.7-.7-3.9-1-5.5-.1-.4.2-.8.7-.6 1.1.3 1.3 2.3 1.1 3.4 1.7zm-21.9 1.7c1.2 0 2-1.2 3-1.7 1.1-.6 3.1-.4 3.5-1.6.2-.4-.2-.9-.6-1.1-1.6-.9-3.8-.6-5.5.1-1.3.6-3.4 1.5-3.2 2.9.1 1 1.8 1.5 2.8 1.4zM420 403.8c-3.6-4-5.3-11.6-7.2-19.7-1.8-8.1-3.9-16.8-10.5-22.4-1.3-1.1-2.6-2.1-4-2.9-1.3-.8-2.7-1.5-4.1-2 9.2-27.3 5.6-54.5-3.7-79.1-11.4-30.1-31.3-56.4-46.5-74.4-17.1-21.5-33.7-41.9-33.4-72C311.1 85.4 315.7.1 234.8 0 132.4-.2 158 103.4 156.9 135.2c-1.7 23.4-6.4 41.8-22.5 64.7-18.9 22.5-45.5 58.8-58.1 96.7-6 17.9-8.8 36.1-6.2 53.3-6.5 5.8-11.4 14.7-16.6 20.2-4.2 4.3-10.3 5.9-17 8.3s-14 6-18.5 14.5c-2.1 3.9-2.8 8.1-2.8 12.4 0 3.9.6 7.9 1.2 11.8 1.2 8.1 2.5 15.7.8 20.8-5.2 14.4-5.9 24.4-2.2 31.7 3.8 7.3 11.4 10.5 20.1 12.3 17.3 3.6 40.8 2.7 59.3 12.5 19.8 10.4 39.9 14.1 55.9 10.4 11.6-2.6 21.1-9.6 25.9-20.2 12.5-.1 26.3-5.4 48.3-6.6 14.9-1.2 33.6 5.3 55.1 4.1.6 2.3 1.4 4.6 2.5 6.7v.1c8.3 16.7 23.8 24.3 40.3 23 16.6-1.3 34.1-11 48.3-27.9 13.6-16.4 36-23.2 50.9-32.2 7.4-4.5 13.4-10.1 13.9-18.3.4-8.2-4.4-17.3-15.5-29.7zM223.7 87.3c9.8-22.2 34.2-21.8 44-.4 6.5 14.2 3.6 30.9-4.3 40.4-1.6-.8-5.9-2.6-12.6-4.9 1.1-1.2 3.1-2.7 3.9-4.6 4.8-11.8-.2-27-9.1-27.3-7.3-.5-13.9 10.8-11.8 23-4.1-2-9.4-3.5-13-4.4-1-6.9-.3-14.6 2.9-21.8zM183 75.8c10.1 0 20.8 14.2 19.1 33.5-3.5 1-7.1 2.5-10.2 4.6 1.2-8.9-3.3-20.1-9.6-19.6-8.4.7-9.8 21.2-1.8 28.1 1 .8 1.9-.2-5.9 5.5-15.6-14.6-10.5-52.1 8.4-52.1zm-13.6 60.7c6.2-4.6 13.6-10 14.1-10.5 4.7-4.4 13.5-14.2 27.9-14.2 7.1 0 15.6 2.3 25.9 8.9 6.3 4.1 11.3 4.4 22.6 9.3 8.4 3.5 13.7 9.7 10.5 18.2-2.6 7.1-11 14.4-22.7 18.1-11.1 3.6-19.8 16-38.2 14.9-3.9-.2-7-1-9.6-2.1-8-3.5-12.2-10.4-20-15-8.6-4.8-13.2-10.4-14.7-15.3-1.4-4.9 0-9 4.2-12.3zm3.3 334c-2.7 35.1-43.9 34.4-75.3 18-29.9-15.8-68.6-6.5-76.5-21.9-2.4-4.7-2.4-12.7 2.6-26.4v-.2c2.4-7.6.6-16-.6-23.9-1.2-7.8-1.8-15 .9-20 3.5-6.7 8.5-9.1 14.8-11.3 10.3-3.7 11.8-3.4 19.6-9.9 5.5-5.7 9.5-12.9 14.3-18 5.1-5.5 10-8.1 17.7-6.9 8.1 1.2 15.1 6.8 21.9 16l19.6 35.6c9.5 19.9 43.1 48.4 41 68.9zm-1.4-25.9c-4.1-6.6-9.6-13.6-14.4-19.6 7.1 0 14.2-2.2 16.7-8.9 2.3-6.2 0-14.9-7.4-24.9-13.5-18.2-38.3-32.5-38.3-32.5-13.5-8.4-21.1-18.7-24.6-29.9s-3-23.3-.3-35.2c5.2-22.9 18.6-45.2 27.2-59.2 2.3-1.7.8 3.2-8.7 20.8-8.5 16.1-24.4 53.3-2.6 82.4.6-20.7 5.5-41.8 13.8-61.5 12-27.4 37.3-74.9 39.3-112.7 1.1.8 4.6 3.2 6.2 4.1 4.6 2.7 8.1 6.7 12.6 10.3 12.4 10 28.5 9.2 42.4 1.2 6.2-3.5 11.2-7.5 15.9-9 9.9-3.1 17.8-8.6 22.3-15 7.7 30.4 25.7 74.3 37.2 95.7 6.1 11.4 18.3 35.5 23.6 64.6 3.3-.1 7 .4 10.9 1.4 13.8-35.7-11.7-74.2-23.3-84.9-4.7-4.6-4.9-6.6-2.6-6.5 12.6 11.2 29.2 33.7 35.2 59 2.8 11.6 3.3 23.7.4 35.7 16.4 6.8 35.9 17.9 30.7 34.8-2.2-.1-3.2 0-4.2 0 3.2-10.1-3.9-17.6-22.8-26.1-19.6-8.6-36-8.6-38.3 12.5-12.1 4.2-18.3 14.7-21.4 27.3-2.8 11.2-3.6 24.7-4.4 39.9-.5 7.7-3.6 18-6.8 29-32.1 22.9-76.7 32.9-114.3 7.2zm257.4-11.5c-.9 16.8-41.2 19.9-63.2 46.5-13.2 15.7-29.4 24.4-43.6 25.5s-26.5-4.8-33.7-19.3c-4.7-11.1-2.4-23.1 1.1-36.3 3.7-14.2 9.2-28.8 9.9-40.6.8-15.2 1.7-28.5 4.2-38.7 2.6-10.3 6.6-17.2 13.7-21.1.3-.2.7-.3 1-.5.8 13.2 7.3 26.6 18.8 29.5 12.6 3.3 30.7-7.5 38.4-16.3 9-.3 15.7-.9 22.6 5.1 9.9 8.5 7.1 30.3 17.1 41.6 10.6 11.6 14 19.5 13.7 24.6zM173.3 148.7c2 1.9 4.7 4.5 8 7.1 6.6 5.2 15.8 10.6 27.3 10.6 11.6 0 22.5-5.9 31.8-10.8 4.9-2.6 10.9-7 14.8-10.4s5.9-6.3 3.1-6.6-2.6 2.6-6 5.1c-4.4 3.2-9.7 7.4-13.9 9.8-7.4 4.2-19.5 10.2-29.9 10.2s-18.7-4.8-24.9-9.7c-3.1-2.5-5.7-5-7.7-6.9-1.5-1.4-1.9-4.6-4.3-4.9-1.4-.1-1.8 3.7 1.7 6.5z"/></svg>
@@ -235,7 +235,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../.." class="md-nav__link">
+      <a href="../../.." class="md-nav__link">
         Home
       </a>
     </li>
@@ -278,7 +278,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../workflow/mirrors/maintenance/" class="md-nav__link">
+      <a href="../../../workflow/mirrors/maintenance/" class="md-nav__link">
         Mirrors maintenance
       </a>
     </li>
@@ -292,7 +292,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../workflow/vSphere/new-vm/" class="md-nav__link">
+      <a href="../../../workflow/vSphere/new-vm/" class="md-nav__link">
         New VM in vSphere
       </a>
     </li>
@@ -306,7 +306,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../workflow/ldap/add-new-user/" class="md-nav__link">
+      <a href="../../../workflow/ldap/add-new-user/" class="md-nav__link">
         Add New User in LDAP
       </a>
     </li>
@@ -326,14 +326,16 @@
 
   
   
+    
+  
   
     
       
     
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" >
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" checked>
       
       
       
@@ -382,7 +384,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../infrastructure/intranet/intranet/" class="md-nav__link">
+      <a href="../../intranet/intranet/" class="md-nav__link">
         Overview
       </a>
     </li>
@@ -396,7 +398,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../infrastructure/tinc/" class="md-nav__link">
+      <a href="../../tinc/" class="md-nav__link">
         Tinc
       </a>
     </li>
@@ -410,7 +412,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../infrastructure/intranet/lugivpn/" class="md-nav__link">
+      <a href="../../intranet/lugivpn/" class="md-nav__link">
         LUGi VPN
       </a>
     </li>
@@ -424,7 +426,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../infrastructure/intranet/gateway/" class="md-nav__link">
+      <a href="../../intranet/gateway/" class="md-nav__link">
         Gateway
       </a>
     </li>
@@ -445,7 +447,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../infrastructure/ldap/" class="md-nav__link">
+      <a href="../../ldap/" class="md-nav__link">
         LDAP: Servers Unified Authentication
       </a>
     </li>
@@ -459,7 +461,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../infrastructure/sshca/" class="md-nav__link">
+      <a href="../../sshca/" class="md-nav__link">
         SSH Certificate Authority
       </a>
     </li>
@@ -473,7 +475,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../infrastructure/auth-dns/" class="md-nav__link">
+      <a href="../../auth-dns/" class="md-nav__link">
         Authoritative DNS
       </a>
     </li>
@@ -487,7 +489,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../infrastructure/ssl/" class="md-nav__link">
+      <a href="../../ssl/" class="md-nav__link">
         SSL Certificates
       </a>
     </li>
@@ -527,7 +529,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../infrastructure/vsphere/esxi/" class="md-nav__link">
+      <a href="../../vsphere/esxi/" class="md-nav__link">
         ESXi
       </a>
     </li>
@@ -541,7 +543,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../infrastructure/vsphere/vcenter/" class="md-nav__link">
+      <a href="../../vsphere/vcenter/" class="md-nav__link">
         vCenter
       </a>
     </li>
@@ -555,7 +557,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../infrastructure/vsphere/nfs/" class="md-nav__link">
+      <a href="../../vsphere/nfs/" class="md-nav__link">
         NFS
       </a>
     </li>
@@ -569,7 +571,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../infrastructure/vsphere/vdp/" class="md-nav__link">
+      <a href="../../vsphere/vdp/" class="md-nav__link">
         VDP
       </a>
     </li>
@@ -588,12 +590,14 @@
               
   
   
+    
+  
   
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_7" type="checkbox" id="__nav_3_7" >
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_7" type="checkbox" id="__nav_3_7" checked>
       
       
       
@@ -614,11 +618,72 @@
               
   
   
+    
   
-    <li class="md-nav__item">
-      <a href="../../infrastructure/proxmox/pve/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Proxmox VE
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         Proxmox VE
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#pve-5vm" class="md-nav__link">
+    pve-5.vm
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#records" class="md-nav__link">
+    工作记录
+  </a>
+  
+    <nav class="md-nav" aria-label="工作记录">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#2021-12-31-docker2" class="md-nav__link">
+    2021-12-31 迁移 docker2
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -630,7 +695,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../infrastructure/proxmox/pbs/" class="md-nav__link">
+      <a href="../pbs/" class="md-nav__link">
         Proxmox Backup Server
       </a>
     </li>
@@ -665,7 +730,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../infrastructure/monitor/" class="md-nav__link">
+      <a href="../../monitor/" class="md-nav__link">
         Monitor
       </a>
     </li>
@@ -679,7 +744,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../infrastructure/google/" class="md-nav__link">
+      <a href="../../google/" class="md-nav__link">
         Google Apps / G Suite
       </a>
     </li>
@@ -693,7 +758,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../infrastructure/github/" class="md-nav__link">
+      <a href="../../github/" class="md-nav__link">
         GitHub
       </a>
     </li>
@@ -707,7 +772,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../infrastructure/mail/" class="md-nav__link">
+      <a href="../../mail/" class="md-nav__link">
         Mail Agent
       </a>
     </li>
@@ -721,7 +786,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../infrastructure/raid/" class="md-nav__link">
+      <a href="../../raid/" class="md-nav__link">
         RAID
       </a>
     </li>
@@ -735,7 +800,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../infrastructure/discontinued/" class="md-nav__link">
+      <a href="../../discontinued/" class="md-nav__link">
         Discontinued Infrastructure
       </a>
     </li>
@@ -755,16 +820,14 @@
 
   
   
-    
-  
   
     
       
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" checked>
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" >
       
       
       
@@ -813,7 +876,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../mirrors/" class="md-nav__link">
+      <a href="../../../services/mirrors/" class="md-nav__link">
         History
       </a>
     </li>
@@ -853,7 +916,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../mirrors/4/" class="md-nav__link">
+      <a href="../../../services/mirrors/4/" class="md-nav__link">
         Overview
       </a>
     </li>
@@ -867,7 +930,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../mirrors/4/volumes/" class="md-nav__link">
+      <a href="../../../services/mirrors/4/volumes/" class="md-nav__link">
         Volumes
       </a>
     </li>
@@ -907,7 +970,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../mirrors/4/networking/" class="md-nav__link">
+      <a href="../../../services/mirrors/4/networking/" class="md-nav__link">
         Interfaces
       </a>
     </li>
@@ -921,7 +984,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../mirrors/4/networking/route/" class="md-nav__link">
+      <a href="../../../services/mirrors/4/networking/route/" class="md-nav__link">
         Routing
       </a>
     </li>
@@ -935,7 +998,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../mirrors/4/networking/misc/" class="md-nav__link">
+      <a href="../../../services/mirrors/4/networking/misc/" class="md-nav__link">
         Misc
       </a>
     </li>
@@ -956,7 +1019,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../mirrors/4/repos/" class="md-nav__link">
+      <a href="../../../services/mirrors/4/repos/" class="md-nav__link">
         Repositories
       </a>
     </li>
@@ -977,7 +1040,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../mirrors/3/" class="md-nav__link">
+      <a href="../../../services/mirrors/3/" class="md-nav__link">
         Auxiliary (3)
       </a>
     </li>
@@ -1017,7 +1080,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../mirrors/2/" class="md-nav__link">
+      <a href="../../../services/mirrors/2/" class="md-nav__link">
         Overview
       </a>
     </li>
@@ -1031,7 +1094,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../mirrors/2/networking/" class="md-nav__link">
+      <a href="../../../services/mirrors/2/networking/" class="md-nav__link">
         Networking
       </a>
     </li>
@@ -1052,7 +1115,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../mirrors/1/" class="md-nav__link">
+      <a href="../../../services/mirrors/1/" class="md-nav__link">
         Obsolete (1)
       </a>
     </li>
@@ -1066,7 +1129,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../mirrors/hardware/" class="md-nav__link">
+      <a href="../../../services/mirrors/hardware/" class="md-nav__link">
         Hardware
       </a>
     </li>
@@ -1080,7 +1143,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../mirrors/docker/" class="md-nav__link">
+      <a href="../../../services/mirrors/docker/" class="md-nav__link">
         Docker
       </a>
     </li>
@@ -1094,7 +1157,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../mirrors/ipmi/" class="md-nav__link">
+      <a href="../../../services/mirrors/ipmi/" class="md-nav__link">
         IPMI
       </a>
     </li>
@@ -1108,7 +1171,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../mirrors/zfs/" class="md-nav__link">
+      <a href="../../../services/mirrors/zfs/" class="md-nav__link">
         ZFS
       </a>
     </li>
@@ -1178,7 +1241,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../mirrors/limiter/" class="md-nav__link">
+      <a href="../../../services/mirrors/limiter/" class="md-nav__link">
         Limiter
       </a>
     </li>
@@ -1206,7 +1269,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../mirrors/mail-list/" class="md-nav__link">
+      <a href="../../../services/mirrors/mail-list/" class="md-nav__link">
         Mail list
       </a>
     </li>
@@ -1227,7 +1290,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../gateway-el/" class="md-nav__link">
+      <a href="../../../services/gateway-el/" class="md-nav__link">
         Gateway EL
       </a>
     </li>
@@ -1241,7 +1304,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../gateway-nic/" class="md-nav__link">
+      <a href="../../../services/gateway-nic/" class="md-nav__link">
         Gateway NIC
       </a>
     </li>
@@ -1255,7 +1318,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../docker2/" class="md-nav__link">
+      <a href="../../../services/docker2/" class="md-nav__link">
         Docker2
       </a>
     </li>
@@ -1283,7 +1346,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../gitlab/" class="md-nav__link">
+      <a href="../../../services/gitlab/" class="md-nav__link">
         GitLab
       </a>
     </li>
@@ -1372,7 +1435,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../light/" class="md-nav__link">
+      <a href="../../../services/light/" class="md-nav__link">
         Light
       </a>
     </li>
@@ -1412,7 +1475,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../pxe/liims/" class="md-nav__link">
+      <a href="../../../services/pxe/liims/" class="md-nav__link">
         LIIMS
       </a>
     </li>
@@ -1426,7 +1489,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../pxe/pxe/" class="md-nav__link">
+      <a href="../../../services/pxe/pxe/" class="md-nav__link">
         PXE
       </a>
     </li>
@@ -1445,52 +1508,11 @@
               
   
   
-    
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          FTP
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../../services/ftp/" class="md-nav__link">
         FTP
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#notes" class="md-nav__link">
-    Notes
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -1502,7 +1524,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../generate-204/" class="md-nav__link">
+      <a href="../../../services/generate-204/" class="md-nav__link">
         Generate 204
       </a>
     </li>
@@ -1516,7 +1538,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../discontinued/" class="md-nav__link">
+      <a href="../../../services/discontinued/" class="md-nav__link">
         Discontinued Services
       </a>
     </li>
@@ -1566,7 +1588,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../faq/dns/" class="md-nav__link">
+      <a href="../../../faq/dns/" class="md-nav__link">
         DNS
       </a>
     </li>
@@ -1580,7 +1602,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../faq/ldap/" class="md-nav__link">
+      <a href="../../../faq/ldap/" class="md-nav__link">
         LDAP
       </a>
     </li>
@@ -1594,7 +1616,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../faq/nginx/" class="md-nav__link">
+      <a href="../../../faq/nginx/" class="md-nav__link">
         Nginx
       </a>
     </li>
@@ -1608,7 +1630,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../faq/systemd-timer/" class="md-nav__link">
+      <a href="../../../faq/systemd-timer/" class="md-nav__link">
         systemd-timer
       </a>
     </li>
@@ -1649,9 +1671,29 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#notes" class="md-nav__link">
-    Notes
+  <a href="#pve-5vm" class="md-nav__link">
+    pve-5.vm
   </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#records" class="md-nav__link">
+    工作记录
+  </a>
+  
+    <nav class="md-nav" aria-label="工作记录">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#2021-12-31-docker2" class="md-nav__link">
+    2021-12-31 迁移 docker2
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -1667,28 +1709,28 @@
             <article class="md-content__inner md-typeset">
               
                 
-<a href="https://github.com/ustclug/documentations/edit/master/docs/services/ftp.md" title="Edit this page" class="md-content__button md-icon">
+<a href="https://github.com/ustclug/documentations/edit/master/docs/infrastructure/proxmox/pve.md" title="Edit this page" class="md-content__button md-icon">
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
 </a>
 
 
-<h1 id="lug-ftp">LUG FTP<a class="headerlink" href="#lug-ftp" title="Permanent link">&para;</a></h1>
-<p>Services: <a href="ftp://ftp.ustclug.org">FTP/FTPS</a>, <a href="sftp://ftp.ustclug.org">SFTP</a>, <a href="http://ftp.ustclug.org">HTTP</a>, <a href="https://ftp.ustclug.org">HTTPS</a>, <a href="afp://ftp.ustclug.org">AFP</a></p>
-<p>Git repository: <a href="https://github.com/ustclug/lugftp">ustclug/lugftp</a></p>
-<p>Docker Hub: <a href="https://hub.docker.com/r/ustclug/ftp/">ustclug/ftp</a></p>
-<p>Server: vdp.s.ustclug.org</p>
-<p>Theme: <a href="https://larsjung.de/h5ai/">h5ai</a></p>
-<p>Deploy: <a href="https://git.lug.ustc.edu.cn/ustclug/docker-run-script/blob/master/ftp/ftp.sh">ftp.sh</a></p>
-<h2 id="notes">Notes<a class="headerlink" href="#notes" title="Permanent link">&para;</a></h2>
-<ol>
-<li>SSL cert is required when running LUG FTP.</li>
-<li><code>ssh-keygen -A</code> is required to be manually run when initializing.</li>
-<li>About directory permission:</li>
-<li>It is strongly suggested to keep permission &amp; owner metadata when backing up/restoring.</li>
-<li>Public folder root: set owner to root:root, permission to dr-xr-xr-x</li>
-<li>Subfolders: set owner to 1000:1000. <code>_h5ai</code> and <code>wp-content</code> needs to be set to a different owner (misconfigured?). And <code>Incoming</code> shall be set to drwxrwxr-x.</li>
-<li>Do not use Google DNS in host, as mobile network may drop UDP packets to 8.8.8.8. A misconfigured DNS may lead to LDAP in container broken.</li>
-</ol>
+<h1 id="proxmox-ve">Proxmox VE<a class="headerlink" href="#proxmox-ve" title="Permanent link">&para;</a></h1>
+<p>LUG 目前服役的 Proxmox VE 主机只有一台，是 james 在 2021 年底给我们的，命名为 <code>pve-5</code>，用于替换已运行多年的 esxi-5（因此编号为 5）。</p>
+<h2 id="pve-5vm">pve-5.vm<a class="headerlink" href="#pve-5vm" title="Permanent link">&para;</a></h2>
+<p>pve-5 位于网络中心，配置为 2× Xeon E5-2603 v4 (Broadwell 6C6T, 1.70 GHz, no HT, no Turbo Boost)，128 GB 内存和一大堆 SSD（2× 三星 240 GB SATA + 10x Intel DC S4500 1.92 TB SATA）。我们将两块 240 GB 的盘组成一个 LVM VG，分配 16 GB 的 rootfs（LVM mirror）和 8 GB 的 swap，其余空间给一个 thinpool。十块 1.92 TB 的盘组成一个 RAIDZ2 的 zpool，用于存储虚拟机等数据。</p>
+<p>出于安全考虑，主机使用 10.38 段的校园网 IP，不连接公网，软件更新使用 mirrors.ustc.edu.cn 即可。其连接的单根 10 Gbps 的光纤，桥接出 <code>vmbr0</code>（Cernet）, <code>vmbr2</code>（Telecom）, <code>vmbr3</code>（Unicom）, <code>vmbr4</code>（Mobile）四个不同 VLAN 的网桥，另有一个 <code>vmbr1</code>（Ustclug）的无头网桥用于桥接 Tinc，因此在使用和维护上也与 esxi-5 相似。</p>
+<div class="admonition danger">
+<p class="admonition-title">硬盘控制器不要使用 VirtIO SCSI Single 或 LSI 开头的选项</p>
+<p>出于未知原因，使用这些模式在虚拟机重启时会导致整个 Proxmox VE 主机卡住而不得不重启。请使用 VirtIO SCSI（不带 Single）。同样原因创建虚拟机硬盘时不要勾选 iothread。</p>
+</div>
+<p>主机使用 ZFS（Zvol）作为虚拟机的虚拟硬盘，在虚拟机中启用 <code>fstrim.timer</code>（systemd 的 fstrim 定时任务，由 <code>util-linux</code> 提供）可以定期腾出不用的空间，帮助 ZFS 更好地规划空间。启用 fstrim 的虚拟硬盘需要在 PVE 上启用 <code>discard</code> 选项，否则 fstrim 不起作用。该特性是由于 ZFS 是 CoW 的，与 ZFS 底层使用 SSD 没有太大关联。</p>
+<h2 id="records">工作记录<a class="headerlink" href="#records" title="Permanent link">&para;</a></h2>
+<h3 id="2021-12-31-docker2">2021-12-31 迁移 docker2<a class="headerlink" href="#2021-12-31-docker2" title="Permanent link">&para;</a></h3>
+<p>docker2 原先使用 QEMU 直接运行在 mirrors2 上，下层存储为 ZFS Zvol（<code>pool0/qemu/docker2</code>），由于 ZFS 调参不当使其占用了 3 倍的硬盘空间（见<a href="https://www.reddit.com/r/zfs/comments/i2ypyy/til_zfs_ashift12_raidz2_zvol_with_4k_blocksize/">这个 Reddit 贴子</a>），加上 mirrors2 本身对外提供 Rsync 服务，硬盘负载极高，所以长期以来 docker2 的 I/O 性能<em>十分</em>低下。正好借这次全闪的新宿主机将其迁移过去。</p>
+<p>迁移时需要保证完整性的主要内容就是虚拟机内的业务，因此需要在主机间传输的内容就是虚拟磁盘，其他配置（CPU、内存、网卡等）都可以直接在新平台上创建新虚拟机时修改。原本我们打算使用 rsync 或者 dd 的方式复制磁盘，但是考虑到两边都是 ZFS，使用 <code>zfs send</code> 是一个更好的方案。</p>
+<p>我们在 pve-5 上运行 <code>nc -l -p 9999 &lt;/dev/null | pv | zfs recv rpool/data/docker2</code>，然后在 mirrors2 上对 zvol 先打个快照，运行 <code>zfs send pool0/qemu/docker2@20211230 &gt; /dev/tcp/{pve-5}/9999</code> 将快照内容发送到 pve-5 上（300 GiB 的数据花费了 16 小时），然后再将 docker2 关机并增量传输，<code>zfs send -i @20211230 pool0/qemu/docker2 &gt; /dev/tcp/{pve-5}/9999</code>（增量传输只发送了 10 GB 数据）。同时我们在 Proxmox 的 web 界面上创建一个新虚拟机，配好 CPU 内存网卡等，分配 300 GiB 的硬盘。</p>
+<p>由于 zfs send 是原样发送的，因此接收到的 zvol 硬盘占用量仍然有 712 GB。Proxmox 新建的 zvol 参数就比较合理（<code>volblocksize=16k</code>），没有严重放大的问题，因此我们再将接收到的 zvol 给 dd 进新虚拟机的 zvol 而不是直接使用。dd 结果约 345 GiB（十分合理），开机进系统运行 fstrim 之后占用量约为 240 GiB（更加合理了）。</p>
+<p>迁移过程没有遇到任何坑，仅有的注意事项就是 zvol 调参需要重新 dd 而不能直接改，以及创建网卡的顺序（会影响虚拟机内部 eth0 和 eth1 的顺序，除非虚拟机内部使用 udev persistent net 方式根据 MAC 地址将网卡改名）。</p>
 
               
             </article>
@@ -1707,7 +1749,7 @@
     <nav class="md-footer__inner md-grid" aria-label="Footer">
       
         
-        <a href="../pxe/pxe/" class="md-footer__link md-footer__link--prev" aria-label="Previous: PXE" rel="prev">
+        <a href="../../vsphere/vdp/" class="md-footer__link md-footer__link--prev" aria-label="Previous: VDP" rel="prev">
           <div class="md-footer__button md-icon">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
           </div>
@@ -1716,20 +1758,20 @@
               <span class="md-footer__direction">
                 Previous
               </span>
-              PXE
+              VDP
             </div>
           </div>
         </a>
       
       
         
-        <a href="../generate-204/" class="md-footer__link md-footer__link--next" aria-label="Next: Generate 204" rel="next">
+        <a href="../pbs/" class="md-footer__link md-footer__link--next" aria-label="Next: Proxmox Backup Server" rel="next">
           <div class="md-footer__title">
             <div class="md-ellipsis">
               <span class="md-footer__direction">
                 Next
               </span>
-              Generate 204
+              Proxmox Backup Server
             </div>
           </div>
           <div class="md-footer__button md-icon">
@@ -1785,10 +1827,10 @@
     <div class="md-dialog" data-md-component="dialog">
       <div class="md-dialog__inner md-typeset"></div>
     </div>
-    <script id="__config" type="application/json">{"base": "../..", "features": ["content.code.annotate", "navigation.top", "navigation.sections"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../assets/javascripts/workers/search.22074ed6.min.js"}</script>
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["content.code.annotate", "navigation.top", "navigation.sections"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../../assets/javascripts/workers/search.22074ed6.min.js"}</script>
     
     
-      <script src="../../assets/javascripts/bundle.01de222e.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.01de222e.min.js"></script>
       
     
   </body>
