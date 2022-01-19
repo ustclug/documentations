@@ -70,7 +70,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#proxmox-ve" class="md-skip">
+        <a href="#proxmox-virtual-environment" class="md-skip">
           Skip to content
         </a>
       
@@ -603,14 +603,14 @@
       
       
         <label class="md-nav__link" for="__nav_3_7">
-          Proxmox
+          Proxmox Cluster
           <span class="md-nav__icon md-icon"></span>
         </label>
       
-      <nav class="md-nav" aria-label="Proxmox" data-md-level="2">
+      <nav class="md-nav" aria-label="Proxmox Cluster" data-md-level="2">
         <label class="md-nav__title" for="__nav_3_7">
           <span class="md-nav__icon md-icon"></span>
-          Proxmox
+          Proxmox Cluster
         </label>
         <ul class="md-nav__list" data-md-scrollfix>
           
@@ -654,9 +654,29 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#pve-5vm" class="md-nav__link">
-    pve-5.vm
+  <a href="#pve-5" class="md-nav__link">
+    pve-5
   </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#esxi-5" class="md-nav__link">
+    esxi-5
+  </a>
+  
+    <nav class="md-nav" aria-label="esxi-5">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#iscsi" class="md-nav__link">
+    iSCSI
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -669,7 +689,7 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#2021-12-31-docker2" class="md-nav__link">
+  <a href="#migrate-docker2" class="md-nav__link">
     2021-12-31 迁移 docker2
   </a>
   
@@ -1671,9 +1691,29 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#pve-5vm" class="md-nav__link">
-    pve-5.vm
+  <a href="#pve-5" class="md-nav__link">
+    pve-5
   </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#esxi-5" class="md-nav__link">
+    esxi-5
+  </a>
+  
+    <nav class="md-nav" aria-label="esxi-5">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#iscsi" class="md-nav__link">
+    iSCSI
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -1686,7 +1726,7 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#2021-12-31-docker2" class="md-nav__link">
+  <a href="#migrate-docker2" class="md-nav__link">
     2021-12-31 迁移 docker2
   </a>
   
@@ -1714,18 +1754,39 @@
 </a>
 
 
-<h1 id="proxmox-ve">Proxmox VE<a class="headerlink" href="#proxmox-ve" title="Permanent link">&para;</a></h1>
-<p>LUG 目前服役的 Proxmox VE 主机只有一台，是 james 在 2021 年底给我们的，命名为 <code>pve-5</code>，用于替换已运行多年的 esxi-5（因此编号为 5）。</p>
-<h2 id="pve-5vm">pve-5.vm<a class="headerlink" href="#pve-5vm" title="Permanent link">&para;</a></h2>
+<h1 id="proxmox-virtual-environment">Proxmox Virtual Environment<a class="headerlink" href="#proxmox-virtual-environment" title="Permanent link">&para;</a></h1>
+<p>LUG 目前服役的 Proxmox VE 主机有：</p>
+<ul>
+<li>pve-5 是 james 在 2021 年底给我们的，用于替换已运行多年的 esxi-5（因此编号为 5）</li>
+<li>esxi-5 是 <a href="https://lug.ustc.edu.cn/news/2011/04/mirrors-ustc-edu-cn-comes/">2011 年</a>的 mirrors 服务器，于 2016 年退役后改装为 ESXi，现在已替换为 Proxmox VE<ul>
+<li>esxi-5 上面额外加装了 Proxmox Backup Server 用于提供备份功能，详情参见 <a href="../pbs/">Proxmox Backup Server</a></li>
+<li>PVE 的 web 端口为 8006，而 PBS 的端口为 8007，安装在同一台主机上时互不冲突，访问时需要使用 HTTPS 并指定端口。</li>
+</ul>
+</li>
+</ul>
+<p>这些 PVE 主机配置为一个集群，可以共享一些配置信息并互相迁移虚拟机。特别地，Proxmox VE Authentication Server（Realm 为 pve）的账号在 PVE 主机之间是共享的，并且添加的 PBS 存储后端也是共享的，即大家都可以往相同的 PBS 上备份虚拟机。</p>
+<h2 id="pve-5">pve-5<a class="headerlink" href="#pve-5" title="Permanent link">&para;</a></h2>
 <p>pve-5 位于网络中心，配置为 2× Xeon E5-2603 v4 (Broadwell 6C6T, 1.70 GHz, no HT, no Turbo Boost)，128 GB 内存和一大堆 SSD（2× 三星 240 GB SATA + 10x Intel DC S4500 1.92 TB SATA）。我们将两块 240 GB 的盘组成一个 LVM VG，分配 16 GB 的 rootfs（LVM mirror）和 8 GB 的 swap，其余空间给一个 thinpool。十块 1.92 TB 的盘组成一个 RAIDZ2 的 zpool，用于存储虚拟机等数据。</p>
-<p>出于安全考虑，主机使用 10.38 段的校园网 IP，不连接公网，软件更新使用 mirrors.ustc.edu.cn 即可。其连接的单根 10 Gbps 的光纤，桥接出 <code>vmbr0</code>（Cernet）, <code>vmbr2</code>（Telecom）, <code>vmbr3</code>（Unicom）, <code>vmbr4</code>（Mobile）四个不同 VLAN 的网桥，另有一个 <code>vmbr1</code>（Ustclug）的无头网桥用于桥接 Tinc，因此在使用和维护上也与 esxi-5 相似。</p>
+<p>出于安全考虑，主机使用 10.38 段的校园网 IP，不连接公网，软件更新使用 mirrors.ustc.edu.cn 即可。其连接的单根 10 Gbps 的光纤，桥接出 <code>vmbr0</code>（Cernet）, <code>vmbr2</code>（Telecom）, <code>vmbr3</code>（Unicom）, <code>vmbr4</code>（Mobile）四个不同 VLAN 的网桥，另有一个 <code>vmbr1</code>（Ustclug）的无头网桥用于从 <a href="../../../services/gateway-nic/">gateway-nic</a> 桥接 Tinc。</p>
 <div class="admonition danger">
 <p class="admonition-title">硬盘控制器不要使用 VirtIO SCSI Single 或 LSI 开头的选项</p>
-<p>出于未知原因，使用这些模式在虚拟机重启时会导致整个 Proxmox VE 主机卡住而不得不重启。请使用 VirtIO SCSI（不带 Single）。同样原因创建虚拟机硬盘时不要勾选 iothread。</p>
+<p>可能由于 ZFS 模块的 bug 或者内存条故障，使用这些模式在虚拟机重启时会导致整个 Proxmox VE 主机卡住而不得不重启。请使用 VirtIO SCSI（不带 Single）。同样原因创建虚拟机硬盘时不要勾选 iothread。</p>
 </div>
 <p>主机使用 ZFS（Zvol）作为虚拟机的虚拟硬盘，在虚拟机中启用 <code>fstrim.timer</code>（systemd 的 fstrim 定时任务，由 <code>util-linux</code> 提供）可以定期腾出不用的空间，帮助 ZFS 更好地规划空间。启用 fstrim 的虚拟硬盘需要在 PVE 上启用 <code>discard</code> 选项，否则 fstrim 不起作用。该特性是由于 ZFS 是 CoW 的，与 ZFS 底层使用 SSD 没有太大关联。</p>
+<h2 id="esxi-5">esxi-5<a class="headerlink" href="#esxi-5" title="Permanent link">&para;</a></h2>
+<p>esxi-5 也位于网络中心，配置为 2× Xeon E5620（Westmere-EP 4C8T, 2.40~2.66 GHz），48 GB 内存，两块 240 GB SATA SSD 和一些不知道坏了多少的 1 TB 和 2 TB HDD。由于机身自带的 RAID 卡不支持硬盘直通（JBOD 模式），因此我们将两块 SSD 分别做成单盘“阵列”然后在系统里使用 LVM（与 pve-5 相同）</p>
+<p>顾名思义本机器曾经运行的是 VMware ESXi，在 2022 年 1 月 19 日重装为 Proxmox VE 7.1，<s>因为咱们都是纠结怪所以决定不改名</s>，还叫 esxi-5。考虑到该机器配置了多个硬盘阵列，且阵列的可用容量比 pve-5 的硬盘的原始容量还大，我们在上面加装 Proxmox Backup Server 软件，主要用作虚拟机备份，替代原先运行在 ESXi 上的 vSphereDataProtection 虚拟机。</p>
+<p>网络配置与 pve-5 相似，其上有两个千兆网卡 enp3s0 和 enp4s0。enp3s0 连接网络中心的交换机，桥接不同的 VLAN 网络给虚拟机，并且各 vmbrX 的数字和端口与 pve-5 一致；而 enp4s0 连接一个外部阵列（vdp2），使用 iSCSI 访问该阵列。</p>
+<h3 id="iscsi">iSCSI<a class="headerlink" href="#iscsi" title="Permanent link">&para;</a></h3>
+<p>由于我们没有研究清楚 open-iscsi 的开机自动挂载机制，因此我们选择直接 override 对应的 service 来完成这个任务：</p>
+<div class="highlight"><span class="filename">$ systemctl edit open-iscsi.service</span><pre><span></span><code><span class="k">[Service]</span><span class="w"></span>
+<span class="na">ExecStart</span><span class="o">=</span><span class="w"></span>
+<span class="na">ExecStart</span><span class="o">=</span><span class="s">/sbin/iscsiadm -d8 -m node -p 192.168.10.1:3260 --login</span><span class="w"></span>
+<span class="na">ExecStart</span><span class="o">=</span><span class="s">/lib/open-iscsi/activate-storage.sh</span><span class="w"></span>
+</code></pre></div>
+<p>若 iSCSI 连接成功，应该可以在系统中看到一个新的硬盘，容量为 14.55 TiB，型号显示为 RS-3116I-S42-6。</p>
 <h2 id="records">工作记录<a class="headerlink" href="#records" title="Permanent link">&para;</a></h2>
-<h3 id="2021-12-31-docker2">2021-12-31 迁移 docker2<a class="headerlink" href="#2021-12-31-docker2" title="Permanent link">&para;</a></h3>
+<h3 id="migrate-docker2">2021-12-31 迁移 docker2<a class="headerlink" href="#migrate-docker2" title="Permanent link">&para;</a></h3>
 <p>docker2 原先使用 QEMU 直接运行在 mirrors2 上，下层存储为 ZFS Zvol（<code>pool0/qemu/docker2</code>），由于 ZFS 调参不当使其占用了 3 倍的硬盘空间（见<a href="https://www.reddit.com/r/zfs/comments/i2ypyy/til_zfs_ashift12_raidz2_zvol_with_4k_blocksize/">这个 Reddit 贴子</a>），加上 mirrors2 本身对外提供 Rsync 服务，硬盘负载极高，所以长期以来 docker2 的 I/O 性能<em>十分</em>低下。正好借这次全闪的新宿主机将其迁移过去。</p>
 <p>迁移时需要保证完整性的主要内容就是虚拟机内的业务，因此需要在主机间传输的内容就是虚拟磁盘，其他配置（CPU、内存、网卡等）都可以直接在新平台上创建新虚拟机时修改。原本我们打算使用 rsync 或者 dd 的方式复制磁盘，但是考虑到两边都是 ZFS，使用 <code>zfs send</code> 是一个更好的方案。</p>
 <p>我们在 pve-5 上运行 <code>nc -l -p 9999 &lt;/dev/null | pv | zfs recv rpool/data/docker2</code>，然后在 mirrors2 上对 zvol 先打个快照，运行 <code>zfs send pool0/qemu/docker2@20211230 &gt; /dev/tcp/{pve-5}/9999</code> 将快照内容发送到 pve-5 上（300 GiB 的数据花费了 16 小时），然后再将 docker2 关机并增量传输，<code>zfs send -i @20211230 pool0/qemu/docker2 &gt; /dev/tcp/{pve-5}/9999</code>（增量传输只发送了 10 GB 数据）。同时我们在 Proxmox 的 web 界面上创建一个新虚拟机，配好 CPU 内存网卡等，分配 300 GiB 的硬盘。</p>
