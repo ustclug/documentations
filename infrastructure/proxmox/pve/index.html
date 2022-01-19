@@ -1855,7 +1855,7 @@
 <div class="admonition warning">
 <p class="admonition-title">注意：不同主机之间的 Linux PAM 用户是不相通的</p>
 </div>
-<p>所有 Proxmox 主机的地址都记录在 DNS <code>&lt;hostname&gt;.vm.ustclug.org</code> 中。</p>
+<p>所有 Proxmox 主机的主机名（hostname）都设为 <code>&lt;hostname&gt;.vm.ustclug.org</code>，对应的 IP 地址记录在 DNS 中。</p>
 <h2 id="common">公用配置<a class="headerlink" href="#common" title="Permanent link">&para;</a></h2>
 <p>安全起见，PVE / PBS 主机使用 <a href="https://en.wikipedia.org/wiki/Private_network#Private_IPv4_addresses">RFC 1918 段</a>的校园网 IP，不连接公网，软件更新使用 mirrors.ustc.edu.cn 即可。</p>
 <ul>
