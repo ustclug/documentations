@@ -1857,13 +1857,13 @@
 </div>
 <p>所有 Proxmox 主机的地址都记录在 DNS <code>&lt;hostname&gt;.vm.ustclug.org</code> 中。</p>
 <h2 id="common">公用配置<a class="headerlink" href="#common" title="Permanent link">&para;</a></h2>
-<p>出于安全考虑，PVE / PBS 主机使用 RFC 1918 段的校园网 IP，不连接公网，软件更新使用 mirrors.ustc.edu.cn 即可。</p>
+<p>安全起见，PVE / PBS 主机使用 RFC 1918 段的校园网 IP，不连接公网，软件更新使用 mirrors.ustc.edu.cn 即可。</p>
 <ul>
 <li>东图可用的 IP 段为 192.168.93.0/24（网关 93.254）</li>
 <li>网络信息中心可用的 IP 段为 10.38.95.0/24（网关 95.254）</li>
 </ul>
 <h3 id="pve-firewall">防火墙<a class="headerlink" href="#pve-firewall" title="Permanent link">&para;</a></h3>
-<p>我们不适用 Proxmox 自带的防火墙功能，但 pve-firewall 仍然会尝试部署或恢复防火墙设置，因此需要禁用相关设置及服务：</p>
+<p>我们不使用 Proxmox 自带的防火墙功能，但 pve-firewall 仍然会尝试部署或恢复防火墙设置，因此需要禁用相关设置及服务：</p>
 <div class="highlight"><span class="filename">/etc/pve/nodes/$(hostname -s)/host.fw</span><pre><span></span><code><span class="k">[OPTIONS]</span><span class="w"></span>
 <span class="na">enable: 0</span><span class="w"></span>
 </code></pre></div>
