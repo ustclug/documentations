@@ -1718,12 +1718,12 @@ apt install proxmox-backup-server
 </div>
 <p>特别地，由于 PBS 和 PVE 同时安装在 esxi-5 上，因此它们可以共享 esxi-5 上的 Linux 用户（即 Linux PAM standard authentication）。</p>
 <h2 id="pbs-add-datastore">设置 Datastore<a class="headerlink" href="#pbs-add-datastore" title="Permanent link">&para;</a></h2>
-<p>PBS 上的虚拟机备份单元是小块的 chunk，也依赖这个设计实现增量备份，所以虚拟机备份（Datastore）的后端都是目录。添加 Datastore 只需要指定一个目录，取一个（简短的）名字就可以了。建议不要使用文件系统的根目录作为 Datastore，可以参考下面所述的 esxi-5 上的配置。</p>
-<p>目前在 esxi-5 上配置了三个 datastore：</p>
+<p>PBS 上的虚拟机备份单元是小块的 chunk，也依赖这个设计实现增量备份，所以虚拟机备份（Datastore）的后端都是目录。添加 Datastore 只需要指定一个目录，取一个（简短的）名字就可以了。建议不要使用文件系统的根目录作为 Datastore，可以创建一个 <code>pbs</code> 文件夹用作 Datastore，参考下面所述的 esxi-5 上的配置。</p>
+<p>目前在 esxi-5 上配置了以下 datastore：</p>
 <ul>
-<li><code>/mnt/raid1/pbs</code>：挂载点为 <code>/mnt/raid1</code>，是 esxi-5 机身的两块 2 TB HDD RAID-1，目前不用作虚拟机备份；</li>
-<li><code>/mnt/data/pbs</code>：挂载点为 <code>/mnt/data</code>，是一个容量为 7 TB 的 HDD 阵列；</li>
-<li><code>/mnt/vdp2/pbs</code>：挂载点为 <code>/mnt/vdp2</code>，是一个容量为 14 TB 的 iSCSI 外置阵列，是我们备份虚拟机的主要存储。</li>
+<li><code>/mnt/raid1/pbs</code>：挂载点为 <code>/mnt/raid1</code>，是 esxi-5 机身的两块快要坏掉的 2 TB HDD RAID-1，<strong>已经挂了</strong>；</li>
+<li><code>/mnt/data/pbs</code>：挂载点为 <code>/mnt/data</code>，是一个容量为 7 TB 的机身 HDD 阵列；</li>
+<li><code>/mnt/vdp2/pbs</code>：挂载点为 <code>/mnt/vdp2</code>，是一个容量为 14 TB 的 iSCSI 外置 HDD 阵列，是我们目前备份虚拟机的主要存储。</li>
 </ul>
 
               
