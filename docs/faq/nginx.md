@@ -1,5 +1,12 @@
 # Nginx 相关配置
 
+## 使用 Git 同步配置，但需要 host-specific 的配置
+
+1. Nginx 自带一个变量 `$hostname` 可以在合适的地方用来 if 或者 map，但是在这个办法不顶用的时候（例如，[`resolver` 不支持变量][ngx-2128]）就只能用下面这个笨办法了。
+2. 把需要 host-specific 的那个文件加入 `.gitignore`，然后在合适的位置留下一个 README。
+
+  [ngx-2128]: https://trac.nginx.org/nginx/ticket/2128
+
 ## 文件打开数大小限制
 
 在默认设置中，nginx 的最大文件打开数上限并不大。当有大量访问时，文件打开数可能会超过限额，导致网站响应缓慢。在新配置服务器时，这一项设置很容易被忽略掉。
@@ -10,6 +17,10 @@
 2. 在打开的 override 文件的 `[Service]` 下方添加 `LimitNOFILE=524288`（视情况这个值可以相应调整）
 
 ## 关于 gateway 配置中的 `/tmp/mem` 路径
+
+!!! tip "更新"
+
+    我们已不再在 nginx.conf 里使用 `/tmp/mem` 了，以下内容仅作存档。
 
 错误表现是 `systemctl start nginx.service` 失败，使用 status 或 journalctl 可以看到以下信息：
 
