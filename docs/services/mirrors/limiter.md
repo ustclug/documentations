@@ -129,14 +129,16 @@
 
 Rsync 服务设置了总连接数限制。即：当建立的连接数到达某个阈值后，拒绝之后收到的连接。
 
-由于白天 HTTP 访问压力较大，夜晚 HTTP 访问量较小，为了实现错峰同步，因此针对不同时段设置了不同的阈值，具体如下：
+!!! note "历史记录"
 
-- 23:00 ~ 8:00 ：最多 60 个连接
-- 8:00 ~ 23:00：最多 30 个连接
+    以前 HTTP 和 Rsync 服务由同一台服务器提供，由于白天 HTTP 访问压力较大，夜晚 HTTP 访问量较小，为了实现错峰同步，保证白天 HTTP 的服务质量，因此针对不同时段设置了不同的阈值，具体如下：
+
+    - 23:00 ~ 8:00：最多 60 个连接
+    - 8:00 ~ 23:00：最多 30 个连接
 
 在 2020 年 8 月 25 日后，由于更换了新服务器，Rsync 由单独机器提供服务，总连接数提升到了全天 60 个连接。
 
-特别的，科大 IP 地址受到 rsync 连接数限制。
+特别的，科大校内 IP 地址受到 rsync 连接数限制。
 
 ## 网络接口级别限制
 
@@ -150,14 +152,14 @@ tc qdisc add dev <interface> root handle 1: tbf rate 1500Mbit burst 750K latency
 
 这里使用了 TBF（令牌桶）算法，后面的 burst 和 latency 参数意义可以参见 `man tc-tbf`。
 具体而言，latency 没有推荐值，但 burst 要求至少为 `rate / HZ`，HZ = 100 时 10Mbps 至少约 10MB。
-HZ 的值需要从内核的编译参数中查看：`` egrep '^CONFIG_HZ_[0-9]+' /boot/config-`uname -r` ``。现代发行版提供的内核中这个值都为 250。
+HZ 的值需要从内核的编译参数中查看：`` egrep '^CONFIG_HZ_[0-9]+' /boot/config-`uname -r` ``。现代发行版提供的内核中这个值一般为 250。
 
 参考资料: [Bucket size in tbf](https://unix.stackexchange.com/a/100797/211239)
 
 目前部署的限制有：
 
-- unicom 1500Mbit（校带宽 2Gbps）
-- telecom 2500Mbit（校带宽 5Gbps）
+- unicom 1500Mbit（学校出口带宽 2 Gbps）
+- telecom 2500Mbit（学校出口带宽 5 Gbps）
 
 在 mirrors4 上该配置的开机自启分别位于 `tc-unicom.service` 和 `tc-telecom.service` 两个服务中，其中 `tc-unicom.service` 配置如下：
 
