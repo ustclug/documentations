@@ -1573,6 +1573,13 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#git-host-specific" class="md-nav__link">
+    使用 Git 同步配置，但需要 host-specific 的配置
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#_1" class="md-nav__link">
     文件打开数大小限制
   </a>
@@ -1642,6 +1649,13 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#git-host-specific" class="md-nav__link">
+    使用 Git 同步配置，但需要 host-specific 的配置
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#_1" class="md-nav__link">
     文件打开数大小限制
   </a>
@@ -1673,6 +1687,11 @@
 
 
 <h1 id="nginx">Nginx 相关配置<a class="headerlink" href="#nginx" title="Permanent link">&para;</a></h1>
+<h2 id="git-host-specific">使用 Git 同步配置，但需要 host-specific 的配置<a class="headerlink" href="#git-host-specific" title="Permanent link">&para;</a></h2>
+<ol>
+<li>Nginx 自带一个变量 <code>$hostname</code> 可以在合适的地方用来 if 或者 map，但是在这个办法不顶用的时候（例如，<a href="https://trac.nginx.org/nginx/ticket/2128"><code>resolver</code> 不支持变量</a>）就只能用下面这个笨办法了。</li>
+<li>把需要 host-specific 的那个文件加入 <code>.gitignore</code>，然后在合适的位置留下一个 README。</li>
+</ol>
 <h2 id="_1">文件打开数大小限制<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <p>在默认设置中，nginx 的最大文件打开数上限并不大。当有大量访问时，文件打开数可能会超过限额，导致网站响应缓慢。在新配置服务器时，这一项设置很容易被忽略掉。</p>
 <p>解决方法：</p>
