@@ -1456,9 +1456,40 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Generate 204
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         Generate 204
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#configration" class="md-nav__link">
+    Configration
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -1597,6 +1628,21 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#configration" class="md-nav__link">
+    Configration
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -1613,10 +1659,22 @@
 
 
 <h1 id="generate-204">Generate 204<a class="headerlink" href="#generate-204" title="Permanent link">&para;</a></h1>
-<p>Service: <a href="http://204.ustclug.org">204.ustclug.org</a></p>
-<p>Configration: <a href="https://git.lug.ustc.edu.cn/ustclug/nginx-config/blob/master/sites-available/204.ustclug.org">GitLab/nginx-config/sites-available/204.ustclug.org</a></p>
-<p>Server: revproxy-el.s.ustclug.org</p>
+<p>Service: 204.ustclug.org (<a href="http://204.ustclug.org">HTTP</a> / <a href="https://204.ustclug.org">HTTPS</a>)</p>
+<p>Server: (gateway)</p>
 <p>Blog: <a href="https://servers.ustclug.org/2016/08/add-http-204-service/">add-http-204-service</a></p>
+<h3 id="configration">Configration<a class="headerlink" href="#configration" title="Permanent link">&para;</a></h3>
+<div class="highlight"><span class="filename">/etc/nginx/sites-available/204.ustclug.org</span><pre><span></span><code><span class="k">server</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kn">listen</span><span class="w">      </span><span class="mi">80</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kn">listen</span><span class="w">      </span><span class="s">[::]:80</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kn">listen</span><span class="w">      </span><span class="mi">443</span><span class="w"> </span><span class="s">ssl</span><span class="w"> </span><span class="s">http2</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kn">listen</span><span class="w">      </span><span class="s">[::]:443</span><span class="w"> </span><span class="s">ssl</span><span class="w"> </span><span class="s">http2</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kn">server_name</span><span class="w"> </span><span class="mi">204</span><span class="s">.ustclug.org</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kn">access_log</span><span class="w">  </span><span class="s">/var/log/nginx/204_access.log</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kn">error_log</span><span class="w">   </span><span class="s">/var/log/nginx/204_error.log</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kn">return</span><span class="w"> </span><span class="mi">204</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</code></pre></div>
+<p>The authoritative copy is on <a href="https://git.lug.ustc.edu.cn/ustclug/nginx-config/blob/master/sites-available/204.ustclug.org">LUG GitLab</a>.</p>
 
               
             </article>
