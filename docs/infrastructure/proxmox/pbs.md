@@ -42,10 +42,10 @@ PBS 自己的账号体系 (Realm pbs) 与 PVE (Realm pve) 互相不通，如果�
 
 ## 设置 Datastore {#pbs-add-datastore}
 
-PBS 上的虚拟机备份单元是小块的 chunk，也依赖这个设计实现增量备份，所以虚拟机备份（Datastore）的后端都是目录。添加 Datastore 只需要指定一个目录，取一个（简短的）名字就可以了。建议不要使用文件系统的根目录作为 Datastore，可以参考下面所述的 esxi-5 上的配置。
+PBS 上的虚拟机备份单元是小块的 chunk，也依赖这个设计实现增量备份，所以虚拟机备份（Datastore）的后端都是目录。添加 Datastore 只需要指定一个目录，取一个（简短的）名字就可以了。建议不要使用文件系统的根目录作为 Datastore，可以创建一个 `pbs` 文件夹用作 Datastore，参考下面所述的 esxi-5 上的配置。
 
-目前在 esxi-5 上配置了三个 datastore：
+目前在 esxi-5 上配置了以下 datastore：
 
-- `/mnt/raid1/pbs`：挂载点为 `/mnt/raid1`，是 esxi-5 机身的两块 2 TB HDD RAID-1，目前不用作虚拟机备份；
-- `/mnt/data/pbs`：挂载点为 `/mnt/data`，是一个容量为 7 TB 的 HDD 阵列；
-- `/mnt/vdp2/pbs`：挂载点为 `/mnt/vdp2`，是一个容量为 14 TB 的 iSCSI 外置阵列，是我们备份虚拟机的主要存储。
+- `/mnt/raid1/pbs`：挂载点为 `/mnt/raid1`，是 esxi-5 机身的两块快要坏掉的 2 TB HDD RAID-1，**已经挂了**；
+- `/mnt/data/pbs`：挂载点为 `/mnt/data`，是一个容量为 7 TB 的机身 HDD 阵列；
+- `/mnt/vdp2/pbs`：挂载点为 `/mnt/vdp2`，是一个容量为 14 TB 的 iSCSI 外置 HDD 阵列，是我们目前备份虚拟机的主要存储。

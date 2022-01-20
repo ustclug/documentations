@@ -92,7 +92,29 @@ esxi-5 也位于网络中心，配置为 2× Xeon E5620（Westmere-EP 4C8T, 2.40
 
 顾名思义本机器曾经运行的是 VMware ESXi，在 2022 年 1 月重装为 Proxmox VE 7.1，<s>因为咱们都是纠结怪所以决定不改名</s>，还叫 esxi-5。考虑到该机器配置了多个硬盘阵列，且阵列的可用容量比 pve-5 的硬盘的原始容量还大，我们在上面加装 Proxmox Backup Server 软件，主要用作虚拟机备份，替代原先运行在 ESXi 上的 vSphereDataProtection 虚拟机。
 
+### 网络
+
 网络配置与 pve-5 相似，其上有两个千兆网卡 enp3s0 和 enp4s0。enp3s0 连接网络中心的交换机，桥接不同的 VLAN 网络给虚拟机，并且各 vmbrX 的数字和端口与 pve-5 一致；而 enp4s0 连接一个外部阵列（vdp2），使用 iSCSI 访问该阵列。
+
+由于我们只有一个 gateway-nic，而 pve-5 和 esxi-5 两个主机都依赖 gw-nic 桥接的 tinc 来接入内网，因此我们在 pve-5 和 esxi-5 之间拉了一条 GRETAP 隧道，并在两个主机上分别将 VTEP 桥接到 vmbr1。
+
+参考配置：
+
+```sh title="pve-5:/etc/network/interfaces"
+auto gretap0esxi-5
+iface gretap0esxi-5 inet manual
+    pre-up ip link add name $IFACE type gretap local 10.38.95.115 remote 10.38.95.111
+    post-down ip link delete $IFACE
+
+auto vmbr1
+iface vmbr1 inet static
+    address 10.254.0.240/21
+    bridge-ports gretap0esxi-5
+    bridge-stp off
+    bridge-fd 0
+```
+
+esxi-5 这端的配置则将对应的 iface 名称和 IP 地址等全部对换即可。
 
 ### iSCSI
 
