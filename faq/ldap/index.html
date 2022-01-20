@@ -1771,6 +1771,17 @@ Stack trace:
 &gt;
 &gt; EOF
 </code></pre></div>
+<ol>
+<li>为 sudoUser 设置 index</li>
+</ol>
+<div class="highlight"><pre><span></span><code># ldapadd -Y EXTERNAL -H ldapi:/// &lt;&lt; EOF
+&gt; dn: olcDatabase={1}mdb,cn=config
+&gt; changetype: modify
+&gt; add: olcDbIndex
+&gt; olcDbIndex: sudoUser eq,sub
+&gt;
+&gt; EOF
+</code></pre></div>
 
               
             </article>
