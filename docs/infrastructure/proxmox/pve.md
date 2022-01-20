@@ -21,12 +21,21 @@ LUG 目前服役的 Proxmox VE 主机有：
 
 ## 公用配置 {#common}
 
-安全起见，PVE / PBS 主机使用 [RFC 1918 段][rfc-1918]的校园网 IP，不连接公网，软件更新使用 mirrors.ustc.edu.cn 即可。
+安全起见，PVE / PBS 主机使用 [RFC 1918 段][rfc-1918]的校园网 IP，不连接公网。
 
 - 东图可用的 IP 段为 192.168.93.0/24（网关 93.254）
 - 网络信息中心可用的 IP 段为 10.38.95.0/24（网关 95.254）
 
   [rfc-1918]: https://en.wikipedia.org/wiki/Private_network#Private_IPv4_addresses
+
+Debian 和 Proxmox 的软件更新使用 mirrors.ustc.edu.cn 即可，若有需要访问校外（如 GitHub 等），请写 hosts 并配置路由，以 GitHub 为例：
+
+```shell
+echo "20.205.243.166 github.com" >> /etc/hosts
+ip route replace 20.205.243.166 via (?) dev (?)
+```
+
+其中 `via` 选择 gateway-el 或 gateway-nic 的内网地址，`dev` 选择桥接内网的 vmbr。
 
 ### 防火墙 {#pve-firewall}
 
@@ -43,7 +52,7 @@ systemctl disable pve-firewall.service
 systemctl mask pve-firewall.service
 ```
 
-（可选）同时安装 `iptables-persistent` 软件包，并利用 iptables 将 443 端口转发到 8006 端口方便使用。
+**可选内容**：同时安装 `iptables-persistent` 软件包，并利用 iptables 将 443 端口转发到 8006 端口方便使用。
 
 ```shell
 update-alternatives --set iptables /usr/sbin/iptables-nft
