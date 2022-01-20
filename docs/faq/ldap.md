@@ -84,3 +84,15 @@ Slapd 是 openldap 的服务端 daemon。正常情况下不需要碰，但是如
 >
 > EOF
 ```
+
+3. 为 sudoUser 设置 index
+
+```
+# ldapadd -Y EXTERNAL -H ldapi:/// << EOF
+> dn: olcDatabase={1}mdb,cn=config
+> changetype: modify
+> add: olcDbIndex
+> olcDbIndex: sudoUser eq,sub
+>
+> EOF
+```
