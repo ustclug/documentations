@@ -1700,6 +1700,10 @@
 <li>在打开的 override 文件的 <code>[Service]</code> 下方添加 <code>LimitNOFILE=524288</code>（视情况这个值可以相应调整）</li>
 </ol>
 <h2 id="gateway-tmpmem">关于 gateway 配置中的 <code>/tmp/mem</code> 路径<a class="headerlink" href="#gateway-tmpmem" title="Permanent link">&para;</a></h2>
+<div class="admonition tip">
+<p class="admonition-title">更新</p>
+<p>我们已不再在 nginx.conf 里使用 <code>/tmp/mem</code> 了，以下内容仅作存档。</p>
+</div>
 <p>错误表现是 <code>systemctl start nginx.service</code> 失败，使用 status 或 journalctl 可以看到以下信息：</p>
 <div class="codehilite"><pre><span></span><code><span class="o">[</span><span class="n">emerg</span><span class="o">]</span><span class="w"> </span><span class="n">mkdir</span><span class="p">()</span><span class="w"> </span><span class="ss">&quot;/tmp/mem/nginx_temp&quot;</span><span class="w"> </span><span class="n">failed</span><span class="w"> </span><span class="p">(</span><span class="mi">2</span><span class="err">:</span><span class="w"> </span><span class="k">No</span><span class="w"> </span><span class="n">such</span><span class="w"> </span><span class="k">file</span><span class="w"> </span><span class="ow">or</span><span class="w"> </span><span class="n">directory</span><span class="p">)</span><span class="w"></span>
 </code></pre></div>
