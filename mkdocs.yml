@@ -127,6 +127,7 @@ nav:
       - Mail list: "services/mirrors/mail-list.md"
     - Gateway EL: "services/gateway-el.md"
     - Gateway NIC: "services/gateway-nic.md"
+    - Gateway JP: "services/gateway-jp.md"
     - Docker2: "services/docker2.md"
     - Neat DNS: "#"
     - GitLab: "services/gitlab.md"

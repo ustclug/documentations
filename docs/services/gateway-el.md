@@ -1,4 +1,4 @@
-# East Campus Library Gateway (`gateway-el`)
+# Gateway: East Campus Library (`gateway-el`)
 
 !!! todo
 
