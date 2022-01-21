@@ -12,14 +12,14 @@
         <meta name="author" content="USTC Linux User Group">
       
       
-        <link rel="canonical" href="https://docs.ustclug.org/services/ftp/">
+        <link rel="canonical" href="https://docs.ustclug.org/workflow/new-server/">
       
       <link rel="icon" href="../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.1.7">
     
     
       
-        <title>FTP - LUG @ USTC</title>
+        <title>New Server Setup Checklist - LUG @ USTC</title>
       
     
     
@@ -70,7 +70,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#lug-ftp" class="md-skip">
+        <a href="#new-server-setup-checklist" class="md-skip">
           Skip to content
         </a>
       
@@ -103,7 +103,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              FTP
+              New Server Setup Checklist
             
           </span>
         </div>
@@ -248,14 +248,16 @@
 
   
   
+    
+  
   
     
       
     
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" >
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" checked>
       
       
       
@@ -286,11 +288,80 @@
               
   
   
+    
   
-    <li class="md-nav__item">
-      <a href="../../workflow/new-server/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          New Server Setup Checklist
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         New Server Setup Checklist
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#ntp-date" class="md-nav__link">
+    NTP Date
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#time-zone" class="md-nav__link">
+    Time zone
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#use-nft-backend-for-iptables" class="md-nav__link">
+    Use nft-backend for iptables
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#update-resolvconf" class="md-nav__link">
+    Update resolv.conf
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#install-console-setup" class="md-nav__link">
+    Install console-setup
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -302,7 +373,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../workflow/mirrors/maintenance/" class="md-nav__link">
+      <a href="../mirrors/maintenance/" class="md-nav__link">
         Mirrors maintenance
       </a>
     </li>
@@ -316,7 +387,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../workflow/vSphere/new-vm/" class="md-nav__link">
+      <a href="../vSphere/new-vm/" class="md-nav__link">
         New VM in vSphere
       </a>
     </li>
@@ -330,7 +401,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../workflow/ldap/add-new-user/" class="md-nav__link">
+      <a href="../ldap/add-new-user/" class="md-nav__link">
         Add New User in LDAP
       </a>
     </li>
@@ -852,16 +923,14 @@
 
   
   
-    
-  
   
     
       
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" checked>
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" >
       
       
       
@@ -963,7 +1032,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../mirrors/">Mirrors</a>
+          <a href="../../services/mirrors/">Mirrors</a>
           
             <label for="__nav_4_1">
               <span class="md-nav__icon md-icon"></span>
@@ -1009,7 +1078,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../mirrors/4/">Current (4)</a>
+          <a href="../../services/mirrors/4/">Current (4)</a>
           
             <label for="__nav_4_1_2">
               <span class="md-nav__icon md-icon"></span>
@@ -1032,7 +1101,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../mirrors/4/volumes/" class="md-nav__link">
+      <a href="../../services/mirrors/4/volumes/" class="md-nav__link">
         Volumes
       </a>
     </li>
@@ -1067,7 +1136,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../mirrors/4/networking/">Networking</a>
+          <a href="../../services/mirrors/4/networking/">Networking</a>
           
             <label for="__nav_4_1_2_3">
               <span class="md-nav__icon md-icon"></span>
@@ -1090,7 +1159,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../mirrors/4/networking/route/" class="md-nav__link">
+      <a href="../../services/mirrors/4/networking/route/" class="md-nav__link">
         Routing
       </a>
     </li>
@@ -1104,7 +1173,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../mirrors/4/networking/misc/" class="md-nav__link">
+      <a href="../../services/mirrors/4/networking/misc/" class="md-nav__link">
         Misc
       </a>
     </li>
@@ -1125,7 +1194,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../mirrors/4/repos/" class="md-nav__link">
+      <a href="../../services/mirrors/4/repos/" class="md-nav__link">
         Repositories
       </a>
     </li>
@@ -1146,7 +1215,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../mirrors/3/" class="md-nav__link">
+      <a href="../../services/mirrors/3/" class="md-nav__link">
         Auxiliary (3)
       </a>
     </li>
@@ -1179,7 +1248,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../mirrors/2/">Auxiliary (2)</a>
+          <a href="../../services/mirrors/2/">Auxiliary (2)</a>
           
             <label for="__nav_4_1_4">
               <span class="md-nav__icon md-icon"></span>
@@ -1202,7 +1271,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../mirrors/2/networking/" class="md-nav__link">
+      <a href="../../services/mirrors/2/networking/" class="md-nav__link">
         Networking
       </a>
     </li>
@@ -1223,7 +1292,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../mirrors/1/" class="md-nav__link">
+      <a href="../../services/mirrors/1/" class="md-nav__link">
         Obsolete (1)
       </a>
     </li>
@@ -1237,7 +1306,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../mirrors/hardware/" class="md-nav__link">
+      <a href="../../services/mirrors/hardware/" class="md-nav__link">
         Hardware
       </a>
     </li>
@@ -1251,7 +1320,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../mirrors/docker/" class="md-nav__link">
+      <a href="../../services/mirrors/docker/" class="md-nav__link">
         Docker
       </a>
     </li>
@@ -1265,7 +1334,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../mirrors/ipmi/" class="md-nav__link">
+      <a href="../../services/mirrors/ipmi/" class="md-nav__link">
         IPMI
       </a>
     </li>
@@ -1279,7 +1348,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../mirrors/zfs/" class="md-nav__link">
+      <a href="../../services/mirrors/zfs/" class="md-nav__link">
         ZFS
       </a>
     </li>
@@ -1349,7 +1418,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../mirrors/limiter/" class="md-nav__link">
+      <a href="../../services/mirrors/limiter/" class="md-nav__link">
         Limiter
       </a>
     </li>
@@ -1377,7 +1446,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../mirrors/mail-list/" class="md-nav__link">
+      <a href="../../services/mirrors/mail-list/" class="md-nav__link">
         Mail list
       </a>
     </li>
@@ -1398,7 +1467,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../gateway-el/" class="md-nav__link">
+      <a href="../../services/gateway-el/" class="md-nav__link">
         Gateway EL
       </a>
     </li>
@@ -1412,7 +1481,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../gateway-nic/" class="md-nav__link">
+      <a href="../../services/gateway-nic/" class="md-nav__link">
         Gateway NIC
       </a>
     </li>
@@ -1426,7 +1495,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../gateway-jp/" class="md-nav__link">
+      <a href="../../services/gateway-jp/" class="md-nav__link">
         Gateway JP
       </a>
     </li>
@@ -1440,7 +1509,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../docker2/" class="md-nav__link">
+      <a href="../../services/docker2/" class="md-nav__link">
         Docker2
       </a>
     </li>
@@ -1454,7 +1523,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../neat-dns/" class="md-nav__link">
+      <a href="../../services/neat-dns/" class="md-nav__link">
         Neat DNS
       </a>
     </li>
@@ -1468,7 +1537,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../gitlab/" class="md-nav__link">
+      <a href="../../services/gitlab/" class="md-nav__link">
         GitLab
       </a>
     </li>
@@ -1565,7 +1634,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../light/" class="md-nav__link">
+      <a href="../../services/light/" class="md-nav__link">
         Light
       </a>
     </li>
@@ -1611,7 +1680,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../pxe/liims/" class="md-nav__link">
+      <a href="../../services/pxe/liims/" class="md-nav__link">
         LIIMS
       </a>
     </li>
@@ -1625,7 +1694,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../pxe/pxe/" class="md-nav__link">
+      <a href="../../services/pxe/pxe/" class="md-nav__link">
         PXE
       </a>
     </li>
@@ -1644,52 +1713,11 @@
               
   
   
-    
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          FTP
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../services/ftp/" class="md-nav__link">
         FTP
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#notes" class="md-nav__link">
-    Notes
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -1701,7 +1729,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../generate-204/" class="md-nav__link">
+      <a href="../../services/generate-204/" class="md-nav__link">
         Generate 204
       </a>
     </li>
@@ -1715,7 +1743,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../discontinued/" class="md-nav__link">
+      <a href="../../services/discontinued/" class="md-nav__link">
         Discontinued Services
       </a>
     </li>
@@ -1858,8 +1886,36 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#notes" class="md-nav__link">
-    Notes
+  <a href="#ntp-date" class="md-nav__link">
+    NTP Date
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#time-zone" class="md-nav__link">
+    Time zone
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#use-nft-backend-for-iptables" class="md-nav__link">
+    Use nft-backend for iptables
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#update-resolvconf" class="md-nav__link">
+    Update resolv.conf
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#install-console-setup" class="md-nav__link">
+    Install console-setup
   </a>
   
 </li>
@@ -1876,28 +1932,31 @@
             <article class="md-content__inner md-typeset">
               
                 
-<a href="https://github.com/ustclug/documentations/edit/master/docs/services/ftp.md" title="Edit this page" class="md-content__button md-icon">
+<a href="https://github.com/ustclug/documentations/edit/master/docs/workflow/new-server.md" title="Edit this page" class="md-content__button md-icon">
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
 </a>
 
 
-<h1 id="lug-ftp">LUG FTP<a class="headerlink" href="#lug-ftp" title="Permanent link">&para;</a></h1>
-<p>Services: <a href="ftp://ftp.ustclug.org">FTP/FTPS</a>, <a href="sftp://ftp.ustclug.org">SFTP</a>, <a href="http://ftp.ustclug.org">HTTP</a>, <a href="https://ftp.ustclug.org">HTTPS</a>, <a href="afp://ftp.ustclug.org">AFP</a></p>
-<p>Git repository: <a href="https://github.com/ustclug/lugftp">ustclug/lugftp</a></p>
-<p>Docker Hub: <a href="https://hub.docker.com/r/ustclug/ftp/">ustclug/ftp</a></p>
-<p>Server: vdp.s.ustclug.org</p>
-<p>Theme: <a href="https://larsjung.de/h5ai/">h5ai</a></p>
-<p>Deploy: <a href="https://git.lug.ustc.edu.cn/ustclug/docker-run-script/blob/master/ftp/ftp.sh">ftp.sh</a></p>
-<h2 id="notes">Notes<a class="headerlink" href="#notes" title="Permanent link">&para;</a></h2>
-<ol>
-<li>SSL cert is required when running LUG FTP.</li>
-<li><code>ssh-keygen -A</code> is required to be manually run when initializing.</li>
-<li>About directory permission:</li>
-<li>It is strongly suggested to keep permission &amp; owner metadata when backing up/restoring.</li>
-<li>Public folder root: set owner to root:root, permission to dr-xr-xr-x</li>
-<li>Subfolders: set owner to 1000:1000. <code>_h5ai</code> and <code>wp-content</code> needs to be set to a different owner (misconfigured?). And <code>Incoming</code> shall be set to drwxrwxr-x.</li>
-<li>Do not use Google DNS in host, as mobile network may drop UDP packets to 8.8.8.8. A misconfigured DNS may lead to LDAP in container broken.</li>
-</ol>
+<h1 id="new-server-setup-checklist">New Server Setup Checklist<a class="headerlink" href="#new-server-setup-checklist" title="Permanent link">&para;</a></h1>
+<h2 id="ntp-date">NTP Date<a class="headerlink" href="#ntp-date" title="Permanent link">&para;</a></h2>
+<p>Install either <code>chrony</code> or <code>systemd-timesyncd</code>. Usually chrony comes pre-installed so it's easily forgot.</p>
+<p>Replace the default NTP pool with USTC's NTP server <code>time.ustc.edu.cn</code>, like this:</p>
+<table class="highlighttable"><tr><th colspan="2" class="filename"><div class="highlight"><span class="filename">/etc/chrony/chrony.conf</span></div></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">7</span>
+<span class="normal">8</span>
+<span class="normal">9</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code><span class="c1"># Use Debian vendor zone.</span>
+<span class="c1">#pool 2.debian.pool.ntp.org iburst</span>
+server time.ustc.edu.cn iburst
+</code></pre></div>
+</td></tr></table>
+<h2 id="time-zone">Time zone<a class="headerlink" href="#time-zone" title="Permanent link">&para;</a></h2>
+<p>Run <code>dpkg-reconfigure tzdata</code> and select Asia/Shanghai as the timezone. Reboot the server.</p>
+<h2 id="use-nft-backend-for-iptables">Use nft-backend for iptables<a class="headerlink" href="#use-nft-backend-for-iptables" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code>update-alternatives --set iptables /usr/sbin/iptables-nft
+update-alternatives --set ip6tables /usr/sbin/ip6tables-nft
+</code></pre></div>
+<h2 id="update-resolvconf">Update resolv.conf<a class="headerlink" href="#update-resolvconf" title="Permanent link">&para;</a></h2>
+<h2 id="install-console-setup">Install console-setup<a class="headerlink" href="#install-console-setup" title="Permanent link">&para;</a></h2>
+<p>This may have already come with the base system. It's more likely missed if the system is installed from scratch (bootstrapped).</p>
 
               
             </article>
@@ -1916,7 +1975,7 @@
     <nav class="md-footer__inner md-grid" aria-label="Footer">
       
         
-        <a href="../pxe/pxe/" class="md-footer__link md-footer__link--prev" aria-label="Previous: PXE" rel="prev">
+        <a href="../.." class="md-footer__link md-footer__link--prev" aria-label="Previous: Home" rel="prev">
           <div class="md-footer__button md-icon">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
           </div>
@@ -1925,20 +1984,20 @@
               <span class="md-footer__direction">
                 Previous
               </span>
-              PXE
+              Home
             </div>
           </div>
         </a>
       
       
         
-        <a href="../generate-204/" class="md-footer__link md-footer__link--next" aria-label="Next: Generate 204" rel="next">
+        <a href="../mirrors/maintenance/" class="md-footer__link md-footer__link--next" aria-label="Next: Mirrors maintenance" rel="next">
           <div class="md-footer__title">
             <div class="md-ellipsis">
               <span class="md-footer__direction">
                 Next
               </span>
-              Generate 204
+              Mirrors maintenance
             </div>
           </div>
           <div class="md-footer__button md-icon">

@@ -271,6 +271,11 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
+         <loc>https://docs.ustclug.org/workflow/new-server/</loc>
+         <lastmod>2022-01-21</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
          <loc>https://docs.ustclug.org/workflow/ldap/add-new-user/</loc>
          <lastmod>2022-01-21</lastmod>
          <changefreq>daily</changefreq>
