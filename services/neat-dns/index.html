@@ -1879,11 +1879,15 @@
 <span class="na">From</span><span class="o">=</span><span class="s">0.0.0.0/0</span><span class="w"></span>
 <span class="na">FirewallMark</span><span class="o">=</span><span class="s">0x101/0x1ff</span><span class="w"></span>
 <span class="na">Table</span><span class="o">=</span><span class="s">1011  # Ustclug_override</span><span class="w"></span>
-<span class="na">Priority</span><span class="o">=</span><span class="s">2</span><span class="w"></span>
+<span class="na">Priority</span><span class="o">=</span><span class="s">1</span><span class="w"></span>
 
 <span class="k">[Route]</span><span class="w"></span>
 <span class="na">Gateway</span><span class="o">=</span><span class="s">10.254.0.254  # gateway-el</span><span class="w"></span>
 <span class="na">Table</span><span class="o">=</span><span class="s">1011</span><span class="w"></span>
+</code></pre></div>
+<p>Using iproute2 <code>ip</code> command, this would be:</p>
+<div class="highlight"><pre><span></span><code>ip rule add fwmark 0x101/0x1ff table Ustclug_override prio <span class="m">1</span>
+ip route replace default via <span class="m">10</span>.254.0.254 table Ustclug_override
 </code></pre></div>
 </li>
 <li>
