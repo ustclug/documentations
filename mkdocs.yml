@@ -70,6 +70,7 @@ markdown_extensions:
 nav:
   - Home: index.md
   - Workflow:
+    - New Server Setup Checklist: "workflow/new-server.md"
     - Mirrors maintenance: "workflow/mirrors/maintenance.md"
     - New VM in vSphere: "workflow/vSphere/new-vm.md"
     - Add New User in LDAP: "workflow/ldap/add-new-user.md"
