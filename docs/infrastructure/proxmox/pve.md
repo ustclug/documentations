@@ -21,6 +21,12 @@ LUG 目前服役的 Proxmox VE 主机有：
 
 ## 公用配置 {#common}
 
+### root 账户
+
+为了便于通过 IPMI 等方式维护，我们约定**所有 Proxmox 主机的 root 账户密码保持为空**。若有操作需要使用 root 密码（如创建和加入集群时），请通过 SSH 或 IPMI 登录，临时设置一个 root 密码，并在修改完 PVE / PBS 的配置后将密码删除（`passwd -d`）。PVE / PBS 没有依赖于 root 密码才能正常运行的组件，因此这样做对 PVE / PBS 来说是没问题的。
+
+### 网络配置 {#networking}
+
 安全起见，PVE / PBS 主机使用 [RFC 1918 段][rfc-1918]的校园网 IP，不连接公网。
 
 - 东图可用的 IP 段为 192.168.93.0/24（网关 93.254）
@@ -82,6 +88,56 @@ server time.ustc.edu.cn iburst
 ```
 
 然后运行 `systemctl restart chrony.service` 重启服务。
+
+### SSL 证书
+
+参见 [SSL 证书](../ssl.md)，正好 vdp 上面运行了 LUG FTP 而因此配置了证书的自动更新，利用 vdp 提供的 NFS 服务，我们在 vdp 上的证书更新脚本中添加了将 vm 证书复制到 NFS 目录的功能，然后由 pve-6 部署到各个主机上。
+
+下面是 pve-6 上的脚本：
+
+```sh title="/etc/cron.daily/sync-cert"
+#!/bin/bash -e
+
+SRC="/etc/pve/nodes/$(hostname -s)"
+DSTROOT="/etc/pve/nodes"
+CERTSRC="/mnt/nfs-el/cert"
+
+cp -u "$CERTSRC/privkey.pem" "$SRC/pveproxy-ssl.key"
+cp -u "$CERTSRC/fullchain.pem" "$SRC/pveproxy-ssl.pem"
+systemctl reload pveproxy.service
+
+for DST in "$DSTROOT"/*; do
+  [ "$DST" = "$SRC" ] && continue
+  node="$(basename "$DST")"
+  cp "$SRC/pveproxy-ssl.key" "$SRC/pveproxy-ssl.pem" "$DST/"
+  ssh "$node" 'systemctl reload pveproxy.service' &
+done
+wait
+```
+
+由于 PVE 和 PBS 的数据不互通，因此 esxi-5 上的相同位置有**另一个**脚本为 PBS 部署证书：
+
+```sh title="/etc/cron.daily/sync-cert"
+#!/bin/bash
+
+SRC="/etc/pve/nodes/$(hostname -s)"
+DST="/etc/proxmox-backup"
+
+if ! cmp -s "$SRC/pveproxy-ssl.pem" "$DST/proxy.pem"; then
+  cp "$SRC/pveproxy-ssl.key" "$DST/proxy.key"
+  cp "$SRC/pveproxy-ssl.pem" "$DST/proxy.pem"
+  systemctl reload proxmox-backup-proxy.service
+fi
+exit 0
+
+# Unreachable code, leaving here for reference
+if command -v openssl 2>/dev/null; then
+  FP="$(openssl x509 -noout -fingerprint -sha256 -inform pem -in "$DST/proxy.pem")"
+  FP="${FP##*=}"
+  pvesm set esxi-5-data --finerprint "$FP"
+  pvesm set esxi-5-vdp2 --finerprint "$FP"
+fi
+```
 
 ## pve-5
 
@@ -183,3 +239,17 @@ docker2 原先使用 QEMU 直接运行在 mirrors2 上，下层存储为 ZFS Zvo
 这是因为 esxi-5 上面根本就没有使用 ZFS，而加入 pve-5 的集群时虚拟机的存储信息（`/etc/pve/storage.cfg`）也从 pve-5 同步过来合并了，因此 esxi-5 在根据 pve-5 的配置尝试启用 zfs 存储。
 
 **解决办法**：由于 `/etc/pve` 下大多数内容在集群间是同步的，打开 `storage.cfg`，在 `zfspool: local-zfs` 下面加入一行，缩进一个 Tab 并加上 `nodes pve-5`，表示这个 storage 只在 pve-5 上使用。
+
+## pve-6
+
+pve-6 位于东图，是一台 HP DL380G6，配置为 2× Xeon E5620 (Westmere 4C8T, 2.50 GHz), 72 GB 内存和l两块 300 GB 的 SAS 硬盘。曾经叫做 esxi-6，在 2022 年 1 月统一更换为 Proxmox VE。
+
+机器有两个网卡，共有 4 个 1 Gbps 的接口，其中 3 个都接在 VLAN 交换机上（另一个不知道接了啥），通过 VLAN 同时连接图书馆的两个网段以及经由 gateway-el 桥接的内网，以及连接 vdp 挂载 NFS。
+
+## pve-2, pve-4
+
+pve-2 和 pve-4 也位于东图，是两台未知品牌、未知型号的旧机器，配置为 2× Xeon E5420 (Very old 4C4T, 2.50 GHz), 16 GB 内存（DDR2 667 MHz）和一块 16 GB 的 SanDisk SSD。该型号机器**没有 IPMI**，而同一批共 5 台机器已经坏掉了三台（esxi-1, esxi-3, vm-nfs，其实这两台机器曾经叫做 esxi-2 和 esxi-4）。
+
+由于配置低下，我们手动安装了 Proxmox VE，没有使用 LVM，分配了 1 GB 的 swap，剩下全部给 rootfs。
+
+机器的网卡有两个 1 Gbps 的接口，与 pve-6 相同，都接在同一个交换机上。

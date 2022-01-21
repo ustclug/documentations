@@ -7,7 +7,7 @@ Systemd-timer 作为 crontab 的替代品，有一系列的优点：
 
 当然相比于 crontab，缺点也很明显：
 
-- 难写。
+- 啰嗦、难写。
 
 所以以下给出一个模板，方便在创建新定时任务的时候使用。这里的例子是 mirrors2 从 mirrors4 获取压缩后的日志。以下文件均放在 `/etc/systemd/system`。
 
