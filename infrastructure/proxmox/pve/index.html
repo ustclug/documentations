@@ -2147,7 +2147,9 @@
 <p>LUG 目前服役的 Proxmox VE 主机有：</p>
 <ul>
 <li>pve-5 是 james 在 2021 年底给我们的，用于替换已运行多年的 esxi-5（因此命名为 pve-5）</li>
-<li>esxi-5 是 <a href="https://lug.ustc.edu.cn/news/2011/04/mirrors-ustc-edu-cn-comes/">2011 年</a>的 mirrors 服务器，于 2016 年退役后改装为 ESXi，现在已替换为 Proxmox VE<ul>
+<li>
+<p>esxi-5 是 <a href="https://lug.ustc.edu.cn/news/2011/04/mirrors-ustc-edu-cn-comes/">2011 年</a>的 mirrors 服务器，于 2016 年退役后改装为 ESXi，现在已替换为 Proxmox VE</p>
+<ul>
 <li>esxi-5 上面额外加装了 Proxmox Backup Server 用于提供备份功能，详情参见 <a href="../pbs/">Proxmox Backup Server</a></li>
 <li>
 <p>PVE 的 web 端口为 8006，而 PBS 的端口为 8007，因此在一台主机上同时安装 PVE 和 PBS 互不冲突，访问时需要使用 HTTPS 并指定端口。</p>
@@ -2156,6 +2158,13 @@
 </div>
 </li>
 </ul>
+</li>
+<li>
+<p>pve-2, pve-4, pve-6 是几台较老的服务器，在改装前都运行 ESXi 6.0，因此主机名曾经分别是 esxi-2, esxi-4, esxi-6。</p>
+<div class="admonition question">
+<p class="admonition-title">pve-1 和 pve-3 去哪了？</p>
+<p>esxi-1 和 esxi-3 已经坏掉很多年了，同批次 5 台机器已经坏掉了 3 台（另外一个是 vm-nfs，esxi-6 不属于该批次）。</p>
+</div>
 </li>
 </ul>
 <p>这些 PVE 主机配置为一个集群，可以共享一些配置信息并互相迁移虚拟机。特别地，Proxmox VE Authentication Server（Realm 为 pve）的账号在 PVE 主机之间是共享的，并且添加的 PBS 存储后端也是共享的，即大家都可以往相同的 PBS 上备份虚拟机。</p>
@@ -2312,7 +2321,7 @@ iface vmbr1 inet static
 <p>pve-6 位于东图，是一台 HP DL380G6，配置为 2× Xeon E5620 (Westmere 4C8T, 2.50 GHz), 72 GB 内存和l两块 300 GB 的 SAS 硬盘。曾经叫做 esxi-6，在 2022 年 1 月统一更换为 Proxmox VE。</p>
 <p>机器有两个网卡，共有 4 个 1 Gbps 的接口，其中 3 个都接在 VLAN 交换机上（另一个不知道接了啥），通过 VLAN 同时连接图书馆的两个网段以及经由 gateway-el 桥接的内网，以及连接 vdp 挂载 NFS。</p>
 <h2 id="pve-2-pve-4">pve-2, pve-4<a class="headerlink" href="#pve-2-pve-4" title="Permanent link">&para;</a></h2>
-<p>pve-2 和 pve-4 也位于东图，是两台未知品牌、未知型号的旧机器，配置为 2× Xeon E5420 (Very old 4C4T, 2.50 GHz), 16 GB 内存（DDR2 667 MHz）和一块 16 GB 的 SanDisk SSD。该型号机器<strong>没有 IPMI</strong>，而同一批共 5 台机器已经坏掉了三台（esxi-1, esxi-3, vm-nfs，其实这两台机器曾经叫做 esxi-2 和 esxi-4）。</p>
+<p>pve-2 和 pve-4 也位于东图，是两台未知品牌、未知型号的旧机器，配置为 2× Xeon E5420 (Very old 4C4T, 2.50 GHz), 16 GB 内存（DDR2 667 MHz）和一块 16 GB 的 SanDisk SSD。该型号机器<strong>没有 IPMI</strong>。</p>
 <p>由于配置低下，我们手动安装了 Proxmox VE，没有使用 LVM，分配了 1 GB 的 swap，剩下全部给 rootfs。</p>
 <p>机器的网卡有两个 1 Gbps 的接口，与 pve-6 相同，都接在同一个交换机上。</p>
 
