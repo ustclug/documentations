@@ -11,6 +11,12 @@ LUG 目前服役的 Proxmox VE 主机有：
 
             PVE 和 PBS 的端口都是固定的，无法更改
 
+- pve-2, pve-4, pve-6 是几台较老的服务器，在改装前都运行 ESXi 6.0，因此主机名曾经分别是 esxi-2, esxi-4, esxi-6。
+
+    !!! question "pve-1 和 pve-3 去哪了？"
+
+        esxi-1 和 esxi-3 已经坏掉很多年了，同批次 5 台机器已经坏掉了 3 台（另外一个是 vm-nfs，esxi-6 不属于该批次）。
+
 这些 PVE 主机配置为一个集群，可以共享一些配置信息并互相迁移虚拟机。特别地，Proxmox VE Authentication Server（Realm 为 pve）的账号在 PVE 主机之间是共享的，并且添加的 PBS 存储后端也是共享的，即大家都可以往相同的 PBS 上备份虚拟机。
 
 !!! warning "不同主机之间的 Linux PAM 用户是不相通的"
@@ -248,7 +254,7 @@ pve-6 位于东图，是一台 HP DL380G6，配置为 2× Xeon E5620 (Westmere 4
 
 ## pve-2, pve-4
 
-pve-2 和 pve-4 也位于东图，是两台未知品牌、未知型号的旧机器，配置为 2× Xeon E5420 (Very old 4C4T, 2.50 GHz), 16 GB 内存（DDR2 667 MHz）和一块 16 GB 的 SanDisk SSD。该型号机器**没有 IPMI**，而同一批共 5 台机器已经坏掉了三台（esxi-1, esxi-3, vm-nfs，其实这两台机器曾经叫做 esxi-2 和 esxi-4）。
+pve-2 和 pve-4 也位于东图，是两台未知品牌、未知型号的旧机器，配置为 2× Xeon E5420 (Very old 4C4T, 2.50 GHz), 16 GB 内存（DDR2 667 MHz）和一块 16 GB 的 SanDisk SSD。该型号机器**没有 IPMI**。
 
 由于配置低下，我们手动安装了 Proxmox VE，没有使用 LVM，分配了 1 GB 的 swap，剩下全部给 rootfs。
 
