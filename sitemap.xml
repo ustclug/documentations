@@ -171,6 +171,11 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
+         <loc>https://docs.ustclug.org/services/neat-dns/</loc>
+         <lastmod>2022-01-21</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
          <loc>https://docs.ustclug.org/services/mirrors/</loc>
          <lastmod>2022-01-21</lastmod>
          <changefreq>daily</changefreq>

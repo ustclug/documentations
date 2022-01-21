@@ -1493,7 +1493,7 @@
   
   
     <li class="md-nav__item">
-      <a href="#" class="md-nav__link">
+      <a href="../../services/neat-dns/" class="md-nav__link">
         Neat DNS
       </a>
     </li>
@@ -1894,47 +1894,40 @@
 
 
 <h1 id="authoritative-dns">Authoritative DNS<a class="headerlink" href="#authoritative-dns" title="Permanent link">&para;</a></h1>
-<p>Services:</p>
+<p>Services (Servers):</p>
 <ul>
-<li>ns-a.ustclug.org</li>
-<li>ns-b.ustclug.org</li>
-<li>ns-c.ustclug.org</li>
-</ul>
-<p>Servers:</p>
-<ul>
-<li>ns-a.s.ustclug.org</li>
-<li>ns-b.s.ustclug.org</li>
-<li>(not ns-c)</li>
+<li>ns-a.ustclug.org (ns-a.s.ustclug.org)</li>
+<li>ns-b.ustclug.org (ns-b.s.ustclug.org)</li>
+<li>ns-c.ustclug.org (<em>something else</em>)</li>
 </ul>
 <h2 id="deploy">Deploy<a class="headerlink" href="#deploy" title="Permanent link">&para;</a></h2>
 <ul>
-<li>Bind configuration:
+<li>Bind configuration: <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M400 224h-24v-72C376 68.2 307.8 0 224 0S72 68.2 72 152v72H48c-26.5 0-48 21.5-48 48v192c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V272c0-26.5-21.5-48-48-48zm-104 0H152v-72c0-39.7 32.3-72 72-72s72 32.3 72 72v72z"/></svg></span>
   <a href="https://github.com/ustclug/auth-dns">https://github.com/ustclug/auth-dns</a></li>
 <li>Bind Dockerfile:
   <a href="https://github.com/zhsj/dockerfile/tree/master/bind9">https://github.com/zhsj/dockerfile/tree/master/bind9</a></li>
 </ul>
-<p>The bind configuration repository is only visible to admins because private key is
-included.</p>
-<div class="highlight"><pre><span></span><code># copy the ssh key https://git.lug.ustc.edu.cn/ustclug/auth-dns/blob/master/git_pull_key
-# to ~/.ssh/id_ed25519
+<p>The bind configuration repository is only visible to admins because private key is included.</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># copy the ssh key https://github.com/ustclug/auth-dns/blob/master/git_pull_key</span>
+<span class="c1"># to ~/.ssh/id_ed25519</span>
 
-# now get the conf
+<span class="c1"># now get the conf</span>
 git clone git@github.com:ustclug/auth-dns.git /var/lib/bind
 
-# delete the ssh key
+<span class="c1"># delete the ssh key</span>
 rm ~/.ssh/id_ed25519
 </code></pre></div>
 <div class="highlight"><pre><span></span><code>docker run --restart=always -v /var/lib/bind/:/etc/bind \
        --net host -it -d --name=auth-dns zhusj/bind9
 </code></pre></div>
 <h2 id="update-dns-record">Update DNS Record<a class="headerlink" href="#update-dns-record" title="Permanent link">&para;</a></h2>
-<p>Just commit your change to the configuartion repository.
+<p>Just commit your changes to the configuration repository.
 More details can be found in the repository.</p>
 <h2 id="webhook">Webhook<a class="headerlink" href="#webhook" title="Permanent link">&para;</a></h2>
 <p>Please add a webhook in the configuration repository, so that the DNS record
-can be automatically updated when we commit.</p>
-<p>The webhook endpoint is http://&lt;server_ip&gt;:9000/hooks/bind, see
-<a href="https://github.com/ustclug/auth-dns/settings/hooks">https://github.com/ustclug/auth-dns/settings/hooks</a> for example.</p>
+can be automatically updated when commits are pushed.</p>
+<p>The webhook endpoint is <code>http://&lt;server_ip&gt;:9000/hooks/bind</code>, see
+<a href="https://github.com/ustclug/auth-dns/settings/hooks">https://github.com/ustclug/auth-dns/settings/hooks</a> for examples.</p>
 
               
             </article>
