@@ -1908,15 +1908,11 @@
 
 
 <h1 id="ssh-certificate-authentication">SSH Certificate Authentication<a class="headerlink" href="#ssh-certificate-authentication" title="Permanent link">&para;</a></h1>
-<p>discussion: <a href="https://groups.google.com/d/topic/lug-internal/K7bDLKTGHXw/discussion">SSH 升级到证书登陆方案讨论</a></p>
-<p>usage: <a href="https://groups.google.com/d/topic/lug-internal/2iQQ30qhbQ8/discussion">SSH 证书认证的使用方法</a></p>
+<p>Discussion: <a href="https://groups.google.com/d/topic/lug-internal/K7bDLKTGHXw/discussion">SSH 升级到证书登陆方案讨论</a></p>
+<p>Usage: <a href="https://groups.google.com/d/topic/lug-internal/2iQQ30qhbQ8/discussion">SSH 证书认证的使用方法</a></p>
 <h2 id="introduction">Introduction<a class="headerlink" href="#introduction" title="Permanent link">&para;</a></h2>
-<p>There are two types of SSH Certificate:</p>
-<ul>
-<li>Root certificate</li>
-<li>Host certificate</li>
-</ul>
-<p>Root certificate can be used to issue a host certificate and has the same format as a regular SSH private-public key pair. Host certificate can be used for authentication on both server side and client side. But certificates cannot issue new certificates (i.e. no chains), it is the very difference from X.509 certificate system.</p>
+<p>An SSH Certificate Authority (CA) is a trusted key pair that issues certificates. It has the same format as a regular SSH private-public key pair (it <em>is</em>, in fact). </p>
+<p>Certificates can be used for authentication on both the server side and the client side. But certificates cannot issue new certificates (i.e. no chains), it is the very difference from X.509 certificate system.</p>
 <h2 id="trust-all-lug-servers-in-one-go">Trust all LUG servers in one go<a class="headerlink" href="#trust-all-lug-servers-in-one-go" title="Permanent link">&para;</a></h2>
 <p>Add the following line to your <code>known_hosts</code>:</p>
 <div class="highlight"><pre><span></span><code>@cert-authority * ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC1Bxw9AXoZvc9HTe5o4f7/qOROcmzvlcO5oofoF3pewtRnhNpcd/DwmxSblqpj/cjLYkE32mSCzMYY8X0CRFyMJsgSIDC4i4LXDNU0e8PbB2NIQAAeyfJEU5m/Dn1tPw9WvPtPqHCRvgSwnRfzYngMVWROgV2Qe6pOqTTgetEYfb5gkDc2i1M7yfTp3H3ExfrDKwOKPc/9UYOADMFU6u1fJN+4epLETilHC1ubtBeVi23pn1K+LDy06Gwhq1MLljCM7gFBMrmv894HrOHU4WrzLUlfkiDt2cyXLb4qPWYqilBFLUjU92kjmiI/EwB/8pR1WmdU7FoYpdgBHNr3NT53 LUG-CA
@@ -1927,13 +1923,18 @@
 <p class="admonition-title">Warning</p>
 <p>When signing certificates using OpenSSH &lt;= 8.1, add <code>-t rsa-sha2-512</code> to the <code>ssh-keygen</code> command. More details can be found here: <a href="https://ibug.io/p/35">https://ibug.io/p/35</a></p>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning 2</p>
-<p>Some of our servers are still running Debian Jessie, which has OpenSSH version 6.7 that does not support SHA-2 certificate algorithms (OpenSSH 7.2 required). Sign with <code>-t ssh-rsa</code> instead if you want to log in to such servers.</p>
+<div class="admonition info">
+<p class="admonition-title">Note</p>
+<p>Some of our servers <em>may</em> still be running Debian Jessie, which has OpenSSH 6.7 that does not support SHA-2 certificate algorithms (OpenSSH 7.2 required). Sign with <code>-t ssh-rsa</code> instead if you want to log in to such servers.</p>
+<p><strong>January 2022 update</strong>: We believe we have got rid of all Jessie systems, so this should no longer be the case. </p>
 </div>
 <p>Copy the file <code>/etc/ssh/ssh_host_rsa_key.pub</code> from target server.</p>
 <p>Then, run <code>ssh-keygen</code> to issue a public key. For example:</p>
-<div class="highlight"><pre><span></span><code>ssh-keygen -s /path/to/ssh_ca -I blog -h -n blog.s.ustclug.org,blog.p.ustclug.org,10.254.0.15,202.141.176.98,202.141.160.98 ssh_host_rsa_key.pub
+<div class="highlight"><pre><span></span><code>ssh-keygen -s /path/to/ssh_ca <span class="se">\</span>
+           -I blog <span class="se">\</span>
+           -h <span class="se">\</span>
+           -n blog.s.ustclug.org,blog.p.ustclug.org,10.254.0.15,202.141.176.98,202.141.160.98 <span class="se">\</span>
+           ssh_host_rsa_key.pub
 </code></pre></div>
 <p>Then, copy the certificate file <code>ssh_host_rsa_key-cert.pub</code> back to target server.</p>
 <p>At last, add the following lines to <code>/etc/ssh/sshd_config</code>:</p>
@@ -1942,22 +1943,28 @@ HostCertificate /etc/ssh/ssh_host_rsa_key-cert.pub
 </code></pre></div>
 <p>Certificate will take effect after SSH daemon is reloaded (<code>systemctl reload ssh</code>).</p>
 <h2 id="issue-a-client-certificate">Issue a client certificate<a class="headerlink" href="#issue-a-client-certificate" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code>ssh-keygen -s /path/to/ssh_ca -I certificate_identity -n principals -O option -V validity_interval public_key_file
+<div class="highlight"><pre><span></span><code>ssh-keygen -s /path/to/ssh_ca <span class="se">\</span>
+           -I certificate_identity <span class="se">\</span>
+           -n principals <span class="se">\</span>
+           -O options <span class="se">\</span>
+           -V validity_interval <span class="se">\</span>
+           public_key_file
 </code></pre></div>
 <p>For example:</p>
 <div class="highlight"><pre><span></span><code>ssh-keygen -s /path/to/ssh_ca -I <span class="s2">&quot;Yifan Gao&quot;</span> -n yifan -V -5m:+365d yifan.pub
 </code></pre></div>
-<p>In general, <em>certificate_identity</em> is user full name, and <em>principals</em> is the user name. In addition, one certificate can carry multiply <em>principals</em>, like:</p>
+<p>In general, <em>certificate_identity</em> is the user's full name, and <em>principals</em> is the system username. The certificate identity is used to identify certificates and is logged in system logs. In addition, one certificate can carry multiply <em>principals</em>, like:</p>
 <div class="highlight"><pre><span></span><code>ssh-keygen -s /path/to/ssh_ca -I <span class="s2">&quot;Yifan Gao&quot;</span> -n yifan,root,liims -V -5m:+365d yifan.pub
 </code></pre></div>
-<p>It authorizes the certificate owner to login to any server with <code>yifan</code>, <code>root</code> or <code>liims</code> username.</p>
+<p>It authorizes the certificate owner to login to any server as <code>yifan</code>, <code>root</code> or <code>liims</code> user.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p><code>liims</code> principal is used to login to library inquiring machines.</p>
+<p>The <code>liims</code> principal is used to log into <strong>li</strong>brary <strong>i</strong>nquiry <strong>m</strong>achine<strong>s</strong>.</p>
 </div>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
 <p>The validity interval by default starts at the current system time. Using <code>-5m:+365d</code> creates a certificate valid from 5 minutes ago to make up for offset times on other systems. Otherwise it's not much useful to have a validity period starting from a long time ago.</p>
+<p>For security purposes, avoid creating certificates without a defined validity period. It's also recommended to keep validity periods as short as necessary.</p>
 </div>
 
               
