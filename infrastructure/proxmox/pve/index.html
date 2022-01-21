@@ -639,6 +639,20 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#root" class="md-nav__link">
+    root 账户
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#networking" class="md-nav__link">
+    网络配置
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#pve-firewall" class="md-nav__link">
     防火墙
   </a>
@@ -648,6 +662,13 @@
           <li class="md-nav__item">
   <a href="#ntp" class="md-nav__link">
     NTP 时间
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ssl" class="md-nav__link">
+    SSL 证书
   </a>
   
 </li>
@@ -729,6 +750,20 @@
         
       </ul>
     </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pve-6" class="md-nav__link">
+    pve-6
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pve-2-pve-4" class="md-nav__link">
+    pve-2, pve-4
+  </a>
   
 </li>
       
@@ -1963,6 +1998,20 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#root" class="md-nav__link">
+    root 账户
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#networking" class="md-nav__link">
+    网络配置
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#pve-firewall" class="md-nav__link">
     防火墙
   </a>
@@ -1972,6 +2021,13 @@
           <li class="md-nav__item">
   <a href="#ntp" class="md-nav__link">
     NTP 时间
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ssl" class="md-nav__link">
+    SSL 证书
   </a>
   
 </li>
@@ -2056,6 +2112,20 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#pve-6" class="md-nav__link">
+    pve-6
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pve-2-pve-4" class="md-nav__link">
+    pve-2, pve-4
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -2094,6 +2164,9 @@
 </div>
 <p>所有 Proxmox 主机的主机名（hostname）都设为 <code>&lt;hostname&gt;.vm.ustclug.org</code>，对应的 IP 地址记录在 DNS 中。</p>
 <h2 id="common">公用配置<a class="headerlink" href="#common" title="Permanent link">&para;</a></h2>
+<h3 id="root">root 账户<a class="headerlink" href="#root" title="Permanent link">&para;</a></h3>
+<p>为了便于通过 IPMI 等方式维护，我们约定<strong>所有 Proxmox 主机的 root 账户密码保持为空</strong>。若有操作需要使用 root 密码（如创建和加入集群时），请通过 SSH 或 IPMI 登录，临时设置一个 root 密码，并在修改完 PVE / PBS 的配置后将密码删除（<code>passwd -d</code>）。PVE / PBS 没有依赖于 root 密码才能正常运行的组件，因此这样做对 PVE / PBS 来说是没问题的。</p>
+<h3 id="networking">网络配置<a class="headerlink" href="#networking" title="Permanent link">&para;</a></h3>
 <p>安全起见，PVE / PBS 主机使用 <a href="https://en.wikipedia.org/wiki/Private_network#Private_IPv4_addresses">RFC 1918 段</a>的校园网 IP，不连接公网。</p>
 <ul>
 <li>东图可用的 IP 段为 192.168.93.0/24（网关 93.254）</li>
@@ -2133,6 +2206,48 @@ COMMIT
 server time.ustc.edu.cn iburst
 </code></pre></div>
 <p>然后运行 <code>systemctl restart chrony.service</code> 重启服务。</p>
+<h3 id="ssl">SSL 证书<a class="headerlink" href="#ssl" title="Permanent link">&para;</a></h3>
+<p>参见 <a href="../../ssl/">SSL 证书</a>，正好 vdp 上面运行了 LUG FTP 而因此配置了证书的自动更新，利用 vdp 提供的 NFS 服务，我们在 vdp 上的证书更新脚本中添加了将 vm 证书复制到 NFS 目录的功能，然后由 pve-6 部署到各个主机上。</p>
+<p>下面是 pve-6 上的脚本：</p>
+<div class="highlight"><span class="filename">/etc/cron.daily/sync-cert</span><pre><span></span><code><span class="ch">#!/bin/bash -e</span>
+
+<span class="nv">SRC</span><span class="o">=</span><span class="s2">&quot;/etc/pve/nodes/</span><span class="k">$(</span>hostname -s<span class="k">)</span><span class="s2">&quot;</span>
+<span class="nv">DSTROOT</span><span class="o">=</span><span class="s2">&quot;/etc/pve/nodes&quot;</span>
+<span class="nv">CERTSRC</span><span class="o">=</span><span class="s2">&quot;/mnt/nfs-el/cert&quot;</span>
+
+cp -u <span class="s2">&quot;</span><span class="nv">$CERTSRC</span><span class="s2">/privkey.pem&quot;</span> <span class="s2">&quot;</span><span class="nv">$SRC</span><span class="s2">/pveproxy-ssl.key&quot;</span>
+cp -u <span class="s2">&quot;</span><span class="nv">$CERTSRC</span><span class="s2">/fullchain.pem&quot;</span> <span class="s2">&quot;</span><span class="nv">$SRC</span><span class="s2">/pveproxy-ssl.pem&quot;</span>
+systemctl reload pveproxy.service
+
+<span class="k">for</span> DST <span class="k">in</span> <span class="s2">&quot;</span><span class="nv">$DSTROOT</span><span class="s2">&quot;</span>/*<span class="p">;</span> <span class="k">do</span>
+  <span class="o">[</span> <span class="s2">&quot;</span><span class="nv">$DST</span><span class="s2">&quot;</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="nv">$SRC</span><span class="s2">&quot;</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="k">continue</span>
+  <span class="nv">node</span><span class="o">=</span><span class="s2">&quot;</span><span class="k">$(</span>basename <span class="s2">&quot;</span><span class="nv">$DST</span><span class="s2">&quot;</span><span class="k">)</span><span class="s2">&quot;</span>
+  cp <span class="s2">&quot;</span><span class="nv">$SRC</span><span class="s2">/pveproxy-ssl.key&quot;</span> <span class="s2">&quot;</span><span class="nv">$SRC</span><span class="s2">/pveproxy-ssl.pem&quot;</span> <span class="s2">&quot;</span><span class="nv">$DST</span><span class="s2">/&quot;</span>
+  ssh <span class="s2">&quot;</span><span class="nv">$node</span><span class="s2">&quot;</span> <span class="s1">&#39;systemctl reload pveproxy.service&#39;</span> <span class="p">&amp;</span>
+<span class="k">done</span>
+<span class="nb">wait</span>
+</code></pre></div>
+<p>由于 PVE 和 PBS 的数据不互通，因此 esxi-5 上的相同位置有<strong>另一个</strong>脚本为 PBS 部署证书：</p>
+<div class="highlight"><span class="filename">/etc/cron.daily/sync-cert</span><pre><span></span><code><span class="ch">#!/bin/bash</span>
+
+<span class="nv">SRC</span><span class="o">=</span><span class="s2">&quot;/etc/pve/nodes/</span><span class="k">$(</span>hostname -s<span class="k">)</span><span class="s2">&quot;</span>
+<span class="nv">DST</span><span class="o">=</span><span class="s2">&quot;/etc/proxmox-backup&quot;</span>
+
+<span class="k">if</span> ! cmp -s <span class="s2">&quot;</span><span class="nv">$SRC</span><span class="s2">/pveproxy-ssl.pem&quot;</span> <span class="s2">&quot;</span><span class="nv">$DST</span><span class="s2">/proxy.pem&quot;</span><span class="p">;</span> <span class="k">then</span>
+  cp <span class="s2">&quot;</span><span class="nv">$SRC</span><span class="s2">/pveproxy-ssl.key&quot;</span> <span class="s2">&quot;</span><span class="nv">$DST</span><span class="s2">/proxy.key&quot;</span>
+  cp <span class="s2">&quot;</span><span class="nv">$SRC</span><span class="s2">/pveproxy-ssl.pem&quot;</span> <span class="s2">&quot;</span><span class="nv">$DST</span><span class="s2">/proxy.pem&quot;</span>
+  systemctl reload proxmox-backup-proxy.service
+<span class="k">fi</span>
+<span class="nb">exit</span> <span class="m">0</span>
+
+<span class="c1"># Unreachable code, leaving here for reference</span>
+<span class="k">if</span> <span class="nb">command</span> -v openssl <span class="m">2</span>&gt;/dev/null<span class="p">;</span> <span class="k">then</span>
+  <span class="nv">FP</span><span class="o">=</span><span class="s2">&quot;</span><span class="k">$(</span>openssl x509 -noout -fingerprint -sha256 -inform pem -in <span class="s2">&quot;</span><span class="nv">$DST</span><span class="s2">/proxy.pem&quot;</span><span class="k">)</span><span class="s2">&quot;</span>
+  <span class="nv">FP</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">FP</span><span class="p">##*=</span><span class="si">}</span><span class="s2">&quot;</span>
+  pvesm <span class="nb">set</span> esxi-5-data --finerprint <span class="s2">&quot;</span><span class="nv">$FP</span><span class="s2">&quot;</span>
+  pvesm <span class="nb">set</span> esxi-5-vdp2 --finerprint <span class="s2">&quot;</span><span class="nv">$FP</span><span class="s2">&quot;</span>
+<span class="k">fi</span>
+</code></pre></div>
 <h2 id="pve-5">pve-5<a class="headerlink" href="#pve-5" title="Permanent link">&para;</a></h2>
 <p>pve-5 位于网络中心，配置为 2× Xeon E5-2603 v4 (Broadwell 6C6T, 1.70 GHz, no HT, no Turbo Boost)，128 GB 内存和一大堆 SSD（2× 三星 240 GB SATA + 10x Intel DC S4500 1.92 TB SATA）。我们将两块 240 GB 的盘组成一个 LVM VG，分配 16 GB 的 rootfs（LVM mirror）和 8 GB 的 swap，其余空间给一个 thinpool。十块 1.92 TB 的盘组成一个 RAIDZ2 的 zpool，用于存储虚拟机等数据。</p>
 <p>其连接的单根 10 Gbps 的光纤，桥接出 <code>vmbr0</code>（Cernet）, <code>vmbr2</code>（Telecom）, <code>vmbr3</code>（Unicom）, <code>vmbr4</code>（Mobile）四个不同 VLAN 的网桥，另有一个 <code>vmbr1</code>（Ustclug）的无头网桥用于从 <a href="../../../services/gateway-nic/">gateway-nic</a> 桥接 Tinc。</p>
@@ -2193,6 +2308,13 @@ iface vmbr1 inet static
 <h3 id="esxi-5-syslog-zfs-error-cannot-open-rpool-no-such-pool">esxi-5 的 syslog 一直出现 zfs error: cannot open 'rpool': no such pool<a class="headerlink" href="#esxi-5-syslog-zfs-error-cannot-open-rpool-no-such-pool" title="Permanent link">&para;</a></h3>
 <p>这是因为 esxi-5 上面根本就没有使用 ZFS，而加入 pve-5 的集群时虚拟机的存储信息（<code>/etc/pve/storage.cfg</code>）也从 pve-5 同步过来合并了，因此 esxi-5 在根据 pve-5 的配置尝试启用 zfs 存储。</p>
 <p><strong>解决办法</strong>：由于 <code>/etc/pve</code> 下大多数内容在集群间是同步的，打开 <code>storage.cfg</code>，在 <code>zfspool: local-zfs</code> 下面加入一行，缩进一个 Tab 并加上 <code>nodes pve-5</code>，表示这个 storage 只在 pve-5 上使用。</p>
+<h2 id="pve-6">pve-6<a class="headerlink" href="#pve-6" title="Permanent link">&para;</a></h2>
+<p>pve-6 位于东图，是一台 HP DL380G6，配置为 2× Xeon E5620 (Westmere 4C8T, 2.50 GHz), 72 GB 内存和l两块 300 GB 的 SAS 硬盘。曾经叫做 esxi-6，在 2022 年 1 月统一更换为 Proxmox VE。</p>
+<p>机器有两个网卡，共有 4 个 1 Gbps 的接口，其中 3 个都接在 VLAN 交换机上（另一个不知道接了啥），通过 VLAN 同时连接图书馆的两个网段以及经由 gateway-el 桥接的内网，以及连接 vdp 挂载 NFS。</p>
+<h2 id="pve-2-pve-4">pve-2, pve-4<a class="headerlink" href="#pve-2-pve-4" title="Permanent link">&para;</a></h2>
+<p>pve-2 和 pve-4 也位于东图，是两台未知品牌、未知型号的旧机器，配置为 2× Xeon E5420 (Very old 4C4T, 2.50 GHz), 16 GB 内存（DDR2 667 MHz）和一块 16 GB 的 SanDisk SSD。该型号机器<strong>没有 IPMI</strong>，而同一批共 5 台机器已经坏掉了三台（esxi-1, esxi-3, vm-nfs，其实这两台机器曾经叫做 esxi-2 和 esxi-4）。</p>
+<p>由于配置低下，我们手动安装了 Proxmox VE，没有使用 LVM，分配了 1 GB 的 swap，剩下全部给 rootfs。</p>
+<p>机器的网卡有两个 1 Gbps 的接口，与 pve-6 相同，都接在同一个交换机上。</p>
 
               
             </article>
