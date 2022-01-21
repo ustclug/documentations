@@ -129,7 +129,7 @@ nav:
     - Gateway NIC: "services/gateway-nic.md"
     - Gateway JP: "services/gateway-jp.md"
     - Docker2: "services/docker2.md"
-    - Neat DNS: "#"
+    - Neat DNS: services/neat-dns.md
     - GitLab: "services/gitlab.md"
     - LUG VPN:
       - RADIUS: "#"
