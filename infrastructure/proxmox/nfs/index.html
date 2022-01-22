@@ -350,14 +350,16 @@
 
   
   
+    
+  
   
     
       
     
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" >
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" checked>
       
       
       
@@ -503,6 +505,132 @@
               
   
   
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_2" type="checkbox" id="__nav_3_2" checked>
+      
+      
+      
+        
+          
+        
+          
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_3_2">
+          Proxmox Cluster
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Proxmox Cluster" data-md-level="2">
+        <label class="md-nav__title" for="__nav_3_2">
+          <span class="md-nav__icon md-icon"></span>
+          Proxmox Cluster
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pve/" class="md-nav__link">
+        Proxmox VE
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pbs/" class="md-nav__link">
+        Proxmox Backup Server
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          NFS
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        NFS
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#pve" class="md-nav__link">
+    PVE 磁盘路径与挂载参数
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
   
     <li class="md-nav__item">
       <a href="../../ldap/" class="md-nav__link">
@@ -550,73 +678,6 @@
       <a href="../../ssl/" class="md-nav__link">
         SSL Certificates
       </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-      
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_6" type="checkbox" id="__nav_3_6" >
-      
-      
-      
-        
-          
-        
-          
-        
-      
-      
-        <label class="md-nav__link" for="__nav_3_6">
-          Proxmox Cluster
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <nav class="md-nav" aria-label="Proxmox Cluster" data-md-level="2">
-        <label class="md-nav__title" for="__nav_3_6">
-          <span class="md-nav__icon md-icon"></span>
-          Proxmox Cluster
-        </label>
-        <ul class="md-nav__list" data-md-scrollfix>
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../pve/" class="md-nav__link">
-        Proxmox VE
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../pbs/" class="md-nav__link">
-        Proxmox Backup Server
-      </a>
-    </li>
-  
-
-            
-          
-        </ul>
-      </nav>
     </li>
   
 
@@ -754,8 +815,6 @@
         
           
         
-          
-        
       
       
         <label class="md-nav__link" for="__nav_3_12_2">
@@ -792,20 +851,6 @@
     <li class="md-nav__item">
       <a href="../../discontinued/vsphere/vcenter/" class="md-nav__link">
         vCenter
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../discontinued/vsphere/nfs.md" class="md-nav__link">
-        NFS
       </a>
     </li>
   
@@ -1839,16 +1884,28 @@
 
 
 <h1 id="nfs">NFS<a class="headerlink" href="#nfs" title="Permanent link">&para;</a></h1>
-<p>NFS 服务器（"vdp"）是东图两个 <del>ESXi</del> PVE 机器的虚拟机存储，型号为 DELL PowerEdge R510。磁盘阵列由于在 2021 年 3 月初损坏，目前容量缩减到 8T（4 块 4T 蓝盘 RAID10）。除虚拟机外，NFS 也存储 LUG 成员的个人数据及 LUG FTP。NFS 服务恢复后，为了保证数据冗余性，使用<a href="http://staff.ustc.edu.cn/~wf0229/office365/">科大 Office 365 A1 账号</a>和 Rclone 每天增量备份 LUG FTP 和 LUG 成员的公开数据。</p>
-<p>vdp 的内网依赖于东图网关。</p>
+<p>NFS 服务器（"vdp"）是东图三个 PVE 机器的虚拟机存储，型号为 DELL PowerEdge R510。磁盘阵列由于在 2021 年 3 月初损坏，目前容量缩减到 8T（4 块 4T 蓝盘 RAID10）。除虚拟机外，NFS 也存储 LUG 成员的个人数据及 LUG FTP。NFS 服务恢复后，为了保证数据冗余性，使用<a href="http://staff.ustc.edu.cn/~wf0229/office365/">科大 Office 365 A1 账号</a>和 Rclone 每天增量备份 LUG FTP 和 LUG 成员的公开数据。</p>
+<p>vdp 的内网依赖于 gateway-el。</p>
 <div class="admonition warning">
 <p class="admonition-title">可能的网络问题</p>
 <p>在 2021 年九月份东图的 ESXi 与 NFS 连接会出现不稳定的问题，原因目前不明。在连接方式从 NFS 4.1 更换到 NFS 3 之后，连接的不稳定不会导致虚拟机被关闭。</p>
 <p>2021/09/29 更新：这两天再次出现了严重的连接问题。调试后发现 192.168.93.0/24 的网关 192.168.93.254 (Cisco 设备) 丢包严重，而 NFS 的出口 IP 错误被设置到了与图书馆交换机相连接的 eno1，导致请求需要绕路。将此 IP 移动至 eno2，修改 sysctl 设置 ARP 过滤并重启后，目前暂时解决了问题。</p>
 </div>
 <h2 id="pve">PVE 磁盘路径与挂载参数<a class="headerlink" href="#pve" title="Permanent link">&para;</a></h2>
-<p>在 storage.cfg 设置中，NFS 挂载到 <code>/mnt/nfs-el</code>，设置的参数为 <code>soft,noexec,nosuid,nodev</code>（设置为 <code>hard</code> 会导致 NFS 下线时重试无限次，大概率导致系统卡死）。</p>
-<p>其中，根据 PVE 的要求，虚拟机磁盘文件必须放在 <code>images/&lt;vmid&gt;</code> 目录下。之后可以使用 <code>qm rescan</code> 扫描新的磁盘文件。</p>
+<p>在 storage.cfg 设置中，NFS 挂载到 <code>/mnt/nfs-el</code>，设置的参数为 <code>soft,noexec,nosuid,nodev</code>。设置为 <code>hard</code> 会导致 NFS 下线时重试无限次，大概率导致系统卡死，其他几个参数主要是为了安全。</p>
+<p>其中，根据 PVE 的要求，虚拟机磁盘文件需要放在 <code>images/&lt;vmid&gt;</code> 目录下才会被自动检测到。若一开始没有按要求放置文件或添加了新文件，可以使用 <code>qm rescan</code> 扫描新的磁盘文件。直接使用 <code>qm set</code> 命令或手动编辑虚拟机配置文件指定磁盘文件的路径时不受此限制。</p>
+<p>另外，由于整个 storage.cfg 文件在集群中共享，需要手动指定 <code>nodes</code> 以免 NIC 的两台 PVE 主机尝试挂载。</p>
+<div class="highlight"><span class="filename">/etc/pve/storage.cfg</span><pre><span></span><code>nfs: nfs-el
+        export /media/vdp/pve
+        path /mnt/nfs-el
+        server nfs-el.vm.ustclug.org
+        options soft,noexec,nosuid,nodev
+        content iso,images
+        nodes pve-2,pve-4,pve-6
+        shared 1
+        prune-backups keep-all=1
+</code></pre></div>
+<p>storage.cfg 的全部配置内容可以参考 <a href="https://pve.proxmox.com/wiki/Storage">https://pve.proxmox.com/wiki/Storage</a>。</p>
 
               
             </article>
@@ -1863,6 +1920,41 @@
       </main>
       
         <footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        
+        <a href="../pbs/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Proxmox Backup Server" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Proxmox Backup Server
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="../../ldap/" class="md-footer__link md-footer__link--next" aria-label="Next: LDAP: Servers Unified Authentication" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              LDAP: Servers Unified Authentication
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
   
   <div class="md-footer-meta md-typeset">
     <div class="md-footer-meta__inner md-grid">
