@@ -96,12 +96,12 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://docs.ustclug.org/infrastructure/intranet/gateway/</loc>
+         <loc>https://docs.ustclug.org/infrastructure/intranet/</loc>
          <lastmod>2022-01-22</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://docs.ustclug.org/infrastructure/intranet/intranet/</loc>
+         <loc>https://docs.ustclug.org/infrastructure/intranet/gateway/</loc>
          <lastmod>2022-01-22</lastmod>
          <changefreq>daily</changefreq>
     </url>
