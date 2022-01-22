@@ -14,7 +14,7 @@ The network contains three parts:
 - Virtual Switch on vSphere host machine
 - tincVPN
 
-tincVPN is a mesh VPN, which can be abstructed as a virtual Switch.
+tincVPN is a mesh VPN, which can be abstracted as a virtual Switch.
 
 vm-nfs.s.ustclug.org runs a layer 2 bridge, connecting tincVPN and SRW2024(physical switch).
 

@@ -76,7 +76,7 @@ nav:
     - Add New User in LDAP: "workflow/ldap/add-new-user.md"
   - Infrastructure:
     - Intranet:
-      - infrastructure/intranet/intranet.md
+      - infrastructure/intranet/index.md
       - Tinc: "infrastructure/tinc.md"
       - LUGi VPN: "infrastructure/intranet/lugivpn.md"
       - Gateway: "infrastructure/intranet/gateway.md"
