@@ -80,13 +80,14 @@ nav:
       - Tinc: "infrastructure/tinc.md"
       - LUGi VPN: "infrastructure/intranet/lugivpn.md"
       - Gateway: "infrastructure/intranet/gateway.md"
+    - Proxmox Cluster:
+      - Proxmox VE: "infrastructure/proxmox/pve.md"
+      - Proxmox Backup Server: "infrastructure/proxmox/pbs.md"
+      - NFS: "infrastructure/proxmox/nfs.md"
     - "LDAP: Servers Unified Authentication": "infrastructure/ldap.md"
     - SSH Certificate Authority: "infrastructure/sshca.md"
     - Authoritative DNS: "infrastructure/auth-dns.md"
     - SSL Certificates: "infrastructure/ssl.md"
-    - Proxmox Cluster:
-      - Proxmox VE: "infrastructure/proxmox/pve.md"
-      - Proxmox Backup Server: "infrastructure/proxmox/pbs.md"
     - Monitor: "infrastructure/monitor.md"
     - Google Apps / G Suite: "infrastructure/google.md"
     - GitHub: infrastructure/github.md
@@ -97,7 +98,6 @@ nav:
       - vSphere Cluster:
         - ESXi: "infrastructure/discontinued/vsphere/esxi.md"
         - vCenter: "infrastructure/discontinued/vsphere/vcenter.md"
-        - NFS: "infrastructure/discontinued/vsphere/nfs.md"
         - VDP: "infrastructure/discontinued/vsphere/vdp.md"
   - Services:
     - Mirrors:
