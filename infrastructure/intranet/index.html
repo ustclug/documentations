@@ -1870,7 +1870,7 @@
 <li>Virtual Switch on vSphere host machine</li>
 <li>tincVPN</li>
 </ul>
-<p>tincVPN is a mesh VPN, which can be abstructed as a virtual Switch.</p>
+<p>tincVPN is a mesh VPN, which can be abstracted as a virtual Switch.</p>
 <p>vm-nfs.s.ustclug.org runs a layer 2 bridge, connecting tincVPN and SRW2024(physical switch).</p>
 <p>It is obvious that vm-nfs is a single point of failure of communicating between tinc host and vSphere virtual machine. I had tried to add another bridge node, but resulted in a broadcast storm. Maybe we can fix it by MPLS (merged in mainland kernel 4.3). But it isn't a right timing at this time.</p>
 <h2 id="network-information">Network information<a class="headerlink" href="#network-information" title="Permanent link">&para;</a></h2>
