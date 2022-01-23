@@ -38,4 +38,3 @@ Every server binds one and only one IP address in 10.254.0.0/21, used to communi
 * 10.254.6.0/24: LUGi emergency entrypoint (managed by yzf)
 * 10.254.7.0/24: LUGi entrypoint (via board.s)
 * other address: not used yet.
-

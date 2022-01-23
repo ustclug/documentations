@@ -72,9 +72,9 @@ Name=Cernet
 
 We then configure addresses and routing rules for this interface:
 
-!!! example "/etc/systemd/network/12-Cernet.network"
+??? example "/etc/systemd/network/12-Cernet.network"
 
-    ```ini title="/etc/systemd/network/12-Cernet.network"
+    ```ini
     [Match]
     Name=Cernet
 
