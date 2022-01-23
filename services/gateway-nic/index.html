@@ -2040,9 +2040,9 @@
 <span class="na">Name</span><span class="o">=</span><span class="s">Cernet</span><span class="w"></span>
 </code></pre></div>
 <p>We then configure addresses and routing rules for this interface:</p>
-<div class="admonition example">
-<p class="admonition-title">/etc/systemd/network/12-Cernet.network</p>
-<div class="highlight"><span class="filename">/etc/systemd/network/12-Cernet.network</span><pre><span></span><code><span class="k">[Match]</span><span class="w"></span>
+<details class="example">
+<summary>/etc/systemd/network/12-Cernet.network</summary>
+<div class="highlight"><pre><span></span><code><span class="k">[Match]</span><span class="w"></span>
 <span class="na">Name</span><span class="o">=</span><span class="s">Cernet</span><span class="w"></span>
 
 <span class="k">[Network]</span><span class="w"></span>
@@ -2090,7 +2090,7 @@
 <span class="na">Table</span><span class="o">=</span><span class="s">1002</span><span class="w"></span>
 <span class="na">Priority</span><span class="o">=</span><span class="s">4</span><span class="w"></span>
 </code></pre></div>
-</div>
+</details>
 <p>This config file assigns one IPv4 and one IPv6 address to the interface, as well as one IPv4 route and one IPv6 route for both the default routing table and an interface-specific routing table. It then adds three routing rules in both IPv4 and IPv6 for replying on the same interface, for sockets bound to this interfaces, and for firewall mark routing.</p>
 <p>Other interfaces are configured similarly, so just refer to their configuration files for details.</p>
 <h3 id="routes">Routes<a class="headerlink" href="#routes" title="Permanent link">&para;</a></h3>
