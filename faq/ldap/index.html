@@ -15,7 +15,7 @@
         <link rel="canonical" href="https://docs.ustclug.org/faq/ldap/">
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.1.7">
+      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.1.8">
     
     
       
@@ -23,7 +23,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.cd566b2a.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.6e60f8b8.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.e6a45f82.min.css">
@@ -1978,11 +1978,10 @@ Stack trace:
 &gt;
 &gt; EOF
 </code></pre></div>
-<ol>
-<li>加载 pw-sha2.la</li>
-</ol>
-<div class="highlight"><pre><span></span><code># ldapmodify -H ldapi:/// -Y EXTERNAL &lt;&lt; EOF
-&gt; dn: cn=module,cn=config
+<p><del>
+2. 加载 pw-sha2.la</p>
+<p><div class="highlight"><pre><span></span><code><span class="c1"># ldapmodify -H ldapi:/// -Y EXTERNAL &lt;&lt; EOF</span>
+&gt; dn: <span class="nv">cn</span><span class="o">=</span>module,cn<span class="o">=</span>config
 &gt; cn: module
 &gt; objectClass: olcModuleList
 &gt; olcModulePath: /usr/lib/ldap/
@@ -1990,6 +1989,7 @@ Stack trace:
 &gt;
 &gt; EOF
 </code></pre></div>
+</del></p>
 <ol>
 <li>为 sudoUser 设置 index</li>
 </ol>
@@ -2001,6 +2001,38 @@ Stack trace:
 &gt;
 &gt; EOF
 </code></pre></div>
+<ol>
+<li>更改默认密码存储选项（可选）</li>
+</ol>
+<p>更改为 crypt/yescrypt</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># ldapmodify -Y EXTERNAL -H ldapi:/// &lt;&lt; EOF</span>
+&gt; dn: <span class="nv">olcDatabase</span><span class="o">={</span>-1<span class="o">}</span>frontend,cn<span class="o">=</span>config
+&gt; add: olcPasswordHash
+&gt; olcPasswordHash: <span class="o">{</span>CRYPT<span class="o">}</span>
+&gt; 
+&gt; dn: <span class="nv">cn</span><span class="o">=</span>config
+&gt; add: olcPasswordCryptSaltFormat
+&gt; olcPasswordCryptSaltFormat: <span class="nv">$y$j9T</span>$%s
+</code></pre></div>
+<p>更改为 ssha512（需要 pw-sha2.la，也可参照上述 yescrypt 的配置更改为 crypt/ssha512）</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># ldapmodify -Y EXTERNAL -H ldapi:/// &lt;&lt; EOF</span>
+&gt; dn: <span class="nv">olcDatabase</span><span class="o">={</span>-1<span class="o">}</span>frontend,cn<span class="o">=</span>config
+&gt; add: olcPasswordHash
+&gt; olcPasswordHash: <span class="o">{</span>SSHA512<span class="o">}</span>
+</code></pre></div>
+<p>如果报错已经存在，可以用 replace 选项，以 crypt/yescrypt 为例：</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># ldapmodify -Y EXTERNAL -H ldapi:/// &lt;&lt; EOF</span>
+&gt; dn: <span class="nv">olcDatabase</span><span class="o">={</span>-1<span class="o">}</span>frontend,cn<span class="o">=</span>config
+&gt; changetype: modify
+&gt; replace: olcPasswordHash
+&gt; olcPasswordHash: <span class="o">{</span>CRYPT<span class="o">}</span>
+&gt; 
+&gt; dn: <span class="nv">cn</span><span class="o">=</span>config
+&gt; changetype: modify
+&gt; replace: olcPasswordCryptSaltFormat
+&gt; olcPasswordCryptSaltFormat: <span class="nv">$y$j9T</span>$%s
+</code></pre></div>
+<p>注意在使用上述 hash 方式的时候进入 gosa 用户页面时可能会报错 Cannot find a suitable password method for the current hash</p>
 
               
             </article>
@@ -2100,7 +2132,7 @@ Stack trace:
     <script id="__config" type="application/json">{"base": "../..", "features": ["content.code.annotate", "navigation.indexes", "navigation.sections", "navigation.top"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../assets/javascripts/workers/search.22074ed6.min.js"}</script>
     
     
-      <script src="../../assets/javascripts/bundle.01de222e.min.js"></script>
+      <script src="../../assets/javascripts/bundle.960e086b.min.js"></script>
       
     
   </body>
