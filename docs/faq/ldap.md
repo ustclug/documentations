@@ -72,8 +72,7 @@ Slapd 是 openldap 的服务端 daemon。正常情况下不需要碰，但是如
 > EOF
 ```
 
-<del>
-2. 加载 pw-sha2.la
+2. 加载 pw-sha2.la（若使用 ssha512/256 则需要加载）
 
 ```sh
 # ldapmodify -H ldapi:/// -Y EXTERNAL << EOF
@@ -85,7 +84,6 @@ Slapd 是 openldap 的服务端 daemon。正常情况下不需要碰，但是如
 >
 > EOF
 ```
-</del>
 
 3. 为 sudoUser 设置 index
 
