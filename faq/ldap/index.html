@@ -1978,9 +1978,10 @@ Stack trace:
 &gt;
 &gt; EOF
 </code></pre></div>
-<p><del>
-2. 加载 pw-sha2.la</p>
-<p><div class="highlight"><pre><span></span><code><span class="c1"># ldapmodify -H ldapi:/// -Y EXTERNAL &lt;&lt; EOF</span>
+<ol>
+<li>加载 pw-sha2.la（若使用 ssha512/256 则需要加载）</li>
+</ol>
+<div class="highlight"><pre><span></span><code><span class="c1"># ldapmodify -H ldapi:/// -Y EXTERNAL &lt;&lt; EOF</span>
 &gt; dn: <span class="nv">cn</span><span class="o">=</span>module,cn<span class="o">=</span>config
 &gt; cn: module
 &gt; objectClass: olcModuleList
@@ -1989,7 +1990,6 @@ Stack trace:
 &gt;
 &gt; EOF
 </code></pre></div>
-</del></p>
 <ol>
 <li>为 sudoUser 设置 index</li>
 </ol>
