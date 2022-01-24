@@ -75,7 +75,7 @@ Slapd 是 openldap 的服务端 daemon。正常情况下不需要碰，但是如
 <del>
 2. 加载 pw-sha2.la
 
-```
+```sh
 # ldapmodify -H ldapi:/// -Y EXTERNAL << EOF
 > dn: cn=module,cn=config
 > cn: module
@@ -100,8 +100,10 @@ Slapd 是 openldap 的服务端 daemon。正常情况下不需要碰，但是如
 ```
 
 4. 更改默认密码存储选项（可选）
+
 更改为 crypt/yescrypt
-```
+
+```sh
 # ldapmodify -Y EXTERNAL -H ldapi:/// << EOF
 > dn: olcDatabase={-1}frontend,cn=config
 > add: olcPasswordHash
@@ -111,15 +113,19 @@ Slapd 是 openldap 的服务端 daemon。正常情况下不需要碰，但是如
 > add: olcPasswordCryptSaltFormat
 > olcPasswordCryptSaltFormat: $y$j9T$%s
 ```
-更改为 ssha512 （需要pw-sha2.la，也可参照上述yescrypt的配置更改为crypt/ssha512）
-```
+
+更改为 ssha512（需要 pw-sha2.la，也可参照上述 yescrypt 的配置更改为 crypt/ssha512）
+
+```sh
 # ldapmodify -Y EXTERNAL -H ldapi:/// << EOF
 > dn: olcDatabase={-1}frontend,cn=config
 > add: olcPasswordHash
 > olcPasswordHash: {SSHA512}
 ```
-如果报错已经存在，可以用replace选项，以crypt/yescrypt为例
-```
+
+如果报错已经存在，可以用 replace 选项，以 crypt/yescrypt 为例：
+
+```sh
 # ldapmodify -Y EXTERNAL -H ldapi:/// << EOF
 > dn: olcDatabase={-1}frontend,cn=config
 > changetype: modify
@@ -131,4 +137,5 @@ Slapd 是 openldap 的服务端 daemon。正常情况下不需要碰，但是如
 > replace: olcPasswordCryptSaltFormat
 > olcPasswordCryptSaltFormat: $y$j9T$%s
 ```
-注意在使用上述hash方式的时候进入gosa用户页面时可能会报错 Cannot find a suitable password method for the current hash
+
+注意在使用上述 hash 方式的时候进入 gosa 用户页面时可能会报错 Cannot find a suitable password method for the current hash
