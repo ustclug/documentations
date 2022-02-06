@@ -7,9 +7,7 @@ LUG 目前服役的 Proxmox VE 主机有：
     - esxi-5 上面额外加装了 Proxmox Backup Server 用于提供备份功能，详情参见 [Proxmox Backup Server](pbs.md)
     - PVE 的 web 端口为 8006，而 PBS 的端口为 8007，因此在一台主机上同时安装 PVE 和 PBS 互不冲突，访问时需要使用 HTTPS 并指定端口。
 
-        !!! info ""
-
-            PVE 和 PBS 的端口都是固定的，无法更改
+        !!! info "PVE 和 PBS 的端口都是固定的，无法更改"
 
 - pve-2, pve-4, pve-6 是几台较老的服务器，在改装前都运行 ESXi 6.0，因此主机名曾经分别是 esxi-2, esxi-4, esxi-6。
 
@@ -29,7 +27,7 @@ LUG 目前服役的 Proxmox VE 主机有：
 
 ### root 账户
 
-为了便于通过 IPMI 等方式维护，我们约定**所有 Proxmox 主机的 root 账户密码保持为空**。若有操作需要使用 root 密码（如创建和加入集群时），请通过 SSH 或 IPMI 登录，临时设置一个 root 密码，并在修改完 PVE / PBS 的配置后将密码删除（`passwd -d`）。PVE / PBS 没有依赖于 root 密码才能正常运行的组件，因此这样做对 PVE / PBS 来说是没问题的。
+为了便于通过 IPMI 等方式维护，我们约定**所有 Proxmox 主机的 root 账户密码保持为空**。若有操作需要使用 root 密码（如创建和加入集群时），请通过 SSH 或 IPMI 登录，临时设置一个 root 密码，并在修改完 PVE / PBS 的配置后将密码删除（`passwd -d`）。PVE / PBS 没有依赖于固定不变的 root 密码才能正常运行的组件，因此这样做对 PVE / PBS 来说是没问题的。
 
 ### 网络配置 {#networking}
 

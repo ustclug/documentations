@@ -2,7 +2,7 @@
 
 NFS 服务器（"vdp"）是东图三个 PVE 机器的虚拟机存储，型号为 DELL PowerEdge R510。磁盘阵列由于在 2021 年 3 月初损坏，目前容量缩减到 8T（4 块 4T 蓝盘 RAID10）。除虚拟机外，NFS 也存储 LUG 成员的个人数据及 LUG FTP。NFS 服务恢复后，为了保证数据冗余性，使用[科大 Office 365 A1 账号](http://staff.ustc.edu.cn/~wf0229/office365/)和 Rclone 每天增量备份 LUG FTP 和 LUG 成员的公开数据。
 
-vdp 的内网依赖于 gateway-el。
+vdp 的内网连接依赖于 gateway-el。
 
 !!! warning "可能的网络问题"
 
@@ -14,7 +14,7 @@ vdp 的内网依赖于 gateway-el。
 
 在 storage.cfg 设置中，NFS 挂载到 `/mnt/nfs-el`，设置的参数为 `soft,noexec,nosuid,nodev`。设置为 `hard` 会导致 NFS 下线时重试无限次，大概率导致系统卡死，其他几个参数主要是为了安全。
 
-其中，根据 PVE 的要求，虚拟机磁盘文件需要放在 `images/<vmid>` 目录下才会被自动检测到。若一开始没有按要求放置文件或添加了新文件，可以使用 `qm rescan` 扫描新的磁盘文件。直接使用 `qm set` 命令或手动编辑虚拟机配置文件指定磁盘文件的路径时不受此限制。
+其中，根据 PVE 的要求，虚拟机磁盘文件需要放在 `images/<vmid>` 目录下才会被自动检测到。若一开始没有按要求放置文件或添加了新文件，可以使用 `qm rescan` 扫描新的磁盘文件。也可以直接使用 `qm set` 命令或手动编辑虚拟机配置文件指定磁盘文件的路径，这两种方法没有此限制。
 
 另外，由于整个 storage.cfg 文件在集群中共享，需要手动指定 `nodes` 以免 NIC 的两台 PVE 主机尝试挂载。
 
