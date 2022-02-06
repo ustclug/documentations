@@ -15,7 +15,7 @@
         <link rel="canonical" href="https://docs.ustclug.org/infrastructure/proxmox/pve/">
       
       <link rel="icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.1.8">
+      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.1.10">
     
     
       
@@ -23,7 +23,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.6e60f8b8.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.d6be258b.min.css">
       
         
         <link rel="stylesheet" href="../../../assets/stylesheets/palette.e6a45f82.min.css">
@@ -316,8 +316,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../workflow/vSphere/new-vm/" class="md-nav__link">
-        New VM in vSphere
+      <a href="../../../workflow/new-vm/" class="md-nav__link">
+        New VM in Proxmox VE
       </a>
     </li>
   
@@ -2150,7 +2150,7 @@
 <li>
 <p>PVE 的 web 端口为 8006，而 PBS 的端口为 8007，因此在一台主机上同时安装 PVE 和 PBS 互不冲突，访问时需要使用 HTTPS 并指定端口。</p>
 <div class="admonition info">
-<p>PVE 和 PBS 的端口都是固定的，无法更改</p>
+<p class="admonition-title">PVE 和 PBS 的端口都是固定的，无法更改</p>
 </div>
 </li>
 </ul>
@@ -2170,7 +2170,7 @@
 <p>所有 Proxmox 主机的主机名（hostname）都设为 <code>&lt;hostname&gt;.vm.ustclug.org</code>，对应的 IP 地址记录在 DNS 中。</p>
 <h2 id="common">公用配置<a class="headerlink" href="#common" title="Permanent link">&para;</a></h2>
 <h3 id="root">root 账户<a class="headerlink" href="#root" title="Permanent link">&para;</a></h3>
-<p>为了便于通过 IPMI 等方式维护，我们约定<strong>所有 Proxmox 主机的 root 账户密码保持为空</strong>。若有操作需要使用 root 密码（如创建和加入集群时），请通过 SSH 或 IPMI 登录，临时设置一个 root 密码，并在修改完 PVE / PBS 的配置后将密码删除（<code>passwd -d</code>）。PVE / PBS 没有依赖于 root 密码才能正常运行的组件，因此这样做对 PVE / PBS 来说是没问题的。</p>
+<p>为了便于通过 IPMI 等方式维护，我们约定<strong>所有 Proxmox 主机的 root 账户密码保持为空</strong>。若有操作需要使用 root 密码（如创建和加入集群时），请通过 SSH 或 IPMI 登录，临时设置一个 root 密码，并在修改完 PVE / PBS 的配置后将密码删除（<code>passwd -d</code>）。PVE / PBS 没有依赖于固定不变的 root 密码才能正常运行的组件，因此这样做对 PVE / PBS 来说是没问题的。</p>
 <h3 id="networking">网络配置<a class="headerlink" href="#networking" title="Permanent link">&para;</a></h3>
 <p>安全起见，PVE / PBS 主机使用 <a href="https://en.wikipedia.org/wiki/Private_network#Private_IPv4_addresses">RFC 1918 段</a>的校园网 IP，不连接公网。</p>
 <ul>
@@ -2416,10 +2416,10 @@ iface vmbr1 inet static
     <div class="md-dialog" data-md-component="dialog">
       <div class="md-dialog__inner md-typeset"></div>
     </div>
-    <script id="__config" type="application/json">{"base": "../../..", "features": ["content.code.annotate", "navigation.indexes", "navigation.sections", "navigation.top"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../../assets/javascripts/workers/search.22074ed6.min.js"}</script>
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["content.code.annotate", "navigation.indexes", "navigation.sections", "navigation.top"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../../assets/javascripts/workers/search.092fa1f6.min.js"}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.960e086b.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.e3b2bf44.min.js"></script>
       
     
   </body>
