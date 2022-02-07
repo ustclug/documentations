@@ -2007,7 +2007,7 @@
 <p>vCenter 地址：vcenter2.vm.ustclug.org</p>
 <p>按照提示创建虚拟机</p>
 <ul>
-<li>Step 7: Customize hardware</li>
+<li>Step 7: Customize hardware<ul>
 <li>Network:<ul>
 <li>ustclug: intranet</li>
 <li>ustclug-bridge: 没有 MAC 源地址检查</li>
@@ -2015,8 +2015,12 @@
 </ul>
 </li>
 <li>VM options<ul>
-<li>VMware Tools</li>
+<li>VMware Tools<ul>
 <li>打开 Sync time with Host</li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -2083,11 +2087,13 @@ wget -O /media/vdp/pve/images/&lt;path&gt;.qcow2 https://mirrors.ustc.edu.cn/&lt
 <ul>
 <li>增加 hostname.s.ustclug.org 的 DNS 解析。（文件 <code>db/ustclug/ustclug.intranet</code>）</li>
 <li>在 vCenter 中更改网络为 ustclug （如果不需要源 MAC 地址检查，选 ustclug-bridge）</li>
-<li>在虚拟机中重启网络接口，改为静态 IP，并更改网关 （东图虚拟机设置为 10.254.0.254，NIC 虚拟机设置为 10.254.0.245）</li>
+<li>在虚拟机中重启网络接口，改为静态 IP，并更改网关 （东图虚拟机设置为 10.254.0.254，NIC 虚拟机设置为 10.254.0.245）<ul>
 <li><code>ifdown -a</code></li>
 <li>edit <code>/etc/network/interfaces</code></li>
 <li><code>ifup -a</code></li>
-<li>更改虚拟机的 DNS 和 domain/search：</li>
+</ul>
+</li>
+<li>更改虚拟机的 DNS 和 domain/search：<ul>
 <li>DNS:<ul>
 <li>neat-dns (10.254.0.253)</li>
 <li>dns backup (202.38.93.94)</li>
@@ -2098,12 +2104,16 @@ wget -O /media/vdp/pve/images/&lt;path&gt;.qcow2 https://mirrors.ustc.edu.cn/&lt
 </ul>
 </li>
 </ul>
+</li>
+</ul>
 <h2 id="install-software">Install software<a class="headerlink" href="#install-software" title="Permanent link">&para;</a></h2>
 <ul>
 <li>根据需要换源，加入安全更新源等</li>
-<li>安装虚拟机工具</li>
+<li>安装虚拟机工具<ul>
 <li>对于 Proxmox VE 的虚拟机：安装 <code>qemu-guest-agent</code></li>
 <li><s>对于 VMware vSphere 的虚拟机：安装 <code>open-vm-tools</code></s></li>
+</ul>
+</li>
 <li>安装 <code>ssh</code></li>
 </ul>
 <h2 id="configure-ldap-and-ssh-ca">Configure LDAP and SSH CA<a class="headerlink" href="#configure-ldap-and-ssh-ca" title="Permanent link">&para;</a></h2>
