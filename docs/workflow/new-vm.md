@@ -9,13 +9,13 @@ vCenter 地址：vcenter2.vm.ustclug.org
 按照提示创建虚拟机
 
 - Step 7: Customize hardware
-  - Network:
-    - ustclug: intranet
-    - ustclug-bridge: 没有 MAC 源地址检查
-    - cernet: 教育网（先选这个，以便于通过网络安装系统）
-  - VM options
-    - VMware Tools
-      - 打开 Sync time with Host
+    - Network:
+        - ustclug: intranet
+        - ustclug-bridge: 没有 MAC 源地址检查
+        - cernet: 教育网（先选这个，以便于通过网络安装系统）
+    - VM options
+        - VMware Tools
+            - 打开 Sync time with Host
 
 ### Install OS
 
@@ -98,22 +98,22 @@ For better console experiences, install and configure `console-setup`, and add `
 - 增加 hostname.s.ustclug.org 的 DNS 解析。（文件 `db/ustclug/ustclug.intranet`）
 - 在 vCenter 中更改网络为 ustclug （如果不需要源 MAC 地址检查，选 ustclug-bridge）
 - 在虚拟机中重启网络接口，改为静态 IP，并更改网关 （东图虚拟机设置为 10.254.0.254，NIC 虚拟机设置为 10.254.0.245）
-  - `ifdown -a`
-  - edit `/etc/network/interfaces`
-  - `ifup -a`
+    - `ifdown -a`
+    - edit `/etc/network/interfaces`
+    - `ifup -a`
 - 更改虚拟机的 DNS 和 domain/search：
-  - DNS:
-    - neat-dns (10.254.0.253)
-    - dns backup (202.38.93.94)
-  - domain/search:
-    - s.ustclug.org
+    - DNS:
+        - neat-dns (10.254.0.253)
+        - dns backup (202.38.93.94)
+    - domain/search:
+        - s.ustclug.org
 
 ## Install software
 
 - 根据需要换源，加入安全更新源等
 - 安装虚拟机工具
-  - 对于 Proxmox VE 的虚拟机：安装 `qemu-guest-agent`
-  - <s>对于 VMware vSphere 的虚拟机：安装 `open-vm-tools`</s>
+    - 对于 Proxmox VE 的虚拟机：安装 `qemu-guest-agent`
+    - <s>对于 VMware vSphere 的虚拟机：安装 `open-vm-tools`</s>
 - 安装 `ssh`
 
 ## Configure LDAP and SSH CA
