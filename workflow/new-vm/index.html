@@ -2031,24 +2031,57 @@
 <li>磁盘设置：使用整个硬盘，只留一个主分区，不留 swap 等分区，方便扩容</li>
 </ul>
 <h2 id="create-vm-on-proxmox-ve">Create VM on Proxmox VE<a class="headerlink" href="#create-vm-on-proxmox-ve" title="Permanent link">&para;</a></h2>
+<p>我们目前不使用 PVE 运行 LXC 容器，因此本文档只介绍创建 KVM 虚拟机的步骤。推荐使用 web 界面操作，除非你需要批量创建虚拟机（此时通过 SSH 登录后可以使用 <code>qm</code> 命令批处理）。</p>
+<p>登录 web 界面，点击右上角的 Create VM，弹出创建虚拟机的对话框。</p>
+<dl>
+<dt><strong>General</strong></dt>
+<dd>
+<p>正确选择虚拟机所在的 Node（即 Host），并指定一个 VMID。目前 VMID 的分配方案是东图 300-399，NIC 200-299，在此基础上递增即可。给 VM 起个易于辨识的名称，不要与已有 VM 重复。Resource Pool 留空即可。</p>
+</dd>
+<dt><strong>OS</strong></dt>
+<dd>
+<p>除非你要使用 iso 镜像手动安装系统，否则请选择「Do not use any media」。正确选择 Guest OS 的类型和版本。</p>
+</dd>
+<dt><strong>System</strong></dt>
+<dd>
+<p>将 SCSI Controller 设为 VirtIO SCSI（注意<strong>不要选 VirtIO SCSI Single</strong>），勾上 Qemu Agent 选项，其他选项都选 Default 即可。</p>
+</dd>
+<dt><strong>Disks, CPU, Memory</strong></dt>
+<dd>
+<p>按需分配，磁盘容量建议控制在 10 GB 以内（仅系统盘，可另加数据盘），其中 Disk 勾选上 Discard，CPU Type 推荐选择 Host。</p>
+</dd>
+<dt><strong>Network</strong></dt>
+<dd>
+<p>按需选择，Model 选 VirtIO，然后取消勾选 Firewall。</p>
+</dd>
+</dl>
+<div class="admonition info">
+<p class="admonition-title">记得在虚拟机的 Options 里将 Start at boot 设为 Yes</p>
+</div>
 <p>在 Proxmox VE 上，通过 web 界面创建新虚拟机后，可以使用普通方式安装系统，也可以直接导入发行版提供的虚拟机镜像（需要通过 SSH 登录 Proxmox VE 或 NFS 服务器）。</p>
 <p>下面以 Debian 为例，创建一个新虚拟机，然后打开 <a href="https://mirrors.ustc.edu.cn/debian-cdimage/cloud/bullseye/">https://mirrors.ustc.edu.cn/debian-cdimage/cloud/bullseye/</a>，点击最新的目录（出于未知原因 latest 链接是坏的），复制 <code>debian-11-genericcloud-amd64-&lt;date&gt;-&lt;rev&gt;</code> 的链接（推荐使用 genericcloud 而不是 generic，其预装 <code>linux-image-cloud-amd64</code>，相比于“完整版”内核精简掉了大部分物理设备的驱动程序，适用于虚拟机环境），然后登录 Proxmox VE 或 vdp（NFS 服务器），使用以下命令直接下载镜像至虚拟机磁盘：</p>
 <div class="highlight"><pre><span></span><code><span class="c1"># Proxmox VE (ZFS / LVM), use RAW</span>
-wget -O /dev/zvol/rpool/data/vm-&lt;id&gt;-disk-0 https://&lt;...&gt;/&lt;...&gt;.raw
+wget -O /dev/zvol/rpool/data/vm-&lt;id&gt;-disk-0 https://mirrors.ustc.edu.cn/&lt;...&gt;.raw
+wget -O /dev/&lt;vg&gt;/&lt;lv&gt; https://mirrors.ustc.edu.cn/&lt;...&gt;.raw
 
-<span class="c1"># vdp, use QCOW2</span>
-wget -O /media/vdp/pve/images/&lt;path&gt;.qcow2 https://&lt;...&gt;/&lt;...&gt;.qcow2
+<span class="c1"># vdp over NFS, use QCOW2</span>
+wget -O /media/vdp/pve/images/&lt;path&gt;.qcow2 https://mirrors.ustc.edu.cn/&lt;...&gt;.qcow2
 </code></pre></div>
 <p>然后在 web 界面指定虚拟机的磁盘（如有需要）。</p>
 <h3 id="reset-password">Reset password<a class="headerlink" href="#reset-password" title="Permanent link">&para;</a></h3>
 <p>由于 Debian 提供的 cloud image 默认禁用了 root 用户，需要手动挂载磁盘，编辑磁盘中的 <code>/etc/shadow</code> 文件，将第一行的 <code>root:*:...</code> 改为 <code>root::...</code>（即删掉星号）。<strong>注意不要误改主机的 shadow 文件</strong>。</p>
-<p>此步骤也可以替换为 chroot 进去后使用 <code>passwd</code> 修改或清空密码。</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>此步骤也可以替换为 chroot 进去后使用 <code>passwd</code> 修改或清空密码。如果你不够熟悉 shadow 文件的格式，这样做更安全。</p>
+</div>
+<p>对于 ZFS 和 LVM 存储的磁盘，可以直接挂载 <code>/dev/zvol/&lt;...&gt;</code> 或 <code>/dev/&lt;vg&gt;/&lt;lv&gt;</code>。对于 Qcow2 文件的磁盘，可以参考<a href="https://gist.github.com/shamil/62935d9b456a6f9877b5">这个 Gist</a> 使用 <code>qemu-nbd</code> 工具来挂载。其中 <code>nbd</code> 是 Linux 原生的内核模块，可以放心 modprobe。</p>
+<p>你也可以在这一步同时修改别的配置文件，例如把 <code>/etc/apt/sources.list</code> 换掉等。修改完成后不要忘记 umount。</p>
 <h3 id="extra-configurations-for-cloud-images">Extra configurations for cloud images<a class="headerlink" href="#extra-configurations-for-cloud-images" title="Permanent link">&para;</a></h3>
 <p>The first two or three boots may hang or end up in kernel panic - <strong>this is completely normal</strong>. The cloud image will grow the root partition and filesystem to the virtual disk size. After it's all set, purge everything related to <code>cloud-init</code>.</p>
 <p>For better console experiences, install and configure <code>console-setup</code>, and add <code>vga=792</code> to <code>GRUB_CMDLINE_LINUX</code> in <code>/etc/default/grub</code>. Then run <code>update-grub</code> and reboot.</p>
 <h2 id="configure-network">Configure network<a class="headerlink" href="#configure-network" title="Permanent link">&para;</a></h2>
 <ul>
-<li>增加 hostname.s.ustclug.org 的 DNS 解析。（ustclug.intranet）</li>
+<li>增加 hostname.s.ustclug.org 的 DNS 解析。（文件 <code>db/ustclug/ustclug.intranet</code>）</li>
 <li>在 vCenter 中更改网络为 ustclug （如果不需要源 MAC 地址检查，选 ustclug-bridge）</li>
 <li>在虚拟机中重启网络接口，改为静态 IP，并更改网关 （东图虚拟机设置为 10.254.0.254，NIC 虚拟机设置为 10.254.0.245）</li>
 <li><code>ifdown -a</code></li>
@@ -2070,8 +2103,8 @@ wget -O /media/vdp/pve/images/&lt;path&gt;.qcow2 https://&lt;...&gt;/&lt;...&gt;
 <li>根据需要换源，加入安全更新源等</li>
 <li>安装虚拟机工具</li>
 <li>对于 Proxmox VE 的虚拟机：安装 <code>qemu-guest-agent</code></li>
-<li>对于 VMware vSphere 的虚拟机：安装 <code>open-vm-tools</code></li>
-<li>安装 openssh</li>
+<li><s>对于 VMware vSphere 的虚拟机：安装 <code>open-vm-tools</code></s></li>
+<li>安装 <code>ssh</code></li>
 </ul>
 <h2 id="configure-ldap-and-ssh-ca">Configure LDAP and SSH CA<a class="headerlink" href="#configure-ldap-and-ssh-ca" title="Permanent link">&para;</a></h2>
 <p>见 <a href="../../infrastructure/ldap.md">LDAP 服务使用及配置说明</a> 和 <a href="../../infrastructure/sshca.md#issue-a-server-certificate">为服务器设置 SSH CA</a></p>
