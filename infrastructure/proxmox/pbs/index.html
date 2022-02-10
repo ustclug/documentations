@@ -1918,9 +1918,9 @@
 <p>我们的 esxi-5 是使用 PVE 的安装盘先装成 PVE，再在上面额外加装 PBS 的。由于 PVE 和 PBS 共享了大量组件，因此在 PVE 上加装 PBS 就只剩下很简单的一些步骤了：</p>
 <div class="highlight"><pre><span></span><code><span class="nb">echo</span> <span class="s2">&quot;deb http://mirrors.ustc.edu.cn/proxmox/debian/pbs bullseye pbs-no-subscription&quot;</span> &gt; /etc/apt/sources.list.d/pbs.list
 apt update
-apt install proxmox-backup-server
+apt install proxmox-backup
 </code></pre></div>
-<p>该过程仅安装了总量为 150+ MB 的 7 个包，就有 PBS 可用了。</p>
+<p>该过程仅安装了总量为 150+ MB 的 8 个包，就有 PBS 可用了。</p>
 <h2 id="pbs-new-user">创建新用户<a class="headerlink" href="#pbs-new-user" title="Permanent link">&para;</a></h2>
 <p>PBS 自己的账号体系 (Realm pbs) 与 PVE (Realm pve) 互相不通，如果需要创建新的 PBS 用户，可以通过 SSH 登录，然后参考以下步骤：</p>
 <ol>
@@ -1933,7 +1933,8 @@ apt install proxmox-backup-server
 <p>参考：<a href="https://pbs.proxmox.com/docs/user-management.html">https://pbs.proxmox.com/docs/user-management.html</a></p>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
-<p>当然，你也可以 SSH 登录后修改 root 密码，再用 root@pam 的账号登录 web 界面进行操作。</p>
+<p>当然，你也可以 SSH 登录后修改 root 密码，再用 root@pam 的账号登录 web 界面进行操作。该方法同时适用于 PVE 和 PBS。操作完成后请恢复 root 密码（<code>passwd -d root</code>）。</p>
+<p><strong>如果你需要经常登录 Web 界面操作，最好创建一个 Realm pve/pbs 而不是依赖于使用 root 密码。</strong></p>
 </div>
 <p>特别地，由于 PBS 和 PVE 同时安装在 esxi-5 上，因此它们可以共享 esxi-5 上的 Linux 用户（即 Linux PAM standard authentication）。</p>
 <h2 id="pbs-add-datastore">设置 Datastore<a class="headerlink" href="#pbs-add-datastore" title="Permanent link">&para;</a></h2>

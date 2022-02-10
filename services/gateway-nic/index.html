@@ -2161,14 +2161,13 @@ gen_route <span class="m">12</span>-Cernet <span class="m">2001</span>:da8:d800:
 
 <span class="k">[Install]</span><span class="w"></span>
 <span class="na">WantedBy</span><span class="o">=</span><span class="s">network.target systemd-networkd.service</span><span class="w"></span>
-<span class="na">Wants</span><span class="o">=</span><span class="s">systemd-networkd.service</span><span class="w"></span>
 </code></pre></div>
 <p>Updating routes from upstream is easy:</p>
 <div class="highlight"><span class="filename">/usr/local/network_config/update.sh</span><pre><span></span><code><span class="ch">#!/bin/sh</span>
 
 <span class="nb">cd</span> <span class="s2">&quot;</span><span class="k">$(</span>dirname <span class="s2">&quot;</span><span class="nv">$0</span><span class="s2">&quot;</span><span class="k">)</span><span class="s2">&quot;</span>
 
-<span class="o">(</span> <span class="nb">cd</span> china-operator-ip<span class="p">;</span> git pull <span class="o">)</span>
+git -C china-operator-ip pull
 systemctl restart route-all.service
 </code></pre></div>
 <p>The resulting routing policies look like this:</p>
