@@ -205,7 +205,6 @@ RemainAfterExit=true
 
 [Install]
 WantedBy=network.target systemd-networkd.service
-Wants=systemd-networkd.service
 ```
 
 Updating routes from upstream is easy:
@@ -215,7 +214,7 @@ Updating routes from upstream is easy:
 
 cd "$(dirname "$0")"
 
-( cd china-operator-ip; git pull )
+git -C china-operator-ip pull
 systemctl restart route-all.service
 ```
 

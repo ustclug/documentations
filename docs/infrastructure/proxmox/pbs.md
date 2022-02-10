@@ -15,10 +15,10 @@ PBS 可以使用安装光盘 iso 安装或直接加装在现有的对应版本�
 ```shell
 echo "deb http://mirrors.ustc.edu.cn/proxmox/debian/pbs bullseye pbs-no-subscription" > /etc/apt/sources.list.d/pbs.list
 apt update
-apt install proxmox-backup-server
+apt install proxmox-backup
 ```
 
-该过程仅安装了总量为 150+ MB 的 7 个包，就有 PBS 可用了。
+该过程仅安装了总量为 150+ MB 的 8 个包，就有 PBS 可用了。
 
   [pbs-installation]: https://pbs.proxmox.com/docs/installation.html
 
@@ -36,7 +36,9 @@ PBS 自己的账号体系 (Realm pbs) 与 PVE (Realm pve) 互相不通，如果�
 
 !!! tip
 
-    当然，你也可以 SSH 登录后修改 root 密码，再用 root@pam 的账号登录 web 界面进行操作。
+    当然，你也可以 SSH 登录后修改 root 密码，再用 root@pam 的账号登录 web 界面进行操作。该方法同时适用于 PVE 和 PBS。操作完成后请恢复 root 密码（`passwd -d root`）。
+
+    **如果你需要经常登录 Web 界面操作，最好创建一个 Realm pve/pbs 而不是依赖于使用 root 密码。**
 
 特别地，由于 PBS 和 PVE 同时安装在 esxi-5 上，因此它们可以共享 esxi-5 上的 Linux 用户（即 Linux PAM standard authentication）。
 
