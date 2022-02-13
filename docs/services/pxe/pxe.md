@@ -50,13 +50,17 @@ DMAR: [DMA Read] Request device [03:00.0] PASID ffffffff fault addr cb2f0000 [fa
 DMAR: DRHD: handling fault status reg 102
 ```
 
-由于此时刚升级至 Debian Bullseye，所以系统仍然保留了 Debian Buster 的 4.19 版内核。重启进该内核可正常启动并运行服务，但只要进 5.10 的内核就会出现以上错误。经测试 Proxmox VE 提供的 pve-kernel-5.15 也是同样问题。
+由于此时刚升级至 Debian Bullseye，所以系统仍然保留了 Debian Buster 的 4.19 版内核。重启进该内核可正常启动并运行服务，但只要进 5.10 的内核就会出现以上错误。测试 Proxmox VE 提供的 pve-kernel-5.15 也是同样问题。
 
 搜索发现主机使用的 RAID 卡 PERC H310 不支持直通（IOMMU 虚拟化），配置 GRUB 加入 `intel_iommu=off` 后可以正常进入 5.10 的内核，作为解决方案。
 
-按说 IOMMU（VT-d）不应该默认启用，因此猜测 5.10+ 的内核会主动尝试开启 IOMMU，导致 RAID 卡出错。
+??? info "调查结果"
+
+    按说 IOMMU（VT-d）不应该默认启用，因此猜测 5.10+ 的内核会主动尝试开启 IOMMU，导致 RAID 卡出错。
+
+    比较 `/boot/config-4.19.0-18-amd64` 和 `/boot/config-5.10.0-11-amd64` 后发现 5.10 版的 config 多了一行 `CONFIG_INTEL_IOMMU_DEFAULT_ON_INTGPU_OFF=y`，搜索发现 [Debian bug #932086](https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=932086)，即 Debian 默认对除了 Intel GPU 以外的设备启用 IOMMU（`linux 5.2.9-2`）。
 
 参考链接：
 
 - [DELLR730 server halts during boot-up when "intel_iommu=on" parameter is enabled in grub for SRIOV functionality. - Dell Community](https://www.dell.com/community/PowerEdge-OS-Forum/DELLR730-server-halts-during-boot-up-when-quot-intel-iommu-on/td-p/4632026)
-- [:fontawesome-solid-file-pdf: Dell PowerEdge RAID Controller (PERC) H310, H710, H710P, and H810 - User's Guide](https://hg.flagshiptech.com/ebay/DellManuals/rc_h310_h710_h710p_h810_ug_en-us.pdf)（第 85 页）
+- [:fontawesome-regular-file-pdf: Dell PowerEdge RAID Controller (PERC) H310, H710, H710P, and H810 - User's Guide](https://hg.flagshiptech.com/ebay/DellManuals/rc_h310_h710_h710p_h810_ug_en-us.pdf)（第 85 页）
