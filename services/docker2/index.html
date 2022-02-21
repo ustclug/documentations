@@ -15,7 +15,7 @@
         <link rel="canonical" href="https://docs.ustclug.org/services/docker2/">
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.1.11">
+      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.2.1">
     
     
       
@@ -23,7 +23,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.50e68009.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.e8d9bf0c.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.e6a45f82.min.css">
@@ -1985,6 +1985,7 @@
 </a>
 
 
+
 <h1 id="docker-services">Docker services<a class="headerlink" href="#docker-services" title="Permanent link">&para;</a></h1>
 <p>Server: docker2.s.ustclug.org</p>
 <p>Provides Docker container environment for other services. All non-system services should be run as Docker containers on this host.</p>
@@ -1994,9 +1995,28 @@
 <p>We use udev rules to assign consistent names to network interfaces, identified by their MAC addresses.</p>
 <div class="highlight"><span class="filename">/etc/udev/rules.d/70-persistent-net.rules</span><pre><span></span><code><span class="na">SUBSYSTEM</span><span class="o">=</span><span class="s">=&quot;net&quot;, ACTION==&quot;add&quot;, DRIVERS==&quot;?*&quot;, ATTR{address}==&quot;00:50:56:9f:00:22&quot;, NAME=&quot;Telecom&quot;</span><span class="w"></span>
 <span class="na">SUBSYSTEM</span><span class="o">=</span><span class="s">=&quot;net&quot;, ACTION==&quot;add&quot;, DRIVERS==&quot;?*&quot;, ATTR{address}==&quot;00:50:56:9f:00:5b&quot;, NAME=&quot;Mobile&quot;</span><span class="w"></span>
-<span class="na">SUBSYSTEM</span><span class="o">=</span><span class="s">=&quot;net&quot;, ACTION==&quot;add&quot;, DRIVERS==&quot;?*&quot;, ATTR{address}==&quot;00:50:56:9f:00:5d&quot;, NAME=&quot;Policy&quot;</span><span class="w"></span>
+<span class="na">SUBSYSTEM</span><span class="o">=</span><span class="s">=&quot;net&quot;, ACTION==&quot;add&quot;, DRIVERS==&quot;?*&quot;, ATTR{address}==&quot;00:50:56:9f:00:5d&quot;, NAME=&quot;ustclug&quot;</span><span class="w"></span>
 </code></pre></div>
 <p>We then refer to these interfaces using their new names in <code>/etc/network/interfaces</code> to ensure consistent network configuration.</p>
+<div class="admonition note">
+<p class="admonition-title">2022 年 2 月 21 日更新</p>
+<p>今日发现 docker2 无法连接容器网络（10.254.1.0/21），调试后发现为 Docker macvlan 网络特性（<a href="https://stackoverflow.com/questions/49600665/docker-macvlan-network-inside-container-is-not-reaching-to-its-own-host">https://stackoverflow.com/questions/49600665/docker-macvlan-network-inside-container-is-not-reaching-to-its-own-host</a>）。为了修复连接问题，进行了以下修改：</p>
+<ol>
+<li>将 <code>/etc/udev/rules.d/70-persistent-net.rules</code> 中 <code>Policy</code> 更名为 <code>ustclug</code>；</li>
+<li>
+<p>在 <code>/etc/network/interfaces</code> 中设置 <code>Policy</code> 和 <code>ustclug</code> 两个 interface 的相关配置如下：</p>
+<div class="highlight"><pre><span></span><code>auto Policy
+iface Policy inet static
+    address 10.254.0.16/21
+    pre-up ip link add Policy link ustclug type macvlan mode bridge
+    post-down ip link del Policy
+
+auto ustclug
+iface ustclug inet manual
+</code></pre></div>
+</li>
+</ol>
+</div>
 <h3 id="docker-daemon-service">Docker daemon service<a class="headerlink" href="#docker-daemon-service" title="Permanent link">&para;</a></h3>
 <p>docker2 上面的 Docker 使用 macvlan 来将虚拟机接入 lugi 内网，因此将 macvlan 的主端口 Policy 配置为 <code>docker.service</code> 的强依赖。</p>
 <div class="highlight"><span class="filename">systemctl edit docker.service</span><pre><span></span><code><span class="k">[Unit]</span><span class="w"></span>
@@ -2156,10 +2176,10 @@ sudo -u www-data -- wp core update --version<span class="o">=</span><span class=
     <div class="md-dialog" data-md-component="dialog">
       <div class="md-dialog__inner md-typeset"></div>
     </div>
-    <script id="__config" type="application/json">{"base": "../..", "features": ["content.code.annotate", "navigation.indexes", "navigation.sections", "navigation.top"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../assets/javascripts/workers/search.092fa1f6.min.js"}</script>
+    <script id="__config" type="application/json">{"base": "../..", "features": ["content.code.annotate", "navigation.indexes", "navigation.sections", "navigation.top"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../assets/javascripts/workers/search.bd0b6b67.min.js"}</script>
     
     
-      <script src="../../assets/javascripts/bundle.5a9542cf.min.js"></script>
+      <script src="../../assets/javascripts/bundle.8aa65030.min.js"></script>
       
     
   </body>
