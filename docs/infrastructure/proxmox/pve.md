@@ -172,8 +172,9 @@ esxi-5 也位于网络中心，配置为 2× Xeon E5620（Westmere-EP 4C8T, 2.40
 ```sh title="pve-5:/etc/network/interfaces"
 auto gretap0esxi-5
 iface gretap0esxi-5 inet manual
-    pre-up ip link add name $IFACE type gretap local 10.38.95.115 remote 10.38.95.111
+    pre-up ip link add name $IFACE mtu $IF_MTU type gretap local 10.38.95.115 remote 10.38.95.111
     post-down ip link delete $IFACE
+    mtu 1500
 
 auto vmbr1
 iface vmbr1 inet static
@@ -184,6 +185,17 @@ iface vmbr1 inet static
 ```
 
 esxi-5 这端的配置则将对应的 iface 名称和 IP 地址等全部对换即可。
+
+!!! note "MTU 问题"
+
+    2022 年 2 月处理内网 tinc ARP 问题时发现 esxi-5 和 pve-5 的 vmbr1 MTU 都被设置成了 1462（GRETAP 的默认 MTU）。我们不确定 MTU 问题与 tinc 是否相关，但保险起见我们还是将该 GRETAP 界面的 MTU 设置成了 1500（GRE 具有分片功能）。
+
+    ```diff
+    -pre-up ip link add name $IFACE type gretap local 10.38.95.115 remote 10.38.95.111
+    +pre-up ip link add name $IFACE mtu $IF_MTU type gretap local 10.38.95.115 remote 10.38.95.111
+     post-down ip link delete $IFACE
+    +mtu 1500
+    ```
 
 ### iSCSI
 
