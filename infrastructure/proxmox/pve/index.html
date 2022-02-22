@@ -2271,8 +2271,9 @@ systemctl reload pveproxy.service
 <p>参考配置：</p>
 <div class="highlight"><span class="filename">pve-5:/etc/network/interfaces</span><pre><span></span><code>auto gretap0esxi-5
 iface gretap0esxi-5 inet manual
-    pre-up ip link add name <span class="nv">$IFACE</span> <span class="nb">type</span> gretap <span class="nb">local</span> <span class="m">10</span>.38.95.115 remote <span class="m">10</span>.38.95.111
+    pre-up ip link add name <span class="nv">$IFACE</span> mtu <span class="nv">$IF_MTU</span> <span class="nb">type</span> gretap <span class="nb">local</span> <span class="m">10</span>.38.95.115 remote <span class="m">10</span>.38.95.111
     post-down ip link delete <span class="nv">$IFACE</span>
+    mtu <span class="m">1500</span>
 
 auto vmbr1
 iface vmbr1 inet static
@@ -2282,6 +2283,15 @@ iface vmbr1 inet static
     bridge-fd <span class="m">0</span>
 </code></pre></div>
 <p>esxi-5 这端的配置则将对应的 iface 名称和 IP 地址等全部对换即可。</p>
+<div class="admonition note">
+<p class="admonition-title">MTU 问题</p>
+<p>2022 年 2 月处理内网 tinc ARP 问题时发现 esxi-5 和 pve-5 的 vmbr1 MTU 都被设置成了 1462（GRETAP 的默认 MTU）。我们不确定 MTU 问题与 tinc 是否相关，但保险起见我们还是将该 GRETAP 界面的 MTU 设置成了 1500（GRE 具有分片功能）。</p>
+<div class="highlight"><pre><span></span><code><span class="gd">-pre-up ip link add name $IFACE type gretap local 10.38.95.115 remote 10.38.95.111</span><span class="w"></span>
+<span class="gi">+pre-up ip link add name $IFACE mtu $IF_MTU type gretap local 10.38.95.115 remote 10.38.95.111</span><span class="w"></span>
+<span class="w"> </span>post-down ip link delete $IFACE<span class="w"></span>
+<span class="gi">+mtu 1500</span><span class="w"></span>
+</code></pre></div>
+</div>
 <h3 id="iscsi">iSCSI<a class="headerlink" href="#iscsi" title="Permanent link">&para;</a></h3>
 <p>由于我们没有研究清楚 open-iscsi 的开机自动挂载机制，因此我们选择直接 override 对应的 service 来完成这个任务：</p>
 <div class="highlight"><span class="filename">$ systemctl edit open-iscsi.service</span><pre><span></span><code><span class="k">[Service]</span><span class="w"></span>
