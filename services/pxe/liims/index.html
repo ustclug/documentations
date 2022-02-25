@@ -1677,7 +1677,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#monitor" class="md-nav__link">
     查询机监控
   </a>
   
@@ -1924,7 +1924,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#monitor" class="md-nav__link">
     查询机监控
   </a>
   
@@ -1984,7 +1984,7 @@ mount -o loop liims.img /mnt
      -append <span class="s2">&quot;root=/dev/sda rootflags=rw&quot;</span>
 </code></pre></div>
 <p>注：其中 netdev 中的 ip 段可以自由选取，<code>device</code> 中的设备名通过 <code>qemu -device \?</code> 查看后选择任一网络设备即可</p>
-<h2 id="_4">查询机监控<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
+<h2 id="monitor">查询机监控<a class="headerlink" href="#monitor" title="Permanent link">&para;</a></h2>
 <p><a href="http://pxe.ustc.edu.cn:3000/">http://pxe.ustc.edu.cn:3000/</a></p>
 <p>提供服务的是一个容器。</p>
 <p>添加新机器：修改 <a href="https://github.com/ustclug/liimstrap/blob/master/monitor/clients.json">https://github.com/ustclug/liimstrap/blob/master/monitor/clients.json</a> 后，在 pxe 上 clone 并在当前目录 build。使用 docker-run-script 中对应脚本执行容器即可。</p>
