@@ -1957,20 +1957,20 @@
 </ul>
 <p>It is strongly advised to clone liimstrap and read through it when reading this document.</p>
 <h2 id="_1">启动配置<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
-<p>配置文件在 <code>/home/pxe/tftp/grub/grub.cfg.d</code>，若要允许新机器启动 liims 镜像，创建一个符号链接到对应的配置文件（目前的镜像是 <code>liims160909</code>）：</p>
-<div class="highlight"><pre><span></span><code>ln -s liims160909 <span class="m">01</span>:23:45:67:89:ab
+<p>配置文件在 <code>/home/pxe/tftp/grub/grub.cfg.d</code>，若要允许新机器启动 liims 镜像，创建一个符号链接到对应的配置文件（目前的镜像是 <code>liims220222</code>）：</p>
+<div class="highlight"><pre><span></span><code>ln -s liims220222 <span class="m">02</span>:23:45:67:89:ab
 </code></pre></div>
 <h2 id="_2">启动镜像<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
 <p>位于 <code>/home/pxe/nfsroot/&lt;category&gt;/&lt;name&gt;</code>，其中 <code>&lt;name&gt;</code> 就是镜像名称（例如 <code>liims160909</code>）。目前有两种部署方式：一种是 NFS as rootfs，文件夹中就是整个 rootfs，直接修改这里的文件，机器重启后就会载入。（注意：覆盖文件可能导致已有的机器运行错误）</p>
-<p>另一种是打包压缩为 squashfs，此时文件夹下三个文件分别为 vmlinuz (kernel), initrd.img 和 root.sfs (squashfs 镜像)。如果需要修改，可以使用 <code>unsquashfs</code> 解压缩，修改完成后参考仓库中 deploy 文件再压缩为 squashfs。</p>
-<p>IP 白名单采用 iptables 实现，修改 rootfs 下的 <code>etc/iptables/*.rules</code> 可修改策略。</p>
+<p>另一种是打包压缩为 squashfs，此时文件夹下三个文件分别为 vmlinuz（kernel）, initrd.img 和 root.sfs（squashfs 镜像）。如果需要修改，可以使用 <code>unsquashfs</code> 解压缩，修改完成后参考仓库中 deploy 文件再压缩为 squashfs。</p>
+<p>IP 白名单采用 iptables 实现，修改 rootfs 下的 <code>etc/iptables/rules.v4</code> 和 <code>rules.v6</code> 可修改策略。注意：防火墙策略仅在机器启动时会载入一次。</p>
 <h2 id="_3">镜像构建<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
 <div class="admonition note">
 <p class="admonition-title">备注</p>
-<p>此节及以下的内容仅适用于 2022 之前的老版本，新版本有关构建、调试等内容请直接阅读 liimstrap 仓库 README。</p>
+<p>此节的内容仅适用于 2022 之前的老版本，新版本有关构建、调试等内容请直接阅读 liimstrap 仓库 README。</p>
 </div>
-<p>使用 liimstrap 在 ArchLinux 下进行构建，liimstrap使用方法参考仓库中的说明。</p>
-<p>构建后需要推送到服务器上的 /nfsroot/liims 下，并设置 /usr 的所有者为 liims。机器的默认 pxe 启动配置在 /home/pxe/tftp/pxelinux.cfg/ 下</p>
+<p>使用 liimstrap 在 ArchLinux 下进行构建，liimstrap 使用方法参考仓库中的说明。</p>
+<p>构建后需要推送到服务器上的 <code>/nfsroot/liims</code> 下，并设置 /usr 的所有者为 liims。机器的默认 pxe 启动配置在 <code>/home/pxe/tftp/pxelinux.cfg/</code> 下</p>
 <h3 id="qemu">示例 qemu 调试方法<a class="headerlink" href="#qemu" title="Permanent link">&para;</a></h3>
 <p>创建并挂载临时镜像:</p>
 <div class="highlight"><pre><span></span><code>dd <span class="k">if</span><span class="o">=</span>/dev/zero <span class="nv">of</span><span class="o">=</span>liims.img <span class="nv">bs</span><span class="o">=</span>4k <span class="nv">count</span><span class="o">=</span><span class="m">1200000</span>
@@ -1988,10 +1988,12 @@ mount -o loop liims.img /mnt
 <p>注：其中 netdev 中的 ip 段可以自由选取，<code>device</code> 中的设备名通过 <code>qemu -device \?</code> 查看后选择任一网络设备即可</p>
 <h2 id="monitor">查询机监控<a class="headerlink" href="#monitor" title="Permanent link">&para;</a></h2>
 <p><a href="http://pxe.ustc.edu.cn:3000/">http://pxe.ustc.edu.cn:3000/</a></p>
-<p>2022 年前，提供服务的是一个容器。在 iBug 用 Go 重写之后，目前直接跑在 host 上。</p>
-<p>添加新机器：</p>
+<p>2022 年前，提供服务的是一个 Docker 容器。在 iBug 用 Go 重写之后，目前直接跑在 host 上。</p>
+<div class="admonition tip">
+<p class="admonition-title">添加新机器</p>
 <p><del>修改 <a href="https://github.com/ustclug/liimstrap/blob/master/monitor/clients.json">https://github.com/ustclug/liimstrap/blob/master/monitor/clients.json</a> 后，在 pxe 上 clone 并在当前目录 build。使用 docker-run-script 中对应脚本执行容器即可。</del></p>
-<p>修改 clients.json 之后使用 systemctl reload 即可。</p>
+<p>修改 clients.json 之后 <code>systemctl reload liims-monitor.service</code> 即可。</p>
+</div>
 
               
             </article>
