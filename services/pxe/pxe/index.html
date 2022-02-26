@@ -15,7 +15,7 @@
         <link rel="canonical" href="https://docs.ustclug.org/services/pxe/pxe/">
       
       <link rel="icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.2.1">
+      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.2.2">
     
     
       
@@ -35,7 +35,7 @@
       
         
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
         <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
       
     
@@ -1947,7 +1947,8 @@
 <p class="admonition-title">推荐使用的虚拟机方案</p>
 <p>PXE 能够成功运行与否和虚拟机环境（特别是虚拟网卡型号）高度相关。需要找到一个稳定的配置方案（比如用 qemu？）</p>
 </div>
-<p>其中主要使用的是新 PXE 方案（pxelinux.0，simple-pxe）。老 PXE 方案（lpxelinux.0）目前仅用于图书馆查询机。</p>
+<p>其中主要使用的是新 PXE 方案（pxelinux.0，simple-pxe）。</p>
+<p><del>老 PXE 方案（lpxelinux.0）目前仅用于图书馆查询机。</del></p>
 <h2 id="_2">架构<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
 <p>新 PXE 方案的 HTTP 服务器为 Apache（Nginx 可能是以前弃用的配置）。URL 中的 boot2 对应 /nfsroot/pxe</p>
 <p>如果出现问题需要调试，建议抓包（可以使用 Wireshark）看是否正常。</p>
@@ -2069,7 +2070,7 @@ DMAR: DRHD: handling fault status reg 102
     <script id="__config" type="application/json">{"base": "../../..", "features": ["content.code.annotate", "navigation.indexes", "navigation.sections", "navigation.top"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../../assets/javascripts/workers/search.bd0b6b67.min.js"}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.8aa65030.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.9f3ca3d1.min.js"></script>
       
     
   </body>
