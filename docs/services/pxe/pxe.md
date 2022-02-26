@@ -30,7 +30,9 @@ PXE 在校园网中直接可用，因为学校的 DHCP 服务器经过了配置�
 
     PXE 能够成功运行与否和虚拟机环境（特别是虚拟网卡型号）高度相关。需要找到一个稳定的配置方案（比如用 qemu？）
 
-其中主要使用的是新 PXE 方案（pxelinux.0，simple-pxe）。老 PXE 方案（lpxelinux.0）目前仅用于图书馆查询机。
+其中主要使用的是新 PXE 方案（pxelinux.0，simple-pxe）。
+
+~~老 PXE 方案（lpxelinux.0）目前仅用于图书馆查询机。~~
 
 ## 架构
 

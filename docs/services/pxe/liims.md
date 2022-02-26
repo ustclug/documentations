@@ -6,7 +6,9 @@ Server: pxe.s.ustclug.org
 
 Git Repository:
 
-- [liimstrap](https://github.com/ustclug/liimstrap) （注意仓库内容的更改时间，可能严重过时了）
+- [liimstrap](https://github.com/ustclug/liimstrap)
+
+It is strongly advised to clone liimstrap and read through it when reading this document.
 
 ## 启动配置
 
@@ -18,15 +20,17 @@ ln -s liims160909 01:23:45:67:89:ab
 
 ## 启动镜像
 
-位于 `/home/pxe/nfsroot/<category>/<name>`，其中 `<name>` 就是镜像名称（例如 `liims160909`）。这是整个 rootfs，直接修改这里的文件，机器重启后就会载入。
+位于 `/home/pxe/nfsroot/<category>/<name>`，其中 `<name>` 就是镜像名称（例如 `liims160909`）。目前有两种部署方式：一种是 NFS as rootfs，文件夹中就是整个 rootfs，直接修改这里的文件，机器重启后就会载入。（注意：覆盖文件可能导致已有的机器运行错误）
+
+另一种是打包压缩为 squashfs，此时文件夹下三个文件分别为 vmlinuz (kernel), initrd.img 和 root.sfs (squashfs 镜像)。如果需要修改，可以使用 `unsquashfs` 解压缩，修改完成后参考仓库中 deploy 文件再压缩为 squashfs。
 
 IP 白名单采用 iptables 实现，修改 rootfs 下的 `etc/iptables/*.rules` 可修改策略。
 
 ## 镜像构建
 
-!!! note "iBug 备注"
+!!! note "备注"
 
-    此节及以下的内容可能严重过时，pxe.s 上的很多配置都被手动更新过了。
+    此节及以下的内容仅适用于 2022 之前的老版本，新版本有关构建、调试等内容请直接阅读 liimstrap 仓库 README。
 
 使用 liimstrap 在 ArchLinux 下进行构建，liimstrap使用方法参考仓库中的说明。
 
@@ -59,6 +63,10 @@ qemu -kernel /mnt/boot/vmlinuz-lts\
 
 <http://pxe.ustc.edu.cn:3000/>
 
-提供服务的是一个容器。
+2022 年前，提供服务的是一个容器。在 iBug 用 Go 重写之后，目前直接跑在 host 上。
 
-添加新机器：修改 <https://github.com/ustclug/liimstrap/blob/master/monitor/clients.json> 后，在 pxe 上 clone 并在当前目录 build。使用 docker-run-script 中对应脚本执行容器即可。
+添加新机器：
+
+~~修改 <https://github.com/ustclug/liimstrap/blob/master/monitor/clients.json> 后，在 pxe 上 clone 并在当前目录 build。使用 docker-run-script 中对应脚本执行容器即可。~~
+
+修改 clients.json 之后使用 systemctl reload 即可。
