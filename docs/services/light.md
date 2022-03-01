@@ -1,41 +1,41 @@
 # Light Accelerator
 
-service: [light.ustclug.org](https://light.ustclug.org)
+Service: [light.ustclug.org](https://light.ustclug.org)
 
-Git Repositry: 
+Git Repository: 
 
 * [Server Daemon](https://github.com/ustclug/light-server)
 * [Web UI](https://github.com/ustclug/lug-vpn-web/tree/light)
 * [Accelerate list](https://github.com/ustclug/light-list)
 * [Documentation](https://git.lug.ustc.edu.cn/lug-light/light-doc)
 
-DockerHub: 
+Docker Hub:
 
 * [ustclug/light-server](https://hub.docker.com/r/ustclug/light-server/)
 * [ustclug/lug-vpn-web:light](https://hub.docker.com/r/ustclug/lug-vpn-web/)
 
-mail list: [轻量级网络加速服务](https://groups.google.com/d/topic/ustc_lug/EZAL7OdJa_E/discussion)
+Mailing list: [轻量级网络加速服务](https://groups.google.com/d/topic/ustc_lug/EZAL7OdJa_E/discussion)
 
-server:
+Servers:
 
 * swarm.s.ustclug.org (docker container)
-  * light-mysql
-  * light-freeradius
-  * light-server
-  * light-web
-* gateway-el.s.ustclug.org (port mapping)
-  * 29979 -> light-server.d.ustclug.org:29979
-  * 29980 -> light-server.d.ustclug.org:29980
-* revproxy-el.s.ustclug.org (reverse proxy)
-  * light.ustclug.org -> light-web.d.ustclug.org
-* docker2.s.ustclug.org
-  * LUG FTP:  [http://ftp.ustclug.org/light/](http://ftp.ustclug.org/light/)
+    * light-mysql
+    * light-freeradius
+    * light-server
+    * light-socks5
+    * light-web
+* gateway-el.s.ustclug.org (port mapping + reverse proxy)
+    * 29979 → light-server.d.ustclug.org:29979
+    * 29980 → light-server.d.ustclug.org:29980
+    * light.ustclug.org → light-web.d.ustclug.org
+* vdp.s.ustclug.org
+    * LUG FTP: <https://ftp.lug.ustc.edu.cn/light/>
 
-## deploy
+## Deploy
 
-deploy script: [docker-run-script/light](https://git.lug.ustc.edu.cn/ustclug/docker-run-script/tree/master/light)
+Deploy script: [:fontawesome-solid-lock: docker-run-script/light](https://github.com/ustclug/docker-run-script/tree/master/light)
 
-deploy order:
+Deploy order:
 
 1. mysql
 2. freeradius, light-web
@@ -44,14 +44,14 @@ deploy order:
 ## Add new domain
 
 ```sh
-git clone https://git.lug.ustc.edu.cn/lug-light/accelerate-list.git
+git clone https://github.com/ustclug/light-list
 cd accelerate-list
 ./tools/add-domain.sh accelerate.list www.example.com
 git commit -v -a
 git push origin master
 ```
 
-Travis CI will update PAC files in LUG FTP automatically.
+GitHub Actions will update PAC files in LUG FTP automatically.
 
 ## Database maintenance
 
@@ -69,9 +69,9 @@ optimize table radacct_backup;
 ## Shutdown
 
 1. Stop two containers: `light-server` & `light-socks`
-2. Set restart policy to `no` (See <https://docs.docker.com/config/containers/start-containers-automatically/#use-a-restart-policy>)
+2. Set restart policy to `no` (See [Docker Documentation](https://docs.docker.com/config/containers/start-containers-automatically/#use-a-restart-policy>))
 
-## Log
+## Logs
 
 Proxy related log is under `/srv/docker/light/log`. Container log (stdout & stderr) is under `/srv/docker/docker/containers/<container id>/*.log*`.
 
