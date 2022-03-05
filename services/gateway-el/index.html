@@ -1446,6 +1446,26 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#issues" class="md-nav__link">
+    Issues &amp; resolution
+  </a>
+  
+    <nav class="md-nav" aria-label="Issues &amp; resolution">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ipvs-conntrack" class="md-nav__link">
+    IPVS Conntrack
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1899,6 +1919,26 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#issues" class="md-nav__link">
+    Issues &amp; resolution
+  </a>
+  
+    <nav class="md-nav" aria-label="Issues &amp; resolution">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ipvs-conntrack" class="md-nav__link">
+    IPVS Conntrack
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1968,6 +2008,15 @@ iface ExtraDemoTunnel inet static
 // ...
 </code></pre></div>
 <p>For wireguard, you can use <code>wg</code> to check status. If you find that the "received" is 0 in transferred, something is going wrong.</p>
+<h2 id="issues">Issues &amp; resolution<a class="headerlink" href="#issues" title="Permanent link">&para;</a></h2>
+<h3 id="ipvs-conntrack">IPVS Conntrack<a class="headerlink" href="#ipvs-conntrack" title="Permanent link">&para;</a></h3>
+<p>In early March 2022 we noticed Light connectivity issues from outside USTCnet, which was narrowed down to connections bypassing Linux Conntrack mechanism.</p>
+<p>Thanks to TUNA group we learned about <code>/proc/sys/net/ipv4/vs/conntrack</code>, which at the time the problem was located, was zero. Settings this to 1 solved the problem.</p>
+<p>However after writing <code>net.ipv4.vs.conntrack = 1</code> to <code>/etc/sysctl.d/10-ipvs-conntrack.conf</code> and rebooting, the problem returned. Checking <code>systemctl status systemd-sysctl.service</code> we noticed this:</p>
+<div class="highlight"><pre><span></span><code>Mar 05 00:00:00 gateway-el systemd-sysctl[218]: Couldn&#39;t write &#39;0&#39; to &#39;net/ipv4/vs/conntrack&#39;, ignoring: No such file or directory
+</code></pre></div>
+<p>Adding <code>ip_vs</code> to <code>/etc/modules</code> and rebooting again correctly fixed the problem.</p>
+<p>This is because the module was automatically loaded the first time <code>ipvsadm</code> is called (namely, <code>/etc/init.d/ipvsadm</code>), which happened at a very late stage. Adding to <code>/etc/modules</code> gets the module loaded earlier (and before <code>systemd-sysctl.service</code>) so it worked.</p>
 
               
             </article>
