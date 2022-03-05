@@ -77,3 +77,21 @@ Why is `74565` set? Let's check `/etc/iproute2/rt_tables`!
 ```
 
 For wireguard, you can use `wg` to check status. If you find that the "received" is 0 in transferred, something is going wrong.
+
+## Issues & resolution {#issues}
+
+### IPVS Conntrack
+
+In early March 2022 we noticed Light connectivity issues from outside USTCnet, which was narrowed down to connections bypassing Linux Conntrack mechanism.
+
+Thanks to TUNA group we learned about `/proc/sys/net/ipv4/vs/conntrack`, which at the time the problem was located, was zero. Settings this to 1 solved the problem.
+
+However after writing `net.ipv4.vs.conntrack = 1` to `/etc/sysctl.d/10-ipvs-conntrack.conf` and rebooting, the problem returned. Checking `systemctl status systemd-sysctl.service` we noticed this:
+
+```text
+Mar 05 00:00:00 gateway-el systemd-sysctl[218]: Couldn't write '0' to 'net/ipv4/vs/conntrack', ignoring: No such file or directory
+```
+
+Adding `ip_vs` to `/etc/modules` and rebooting again correctly fixed the problem.
+
+This is because the module was automatically loaded the first time `ipvsadm` is called (namely, `/etc/init.d/ipvsadm`), which happened at a very late stage. Adding to `/etc/modules` gets the module loaded earlier (and before `systemd-sysctl.service`) so it worked.
