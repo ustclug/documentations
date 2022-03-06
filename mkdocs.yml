@@ -147,3 +147,4 @@ nav:
     - LDAP: faq/ldap.md
     - Nginx: faq/nginx.md
     - systemd-timer: faq/systemd-timer.md
+    - Docker: faq/docker.md
