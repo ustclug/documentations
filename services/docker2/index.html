@@ -1476,6 +1476,13 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#opensuse-guide-qtguide" class="md-nav__link">
+    opensuse-guide 与 qtguide 每日更新
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1930,6 +1937,13 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#opensuse-guide-qtguide" class="md-nav__link">
+    opensuse-guide 与 qtguide 每日更新
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -2026,6 +2040,9 @@ iface ustclug inet manual
 </code></pre></div>
 <p>实际上 <code>After=network-online.target</code> 就够了，但是出于历史原因使用了 <code>BindsTo</code> 强依赖内网端口，这是因为 docker2 曾经单独运行 tinc 接入内网，而 tinc 的端口只在 tinc 启动后才会出现（才能分出 macvlan 子端口），因此使用 <code>BindsTo</code> 保证 docker 随该端口的出现和消失而启动/停止。</p>
 <p>2022 年 1 月 15 日以后 docker2 与其他虚拟机一样通过 gateway-nic 桥接的 tinc 接入内网，不再单独运行 tinc。</p>
+<h3 id="opensuse-guide-qtguide">opensuse-guide 与 qtguide 每日更新<a class="headerlink" href="#opensuse-guide-qtguide" title="Permanent link">&para;</a></h3>
+<p>由于没有设置 webhook，目前配置了 <a href="../../faq/systemd-timer/">systemd timer</a>，执行 <code>/srv/docker/guide</code> 中的脚本，以分别在每日晚上 23:15 和 23:30 更新 opensuse-guide 和 qtguide 两个容器的 image 并重启容器。</p>
+<p>详细的配置文件可查看 docker-run-script 中的 opensuse-guide 和 qtguide 两个文件夹。</p>
 <h2 id="workflows-troubleshooting">Workflows &amp; Troubleshooting<a class="headerlink" href="#workflows-troubleshooting" title="Permanent link">&para;</a></h2>
 <h3 id="docker-pingd">Docker "pingd"<a class="headerlink" href="#docker-pingd" title="Permanent link">&para;</a></h3>
 <div class="admonition tip">
