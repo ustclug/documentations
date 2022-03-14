@@ -52,6 +52,12 @@ After=sys-subsystem-net-devices-Policy.device
 
 2022 年 1 月 15 日以后 docker2 与其他虚拟机一样通过 gateway-nic 桥接的 tinc 接入内网，不再单独运行 tinc。
 
+### opensuse-guide 与 qtguide 每日更新
+
+由于没有设置 webhook，目前配置了 [systemd timer](../faq/systemd-timer.md)，执行 `/srv/docker/guide` 中的脚本，以分别在每日晚上 23:15 和 23:30 更新 opensuse-guide 和 qtguide 两个容器的 image 并重启容器。
+
+详细的配置文件可查看 docker-run-script 中的 opensuse-guide 和 qtguide 两个文件夹。
+
 ## Workflows & Troubleshooting
 
 ### Docker "pingd"
