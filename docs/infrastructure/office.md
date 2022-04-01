@@ -32,15 +32,38 @@ Outlook 无法直接通过网页端添加发件人名称、设置回复地址，
 
 ## Thunderbird
 
-在登录时，在自动查询到推荐的服务器配置后，选择 IMAP，并选择 `Configure manually`。
+在登录时，输入了用户名、密码后，会显示无法找到对应的邮箱配置
 
-将 `Incoming server` 和 `Outgoing server` 下面的 `Authentication method:` 都修改为 `OAuth2`。然后点 `Done`。在弹出的窗口中完成认证。
+![Thunderbird auto config failed](img/thunderbird-auto-conf-failed.jpg)
+
+进行如下的手动配置：
+
+- Incoming Server
+  - Hostname: outlook.office365.com
+  - Port: 993
+  - Connection security: SSL/TLS
+  - Authentication: Autodetect
+- Outgoing server
+  - Hostname: smtp.office365.com
+  - Port: 587
+  - Connection security: STARTTLS
+  - Authentication: Autodetect
+
+如下图：
+
+![Thunderbird manually config](img/thunderbird-conf-manual.jpg)
+
+然后点左下角的 `Re-test`，重新搜索到配置后，在两个 Authentication method 中均选择 OAthu2
+
+![Thunderbird re-test](img/thunderbird-re-test.jpg)
+
+然后点 `Done`。在弹出的窗口中完成认证。
 
 ![Thunderbird Login Config](./img/thunderbird-config.jpg)
 
 在完成后，在右上角中选择账户设置，在默认身份中
 
-- 修改 “您的姓名“ 为 ”Zeyu Gao on behalf of USTC LUG”（请换成自己的名字）
+- 修改 “您的姓名“ 为 “Zeyu Gao on behalf of USTC LUG”（请换成自己的名字）
 - ”回复地址“ 修改为 “`lug@ustc.edu.cn`”
 - “签名文字” 为（最后一行换成自己的信息）
 
