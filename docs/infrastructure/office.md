@@ -39,15 +39,15 @@ Outlook 无法直接通过网页端添加发件人名称、设置回复地址，
 进行如下的手动配置：
 
 - Incoming Server
-  - Hostname: outlook.office365.com
-  - Port: 993
-  - Connection security: SSL/TLS
-  - Authentication: Autodetect
+    - Hostname: outlook.office365.com
+    - Port: 993
+    - Connection security: SSL/TLS
+    - Authentication: Autodetect
 - Outgoing server
-  - Hostname: smtp.office365.com
-  - Port: 587
-  - Connection security: STARTTLS
-  - Authentication: Autodetect
+    - Hostname: smtp.office365.com
+    - Port: 587
+    - Connection security: STARTTLS
+    - Authentication: Autodetect
 
 如下图：
 
@@ -58,8 +58,6 @@ Outlook 无法直接通过网页端添加发件人名称、设置回复地址，
 ![Thunderbird re-test](img/thunderbird-re-test.jpg)
 
 然后点 `Done`。在弹出的窗口中完成认证。
-
-![Thunderbird Login Config](./img/thunderbird-config.jpg)
 
 在完成后，在右上角中选择账户设置，在默认身份中
 
