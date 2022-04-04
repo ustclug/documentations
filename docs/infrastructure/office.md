@@ -28,9 +28,11 @@ tky:
 
 ## 邮件签名 {#email-signature}
 
-Outlook 无法直接通过网页端添加发件人名称、设置回复地址，因此只能通过邮件客户端进行使用。
+Outlook 无法直接通过网页端添加发件人名称、设置回复地址，因此只能通过邮件客户端进行使用。在下一章节的Thunderbird中进行详细阐述。
 
-## Thunderbird
+## Thunderbird 配置
+
+### 登录
 
 在登录时，输入了用户名、密码后，会显示无法找到对应的邮箱配置
 
@@ -59,7 +61,9 @@ Outlook 无法直接通过网页端添加发件人名称、设置回复地址，
 
 然后点 `Done`。在弹出的窗口中完成认证。
 
-在完成后，在右上角中选择账户设置，在默认身份中
+### 签名与发件身份
+
+在右上角中选择账户设置，在默认身份中
 
 - 修改 “您的姓名“ 为 “Zeyu Gao on behalf of USTC LUG”（请换成自己的名字）
 - ”回复地址“ 修改为 “`lug@ustc.edu.cn`”
@@ -77,6 +81,32 @@ Zeyu Gao (高泽豫) <zeyugao@ustclug.org>
 
 ![Thunderbird Conf](./img/thunderbird-account-settings.jpg)
 
+### 文件夹
+
+Thunderbird 维护了自己的文件夹，如果需要与云端的文件夹同步，可以进行如下操作
+
+在账户上右键，在弹出的菜单中点击 “subscribe”。弹出的窗口中包含了云端的文件夹，由于 Thunderbird 会自行维护垃圾箱和已发邮件，因此可能会有两个垃圾箱，“Deleted Items”和“Trash”，可以在网页端删除不需要的文件夹，并在 Thunderbird 中选择需要的。
+
+![thunderbird-subscribe](./img/thunderbird-subscribe.png)
+
+然后打开账户设置，进行如下修改
+
+1. 在 *Server Settings* 下，修改 *When I delete a message* 为 *Move it to this folder: Deleted Items*
+
+![server-settings](./img/thunderbird-server-settings.png)
+
+2. 在 *Copies & Folders* 下，修改 *Place a copy*、*Keep message archives in*、*Keep draft messages in* 为对应的远端服务器文件夹
+
+![Copies & Folders](./img/thunderbird-copies-folders.png)
+
+### 垃圾邮件
+
+Outlook 云端已经带有了垃圾邮件分类功能，不需要 thunderbird 自己的垃圾邮件分类功能。
+
+在账户设置的 *Local Folders* 下的 *Junk Settings* 中，取消选中 *Enable adaptive junk mail controls for this account*。
+
+请在上面的 subscribe 中将垃圾邮件选中以同步。
+
 ### 使用 Thunderbird 配置不同的身份
 
 (written by taoky)
@@ -92,10 +122,6 @@ Zeyu Gao (高泽豫) <zeyugao@ustclug.org>
 ![Thunderbird - 2](./img/thunderbird-2.png)
 
 配置完成后，在编写邮件时，就可以选择新的标识了，并且发件人名称、回复地址和签名都会自动设置好（抄送还是要自己设置，别忘了！）
-
-## Outlook 客户端
-
-使用 Outlook 客户端可以使用完整的 Outlook 功能，包括在 Web 端设置的自定义规则等。
 
 ### GMail
 
