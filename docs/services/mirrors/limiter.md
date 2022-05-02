@@ -6,16 +6,16 @@
 2. 爬虫类流量
 3. 不合理的请求（如：极少数用户的大量请求）
 
-## 白名单
+## 白名单 {#whitelists}
 
 一般而言，科大校内的地址位于限制规则的白名单中，不受到限制策略的影响。如果没有特殊说明，科大地址默认不受限制。
 
 白名单位于：
 
-- `/usr/local/network_config/ipset.list`
+- `/usr/local/network_config/iptables/ipset`
 - `/etc/nginx/conf.d/geo-ustcnet.conf`
 
-## 防火墙级别限制
+## 防火墙级别限制 {#firewall}
 
 防火墙 (iptables) 目前只负责限制单 IP 的并发链接数。这是为了防止同时涌入大量并发连接，导致后端应用耗费大量 CPU 和 I/O 资源处理这些不合常理的请求。
 
@@ -39,11 +39,11 @@
 
 \* FTP 服务已停止提供，Rsync 仅从 mirrors2 提供，mirrors4 上的 Rsync 端口限制只能从 mirrors2 上访问。
 
-## 应用级别限制
+## 应用级别限制 {#application}
 
 此类限制规则位于应用程序内。由于在用户态程序中实现，因此更加灵活。
 
-### Nginx LUA 组件
+### Nginx LUA 组件 {#nginx-mod-lua}
 
 代码位于 [/etc/nginx/lua/access.lua](https://git.lug.ustc.edu.cn/mirrors/nginx-config/blob/master/lua/access.lua)
 
@@ -86,7 +86,7 @@
 
 限制器之间相互独立，当被触发的所有限制器产生不一致的等待时间时，应用最长的等待时间。
 
-### 大文件下载速度限制
+### 大文件下载速度限制 {#large-files}
 
 代码位于 [/etc/nginx/lua/header_filter.lua](https://git.lug.ustc.edu.cn/mirrors/nginx-config/blob/master/lua/header_filter.lua)
 
@@ -102,7 +102,7 @@
 
 注：大文件定义为 HTTP Content-Length > 512M 的文件
 
-### NGINX JS 挑战
+### Nginx JavaScript 挑战 {#nginx-js-challenge}
 
 代码位于 [/etc/nginx/sites-available/iso.mirrors.ustc.edu.cn](https://git.lug.ustc.edu.cn/mirrors/nginx-config/blob/master/sites-available/iso.mirrors.ustc.edu.cn)
 
@@ -117,13 +117,13 @@
 - zip
 - tar
 
-### 爬虫限制
+### 爬虫限制 {#robots}
 
 代码位于 [/etc/nginx/snippets/robots](https://git.lug.ustc.edu.cn/mirrors/nginx-config/blob/master/snippets/robots)
 
 如果客户端 User-Agent 包含 Spider、Robot 关键字， 则禁止其访问仓库内容。避免由于频繁列目录带来大量 IO 负载。
 
-### Rsync 总连接数限制
+### Rsync 总连接数限制 {#rsync-connections}
 
 Rsync 服务设置了总连接数限制。即：当建立的连接数到达某个阈值后，拒绝之后收到的连接。
 
@@ -138,13 +138,13 @@ Rsync 服务设置了总连接数限制。即：当建立的连接数到达某�
 
 特别的，科大校内 IP 地址受到 rsync 连接数限制。
 
-## 网络接口级别限制
+## 网络接口级别限制 {#interface-limit}
 
 mirrors 常态下没有网络接口限制，但在需要临时对某一接口进行限制时，可以使用 tc 来完成。
 
 例如可以参考这份回答：[iptables - Limiting interface bandwidth with tc under Linux - Server Fault](https://serverfault.com/questions/452829/limiting-interface-bandwidth-with-tc-under-linux)，使用如下指令限制某一接口的网络速率为 1.5Gbps：
 
-```bash
+```shell
 tc qdisc add dev <interface> root handle 1: tbf rate 1500Mbit burst 750K latency 14ms
 ```
 
@@ -177,7 +177,7 @@ WantedBy=sys-subsystem-net-devices-unicom.device
 
 Install 部分的 WantedBy 使用这种写法可以使该服务依赖于名为 `unicom` 的网口，详细回答可以看 [What is the systemd-networkd equivalent of post-up?](https://serverfault.com/a/869916/450575)。
 
-## IP 黑名单限制
+## IP 黑名单限制 {#blacklists}
 
 对于滥用的 IP 段，可以使用 ipset 和 iptables 实现黑名单限制。
 ipset 将某个 IP 匹配到一个集合中，iptables 再针对某一集合进行限制。
@@ -191,9 +191,9 @@ ipset add blacklist 192.0.2.0/24
 ipset add blacklist6 2001:db8:114:514::/64
 ```
 
-与 iptables 类似，ipset 也需要持久化。封禁名单的文件位于（mirrors4）`/usr/local/network_config/ipset-blacklist.list`，可以在运行完 ipset 命令后手动编辑该文件添加相关条目，以确保服务器重启后相同的表项能够被载入。
+与 iptables 类似，ipset 也需要持久化。封禁名单的文件位于（mirrors4）`/usr/local/network_config/iptables/blacklist.list`，修改此文件增减条目后运行该目录下的 `apply.sh` 即可。
 
-### ipset 持久化
+### ipset 持久化 {#ipset-persistent}
 
 我们使用软件源里的 `ipset-persistent` 包来帮助 ipset 在开机时自动恢复，该软件包会在开机加载 iptables 前先从 `/etc/iptables/ipsets` 中恢复 ipset 以确保 iptables 中的引用能正确处理。
 

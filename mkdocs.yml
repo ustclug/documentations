@@ -132,8 +132,8 @@ nav:
     - Neat DNS: services/neat-dns.md
     - GitLab: "services/gitlab.md"
     - LUG VPN:
+      - VPN: "services/vpn.md"
       - RADIUS: "#"
-      - VPN: "#"
       - Web: "#"
     - Light: "services/light.md"
     - PXE:

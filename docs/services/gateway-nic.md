@@ -290,6 +290,15 @@ To make sure fail2ban rules can be re-applied after reloading iptables manually,
 
 ```ini title="$ systemctl edit fail2ban.service"
 [Unit]
-BindsTo=netfilter-persistent.service
 After=netfilter-persistent.service
+BindsTo=netfilter-persistent.service
+```
+
+For some servers where we want to manually start fail2ban, we use `Requires=` + `PartOf=`. This will propagate "restart" event from iptables to fail2ban, but not "start".
+
+```ini title="$ systemctl edit fail2ban.service"
+[Unit]
+After=netfilter-persistent.service
+Requires=netfilter-persistent.service
+PartOf=netfilter-persistent.service
 ```
