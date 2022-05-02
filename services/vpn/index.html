@@ -12,14 +12,14 @@
         <meta name="author" content="USTC Linux User Group">
       
       
-        <link rel="canonical" href="https://docs.ustclug.org/services/gitlab/">
+        <link rel="canonical" href="https://docs.ustclug.org/services/vpn/">
       
       <link rel="icon" href="../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.3.0, mkdocs-material-8.2.13">
     
     
       
-        <title>GitLab - LUG @ USTC</title>
+        <title>VPN - LUG @ USTC</title>
       
     
     
@@ -71,7 +71,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#gitlab" class="md-skip">
+        <a href="#lug-vpn" class="md-skip">
           Skip to content
         </a>
       
@@ -104,7 +104,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              GitLab
+              VPN
             
           </span>
         </div>
@@ -1447,187 +1447,11 @@
               
   
   
-    
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          GitLab
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../gitlab/" class="md-nav__link">
         GitLab
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#gitlab-security" class="md-nav__link">
-    GitLab &amp; Security
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_1" class="md-nav__link">
-    更新
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#postgresql-redis" class="md-nav__link">
-    postgresql 与 redis 的更新
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#rails-console" class="md-nav__link">
-    访问 Rails console
-  </a>
-  
-    <nav class="md-nav" aria-label="访问 Rails console">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
-    查询
-  </a>
-  
-    <nav class="md-nav" aria-label="查询">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#hashed-storage" class="md-nav__link">
-    查询 Hashed storage 下仓库对应的项目
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#sql-like" class="md-nav__link">
-    查询无项目且邮箱满足条件的用户 (SQL like)
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
-    刷新某个项目的统计信息
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#lfs-id" class="md-nav__link">
-    获取所有包含 LFS 的项目 ID
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#rake-tasks" class="md-nav__link">
-    使用 Rake tasks
-  </a>
-  
-    <nav class="md-nav" aria-label="使用 Rake tasks">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
-    清理
-  </a>
-  
-    <nav class="md-nav" aria-label="清理">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
-    清理上传目录
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#artifact" class="md-nav__link">
-    清理未被引用的 artifact 文件
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#lfs-reference" class="md-nav__link">
-    清理无效的 LFS reference
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_6" class="md-nav__link">
-    紧急操作
-  </a>
-  
-    <nav class="md-nav" aria-label="紧急操作">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#_7" class="md-nav__link">
-    设置为只读
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -1637,12 +1461,14 @@
               
   
   
+    
+  
   
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_8" type="checkbox" id="__nav_4_8" >
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_8" type="checkbox" id="__nav_4_8" checked>
       
       
       
@@ -1671,11 +1497,52 @@
               
   
   
+    
   
-    <li class="md-nav__item">
-      <a href="../vpn/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          VPN
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         VPN
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#iptables" class="md-nav__link">
+    iptables 防火墙管理
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -1990,144 +1857,9 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#gitlab-security" class="md-nav__link">
-    GitLab &amp; Security
+  <a href="#iptables" class="md-nav__link">
+    iptables 防火墙管理
   </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_1" class="md-nav__link">
-    更新
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#postgresql-redis" class="md-nav__link">
-    postgresql 与 redis 的更新
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#rails-console" class="md-nav__link">
-    访问 Rails console
-  </a>
-  
-    <nav class="md-nav" aria-label="访问 Rails console">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
-    查询
-  </a>
-  
-    <nav class="md-nav" aria-label="查询">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#hashed-storage" class="md-nav__link">
-    查询 Hashed storage 下仓库对应的项目
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#sql-like" class="md-nav__link">
-    查询无项目且邮箱满足条件的用户 (SQL like)
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
-    刷新某个项目的统计信息
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#lfs-id" class="md-nav__link">
-    获取所有包含 LFS 的项目 ID
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#rake-tasks" class="md-nav__link">
-    使用 Rake tasks
-  </a>
-  
-    <nav class="md-nav" aria-label="使用 Rake tasks">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
-    清理
-  </a>
-  
-    <nav class="md-nav" aria-label="清理">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
-    清理上传目录
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#artifact" class="md-nav__link">
-    清理未被引用的 artifact 文件
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#lfs-reference" class="md-nav__link">
-    清理无效的 LFS reference
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_6" class="md-nav__link">
-    紧急操作
-  </a>
-  
-    <nav class="md-nav" aria-label="紧急操作">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#_7" class="md-nav__link">
-    设置为只读
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -2143,108 +1875,23 @@
             <article class="md-content__inner md-typeset">
               
                 
-  <a href="https://github.com/ustclug/documentations/edit/master/docs/services/gitlab.md" title="Edit this page" class="md-content__button md-icon">
+  <a href="https://github.com/ustclug/documentations/edit/master/docs/services/vpn.md" title="Edit this page" class="md-content__button md-icon">
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
   </a>
 
 
 
-<h1 id="gitlab">GitLab<a class="headerlink" href="#gitlab" title="Permanent link">&para;</a></h1>
-<p>Server: gitlab.s.ustclug.org (management ssh port 2222)</p>
-<p>Git Repository:</p>
+<h1 id="lug-vpn">LUG VPN<a class="headerlink" href="#lug-vpn" title="Permanent link">&para;</a></h1>
+<h2 id="iptables">iptables 防火墙管理<a class="headerlink" href="#iptables" title="Permanent link">&para;</a></h2>
+<div class="admonition note">
+<p class="admonition-title">本节内容适用于包括 VPN 在内的多个服务器</p>
 <ul>
-<li><a href="https://git.lug.ustc.edu.cn/ustclug/gitlab-scripts">gitlab-scripts</a></li>
+<li>mirrors2</li>
+<li>mirrors4</li>
+<li>gateway-el</li>
+<li>gateway-nic</li>
 </ul>
-<h2 id="gitlab-security">GitLab &amp; Security<a class="headerlink" href="#gitlab-security" title="Permanent link">&para;</a></h2>
-<p>GitLab 维护者需要订阅：</p>
-<ol>
-<li>GitLab Security Notices 邮件列表 (<a href="https://about.gitlab.com/company/contact/">https://about.gitlab.com/company/contact/</a> 右侧 "Sign up for security notices")</li>
-<li>sameersbn/docker-gitlab releases (GitHub <a href="https://github.com/sameersbn/docker-gitlab/releases">https://github.com/sameersbn/docker-gitlab/releases</a> Watch -&gt; Custom -&gt; Releases)</li>
-</ol>
-<p>在 GitLab 有 Security Release 且 docker-gitlab 发布新版本之后需要安排时间更新。尤其 Critical Security Release 需要尽快找时间更新。</p>
-<h2 id="_1">更新<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
-<p>（建议阅读 <a href="https://docs.gitlab.com/ee/update/index.html">https://docs.gitlab.com/ee/update/index.html</a>）</p>
-<p>由于已经 docker 化，因此我们的更新是通过拉取 <a href="https://github.com/sameersbn/docker-gitlab/">sameersbn/docker-gitlab</a> 的 docker image，进行数据库准备以及启动镜像实例来进行更新，Zack Zeng 学长已经写好了一套脚本系统：<a href="https://git.lug.ustc.edu.cn/ustclug/gitlab-scripts">gitlab-scripts</a>，因此更新时只要跑脚本就可以了。</p>
-<p>由于更新需要停止服务，因此请于更新前至少几小时发布更新公告（包括具体时间等），并检查 Admin -&gt; Monitoring -&gt; Background Migrations 中所有 migration 是否都已经成功完成。</p>
-<p>更新前请先提前于 <a href="https://vcenter2.vm.ustclug.org/">VCenter</a> 上对虚拟机打快照（打快照时服务会暂时停止）</p>
-<p>打完快照之后使用脚本进行更新（目前脚本位于 <code>/home/sirius/gitlab-scripts</code>），首先使用 <code>./gitlab.sh db</code> 进行数据库的准备工作。之后可以通过 <code>./gitlab.sh run &lt;版本号&gt;</code> 来进行 docker container 的替换。更换前脚本会自动拉取相应版本号的 docker 镜像，如果担心拉取时间过长可以在打快照前提前通过 <code>docker pull sameersbn/gitlab:&lt;版本号&gt;</code> 来拉取相应的镜像。</p>
-<p>一般情况下经以上操作后更新就正常结束，如果长时间无法启动，可以通过 <code>docker logs gitlab</code> 查看日志，如果发现更新后的启动出现问题，可以到 <a href="https://github.com/sameersbn/docker-gitlab/">sameersbn/docker-gitlab</a> 的 issue 区等地查看相关 issue，以及通过对出错日志进行 Google 可能会发现是 gitlab 上游等出现的问题。如果有解决办法，可以按照相应解决办法解决，如果没有。可以通过找到有相应问题前的正常版本号，回滚快照，之后更到表现正常的版本。（最近的更新会在启动之后短暂出现 502 的情况，但很快就会恢复，遇到这种情况时不要惊慌）。</p>
-<p>由于更新可能会出现问题导致服务不可用，因此不建议通过 cron 等方式自动进行更新。</p>
-<p><strong>建议在更新完成 72 小时内删除快照，详见 <a href="/infrastructure/vsphere/esxi/#about-snapshot">关于快照</a>。</strong></p>
-<h2 id="postgresql-redis">postgresql 与 redis 的更新<a class="headerlink" href="#postgresql-redis" title="Permanent link">&para;</a></h2>
-<p>由于 gitlab 更新后可能对 postgresql 与 redis 的版本有要求，因此有可能需要定期更新 redis 与 postgresql。</p>
-<p>更新前请先停止 gitlab 的 container。</p>
-<p>更新时可以按照官网教程 <a href="https://github.com/sameersbn/docker-postgresql/blob/master/README.md">docker-postgresql</a> 进行更新，可以通过拉取 latest 标签的镜像，删除原来的 container，再通过脚本 <code>./gitlab.sh db</code> 自动启动，数据库更新时可能会需要一定时间来迁移数据，请通过 <code>docker logs -f gitlab-postgresql</code> 命令来查看迁移进度，待迁移完成后再运行 GitLab 的 container。</p>
-<h2 id="rails-console">访问 Rails console<a class="headerlink" href="#rails-console" title="Permanent link">&para;</a></h2>
-<p>Rails console 可以完成一些高级的维护任务。在 gitlab 容器中执行 <code>bin/rails console</code> 启动。注意 console 的启动时间很长，需要有耐心。</p>
-<p>可以执行的命令可参考 <a href="https://docs.gitlab.com/ee/administration/troubleshooting/gitlab_rails_cheat_sheet.html">https://docs.gitlab.com/ee/administration/troubleshooting/gitlab_rails_cheat_sheet.html</a>。</p>
-<h3 id="_2">查询<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h3>
-<h4 id="hashed-storage">查询 Hashed storage 下仓库对应的项目<a class="headerlink" href="#hashed-storage" title="Permanent link">&para;</a></h4>
-<div class="highlight"><pre><span></span><code><span class="no">ProjectRepository</span><span class="o">.</span><span class="n">find_by</span><span class="p">(</span><span class="ss">disk_path</span><span class="p">:</span> <span class="s1">&#39;@hashed/23/33/2333333333333333333333333333333333333333333333333333333333333333&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">project</span>
-</code></pre></div>
-<p>如果存在，会返回类似以下的内容：</p>
-<div class="highlight"><pre><span></span><code>=&gt; #&lt;Project id:23333 username/project&gt;&gt;
-</code></pre></div>
-<h4 id="sql-like">查询无项目且邮箱满足条件的用户 (SQL <code>like</code>)<a class="headerlink" href="#sql-like" title="Permanent link">&para;</a></h4>
-<div class="highlight"><pre><span></span><code><span class="n">users</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="s1">&#39;id NOT IN (select distinct(user_id) from project_authorizations)&#39;</span><span class="p">)</span>
-<span class="n">users</span> <span class="o">=</span> <span class="n">users</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="s1">&#39;email like ?&#39;</span><span class="p">,</span> <span class="s1">&#39;%.ru&#39;</span><span class="p">)</span>
-<span class="n">users</span><span class="o">.</span><span class="n">count</span>
-
-<span class="n">users</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">user</span><span class="o">|</span>
-    <span class="nb">puts</span> <span class="n">user</span><span class="o">.</span><span class="n">last_activity_on</span>
-<span class="k">end</span>
-</code></pre></div>
-<h3 id="_3">刷新某个项目的统计信息<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><span class="nb">p</span> <span class="o">=</span> <span class="no">Project</span><span class="o">.</span><span class="n">find_by_full_path</span><span class="p">(</span><span class="s1">&#39;&lt;namespace&gt;/&lt;project&gt;&#39;</span><span class="p">)</span>
-<span class="n">pp</span> <span class="nb">p</span><span class="o">.</span><span class="n">statistics</span>
-<span class="nb">p</span><span class="o">.</span><span class="n">statistics</span><span class="o">.</span><span class="n">refresh!</span>
-<span class="n">pp</span> <span class="nb">p</span><span class="o">.</span><span class="n">statistics</span>
-</code></pre></div>
-<h3 id="lfs-id">获取所有包含 LFS 的项目 ID<a class="headerlink" href="#lfs-id" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><span class="no">LfsObject</span><span class="o">.</span><span class="n">all</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">lo</span><span class="o">|</span>
-    <span class="nb">puts</span> <span class="no">LfsObjectsProject</span><span class="o">.</span><span class="n">find_by_lfs_object_id</span><span class="p">(</span><span class="n">lo</span><span class="o">.</span><span class="n">id</span><span class="p">)</span><span class="o">.</span><span class="n">project_id</span>
-<span class="k">end</span>
-</code></pre></div>
-<p>输出较多。可以使用 <code>rails r xxx.rb</code> 运行，重定向到文件，去重后查看所有包含 LFS 的项目。</p>
-<h2 id="rake-tasks">使用 Rake tasks<a class="headerlink" href="#rake-tasks" title="Permanent link">&para;</a></h2>
-<p>详见 <a href="https://github.com/sameersbn/docker-gitlab#rake-tasks">https://github.com/sameersbn/docker-gitlab#rake-tasks</a>。和 Rails console 一样，初始化很慢。</p>
-<p>当前实例信息：</p>
-<div class="highlight"><pre><span></span><code>sudo docker <span class="nb">exec</span> --user git -it gitlab bundle <span class="nb">exec</span> rake gitlab:env:info <span class="nv">RAILS_ENV</span><span class="o">=</span>production
-</code></pre></div>
-<h3 id="_4">清理<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h3>
-<p>参考 <a href="https://github.com/gitlabhq/gitlabhq/blob/master/doc/raketasks/cleanup.md">https://github.com/gitlabhq/gitlabhq/blob/master/doc/raketasks/cleanup.md</a>。</p>
-<p>不过作用有限。</p>
-<h4 id="_5">清理上传目录<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h4>
-<p>查看会被清理的文件：</p>
-<div class="highlight"><pre><span></span><code>sudo docker <span class="nb">exec</span> --user git -it gitlab bundle <span class="nb">exec</span> rake gitlab:cleanup:project_uploads <span class="nv">RAILS_ENV</span><span class="o">=</span>production
-</code></pre></div>
-<p>清理（移动到 /-/project-lost-found/）：</p>
-<div class="highlight"><pre><span></span><code>sudo docker <span class="nb">exec</span> --user git -it gitlab bundle <span class="nb">exec</span> rake gitlab:cleanup:project_uploads <span class="nv">RAILS_ENV</span><span class="o">=</span>production <span class="nv">DRY_RUN</span><span class="o">=</span><span class="nb">false</span>
-</code></pre></div>
-<h4 id="artifact">清理未被引用的 artifact 文件<a class="headerlink" href="#artifact" title="Permanent link">&para;</a></h4>
-<p>查看会被清理的 artifact 数量：</p>
-<div class="highlight"><pre><span></span><code>sudo docker <span class="nb">exec</span> --user git -it gitlab bundle <span class="nb">exec</span> rake gitlab:cleanup:orphan_job_artifact_files <span class="nv">RAILS_ENV</span><span class="o">=</span>production
-</code></pre></div>
-<p>清理：</p>
-<div class="highlight"><pre><span></span><code>sudo docker <span class="nb">exec</span> --user git -it gitlab bundle <span class="nb">exec</span> rake gitlab:cleanup:orphan_job_artifact_files <span class="nv">RAILS_ENV</span><span class="o">=</span>production <span class="nv">DRY_RUN</span><span class="o">=</span><span class="nb">false</span>
-</code></pre></div>
-<p>注意，新设置的 expire 期限不会影响以前的 artifact，这里的命令也无法清理。</p>
-<h4 id="lfs-reference">清理无效的 LFS reference<a class="headerlink" href="#lfs-reference" title="Permanent link">&para;</a></h4>
-<div class="highlight"><pre><span></span><code><span class="k">for</span> i <span class="k">in</span> <span class="sb">`</span>cat projectid_lfs<span class="sb">`</span><span class="p">;</span> <span class="k">do</span> sudo docker <span class="nb">exec</span> --user git -it gitlab bundle <span class="nb">exec</span> rake gitlab:cleanup:orphan_lfs_file_references <span class="nv">PROJECT_ID</span><span class="o">=</span><span class="nv">$i</span> <span class="nv">RAILS_ENV</span><span class="o">=</span>production <span class="nv">DRY_RUN</span><span class="o">=</span>false<span class="p">;</span> <span class="k">done</span>
-</code></pre></div>
-<p><code>projectid_lfs</code> 是上文中「获取所有包含 LFS 的项目 ID」的去重后的输出。</p>
-<p>无 reference 的 LFS 文件每日 GitLab 会自动清除。如果需要立刻删除，可以使用 <code>gitlab:cleanup:orphan_lfs_files</code>。</p>
-<h2 id="_6">紧急操作<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
-<h3 id="_7">设置为只读<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h3>
-<p>https://docs.gitlab.com/ee/administration/read_only_gitlab.html</p>
-<div class="highlight"><pre><span></span><code><span class="gp"># </span>docker <span class="nb">exec</span> --user git -it gitlab bin/rails console
-</code></pre></div>
-<p>之后执行</p>
-<div class="highlight"><pre><span></span><code><span class="no">Project</span><span class="o">.</span><span class="n">all</span><span class="o">.</span><span class="n">find_each</span> <span class="p">{</span> <span class="o">|</span><span class="n">project</span><span class="o">|</span> <span class="nb">puts</span> <span class="n">project</span><span class="o">.</span><span class="n">name</span><span class="p">;</span> <span class="n">project</span><span class="o">.</span><span class="n">update!</span><span class="p">(</span><span class="ss">repository_read_only</span><span class="p">:</span> <span class="kp">true</span><span class="p">)</span> <span class="p">}</span>
-</code></pre></div>
-<p>将所有仓库设置为只读。如果中间出现错误（特殊的项目名可能会导致运行中断），重命名最后输出对应的项目。</p>
-<p>在设置前，需要添加 Messages 通知用户。</p>
-<p>此时数据库仍然可写入。如果需要数据库只读，参考以上链接配置。</p>
+</div>
 
               
             </article>
@@ -2263,7 +1910,7 @@
     <nav class="md-footer__inner md-grid" aria-label="Footer">
       
         
-        <a href="../neat-dns/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Neat DNS" rel="prev">
+        <a href="../gitlab/" class="md-footer__link md-footer__link--prev" aria-label="Previous: GitLab" rel="prev">
           <div class="md-footer__button md-icon">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
           </div>
@@ -2272,20 +1919,20 @@
               <span class="md-footer__direction">
                 Previous
               </span>
-              Neat DNS
+              GitLab
             </div>
           </div>
         </a>
       
       
         
-        <a href="../vpn/" class="md-footer__link md-footer__link--next" aria-label="Next: VPN" rel="next">
+        <a href="../light/" class="md-footer__link md-footer__link--next" aria-label="Next: Light" rel="next">
           <div class="md-footer__title">
             <div class="md-ellipsis">
               <span class="md-footer__direction">
                 Next
               </span>
-              VPN
+              Light
             </div>
           </div>
           <div class="md-footer__button md-icon">
