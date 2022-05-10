@@ -2328,6 +2328,10 @@ iface vmbr1 inet static
 <h2 id="pve-6">pve-6<a class="headerlink" href="#pve-6" title="Permanent link">&para;</a></h2>
 <p>pve-6 位于东图，是一台 HP DL380G6，配置为 2× Xeon E5620 (Westmere 4C8T, 2.50 GHz), 72 GB 内存和l两块 300 GB 的 SAS 硬盘。曾经叫做 esxi-6，在 2022 年 1 月统一更换为 Proxmox VE。</p>
 <p>机器有两个网卡，共有 4 个 1 Gbps 的接口，其中 3 个都接在 VLAN 交换机上（另一个不知道接了啥），通过 VLAN 同时连接图书馆的两个网段以及经由 gateway-el 桥接的内网，以及连接 vdp 挂载 NFS。</p>
+<div class="admonition note">
+<p class="admonition-title">HP Smart Array</p>
+<p>HP 的自带 RAID 卡管理软件可以在 <a href="http://downloads.linux.hpe.com/SDR/repo/mcp/Debian/pool/non-free/">http://downloads.linux.hpe.com/SDR/repo/mcp/Debian/pool/non-free/</a> 下载，安装 <code>ssacli</code> 软件包。相关使用方法可以参考 <a href="https://sleeplessbeastie.eu/2017/03/06/how-to-use-hp-command-line-array-configuration-utility/">https://sleeplessbeastie.eu/2017/03/06/how-to-use-hp-command-line-array-configuration-utility/</a>。</p>
+</div>
 <h2 id="pve-2-pve-4">pve-2, pve-4<a class="headerlink" href="#pve-2-pve-4" title="Permanent link">&para;</a></h2>
 <p>pve-2 和 pve-4 也位于东图，是两台未知品牌、未知型号的旧机器，配置为 2× Xeon E5420 (Very old 4C4T, 2.50 GHz), 16 GB 内存（DDR2 667 MHz）和一块 16 GB 的 SanDisk SSD。该型号机器<strong>没有 IPMI</strong>。</p>
 <p>由于配置低下，我们手动安装了 Proxmox VE，没有使用 LVM，分配了 1 GB 的 swap，剩下全部给 rootfs。</p>
