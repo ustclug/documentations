@@ -262,6 +262,10 @@ pve-6 位于东图，是一台 HP DL380G6，配置为 2× Xeon E5620 (Westmere 4
 
 机器有两个网卡，共有 4 个 1 Gbps 的接口，其中 3 个都接在 VLAN 交换机上（另一个不知道接了啥），通过 VLAN 同时连接图书馆的两个网段以及经由 gateway-el 桥接的内网，以及连接 vdp 挂载 NFS。
 
+!!! note "HP Smart Array"
+
+    HP 的自带 RAID 卡管理软件可以在 <http://downloads.linux.hpe.com/SDR/repo/mcp/Debian/pool/non-free/> 下载，安装 `ssacli` 软件包。相关使用方法可以参考 <https://sleeplessbeastie.eu/2017/03/06/how-to-use-hp-command-line-array-configuration-utility/>。
+
 ## pve-2, pve-4
 
 pve-2 和 pve-4 也位于东图，是两台未知品牌、未知型号的旧机器，配置为 2× Xeon E5420 (Very old 4C4T, 2.50 GHz), 16 GB 内存（DDR2 667 MHz）和一块 16 GB 的 SanDisk SSD。该型号机器**没有 IPMI**。
