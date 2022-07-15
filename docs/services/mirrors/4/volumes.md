@@ -149,7 +149,7 @@ lvconvert --type cache-pool --poolmetadata ssd/mcache_meta --cachemode writethro
         ```sh
         # dirty hack
         sudo lvchange --cachepolicy cleaner lug/repo
-        for i in `seq 1 1500`; do sudo lvchange --cachesettings migration_threshold=2113536 lug/repo && sudo lvchange --cachesettings migration_threshold=16384 && echo $i && sleep 15; done;
+        for i in `seq 1 1500`; do sudo lvchange --cachesettings migration_threshold=2113536 lug/repo && sudo lvchange --cachesettings migration_threshold=16384 lug/repo && echo $i && sleep 15; done;
         # 需要确认没有脏块。如果还有的话继续执行（次数调小一些）
         # 如果是从 writeback 切换，需要先把模式切到 writethrough
         # 然后再修改 cachepolicy 到 smq
@@ -215,6 +215,16 @@ mount /dev/lug/docker /var/lib/docker
   [root_mlog]     lug lwi-aom---   4.00m                                                                       /dev/sdb3(8192)
 ```
 
+检查 cache 是否有 dirty block：
+
+```
+$ sudo lvs -o name,cache_policy,cache_settings,chunk_size,cache_used_blocks,cache_dirty_blocks /dev/mapper/lug-repo
+  LV   CachePolicy CacheSettings Chunk CacheUsedBlocks  CacheDirtyBlocks
+  repo smq                       1.00m          1048551                0
+```
+
+（正常重启之后可能会出现 dirty block，原因不明。如果看到有的话，那只能 ~~再次进入痛苦的轮回~~ 用上述的方法清除，并且清除的时候对系统负载影响很大，因为落盘的时候其他进程对应的 IO 会被暂停，在相对平衡时间和负载的命令下，估计需要 10 小时的时间。）
+
 然后 uncache、扩容：
 
 ```
@@ -232,6 +242,10 @@ mount /dev/lug/docker /var/lib/docker
 # lvconvert --type cache-pool --poolmetadata lug/mcache_meta --cachemode writethrough -c 1M --config allocation/cache_pool_max_chunks=2000000 lug/mcache
 # lvconvert --type cache --cachepool lug/mcache lug/repo
 ```
+
+!!! danger "坑 5"
+
+    新建时在倒数第二步的 `lvconvert` 可能会卡死超过半小时（但是最后还是能完成的），栈的信息显示栈顶函数是 `submit_bio_wait()`，有可能是在等 SSD discarding 完成。
 
 ## fstab
 
