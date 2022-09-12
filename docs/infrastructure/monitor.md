@@ -21,6 +21,15 @@
 auth-enabled = true
 ```
 
+此外，参考 <https://docs.influxdata.com/influxdb/v1.8/administration/authentication_and_authorization/#set-up-authentication>，考虑关闭部分功能：
+
+```shell title="/srv/docker/influxdb/conf/influxdb.conf"
+[http]
+# Determines whether the pprof endpoint is enabled.  This endpoint is used for
+# troubleshooting and monitoring.
+pprof-enabled = false
+```
+
 ## Install telegraf
 
 安装方法见 <https://docs.influxdata.com/telegraf/v1.21/introduction/installation/>
