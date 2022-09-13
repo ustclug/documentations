@@ -105,7 +105,11 @@ Outlook 云端已经带有了垃圾邮件分类功能，不需要 thunderbird �
 
 在账户设置的 *Local Folders* 下的 *Junk Settings* 中，取消选中 *Enable adaptive junk mail controls for this account*。
 
-请在上面的 subscribe 中将垃圾邮件选中以同步。
+请在上面的 subscribe 中将垃圾邮件选中以同步。此外，由于 Outlook 目前会将几乎所有邮件都扔进垃圾邮件箱（原因似乎是 M365 的机器学习模型会把所有科大的邮件扔进垃圾箱），因此设置拉取邮件时总是检查垃圾邮件箱。设置方法为在垃圾邮件目录上点击右键 -> 属性，然后选择这里第二个勾：
+
+![Always check spam](./img/thunderbird-spam-always-check.png)
+
+注意：不要查看垃圾邮件的远程内容、不要回复垃圾邮件。正常邮件需要手动移动到收件箱。
 
 ### 使用 Thunderbird 配置不同的身份
 
