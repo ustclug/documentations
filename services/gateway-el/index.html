@@ -15,7 +15,7 @@
         <link rel="canonical" href="https://docs.ustclug.org/services/gateway-el/">
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.3.1, mkdocs-material-8.4.3">
+      <meta name="generator" content="mkdocs-1.3.1, mkdocs-material-8.4.4">
     
     
       
@@ -2035,6 +2035,7 @@ iface ExtraDemoTunnel inet static
 </code></pre></div>
 <p>Adding <code>ip_vs</code> to <code>/etc/modules</code> and rebooting again correctly fixed the problem.</p>
 <p>This is because the module was automatically loaded the first time <code>ipvsadm</code> is called (namely, <code>/etc/init.d/ipvsadm</code>), which happened at a very late stage. Adding to <code>/etc/modules</code> gets the module loaded earlier (and before <code>systemd-sysctl.service</code>) so it worked.</p>
+
 
 
 

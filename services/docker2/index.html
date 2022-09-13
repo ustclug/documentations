@@ -15,7 +15,7 @@
         <link rel="canonical" href="https://docs.ustclug.org/services/docker2/">
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.3.1, mkdocs-material-8.4.3">
+      <meta name="generator" content="mkdocs-1.3.1, mkdocs-material-8.4.4">
     
     
       
@@ -2100,6 +2100,7 @@ sudo -u www-data -- wp core update --version<span class="o">=</span><span class=
 <p>2021/10/25 发现某容器显示正在运行，但是实际没有进程。后发现为 Docker 的 bug，在容器进程被 cgroups 干掉之后可能会出现此情况。</p>
 <p>对应 issue：<a href="https://github.com/moby/moby/issues/38501">https://github.com/moby/moby/issues/38501</a></p>
 <p>解决方法：将容器 ID 对应的 <code>containerd-shim</code> 杀死即可让 Docker 更新其状态为已停止，然后重新开启即可。</p>
+
 
 
 
