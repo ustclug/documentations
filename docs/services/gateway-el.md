@@ -95,3 +95,7 @@ Mar 05 00:00:00 gateway-el systemd-sysctl[218]: Couldn't write '0' to 'net/ipv4/
 Adding `ip_vs` to `/etc/modules` and rebooting again correctly fixed the problem.
 
 This is because the module was automatically loaded the first time `ipvsadm` is called (namely, `/etc/init.d/ipvsadm`), which happened at a very late stage. Adding to `/etc/modules` gets the module loaded earlier (and before `systemd-sysctl.service`) so it worked.
+
+### Tinc issue
+
+See [gateway](../infrastructure/intranet/gateway.md#tinc-workaround-1)
