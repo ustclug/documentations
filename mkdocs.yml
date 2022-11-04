@@ -131,10 +131,7 @@ nav:
     - Docker2: "services/docker2.md"
     - Neat DNS: services/neat-dns.md
     - GitLab: "services/gitlab.md"
-    - LUG VPN:
-      - VPN: "services/vpn.md"
-      - RADIUS: "#"
-      - Web: "#"
+    - LUG VPN: "services/vpn.md"
     - Light: "services/light.md"
     - PXE:
       - LIIMS: "services/pxe/liims.md"
