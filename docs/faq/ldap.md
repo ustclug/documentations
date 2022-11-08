@@ -56,84 +56,84 @@ Slapd 是 openldap 的服务端 daemon。正常情况下不需要碰，但是如
 
 1. TLS/SSL
 
-```
-# ldapmodify -H ldapi:/// -Y EXTERNAL << EOF
-> dn: cn=config
-> changetype: modify
-> replace: olcTLSCertificateFile
-> olcTLSCertificateFile: /etc/ldap/ssl/slapd-server.crt
-> -
-> replace: olcTLSCACertificateFile
-> olcTLSCACertificateFile: /etc/ldap/ssl/slapd-ca-cert.pem
-> -
-> replace: olcTLSCertificateKeyFile
-> olcTLSCertificateKeyFile: /etc/ldap/ssl/slapd-server.key
->
-> EOF
-```
+    ```console
+    # ldapmodify -H ldapi:/// -Y EXTERNAL << EOF
+    > dn: cn=config
+    > changetype: modify
+    > replace: olcTLSCertificateFile
+    > olcTLSCertificateFile: /etc/ldap/ssl/slapd-server.crt
+    > -
+    > replace: olcTLSCACertificateFile
+    > olcTLSCACertificateFile: /etc/ldap/ssl/slapd-ca-cert.pem
+    > -
+    > replace: olcTLSCertificateKeyFile
+    > olcTLSCertificateKeyFile: /etc/ldap/ssl/slapd-server.key
+    >
+    > EOF
+    ```
 
 2. 加载 pw-sha2.la（若使用 ssha512/256 则需要加载）
 
-```sh
-# ldapmodify -H ldapi:/// -Y EXTERNAL << EOF
-> dn: cn=module,cn=config
-> cn: module
-> objectClass: olcModuleList
-> olcModulePath: /usr/lib/ldap/
-> olcModuleLoad: pw-sha2.la
->
-> EOF
-```
+    ```console
+    # ldapmodify -H ldapi:/// -Y EXTERNAL << EOF
+    > dn: cn=module,cn=config
+    > cn: module
+    > objectClass: olcModuleList
+    > olcModulePath: /usr/lib/ldap/
+    > olcModuleLoad: pw-sha2.la
+    >
+    > EOF
+    ```
 
 3. 为 sudoUser 设置 index
 
-```
-# ldapadd -Y EXTERNAL -H ldapi:/// << EOF
-> dn: olcDatabase={1}mdb,cn=config
-> changetype: modify
-> add: olcDbIndex
-> olcDbIndex: sudoUser eq,sub
->
-> EOF
-```
+    ```console
+    # ldapadd -Y EXTERNAL -H ldapi:/// << EOF
+    > dn: olcDatabase={1}mdb,cn=config
+    > changetype: modify
+    > add: olcDbIndex
+    > olcDbIndex: sudoUser eq,sub
+    >
+    > EOF
+    ```
 
 4. 更改默认密码存储选项（可选）
 
-更改为 crypt/yescrypt
+    更改为 crypt/yescrypt
 
-```sh
-# ldapmodify -Y EXTERNAL -H ldapi:/// << EOF
-> dn: olcDatabase={-1}frontend,cn=config
-> add: olcPasswordHash
-> olcPasswordHash: {CRYPT}
-> 
-> dn: cn=config
-> add: olcPasswordCryptSaltFormat
-> olcPasswordCryptSaltFormat: $y$j9T$%s
-```
+    ```console
+    # ldapmodify -Y EXTERNAL -H ldapi:/// << EOF
+    > dn: olcDatabase={-1}frontend,cn=config
+    > add: olcPasswordHash
+    > olcPasswordHash: {CRYPT}
+    > 
+    > dn: cn=config
+    > add: olcPasswordCryptSaltFormat
+    > olcPasswordCryptSaltFormat: $y$j9T$%s
+    ```
 
-更改为 ssha512（需要 pw-sha2.la，也可参照上述 yescrypt 的配置更改为 crypt/ssha512）
+    更改为 ssha512（需要 pw-sha2.la，也可参照上述 yescrypt 的配置更改为 crypt/ssha512）
 
-```sh
-# ldapmodify -Y EXTERNAL -H ldapi:/// << EOF
-> dn: olcDatabase={-1}frontend,cn=config
-> add: olcPasswordHash
-> olcPasswordHash: {SSHA512}
-```
+    ```console
+    # ldapmodify -Y EXTERNAL -H ldapi:/// << EOF
+    > dn: olcDatabase={-1}frontend,cn=config
+    > add: olcPasswordHash
+    > olcPasswordHash: {SSHA512}
+    ```
 
-如果报错已经存在，可以用 replace 选项，以 crypt/yescrypt 为例：
+    如果报错已经存在，可以用 replace 选项，以 crypt/yescrypt 为例：
 
-```sh
-# ldapmodify -Y EXTERNAL -H ldapi:/// << EOF
-> dn: olcDatabase={-1}frontend,cn=config
-> changetype: modify
-> replace: olcPasswordHash
-> olcPasswordHash: {CRYPT}
-> 
-> dn: cn=config
-> changetype: modify
-> replace: olcPasswordCryptSaltFormat
-> olcPasswordCryptSaltFormat: $y$j9T$%s
-```
+    ```console
+    # ldapmodify -Y EXTERNAL -H ldapi:/// << EOF
+    > dn: olcDatabase={-1}frontend,cn=config
+    > changetype: modify
+    > replace: olcPasswordHash
+    > olcPasswordHash: {CRYPT}
+    > 
+    > dn: cn=config
+    > changetype: modify
+    > replace: olcPasswordCryptSaltFormat
+    > olcPasswordCryptSaltFormat: $y$j9T$%s
+    ```
 
-注意在使用上述 hash 方式的时候进入 gosa 用户页面时可能会报错 Cannot find a suitable password method for the current hash
+    注意在使用上述 hash 方式的时候进入 gosa 用户页面时可能会报错 Cannot find a suitable password method for the current hash

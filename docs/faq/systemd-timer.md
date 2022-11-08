@@ -11,9 +11,8 @@ Systemd-timer 作为 crontab 的替代品，有一系列的优点：
 
 所以以下给出一个模板，方便在创建新定时任务的时候使用。这里的例子是 mirrors2 从 mirrors4 获取压缩后的日志。以下文件均放在 `/etc/systemd/system`。
 
-`m4log.service`:
 
-```systemd
+```systemd title="m4log.service"
 [Unit]
 Description=Mirrors4 log backup
 Documentation=man:rsync(1)
@@ -29,9 +28,7 @@ Restart=on-failure
 RestartSec=3
 ```
 
-`m4log.timer`:
-
-```systemd
+```systemd title="m4log.timer"
 [Unit]
 Description=Mirrors4 log backup timer
 Documentation=man:rsync(1)
@@ -48,7 +45,7 @@ Unit=m4log.service
 WantedBy=timer.target
 ```
 
-关于 OnCalendar 的触发时间，可以用 `systemd-analyze calendar` 来检验正确性，也可以用 `systemctl list-timers` 观察 Timer 下次触发的时间是否符合预期
+关于 OnCalendar 的触发时间，可以参考 systemd 的 [Calendar Events](https://www.freedesktop.org/software/systemd/man/systemd.time.html#Calendar%20Events) 说明，并用 `systemd-analyze calendar` 来检验正确性，也可以用 `systemctl list-timers` 观察 Timer 下次触发的时间是否符合预期。
 
 下面是一些常用命令：
 
