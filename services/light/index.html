@@ -1888,7 +1888,7 @@
 <p>Mailing list: <a href="https://groups.google.com/d/topic/ustc_lug/EZAL7OdJa_E/discussion">轻量级网络加速服务</a></p>
 <p>Servers:</p>
 <ul>
-<li>swarm.s.ustclug.org (docker container)<ul>
+<li>swarm.s.ustclug.org (docker containers)<ul>
 <li>light-mysql</li>
 <li>light-freeradius</li>
 <li>light-server</li>
@@ -1935,10 +1935,10 @@ git push origin master
 <h2 id="shutdown">Shutdown<a class="headerlink" href="#shutdown" title="Permanent link">&para;</a></h2>
 <ol>
 <li>Stop two containers: <code>light-server</code> &amp; <code>light-socks</code></li>
-<li>Set restart policy to <code>no</code> (See <a href="https://docs.docker.com/config/containers/start-containers-automatically/#use-a-restart-policy&gt;">Docker Documentation</a>)</li>
+<li>Set restart policy to <code>no</code> (See <a href="https://docs.docker.com/config/containers/start-containers-automatically/#use-a-restart-policy">Docker Documentation</a>)</li>
 </ol>
 <h2 id="logs">Logs<a class="headerlink" href="#logs" title="Permanent link">&para;</a></h2>
-<p>Proxy related log is under <code>/srv/docker/light/log</code>. Container log (stdout &amp; stderr) is under <code>/srv/docker/docker/containers/&lt;container id&gt;/*.log*</code>.</p>
+<p>Proxy related log is under <code>/srv/docker/light/log</code>. Container log (stdout &amp; stderr) is under <code>/srv/docker/docker/containers/&lt;container id&gt;/*.log*</code> (use <code>docker logs &lt;container&gt;</code> to view).</p>
 <p>Logrotate is configured to save logs for 180 days. Please manually backup logs when removing the container.</p>
 
 
