@@ -1780,8 +1780,7 @@
 <li>啰嗦、难写。</li>
 </ul>
 <p>所以以下给出一个模板，方便在创建新定时任务的时候使用。这里的例子是 mirrors2 从 mirrors4 获取压缩后的日志。以下文件均放在 <code>/etc/systemd/system</code>。</p>
-<p><code>m4log.service</code>:</p>
-<div class="highlight"><pre><span></span><code>[Unit]
+<div class="highlight"><span class="filename">m4log.service</span><pre><span></span><code>[Unit]
 Description=Mirrors4 log backup
 Documentation=man:rsync(1)
 After=network.target
@@ -1795,8 +1794,7 @@ ExecStart=rsync -rltpv --include=*/ --include=*.xz --exclude=* m4log:/ /var/m4lo
 Restart=on-failure
 RestartSec=3
 </code></pre></div>
-<p><code>m4log.timer</code>:</p>
-<div class="highlight"><pre><span></span><code>[Unit]
+<div class="highlight"><span class="filename">m4log.timer</span><pre><span></span><code>[Unit]
 Description=Mirrors4 log backup timer
 Documentation=man:rsync(1)
 After=network.target
@@ -1811,7 +1809,7 @@ Unit=m4log.service
 [Install]
 WantedBy=timer.target
 </code></pre></div>
-<p>关于 OnCalendar 的触发时间，可以用 <code>systemd-analyze calendar</code> 来检验正确性，也可以用 <code>systemctl list-timers</code> 观察 Timer 下次触发的时间是否符合预期</p>
+<p>关于 OnCalendar 的触发时间，可以参考 systemd 的 <a href="https://www.freedesktop.org/software/systemd/man/systemd.time.html#Calendar%20Events">Calendar Events</a> 说明，并用 <code>systemd-analyze calendar</code> 来检验正确性，也可以用 <code>systemctl list-timers</code> 观察 Timer 下次触发的时间是否符合预期。</p>
 <p>下面是一些常用命令：</p>
 <ul>
 <li>开机启用计时器：<code>systemctl enable m4log.timer</code></li>

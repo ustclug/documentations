@@ -1900,77 +1900,79 @@ Stack trace:
 </ol>
 <p>恢复成功后，有些配置需要手动设置：</p>
 <ol>
-<li>TLS/SSL</li>
-</ol>
-<div class="highlight"><pre><span></span><code># ldapmodify -H ldapi:/// -Y EXTERNAL &lt;&lt; EOF
-&gt; dn: cn=config
-&gt; changetype: modify
-&gt; replace: olcTLSCertificateFile
-&gt; olcTLSCertificateFile: /etc/ldap/ssl/slapd-server.crt
-&gt; -
-&gt; replace: olcTLSCACertificateFile
-&gt; olcTLSCACertificateFile: /etc/ldap/ssl/slapd-ca-cert.pem
-&gt; -
-&gt; replace: olcTLSCertificateKeyFile
-&gt; olcTLSCertificateKeyFile: /etc/ldap/ssl/slapd-server.key
-&gt;
-&gt; EOF
+<li>
+<p>TLS/SSL</p>
+<div class="highlight"><pre><span></span><code><span class="gp"># </span>ldapmodify -H ldapi:/// -Y EXTERNAL &lt;&lt; EOF
+<span class="go">&gt; dn: cn=config</span>
+<span class="go">&gt; changetype: modify</span>
+<span class="go">&gt; replace: olcTLSCertificateFile</span>
+<span class="go">&gt; olcTLSCertificateFile: /etc/ldap/ssl/slapd-server.crt</span>
+<span class="go">&gt; -</span>
+<span class="go">&gt; replace: olcTLSCACertificateFile</span>
+<span class="go">&gt; olcTLSCACertificateFile: /etc/ldap/ssl/slapd-ca-cert.pem</span>
+<span class="go">&gt; -</span>
+<span class="go">&gt; replace: olcTLSCertificateKeyFile</span>
+<span class="go">&gt; olcTLSCertificateKeyFile: /etc/ldap/ssl/slapd-server.key</span>
+<span class="go">&gt;</span>
+<span class="go">&gt; EOF</span>
 </code></pre></div>
-<ol>
-<li>加载 pw-sha2.la（若使用 ssha512/256 则需要加载）</li>
-</ol>
-<div class="highlight"><pre><span></span><code><span class="c1"># ldapmodify -H ldapi:/// -Y EXTERNAL &lt;&lt; EOF</span>
-&gt; dn: <span class="nv">cn</span><span class="o">=</span>module,cn<span class="o">=</span>config
-&gt; cn: module
-&gt; objectClass: olcModuleList
-&gt; olcModulePath: /usr/lib/ldap/
-&gt; olcModuleLoad: pw-sha2.la
-&gt;
-&gt; EOF
+</li>
+<li>
+<p>加载 pw-sha2.la（若使用 ssha512/256 则需要加载）</p>
+<div class="highlight"><pre><span></span><code><span class="gp"># </span>ldapmodify -H ldapi:/// -Y EXTERNAL &lt;&lt; EOF
+<span class="go">&gt; dn: cn=module,cn=config</span>
+<span class="go">&gt; cn: module</span>
+<span class="go">&gt; objectClass: olcModuleList</span>
+<span class="go">&gt; olcModulePath: /usr/lib/ldap/</span>
+<span class="go">&gt; olcModuleLoad: pw-sha2.la</span>
+<span class="go">&gt;</span>
+<span class="go">&gt; EOF</span>
 </code></pre></div>
-<ol>
-<li>为 sudoUser 设置 index</li>
-</ol>
-<div class="highlight"><pre><span></span><code># ldapadd -Y EXTERNAL -H ldapi:/// &lt;&lt; EOF
-&gt; dn: olcDatabase={1}mdb,cn=config
-&gt; changetype: modify
-&gt; add: olcDbIndex
-&gt; olcDbIndex: sudoUser eq,sub
-&gt;
-&gt; EOF
+</li>
+<li>
+<p>为 sudoUser 设置 index</p>
+<div class="highlight"><pre><span></span><code><span class="gp"># </span>ldapadd -Y EXTERNAL -H ldapi:/// &lt;&lt; EOF
+<span class="go">&gt; dn: olcDatabase={1}mdb,cn=config</span>
+<span class="go">&gt; changetype: modify</span>
+<span class="go">&gt; add: olcDbIndex</span>
+<span class="go">&gt; olcDbIndex: sudoUser eq,sub</span>
+<span class="go">&gt;</span>
+<span class="go">&gt; EOF</span>
 </code></pre></div>
-<ol>
-<li>更改默认密码存储选项（可选）</li>
-</ol>
+</li>
+<li>
+<p>更改默认密码存储选项（可选）</p>
 <p>更改为 crypt/yescrypt</p>
-<div class="highlight"><pre><span></span><code><span class="c1"># ldapmodify -Y EXTERNAL -H ldapi:/// &lt;&lt; EOF</span>
-&gt; dn: <span class="nv">olcDatabase</span><span class="o">={</span>-1<span class="o">}</span>frontend,cn<span class="o">=</span>config
-&gt; add: olcPasswordHash
-&gt; olcPasswordHash: <span class="o">{</span>CRYPT<span class="o">}</span>
-&gt; 
-&gt; dn: <span class="nv">cn</span><span class="o">=</span>config
-&gt; add: olcPasswordCryptSaltFormat
-&gt; olcPasswordCryptSaltFormat: <span class="nv">$y$j9T</span>$%s
+<div class="highlight"><pre><span></span><code><span class="gp"># </span>ldapmodify -Y EXTERNAL -H ldapi:/// &lt;&lt; EOF
+<span class="go">&gt; dn: olcDatabase={-1}frontend,cn=config</span>
+<span class="go">&gt; add: olcPasswordHash</span>
+<span class="go">&gt; olcPasswordHash: {CRYPT}</span>
+<span class="go">&gt; </span>
+<span class="go">&gt; dn: cn=config</span>
+<span class="go">&gt; add: olcPasswordCryptSaltFormat</span>
+<span class="go">&gt; olcPasswordCryptSaltFormat: $y$j9T$%s</span>
 </code></pre></div>
 <p>更改为 ssha512（需要 pw-sha2.la，也可参照上述 yescrypt 的配置更改为 crypt/ssha512）</p>
-<div class="highlight"><pre><span></span><code><span class="c1"># ldapmodify -Y EXTERNAL -H ldapi:/// &lt;&lt; EOF</span>
-&gt; dn: <span class="nv">olcDatabase</span><span class="o">={</span>-1<span class="o">}</span>frontend,cn<span class="o">=</span>config
-&gt; add: olcPasswordHash
-&gt; olcPasswordHash: <span class="o">{</span>SSHA512<span class="o">}</span>
+<div class="highlight"><pre><span></span><code><span class="gp"># </span>ldapmodify -Y EXTERNAL -H ldapi:/// &lt;&lt; EOF
+<span class="go">&gt; dn: olcDatabase={-1}frontend,cn=config</span>
+<span class="go">&gt; add: olcPasswordHash</span>
+<span class="go">&gt; olcPasswordHash: {SSHA512}</span>
 </code></pre></div>
 <p>如果报错已经存在，可以用 replace 选项，以 crypt/yescrypt 为例：</p>
-<div class="highlight"><pre><span></span><code><span class="c1"># ldapmodify -Y EXTERNAL -H ldapi:/// &lt;&lt; EOF</span>
-&gt; dn: <span class="nv">olcDatabase</span><span class="o">={</span>-1<span class="o">}</span>frontend,cn<span class="o">=</span>config
-&gt; changetype: modify
-&gt; replace: olcPasswordHash
-&gt; olcPasswordHash: <span class="o">{</span>CRYPT<span class="o">}</span>
-&gt; 
-&gt; dn: <span class="nv">cn</span><span class="o">=</span>config
-&gt; changetype: modify
-&gt; replace: olcPasswordCryptSaltFormat
-&gt; olcPasswordCryptSaltFormat: <span class="nv">$y$j9T</span>$%s
+<div class="highlight"><pre><span></span><code><span class="gp"># </span>ldapmodify -Y EXTERNAL -H ldapi:/// &lt;&lt; EOF
+<span class="go">&gt; dn: olcDatabase={-1}frontend,cn=config</span>
+<span class="go">&gt; changetype: modify</span>
+<span class="go">&gt; replace: olcPasswordHash</span>
+<span class="go">&gt; olcPasswordHash: {CRYPT}</span>
+<span class="go">&gt; </span>
+<span class="go">&gt; dn: cn=config</span>
+<span class="go">&gt; changetype: modify</span>
+<span class="go">&gt; replace: olcPasswordCryptSaltFormat</span>
+<span class="go">&gt; olcPasswordCryptSaltFormat: $y$j9T$%s</span>
 </code></pre></div>
 <p>注意在使用上述 hash 方式的时候进入 gosa 用户页面时可能会报错 Cannot find a suitable password method for the current hash</p>
+</li>
+</ol>
 
 
 
