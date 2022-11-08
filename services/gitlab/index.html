@@ -2100,9 +2100,9 @@
 <p>在 GitLab 有 Security Release 且 docker-gitlab 发布新版本之后需要安排时间更新。尤其 Critical Security Release 需要尽快找时间更新。</p>
 <h2 id="_1">更新<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <p>（建议阅读 <a href="https://docs.gitlab.com/ee/update/index.html">https://docs.gitlab.com/ee/update/index.html</a>）</p>
-<p>由于已经 docker 化，因此我们的更新是通过拉取 <a href="https://github.com/sameersbn/docker-gitlab/">sameersbn/docker-gitlab</a> 的 docker image，进行数据库准备以及启动镜像实例来进行更新，Zack Zeng 学长已经写好了一套脚本系统：<a href="https://git.lug.ustc.edu.cn/ustclug/gitlab-scripts">gitlab-scripts</a>，因此更新时只要跑脚本就可以了。</p>
+<p>由于已经 docker 化，因此我们的更新是通过拉取 <a href="https://github.com/sameersbn/docker-gitlab">sameersbn/docker-gitlab</a> 的 docker image，进行数据库准备以及启动镜像实例来进行更新，Zack Zeng 学长已经写好了一套脚本系统：<a href="https://git.lug.ustc.edu.cn/ustclug/gitlab-scripts">gitlab-scripts</a>，因此更新时只要跑脚本就可以了。</p>
 <p>由于更新需要停止服务，因此请于更新前至少几小时发布更新公告（包括具体时间等），并检查 Admin -&gt; Monitoring -&gt; Background Migrations 中所有 migration 是否都已经成功完成。</p>
-<p>更新前请先提前于 <a href="https://vcenter2.vm.ustclug.org/">VCenter</a> 上对虚拟机打快照（打快照时服务会暂时停止）</p>
+<p>更新前请先提前于 <a href="https://pve-6.vm.ustclug.org/">Proxmox VE</a> 上对虚拟机打快照（打快照时服务会暂时停止）</p>
 <p>打完快照之后使用脚本进行更新（目前脚本位于 <code>/home/sirius/gitlab-scripts</code>），首先使用 <code>./gitlab.sh db</code> 进行数据库的准备工作。之后可以通过 <code>./gitlab.sh run &lt;版本号&gt;</code> 来进行 docker container 的替换。更换前脚本会自动拉取相应版本号的 docker 镜像，如果担心拉取时间过长可以在打快照前提前通过 <code>docker pull sameersbn/gitlab:&lt;版本号&gt;</code> 来拉取相应的镜像。</p>
 <p>一般情况下经以上操作后更新就正常结束，如果长时间无法启动，可以通过 <code>docker logs gitlab</code> 查看日志，如果发现更新后的启动出现问题，可以到 <a href="https://github.com/sameersbn/docker-gitlab/">sameersbn/docker-gitlab</a> 的 issue 区等地查看相关 issue，以及通过对出错日志进行 Google 可能会发现是 gitlab 上游等出现的问题。如果有解决办法，可以按照相应解决办法解决，如果没有。可以通过找到有相应问题前的正常版本号，回滚快照，之后更到表现正常的版本。（最近的更新会在启动之后短暂出现 502 的情况，但很快就会恢复，遇到这种情况时不要惊慌）。</p>
 <p>由于更新可能会出现问题导致服务不可用，因此不建议通过 cron 等方式自动进行更新。</p>
@@ -2145,35 +2145,35 @@
 <h2 id="rake-tasks">使用 Rake tasks<a class="headerlink" href="#rake-tasks" title="Permanent link">&para;</a></h2>
 <p>详见 <a href="https://github.com/sameersbn/docker-gitlab#rake-tasks">https://github.com/sameersbn/docker-gitlab#rake-tasks</a>。和 Rails console 一样，初始化很慢。</p>
 <p>当前实例信息：</p>
-<div class="highlight"><pre><span></span><code>sudo docker <span class="nb">exec</span> --user git -it gitlab bundle <span class="nb">exec</span> rake gitlab:env:info <span class="nv">RAILS_ENV</span><span class="o">=</span>production
+<div class="highlight"><pre><span></span><code>docker <span class="nb">exec</span> --user git -it gitlab bundle <span class="nb">exec</span> rake gitlab:env:info <span class="nv">RAILS_ENV</span><span class="o">=</span>production
 </code></pre></div>
 <h3 id="_4">清理<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h3>
 <p>参考 <a href="https://github.com/gitlabhq/gitlabhq/blob/master/doc/raketasks/cleanup.md">https://github.com/gitlabhq/gitlabhq/blob/master/doc/raketasks/cleanup.md</a>。</p>
 <p>不过作用有限。</p>
 <h4 id="_5">清理上传目录<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h4>
 <p>查看会被清理的文件：</p>
-<div class="highlight"><pre><span></span><code>sudo docker <span class="nb">exec</span> --user git -it gitlab bundle <span class="nb">exec</span> rake gitlab:cleanup:project_uploads <span class="nv">RAILS_ENV</span><span class="o">=</span>production
+<div class="highlight"><pre><span></span><code>docker <span class="nb">exec</span> --user git -it gitlab bundle <span class="nb">exec</span> rake gitlab:cleanup:project_uploads <span class="nv">RAILS_ENV</span><span class="o">=</span>production
 </code></pre></div>
 <p>清理（移动到 /-/project-lost-found/）：</p>
-<div class="highlight"><pre><span></span><code>sudo docker <span class="nb">exec</span> --user git -it gitlab bundle <span class="nb">exec</span> rake gitlab:cleanup:project_uploads <span class="nv">RAILS_ENV</span><span class="o">=</span>production <span class="nv">DRY_RUN</span><span class="o">=</span><span class="nb">false</span>
+<div class="highlight"><pre><span></span><code>docker <span class="nb">exec</span> --user git -it gitlab bundle <span class="nb">exec</span> rake gitlab:cleanup:project_uploads <span class="nv">RAILS_ENV</span><span class="o">=</span>production <span class="nv">DRY_RUN</span><span class="o">=</span><span class="nb">false</span>
 </code></pre></div>
 <h4 id="artifact">清理未被引用的 artifact 文件<a class="headerlink" href="#artifact" title="Permanent link">&para;</a></h4>
 <p>查看会被清理的 artifact 数量：</p>
-<div class="highlight"><pre><span></span><code>sudo docker <span class="nb">exec</span> --user git -it gitlab bundle <span class="nb">exec</span> rake gitlab:cleanup:orphan_job_artifact_files <span class="nv">RAILS_ENV</span><span class="o">=</span>production
+<div class="highlight"><pre><span></span><code>docker <span class="nb">exec</span> --user git -it gitlab bundle <span class="nb">exec</span> rake gitlab:cleanup:orphan_job_artifact_files <span class="nv">RAILS_ENV</span><span class="o">=</span>production
 </code></pre></div>
 <p>清理：</p>
-<div class="highlight"><pre><span></span><code>sudo docker <span class="nb">exec</span> --user git -it gitlab bundle <span class="nb">exec</span> rake gitlab:cleanup:orphan_job_artifact_files <span class="nv">RAILS_ENV</span><span class="o">=</span>production <span class="nv">DRY_RUN</span><span class="o">=</span><span class="nb">false</span>
+<div class="highlight"><pre><span></span><code>docker <span class="nb">exec</span> --user git -it gitlab bundle <span class="nb">exec</span> rake gitlab:cleanup:orphan_job_artifact_files <span class="nv">RAILS_ENV</span><span class="o">=</span>production <span class="nv">DRY_RUN</span><span class="o">=</span><span class="nb">false</span>
 </code></pre></div>
 <p>注意，新设置的 expire 期限不会影响以前的 artifact，这里的命令也无法清理。</p>
 <h4 id="lfs-reference">清理无效的 LFS reference<a class="headerlink" href="#lfs-reference" title="Permanent link">&para;</a></h4>
-<div class="highlight"><pre><span></span><code><span class="k">for</span> i <span class="k">in</span> <span class="sb">`</span>cat projectid_lfs<span class="sb">`</span><span class="p">;</span> <span class="k">do</span> sudo docker <span class="nb">exec</span> --user git -it gitlab bundle <span class="nb">exec</span> rake gitlab:cleanup:orphan_lfs_file_references <span class="nv">PROJECT_ID</span><span class="o">=</span><span class="nv">$i</span> <span class="nv">RAILS_ENV</span><span class="o">=</span>production <span class="nv">DRY_RUN</span><span class="o">=</span>false<span class="p">;</span> <span class="k">done</span>
+<div class="highlight"><pre><span></span><code><span class="k">for</span> i <span class="k">in</span> <span class="sb">`</span>cat projectid_lfs<span class="sb">`</span><span class="p">;</span> <span class="k">do</span> docker <span class="nb">exec</span> --user git -it gitlab bundle <span class="nb">exec</span> rake gitlab:cleanup:orphan_lfs_file_references <span class="nv">PROJECT_ID</span><span class="o">=</span><span class="nv">$i</span> <span class="nv">RAILS_ENV</span><span class="o">=</span>production <span class="nv">DRY_RUN</span><span class="o">=</span>false<span class="p">;</span> <span class="k">done</span>
 </code></pre></div>
 <p><code>projectid_lfs</code> 是上文中「获取所有包含 LFS 的项目 ID」的去重后的输出。</p>
 <p>无 reference 的 LFS 文件每日 GitLab 会自动清除。如果需要立刻删除，可以使用 <code>gitlab:cleanup:orphan_lfs_files</code>。</p>
 <h2 id="_6">紧急操作<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
 <h3 id="_7">设置为只读<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h3>
-<p>https://docs.gitlab.com/ee/administration/read_only_gitlab.html</p>
-<div class="highlight"><pre><span></span><code><span class="gp"># </span>docker <span class="nb">exec</span> --user git -it gitlab bin/rails console
+<p>Ref: <a href="https://docs.gitlab.com/ee/administration/read_only_gitlab.html">https://docs.gitlab.com/ee/administration/read_only_gitlab.html</a></p>
+<div class="highlight"><pre><span></span><code>docker <span class="nb">exec</span> --user git -it gitlab bin/rails console
 </code></pre></div>
 <p>之后执行</p>
 <div class="highlight"><pre><span></span><code><span class="no">Project</span><span class="o">.</span><span class="n">all</span><span class="o">.</span><span class="n">find_each</span> <span class="p">{</span> <span class="o">|</span><span class="n">project</span><span class="o">|</span> <span class="nb">puts</span> <span class="n">project</span><span class="o">.</span><span class="n">name</span><span class="p">;</span> <span class="n">project</span><span class="o">.</span><span class="n">update!</span><span class="p">(</span><span class="ss">repository_read_only</span><span class="p">:</span> <span class="kp">true</span><span class="p">)</span> <span class="p">}</span>
