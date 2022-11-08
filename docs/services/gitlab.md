@@ -19,11 +19,11 @@ GitLab 维护者需要订阅：
 
 （建议阅读 <https://docs.gitlab.com/ee/update/index.html>）
 
-由于已经 docker 化，因此我们的更新是通过拉取 [sameersbn/docker-gitlab](https://github.com/sameersbn/docker-gitlab/) 的 docker image，进行数据库准备以及启动镜像实例来进行更新，Zack Zeng 学长已经写好了一套脚本系统：[gitlab-scripts](https://git.lug.ustc.edu.cn/ustclug/gitlab-scripts)，因此更新时只要跑脚本就可以了。
+由于已经 docker 化，因此我们的更新是通过拉取 [sameersbn/docker-gitlab](https://github.com/sameersbn/docker-gitlab) 的 docker image，进行数据库准备以及启动镜像实例来进行更新，Zack Zeng 学长已经写好了一套脚本系统：[gitlab-scripts](https://git.lug.ustc.edu.cn/ustclug/gitlab-scripts)，因此更新时只要跑脚本就可以了。
 
 由于更新需要停止服务，因此请于更新前至少几小时发布更新公告（包括具体时间等），并检查 Admin -> Monitoring -> Background Migrations 中所有 migration 是否都已经成功完成。
 
-更新前请先提前于 [VCenter](https://vcenter2.vm.ustclug.org/) 上对虚拟机打快照（打快照时服务会暂时停止）
+更新前请先提前于 [Proxmox VE](https://pve-6.vm.ustclug.org:8006/) 上对虚拟机打快照（打快照时服务会暂时停止）
 
 打完快照之后使用脚本进行更新（目前脚本位于 `/home/sirius/gitlab-scripts`），首先使用 `./gitlab.sh db` 进行数据库的准备工作。之后可以通过 `./gitlab.sh run <版本号>` 来进行 docker container 的替换。更换前脚本会自动拉取相应版本号的 docker 镜像，如果担心拉取时间过长可以在打快照前提前通过 `docker pull sameersbn/gitlab:<版本号>` 来拉取相应的镜像。
 
@@ -99,7 +99,7 @@ end
 当前实例信息：
 
 ```shell
-sudo docker exec --user git -it gitlab bundle exec rake gitlab:env:info RAILS_ENV=production
+docker exec --user git -it gitlab bundle exec rake gitlab:env:info RAILS_ENV=production
 ```
 
 ### 清理
@@ -113,13 +113,13 @@ sudo docker exec --user git -it gitlab bundle exec rake gitlab:env:info RAILS_EN
 查看会被清理的文件：
 
 ```shell
-sudo docker exec --user git -it gitlab bundle exec rake gitlab:cleanup:project_uploads RAILS_ENV=production
+docker exec --user git -it gitlab bundle exec rake gitlab:cleanup:project_uploads RAILS_ENV=production
 ```
 
 清理（移动到 /-/project-lost-found/）：
 
 ```shell
-sudo docker exec --user git -it gitlab bundle exec rake gitlab:cleanup:project_uploads RAILS_ENV=production DRY_RUN=false
+docker exec --user git -it gitlab bundle exec rake gitlab:cleanup:project_uploads RAILS_ENV=production DRY_RUN=false
 ```
 
 #### 清理未被引用的 artifact 文件
@@ -127,13 +127,13 @@ sudo docker exec --user git -it gitlab bundle exec rake gitlab:cleanup:project_u
 查看会被清理的 artifact 数量：
 
 ```shell
-sudo docker exec --user git -it gitlab bundle exec rake gitlab:cleanup:orphan_job_artifact_files RAILS_ENV=production
+docker exec --user git -it gitlab bundle exec rake gitlab:cleanup:orphan_job_artifact_files RAILS_ENV=production
 ```
 
 清理：
 
 ```shell
-sudo docker exec --user git -it gitlab bundle exec rake gitlab:cleanup:orphan_job_artifact_files RAILS_ENV=production DRY_RUN=false
+docker exec --user git -it gitlab bundle exec rake gitlab:cleanup:orphan_job_artifact_files RAILS_ENV=production DRY_RUN=false
 ```
 
 注意，新设置的 expire 期限不会影响以前的 artifact，这里的命令也无法清理。
@@ -141,7 +141,7 @@ sudo docker exec --user git -it gitlab bundle exec rake gitlab:cleanup:orphan_jo
 #### 清理无效的 LFS reference
 
 ```shell
-for i in `cat projectid_lfs`; do sudo docker exec --user git -it gitlab bundle exec rake gitlab:cleanup:orphan_lfs_file_references PROJECT_ID=$i RAILS_ENV=production DRY_RUN=false; done
+for i in `cat projectid_lfs`; do docker exec --user git -it gitlab bundle exec rake gitlab:cleanup:orphan_lfs_file_references PROJECT_ID=$i RAILS_ENV=production DRY_RUN=false; done
 ```
 
 `projectid_lfs` 是上文中「获取所有包含 LFS 的项目 ID」的去重后的输出。
@@ -152,10 +152,10 @@ for i in `cat projectid_lfs`; do sudo docker exec --user git -it gitlab bundle e
 
 ### 设置为只读
 
-https://docs.gitlab.com/ee/administration/read_only_gitlab.html
+Ref: <https://docs.gitlab.com/ee/administration/read_only_gitlab.html>
 
-```console
-# docker exec --user git -it gitlab bin/rails console
+```shell
+docker exec --user git -it gitlab bin/rails console
 ```
 
 之后执行
