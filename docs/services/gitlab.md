@@ -2,16 +2,14 @@
 
 Server: gitlab.s.ustclug.org (management ssh port 2222)
 
-Git Repository:
-
-- [gitlab-scripts](https://git.lug.ustc.edu.cn/ustclug/gitlab-scripts)
+Git Repository: [gitlab-scripts](https://git.lug.ustc.edu.cn/ustclug/gitlab-scripts)
 
 ## GitLab & Security
 
 GitLab 维护者需要订阅：
 
 1. GitLab Security Notices 邮件列表 (<https://about.gitlab.com/company/contact/> 右侧 "Sign up for security notices")
-2. [GitHub sameersbn/docker-gitlab releases](https://github.com/sameersbn/docker-gitlab/releases) (Watch -> Custom -> Releases)
+2. [:octicons-mark-github-16: sameersbn/docker-gitlab Releases](https://github.com/sameersbn/docker-gitlab/releases) (Watch → Custom → Releases)
 
 在 GitLab 有 Security Release 且 docker-gitlab 发布新版本之后需要安排时间更新。尤其 Critical Security Release 需要尽快找时间更新。
 
@@ -43,7 +41,7 @@ GitLab 维护者需要订阅：
 
 ## 访问 Rails console
 
-Rails console 可以完成一些高级的维护任务。在 gitlab 容器中执行 `bin/rails console` 启动。注意 console 的启动时间很长，需要有耐心。
+Rails console 可以完成一些高级的维护任务。在 gitlab 容器中执行 `bin/rails console` 启动。注意 console 的启动时间很长（:octicons-clock-16: 1 分钟以上），需要有耐心。
 
 可以执行的命令可参考 <https://docs.gitlab.com/ee/administration/troubleshooting/gitlab_rails_cheat_sheet.html>。
 

@@ -22,7 +22,7 @@ We then refer to these interfaces using their new names in `/etc/network/interfa
 
 !!! note "2022 年 2 月 21 日更新"
 
-    今日发现 docker2 无法连接容器网络（10.254.1.0/21），调试后发现为 Docker macvlan 网络特性（[Stack Overflow](https://stackoverflow.com/a/51973512/5958455)）。为了修复连接问题，进行了以下修改：
+    今日发现 docker2 无法连接容器网络（10.254.1.0/21），调试后发现为 Linux macvlan 网络特性（[Stack Overflow](https://stackoverflow.com/a/51973512/5958455)）。为了修复连接问题，进行了以下修改：
 
     1. 将 `/etc/udev/rules.d/70-persistent-net.rules` 中 `Policy` 更名为 `ustclug`；
     2. 在 `/etc/network/interfaces` 中设置 `Policy` 和 `ustclug` 两个 interface 的相关配置如下：
