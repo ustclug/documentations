@@ -18,7 +18,7 @@ Mailing list: [轻量级网络加速服务](https://groups.google.com/d/topic/us
 
 Servers:
 
-* swarm.s.ustclug.org (docker container)
+* swarm.s.ustclug.org (docker containers)
     * light-mysql
     * light-freeradius
     * light-server
@@ -69,10 +69,10 @@ optimize table radacct_backup;
 ## Shutdown
 
 1. Stop two containers: `light-server` & `light-socks`
-2. Set restart policy to `no` (See [Docker Documentation](https://docs.docker.com/config/containers/start-containers-automatically/#use-a-restart-policy>))
+2. Set restart policy to `no` (See [Docker Documentation](https://docs.docker.com/config/containers/start-containers-automatically/#use-a-restart-policy))
 
 ## Logs
 
-Proxy related log is under `/srv/docker/light/log`. Container log (stdout & stderr) is under `/srv/docker/docker/containers/<container id>/*.log*`.
+Proxy related log is under `/srv/docker/light/log`. Container log (stdout & stderr) is under `/srv/docker/docker/containers/<container id>/*.log*` (use `docker logs <container>` to view).
 
 Logrotate is configured to save logs for 180 days. Please manually backup logs when removing the container.

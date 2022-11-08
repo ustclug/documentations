@@ -11,7 +11,7 @@ Git Repository:
 GitLab 维护者需要订阅：
 
 1. GitLab Security Notices 邮件列表 (<https://about.gitlab.com/company/contact/> 右侧 "Sign up for security notices")
-2. sameersbn/docker-gitlab releases (GitHub <https://github.com/sameersbn/docker-gitlab/releases> Watch -> Custom -> Releases)
+2. [GitHub sameersbn/docker-gitlab releases](https://github.com/sameersbn/docker-gitlab/releases) (Watch -> Custom -> Releases)
 
 在 GitLab 有 Security Release 且 docker-gitlab 发布新版本之后需要安排时间更新。尤其 Critical Security Release 需要尽快找时间更新。
 
