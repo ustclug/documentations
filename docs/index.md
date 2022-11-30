@@ -1,3 +1,7 @@
+---
+ᴴₒᴴₒᴴₒ: true
+---
+
 # LUG @ USTC Documentation
 
 Documentation for LUG @ USTC technical infrastructure.
