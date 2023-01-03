@@ -236,7 +236,7 @@ $ sudo lvs -o name,cache_policy,cache_settings,chunk_size,cache_used_blocks,cach
 然后恢复 cache（参考上面 mcache_meta 和 mcache 逻辑卷的配置，**请注意在理解命令后再执行**！）：
 
 ```
-# lvcreate -L 16G -n mcache_meta lug /dev/sdc1
+# lvcreate -L 16G -n mcache_meta lug /dev/sdc1  # SSD 设备路径重启后可能会变化
 # lvcreate -l 100%FREE -n mcache lug /dev/sdc1
 # lvreduce -l -2048 lug/mcache
 # lvconvert --type cache-pool --poolmetadata lug/mcache_meta --cachemode writethrough -c 1M --config allocation/cache_pool_max_chunks=2000000 lug/mcache
@@ -245,7 +245,7 @@ $ sudo lvs -o name,cache_policy,cache_settings,chunk_size,cache_used_blocks,cach
 
 !!! danger "坑 5"
 
-    新建时在倒数第二步的 `lvconvert` 可能会卡死超过半小时（但是最后还是能完成的），栈的信息显示栈顶函数是 `submit_bio_wait()`，有可能是在等 SSD discarding 完成。
+    新建时在倒数第二步的 `lvconvert` 可能会卡死超过半小时（但是最后还是能完成的），栈的信息显示栈顶函数是 `submit_bio_wait()`，在清零对应的 block range，因为 RAID 卡不支持下传 discarding 所以会很慢，需要等一段时间。
 
 ## fstab
 
