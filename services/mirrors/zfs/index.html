@@ -14,8 +14,14 @@
       
         <link rel="canonical" href="https://docs.ustclug.org/services/mirrors/zfs/">
       
+      
+        <link rel="prev" href="../ipmi/">
+      
+      
+        <link rel="next" href="../limiter/">
+      
       <link rel="icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-8.5.10">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.0.1">
     
     
       
@@ -23,11 +29,10 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.975780f9.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.3bd4f189.min.css">
       
         
         <link rel="stylesheet" href="../../../assets/stylesheets/palette.2505c338.min.css">
-        
       
       
 
@@ -117,8 +122,6 @@
       <form class="md-header__option" data-md-component="palette">
         
           
-          
-          
           <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="teal"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
           
             <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
@@ -126,8 +129,6 @@
             </label>
           
         
-          
-          
           
           <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="green" data-md-color-accent="green"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_2">
           
@@ -1923,10 +1924,9 @@
                 
                   
 
-  <a href="https://github.com/ustclug/documentations/edit/master/docs/services/mirrors/zfs.md" title="Edit this page" class="md-content__button md-icon">
-    
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
-  </a>
+  
+  
+
 
 
 <h1 id="zfs">ZFS<a class="headerlink" href="#zfs" title="Permanent link">&para;</a></h1>
@@ -1940,26 +1940,26 @@ options zfs l2arc_noprefetch=0
 <p>refer to <code>man zfs-module-parameters</code>.</p>
 <h2 id="common-operations">Common Operations<a class="headerlink" href="#common-operations" title="Permanent link">&para;</a></h2>
 <h3 id="get-zpool-status">Get zpool status<a class="headerlink" href="#get-zpool-status" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code>zpool status
+<div class="highlight"><pre><span></span><code>zpool<span class="w"> </span>status
 </code></pre></div>
 <h3 id="get-io-status">Get IO status<a class="headerlink" href="#get-io-status" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code>zpool iostat -v <span class="m">1</span>
+<div class="highlight"><pre><span></span><code>zpool<span class="w"> </span>iostat<span class="w"> </span>-v<span class="w"> </span><span class="m">1</span>
 </code></pre></div>
 <h3 id="replace-disk">Replace Disk<a class="headerlink" href="#replace-disk" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code>zpool replace pool0 old-disk new-disk
+<div class="highlight"><pre><span></span><code>zpool<span class="w"> </span>replace<span class="w"> </span>pool0<span class="w"> </span>old-disk<span class="w"> </span>new-disk
 </code></pre></div>
 <h3 id="new-zfs-file-system">New ZFS file system<a class="headerlink" href="#new-zfs-file-system" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code>zfs create <span class="o">[</span>-o <span class="nv">mountpoint</span><span class="o">=</span><span class="nv">$mountpoint</span><span class="o">]</span> <span class="nv">$filesystem</span>
+<div class="highlight"><pre><span></span><code>zfs<span class="w"> </span>create<span class="w"> </span><span class="o">[</span>-o<span class="w"> </span><span class="nv">mountpoint</span><span class="o">=</span><span class="nv">$mountpoint</span><span class="o">]</span><span class="w"> </span><span class="nv">$filesystem</span>
 </code></pre></div>
 <p>Example:</p>
-<div class="highlight"><pre><span></span><code>zfs create -o <span class="nv">mountpoint</span><span class="o">=</span>/srv/repo/debian pool0/repo/debian
+<div class="highlight"><pre><span></span><code>zfs<span class="w"> </span>create<span class="w"> </span>-o<span class="w"> </span><span class="nv">mountpoint</span><span class="o">=</span>/srv/repo/debian<span class="w"> </span>pool0/repo/debian
 </code></pre></div>
 <p>If mountpoint is not specified, then it's inherited from the parent with a subpath appended, e.g. when <code>pool0/example</code> is mounted on <code>/mnt/haha</code> then <code>pool0/example/test</code> will by default mount on <code>/mnt/haha/test</code>.</p>
 <h3 id="destory-zfs-file-system">Destory ZFS file system<a class="headerlink" href="#destory-zfs-file-system" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code>zfs destroy <span class="nv">$filesystem</span>
+<div class="highlight"><pre><span></span><code>zfs<span class="w"> </span>destroy<span class="w"> </span><span class="nv">$filesystem</span>
 </code></pre></div>
 <p>Example:</p>
-<div class="highlight"><pre><span></span><code>zfs destroy pool0/repo/debian
+<div class="highlight"><pre><span></span><code>zfs<span class="w"> </span>destroy<span class="w"> </span>pool0/repo/debian
 </code></pre></div>
 <h3 id="traps">Traps<a class="headerlink" href="#traps" title="Permanent link">&para;</a></h3>
 <p><del>Do <strong>NOT</strong> install <code>zfs-dkms</code> and related packages from Debian backports repositories. They'll easily break when upgrading.</del></p>
@@ -1985,42 +1985,6 @@ options zfs l2arc_noprefetch=0
       </main>
       
         <footer class="md-footer">
-  
-    
-    <nav class="md-footer__inner md-grid" aria-label="Footer" >
-      
-        
-        <a href="../ipmi/" class="md-footer__link md-footer__link--prev" aria-label="Previous: IPMI" rel="prev">
-          <div class="md-footer__button md-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
-          </div>
-          <div class="md-footer__title">
-            <div class="md-ellipsis">
-              <span class="md-footer__direction">
-                Previous
-              </span>
-              IPMI
-            </div>
-          </div>
-        </a>
-      
-      
-        
-        <a href="../limiter/" class="md-footer__link md-footer__link--next" aria-label="Next: Limiter" rel="next">
-          <div class="md-footer__title">
-            <div class="md-ellipsis">
-              <span class="md-footer__direction">
-                Next
-              </span>
-              Limiter
-            </div>
-          </div>
-          <div class="md-footer__button md-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
-          </div>
-        </a>
-      
-    </nav>
   
   <div class="md-footer-meta md-typeset">
     <div class="md-footer-meta__inner md-grid">
@@ -2069,12 +2033,11 @@ options zfs l2arc_noprefetch=0
       <div class="md-dialog__inner md-typeset"></div>
     </div>
     
-    <script id="__config" type="application/json">{"base": "../../..", "features": ["content.code.annotate", "navigation.indexes", "navigation.sections", "navigation.top"], "search": "../../../assets/javascripts/workers/search.16e2a7d4.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["content.code.annotate", "navigation.indexes", "navigation.sections", "navigation.top"], "search": "../../../assets/javascripts/workers/search.12658920.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.5a2dcb6a.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.5cf534bf.min.js"></script>
       
-    
     
   </body>
 </html>

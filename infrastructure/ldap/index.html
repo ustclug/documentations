@@ -14,8 +14,14 @@
       
         <link rel="canonical" href="https://docs.ustclug.org/infrastructure/ldap/">
       
+      
+        <link rel="prev" href="../proxmox/nfs/">
+      
+      
+        <link rel="next" href="../sshca/">
+      
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-8.5.10">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.0.1">
     
     
       
@@ -23,11 +29,10 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.975780f9.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.3bd4f189.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.2505c338.min.css">
-        
       
       
 
@@ -117,8 +122,6 @@
       <form class="md-header__option" data-md-component="palette">
         
           
-          
-          
           <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="teal"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
           
             <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
@@ -126,8 +129,6 @@
             </label>
           
         
-          
-          
           
           <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="green" data-md-color-accent="green"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_2">
           
@@ -2099,10 +2100,9 @@
                 
                   
 
-  <a href="https://github.com/ustclug/documentations/edit/master/docs/infrastructure/ldap.md" title="Edit this page" class="md-content__button md-icon">
-    
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
-  </a>
+  
+  
+
 
 
 <h1 id="ldap">LDAP 服务使用及配置说明<a class="headerlink" href="#ldap" title="Permanent link">&para;</a></h1>
@@ -2121,7 +2121,7 @@
 <div class="admonition danger">
 <p class="admonition-title">坑</p>
 <p>小心输出的顺序，最大的 UID 不一定是最后一个（而且事实上经常不是），建议配合 sed, awk, sort 之类的命令妥善处理，例如</p>
-<div class="highlight"><pre><span></span><code>getent passwd <span class="p">|</span> cut -d: -f3 <span class="p">|</span> sort -n
+<div class="highlight"><pre><span></span><code>getent<span class="w"> </span>passwd<span class="w"> </span><span class="p">|</span><span class="w"> </span>cut<span class="w"> </span>-d:<span class="w"> </span>-f3<span class="w"> </span><span class="p">|</span><span class="w"> </span>sort<span class="w"> </span>-n
 </code></pre></div>
 <p>同时还有若干 UID 很大但是离散的特殊账号，很容易分辨。显然新 UID 是 2000 开始连续的最大 UID + 1.</p>
 </div>
@@ -2206,15 +2206,15 @@ sudoers:        files ldap
 <h3 id="centos">CentOS 配置方法<a class="headerlink" href="#centos" title="Permanent link">&para;</a></h3>
 <p>通过 yum 安装 openldap openldap-clients nss_ldap nss-pam-ldap</p>
 <p>以 root 身份执行</p>
-<div class="highlight"><pre><span></span><code>authconfig --enablecache <span class="se">\</span>
-       --enableldap <span class="se">\</span>
-       --enableldapauth <span class="se">\</span>
-       --ldapserver<span class="o">=</span><span class="s2">&quot;ldaps://ldap.lug.ustc.edu.cn/&quot;</span> <span class="se">\</span>
-       --ldapbasedn<span class="o">=</span><span class="s2">&quot;dc=lug,dc=ustc,dc=edu,dc=cn&quot;</span> <span class="se">\</span>
-       --enableshadow <span class="se">\</span>
-       --enablemkhomedir <span class="se">\</span>
-       --enablelocauthorize <span class="se">\</span>
-       --update
+<div class="highlight"><pre><span></span><code>authconfig<span class="w"> </span>--enablecache<span class="w"> </span><span class="se">\</span>
+<span class="w">       </span>--enableldap<span class="w"> </span><span class="se">\</span>
+<span class="w">       </span>--enableldapauth<span class="w"> </span><span class="se">\</span>
+<span class="w">       </span>--ldapserver<span class="o">=</span><span class="s2">&quot;ldaps://ldap.lug.ustc.edu.cn/&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">       </span>--ldapbasedn<span class="o">=</span><span class="s2">&quot;dc=lug,dc=ustc,dc=edu,dc=cn&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">       </span>--enableshadow<span class="w"> </span><span class="se">\</span>
+<span class="w">       </span>--enablemkhomedir<span class="w"> </span><span class="se">\</span>
+<span class="w">       </span>--enablelocauthorize<span class="w"> </span><span class="se">\</span>
+<span class="w">       </span>--update
 </code></pre></div>
 <p>注意，由于 authconfig 的 bug，上一条命令的执行环境必须是 <code>LC_ALL=en_US.UTF-8</code></p>
 <p>Sudo 的配置是通过 sssd 实现的，参考 <a href="https://access.redhat.com/site/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Deployment_Guide/sssd-ldap-sudo.html">https://access.redhat.com/site/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Deployment_Guide/sssd-ldap-sudo.html</a></p>
@@ -2223,11 +2223,11 @@ sudoers:        files ldap
 <div class="highlight"><pre><span></span><code><span class="w">[taoky@gateway-nic ~]$ sudo diff /usr/share/doc/sssd-common/sssd-example.conf /etc/sssd/sssd.conf</span>
 <span class="w">3c3</span>
 <span class="w">&lt; services = nss, pam</span>
-<span class="gd">---</span><span class="w"></span>
+<span class="gd">---</span>
 <span class="w">&gt; services = nss, pam, sudo</span>
 <span class="w">8c8</span>
 <span class="w">&lt; ; domains = LDAP</span>
-<span class="gd">---</span><span class="w"></span>
+<span class="gd">---</span>
 <span class="w">&gt; domains = LDAP</span>
 <span class="w">13a14,15</span>
 <span class="w">&gt; [sudo]</span>
@@ -2236,7 +2236,7 @@ sudoers:        files ldap
 <span class="w">&lt; ; [domain/LDAP]</span>
 <span class="w">&lt; ; id_provider = ldap</span>
 <span class="w">&lt; ; auth_provider = ldap</span>
-<span class="gd">---</span><span class="w"></span>
+<span class="gd">---</span>
 <span class="w">&gt; [domain/LDAP]</span>
 <span class="w">&gt; id_provider = ldap</span>
 <span class="w">&gt; auth_provider = ldap</span>
@@ -2244,18 +2244,18 @@ sudoers:        files ldap
 <span class="w">&lt; ; ldap_schema = rfc2307</span>
 <span class="w">&lt; ; ldap_uri = ldap://ldap.mydomain.org</span>
 <span class="w">&lt; ; ldap_search_base = dc=mydomain,dc=org</span>
-<span class="gd">---</span><span class="w"></span>
+<span class="gd">---</span>
 <span class="w">&gt; ldap_schema = rfc2307</span>
 <span class="w">&gt; ldap_uri = ldaps://ldap.lug.ustc.edu.cn</span>
 <span class="w">&gt; ldap_search_base = dc=lug,dc=ustc,dc=edu,dc=cn</span>
 <span class="w">&gt; ldap_sudo_search_base = ou=sudoers,dc=lug,dc=ustc,dc=edu,dc=cn</span>
 <span class="w">30c33</span>
 <span class="w">&lt; ; cache_credentials = true</span>
-<span class="gd">---</span><span class="w"></span>
+<span class="gd">---</span>
 <span class="w">&gt; cache_credentials = true</span>
 <span class="w">35c38</span>
 <span class="w">&lt; # you must install Microsoft Services For UNIX and map LDAP attributes onto</span>
-<span class="gd">---</span><span class="w"></span>
+<span class="gd">---</span>
 <span class="w">&gt; # you must install Microsoft Services For Unix and map LDAP attributes onto</span>
 </code></pre></div>
 <div class="admonition danger">
@@ -2265,18 +2265,18 @@ sudoers:        files ldap
 <p>另外记得像前面在 Debian 中安装介绍到的那样修改 <code>/etc/nsswitch.conf</code> 以及 <code>/etc/nslcd.conf</code>.</p>
 <h3 id="nscd">NSCD 使用说明<a class="headerlink" href="#nscd" title="Permanent link">&para;</a></h3>
 <p>NSCD 是用于 LDAP 缓存的服务，目前在 mirrors 上的配置是保持 30 天。这导致的问题是每当 ldap 服务器上做出修改的时候需要在 mirrors 上执行，清除指定类型的缓存<s>(目前 mirrors 服务器暂未配置 LDAP 认证。)</s></p>
-<div class="highlight"><pre><span></span><code>nscd -i passwd
-nscd -i group
+<div class="highlight"><pre><span></span><code>nscd<span class="w"> </span>-i<span class="w"> </span>passwd
+nscd<span class="w"> </span>-i<span class="w"> </span>group
 </code></pre></div>
 <p>参考：<a href="https://wiki.debian.org/LDAP/NSS">https://wiki.debian.org/LDAP/NSS</a></p>
 <h2 id="ldap-cli">LDAP CLI 工具使用说明<a class="headerlink" href="#ldap-cli" title="Permanent link">&para;</a></h2>
 <p>这里以 <code>ldappasswd</code> 为例，其余 ladp-series 指令与其大致相同：</p>
 <p>LDAP 利用 dn 来定位一个用户，以下指令可以列出所有用户及其 dn：</p>
-<div class="highlight"><pre><span></span><code>ldapsearch -x -LLL <span class="nv">uid</span><span class="o">=</span>* uid
+<div class="highlight"><pre><span></span><code>ldapsearch<span class="w"> </span>-x<span class="w"> </span>-LLL<span class="w"> </span><span class="nv">uid</span><span class="o">=</span>*<span class="w"> </span>uid
 </code></pre></div>
 <p><code>-x</code> 指定使用 Simple authentication，即使用密码认证。</p>
 <p>如果要修改一个用户的密码，使用：</p>
-<div class="highlight"><pre><span></span><code>ldappasswd -x -D <span class="s1">&#39;&lt;executor dn&gt;&#39;</span> -W -S <span class="s1">&#39;&lt;target user dn&gt;&#39;</span>
+<div class="highlight"><pre><span></span><code>ldappasswd<span class="w"> </span>-x<span class="w"> </span>-D<span class="w"> </span><span class="s1">&#39;&lt;executor dn&gt;&#39;</span><span class="w"> </span>-W<span class="w"> </span>-S<span class="w"> </span><span class="s1">&#39;&lt;target user dn&gt;&#39;</span>
 </code></pre></div>
 <p><code>-D '&lt;executor dn&gt;'</code> 指定了执行者的身份，<code>-W</code>/<code>-S</code> 指定了接下来询问执行者/目标用户的密码/旧密码。</p>
 <p>需要额外注意的是，在 CLI 中添加/删除用户或更改用户密码时需要以 LDAP admin 执行，否则会有报错：</p>
@@ -2480,42 +2480,6 @@ nscd -i group
       
         <footer class="md-footer">
   
-    
-    <nav class="md-footer__inner md-grid" aria-label="Footer" >
-      
-        
-        <a href="../proxmox/nfs/" class="md-footer__link md-footer__link--prev" aria-label="Previous: NFS" rel="prev">
-          <div class="md-footer__button md-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
-          </div>
-          <div class="md-footer__title">
-            <div class="md-ellipsis">
-              <span class="md-footer__direction">
-                Previous
-              </span>
-              NFS
-            </div>
-          </div>
-        </a>
-      
-      
-        
-        <a href="../sshca/" class="md-footer__link md-footer__link--next" aria-label="Next: SSH Certificate Authority" rel="next">
-          <div class="md-footer__title">
-            <div class="md-ellipsis">
-              <span class="md-footer__direction">
-                Next
-              </span>
-              SSH Certificate Authority
-            </div>
-          </div>
-          <div class="md-footer__button md-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
-          </div>
-        </a>
-      
-    </nav>
-  
   <div class="md-footer-meta md-typeset">
     <div class="md-footer-meta__inner md-grid">
       <div class="md-copyright">
@@ -2563,12 +2527,11 @@ nscd -i group
       <div class="md-dialog__inner md-typeset"></div>
     </div>
     
-    <script id="__config" type="application/json">{"base": "../..", "features": ["content.code.annotate", "navigation.indexes", "navigation.sections", "navigation.top"], "search": "../../assets/javascripts/workers/search.16e2a7d4.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "../..", "features": ["content.code.annotate", "navigation.indexes", "navigation.sections", "navigation.top"], "search": "../../assets/javascripts/workers/search.12658920.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.5a2dcb6a.min.js"></script>
+      <script src="../../assets/javascripts/bundle.5cf534bf.min.js"></script>
       
-    
     
   </body>
 </html>

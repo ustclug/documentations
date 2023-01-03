@@ -14,8 +14,14 @@
       
         <link rel="canonical" href="https://docs.ustclug.org/services/mirrors/4/networking/route/">
       
+      
+        <link rel="prev" href="../">
+      
+      
+        <link rel="next" href="../misc/">
+      
       <link rel="icon" href="../../../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-8.5.10">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.0.1">
     
     
       
@@ -23,11 +29,10 @@
       
     
     
-      <link rel="stylesheet" href="../../../../../assets/stylesheets/main.975780f9.min.css">
+      <link rel="stylesheet" href="../../../../../assets/stylesheets/main.3bd4f189.min.css">
       
         
         <link rel="stylesheet" href="../../../../../assets/stylesheets/palette.2505c338.min.css">
-        
       
       
 
@@ -117,8 +122,6 @@
       <form class="md-header__option" data-md-component="palette">
         
           
-          
-          
           <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="teal"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
           
             <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
@@ -126,8 +129,6 @@
             </label>
           
         
-          
-          
           
           <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="green" data-md-color-accent="green"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_2">
           
@@ -1817,10 +1818,9 @@
                 
                   
 
-  <a href="https://github.com/ustclug/documentations/edit/master/docs/services/mirrors/4/networking/route.md" title="Edit this page" class="md-content__button md-icon">
-    
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
-  </a>
+  
+  
+
 
 
 <h1 id="routing-on-mirrors4">Routing on mirrors4<a class="headerlink" href="#routing-on-mirrors4" title="Permanent link">&para;</a></h1>
@@ -1831,52 +1831,52 @@
 <span class="nv">ROOT_IP_LIST</span><span class="o">=</span>/usr/local/network_config/iplist
 <span class="nv">ROOT_RT</span><span class="o">=</span>/run/systemd/network
 
-gen_route<span class="o">()</span> <span class="o">{</span>
-  <span class="nv">IPLIST</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$ROOT_IP_LIST</span><span class="s2">/</span><span class="nv">$1</span><span class="s2">&quot;</span>
-  <span class="nv">GW</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$2</span><span class="s2">&quot;</span>
-  <span class="nv">DEV</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$3</span><span class="s2">&quot;</span>
-  <span class="c1"># Convert table to number</span>
-  <span class="nv">TABLENAME</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$4</span><span class="s2">&quot;</span>
-  <span class="nv">TABLE</span><span class="o">=</span><span class="s2">&quot;</span><span class="k">$(</span>awk <span class="s1">&#39;substr($0, 1, 1) != &quot;#&quot; &amp;&amp; $2 == &quot;&#39;</span><span class="s2">&quot;</span><span class="nv">$TABLENAME</span><span class="s2">&quot;</span><span class="s1">&#39;&quot; { print $1 }&#39;</span> /etc/iproute2/rt_tables <span class="p">|</span> head -1<span class="k">)</span><span class="s2">&quot;</span>
-  <span class="nv">PRIORITY</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$5</span><span class="s2">&quot;</span>
+gen_route<span class="o">()</span><span class="w"> </span><span class="o">{</span>
+<span class="w">  </span><span class="nv">IPLIST</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$ROOT_IP_LIST</span><span class="s2">/</span><span class="nv">$1</span><span class="s2">&quot;</span>
+<span class="w">  </span><span class="nv">GW</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$2</span><span class="s2">&quot;</span>
+<span class="w">  </span><span class="nv">DEV</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$3</span><span class="s2">&quot;</span>
+<span class="w">  </span><span class="c1"># Convert table to number</span>
+<span class="w">  </span><span class="nv">TABLENAME</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$4</span><span class="s2">&quot;</span>
+<span class="w">  </span><span class="nv">TABLE</span><span class="o">=</span><span class="s2">&quot;</span><span class="k">$(</span>awk<span class="w"> </span><span class="s1">&#39;substr($0, 1, 1) != &quot;#&quot; &amp;&amp; $2 == &quot;&#39;</span><span class="s2">&quot;</span><span class="nv">$TABLENAME</span><span class="s2">&quot;</span><span class="s1">&#39;&quot; { print $1 }&#39;</span><span class="w"> </span>/etc/iproute2/rt_tables<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-1<span class="k">)</span><span class="s2">&quot;</span>
+<span class="w">  </span><span class="nv">PRIORITY</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$5</span><span class="s2">&quot;</span>
 
-  <span class="nv">F</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$ROOT_RT</span><span class="s2">/</span><span class="nv">$DEV</span><span class="s2">.network.d&quot;</span>
-  mkdir -p <span class="s2">&quot;</span><span class="nv">$F</span><span class="s2">&quot;</span>
-  <span class="nv">F</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$F</span><span class="s2">/route-</span><span class="si">${</span><span class="nv">TABLENAME</span><span class="p">,,</span><span class="si">}</span><span class="s2">.conf&quot;</span>
+<span class="w">  </span><span class="nv">F</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$ROOT_RT</span><span class="s2">/</span><span class="nv">$DEV</span><span class="s2">.network.d&quot;</span>
+<span class="w">  </span>mkdir<span class="w"> </span>-p<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$F</span><span class="s2">&quot;</span>
+<span class="w">  </span><span class="nv">F</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$F</span><span class="s2">/route-</span><span class="si">${</span><span class="nv">TABLENAME</span><span class="p">,,</span><span class="si">}</span><span class="s2">.conf&quot;</span>
 
-  <span class="nb">echo</span> -e <span class="s2">&quot;[RoutingPolicyRule]\nTable=</span><span class="nv">$TABLE</span><span class="s2">\nPriority=</span><span class="nv">$PRIORITY</span><span class="s2">\n&quot;</span> &gt; <span class="s2">&quot;</span><span class="nv">$F</span><span class="s2">&quot;</span>
-  awk <span class="s1">&#39;{ print &quot;[Route]\nDestination=&quot; $1 &quot;\nGateway=&#39;</span><span class="s2">&quot;</span><span class="nv">$GW</span><span class="s2">&quot;</span><span class="s1">&#39;\nTable=&#39;</span><span class="s2">&quot;</span><span class="nv">$TABLE</span><span class="s2">&quot;</span><span class="s1">&#39;\n&quot; }&#39;</span> <span class="s2">&quot;</span><span class="nv">$IPLIST</span><span class="s2">&quot;</span> &gt;&gt; <span class="s2">&quot;</span><span class="nv">$F</span><span class="s2">&quot;</span>
+<span class="w">  </span><span class="nb">echo</span><span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;[RoutingPolicyRule]\nTable=</span><span class="nv">$TABLE</span><span class="s2">\nPriority=</span><span class="nv">$PRIORITY</span><span class="s2">\n&quot;</span><span class="w"> </span>&gt;<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$F</span><span class="s2">&quot;</span>
+<span class="w">  </span>awk<span class="w"> </span><span class="s1">&#39;{ print &quot;[Route]\nDestination=&quot; $1 &quot;\nGateway=&#39;</span><span class="s2">&quot;</span><span class="nv">$GW</span><span class="s2">&quot;</span><span class="s1">&#39;\nTable=&#39;</span><span class="s2">&quot;</span><span class="nv">$TABLE</span><span class="s2">&quot;</span><span class="s1">&#39;\n&quot; }&#39;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$IPLIST</span><span class="s2">&quot;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$F</span><span class="s2">&quot;</span>
 <span class="o">}</span>
 
-gen_route ustcnet.txt <span class="m">202</span>.38.95.126 cernet Ustcnet <span class="m">5</span>
-gen_route cernet.txt <span class="m">202</span>.38.95.126 cernet Cernet <span class="m">6</span>
-gen_route telecom.txt <span class="m">202</span>.141.160.126 telecom Telecom <span class="m">6</span>
-gen_route mobile.txt <span class="m">202</span>.141.176.126 mobile Mobile <span class="m">6</span>
-gen_route unicom.txt <span class="m">218</span>.104.71.161 unicom Unicom <span class="m">6</span>
-gen_route china.txt <span class="m">218</span>.104.71.161 unicom China <span class="m">7</span>
+gen_route<span class="w"> </span>ustcnet.txt<span class="w"> </span><span class="m">202</span>.38.95.126<span class="w"> </span>cernet<span class="w"> </span>Ustcnet<span class="w"> </span><span class="m">5</span>
+gen_route<span class="w"> </span>cernet.txt<span class="w"> </span><span class="m">202</span>.38.95.126<span class="w"> </span>cernet<span class="w"> </span>Cernet<span class="w"> </span><span class="m">6</span>
+gen_route<span class="w"> </span>telecom.txt<span class="w"> </span><span class="m">202</span>.141.160.126<span class="w"> </span>telecom<span class="w"> </span>Telecom<span class="w"> </span><span class="m">6</span>
+gen_route<span class="w"> </span>mobile.txt<span class="w"> </span><span class="m">202</span>.141.176.126<span class="w"> </span>mobile<span class="w"> </span>Mobile<span class="w"> </span><span class="m">6</span>
+gen_route<span class="w"> </span>unicom.txt<span class="w"> </span><span class="m">218</span>.104.71.161<span class="w"> </span>unicom<span class="w"> </span>Unicom<span class="w"> </span><span class="m">6</span>
+gen_route<span class="w"> </span>china.txt<span class="w"> </span><span class="m">218</span>.104.71.161<span class="w"> </span>unicom<span class="w"> </span>China<span class="w"> </span><span class="m">7</span>
 </code></pre></div>
 <p>这个仓库里有很多个 txt 文件，每个文件对应一个 ISP 的地址列表，每行一个 CIDR。脚本中的 <code>gen_route</code> 函数根据参数读取文件，并转换成下面这样的格式：</p>
-<div class="highlight"><pre><span></span><code><span class="k">[Route]</span><span class="w"></span>
-<span class="na">Destination</span><span class="o">=</span><span class="s">1.0.0.0/24</span><span class="w"></span>
-<span class="na">Gateway</span><span class="o">=</span><span class="s">202.38.95.126</span><span class="w"></span>
-<span class="na">Table</span><span class="o">=</span><span class="s">1011</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="k">[Route]</span>
+<span class="na">Destination</span><span class="o">=</span><span class="s">1.0.0.0/24</span>
+<span class="na">Gateway</span><span class="o">=</span><span class="s">202.38.95.126</span>
+<span class="na">Table</span><span class="o">=</span><span class="s">1011</span>
 </code></pre></div>
 <p>这样一个 <code>[Route]</code> 节对应<strong>一条</strong>路由规则，整个 txt 的转换结果输出到 <code>/run/systemd/network/cernet.network.d/route-example.conf</code>。其中 <code>cernet.network.d/*.conf</code> 用于向现有的配置中添加内容（与 systemd service 类似），而 <code>/run</code> 目录（按理来说）重启会清空，适合放置这些用于动态生成的内容。另外由于路由规则（<code>ip rule</code>）也由 networkd 管理和生成了，因此每个 <code>route-xxx.conf</code> 开头会包含一个 <code>[RoutingPolicyRule]</code> 节用于生成路由表对应的路由规则。</p>
 <p>注意路由表是用名称指定的，从 <code>/etc/iproute2/rt_tables</code> 中查出对应的数字 ID。这个文件本来也是 <code>ip</code> 命令所使用的（注意它的目录名叫 <code>iproute2</code>）。</p>
 <p>最后给这个脚本配个 service，让它在 networkd 之前运行：</p>
-<div class="highlight"><pre><span></span><code><span class="c1"># WARNING: This is NOT the final configuration file!</span><span class="w"></span>
-<span class="k">[Unit]</span><span class="w"></span>
-<span class="na">Description</span><span class="o">=</span><span class="s">Generate routes for systemd-networkd</span><span class="w"></span>
-<span class="na">Before</span><span class="o">=</span><span class="s">systemd-networkd.service</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="c1"># WARNING: This is NOT the final configuration file!</span>
+<span class="k">[Unit]</span>
+<span class="na">Description</span><span class="o">=</span><span class="s">Generate routes for systemd-networkd</span>
+<span class="na">Before</span><span class="o">=</span><span class="s">systemd-networkd.service</span>
 
-<span class="k">[Service]</span><span class="w"></span>
-<span class="na">Type</span><span class="o">=</span><span class="s">oneshot</span><span class="w"></span>
-<span class="na">ExecStart</span><span class="o">=</span><span class="s">/bin/bash /usr/local/network_config/route-all.sh</span><span class="w"></span>
-<span class="na">RemainAfterExit</span><span class="o">=</span><span class="s">true</span><span class="w"></span>
+<span class="k">[Service]</span>
+<span class="na">Type</span><span class="o">=</span><span class="s">oneshot</span>
+<span class="na">ExecStart</span><span class="o">=</span><span class="s">/bin/bash /usr/local/network_config/route-all.sh</span>
+<span class="na">RemainAfterExit</span><span class="o">=</span><span class="s">true</span>
 
-<span class="k">[Install]</span><span class="w"></span>
-<span class="na">WantedBy</span><span class="o">=</span><span class="s">network.target systemd-networkd.service</span><span class="w"></span>
-<span class="na">Wants</span><span class="o">=</span><span class="s">systemd-networkd.service</span><span class="w"></span>
+<span class="k">[Install]</span>
+<span class="na">WantedBy</span><span class="o">=</span><span class="s">network.target systemd-networkd.service</span>
+<span class="na">Wants</span><span class="o">=</span><span class="s">systemd-networkd.service</span>
 </code></pre></div>
 <p>这个文件存到 <code>/etc/systemd/system/route-all.service</code>，reload 再 enable 就可以了。</p>
 <div class="admonition bug">
@@ -1886,79 +1886,79 @@ gen_route china.txt <span class="m">218</span>.104.71.161 unicom China <span cla
 </div>
 <h2 id="special-routing">Special routing<a class="headerlink" href="#special-routing" title="Permanent link">&para;</a></h2>
 <p>部分 IP 需要配置特殊路由规则时（而不是使用默认），编辑 <code>/usr/local/network_config/special.yml</code>，其格式如下：</p>
-<div class="highlight"><pre><span></span><code><span class="nt">routes</span><span class="p">:</span><span class="w"> </span><span class="c1"># Root key，保留</span><span class="w"></span>
-<span class="w">  </span><span class="nt">lugvpn</span><span class="p">:</span><span class="w"> </span><span class="c1"># /etc/systemd/network 中对应的 .network 文件名</span><span class="w"></span>
-<span class="w">    </span><span class="c1"># 下面是一个路由文件的配置，一个文件共享一个 table 和 gateway 设置</span><span class="w"></span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">route-special</span><span class="w"> </span><span class="c1"># 将要创建的 .conf 文件名，可以随意</span><span class="w"></span>
-<span class="w">      </span><span class="nt">table</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Special</span><span class="w"> </span><span class="c1"># 路由表，即 ip route add table 后面的参数，数字或表名</span><span class="w"></span>
-<span class="w">      </span><span class="nt">gateway</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"> </span><span class="c1"># 是否包含网关，或者 ip route 的 via 参数</span><span class="w"></span>
-<span class="w">      </span><span class="nt">routes</span><span class="p">:</span><span class="w"> </span><span class="c1"># 所有的路由条目</span><span class="w"></span>
-<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.2.3.4</span><span class="w"></span>
-<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5.6.7.8/28</span><span class="w"></span>
-<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2001:db8::2333/64</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="nt">routes</span><span class="p">:</span><span class="w"> </span><span class="c1"># Root key，保留</span>
+<span class="w">  </span><span class="nt">lugvpn</span><span class="p">:</span><span class="w"> </span><span class="c1"># /etc/systemd/network 中对应的 .network 文件名</span>
+<span class="w">    </span><span class="c1"># 下面是一个路由文件的配置，一个文件共享一个 table 和 gateway 设置</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">route-special</span><span class="w"> </span><span class="c1"># 将要创建的 .conf 文件名，可以随意</span>
+<span class="w">      </span><span class="nt">table</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Special</span><span class="w"> </span><span class="c1"># 路由表，即 ip route add table 后面的参数，数字或表名</span>
+<span class="w">      </span><span class="nt">gateway</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"> </span><span class="c1"># 是否包含网关，或者 ip route 的 via 参数</span>
+<span class="w">      </span><span class="nt">routes</span><span class="p">:</span><span class="w"> </span><span class="c1"># 所有的路由条目</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.2.3.4</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5.6.7.8/28</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2001:db8::2333/64</span>
 
-<span class="w">  </span><span class="nt">cernet</span><span class="p">:</span><span class="w"> </span><span class="c1"># 更多的配置</span><span class="w"></span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">...</span><span class="w"></span>
+<span class="w">  </span><span class="nt">cernet</span><span class="p">:</span><span class="w"> </span><span class="c1"># 更多的配置</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">...</span>
 </code></pre></div>
 <p>修改 <code>special.yml</code> 之后重启 <code>route-all.service</code>。该服务会自动导致 <code>systemd-networkd.service</code> 重启并载入新的路由配置信息。</p>
 <details class="tips">
 <summary>special.rb 处理脚本（放在这备份）</summary>
 <div class="highlight"><pre><span></span><code><span class="ch">#!/usr/bin/ruby</span>
 
-<span class="nb">require</span> <span class="s1">&#39;fileutils&#39;</span>
-<span class="nb">require</span> <span class="s1">&#39;yaml&#39;</span>
+<span class="nb">require</span><span class="w"> </span><span class="s1">&#39;fileutils&#39;</span>
+<span class="nb">require</span><span class="w"> </span><span class="s1">&#39;yaml&#39;</span>
 
-<span class="no">BASEDIR</span> <span class="o">=</span> <span class="s1">&#39;/run/systemd/network&#39;</span>
-<span class="no">RT_TABLES</span> <span class="o">=</span> <span class="s1">&#39;/etc/iproute2/rt_tables&#39;</span>
+<span class="no">BASEDIR</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;/run/systemd/network&#39;</span>
+<span class="no">RT_TABLES</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;/etc/iproute2/rt_tables&#39;</span>
 
-<span class="n">rt_tables</span> <span class="o">=</span> <span class="no">Hash</span><span class="o">.</span><span class="n">new</span>
-<span class="no">File</span><span class="o">.</span><span class="n">readlines</span><span class="p">(</span><span class="no">RT_TABLES</span><span class="p">)</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">l</span><span class="o">|</span>
-  <span class="k">next</span> <span class="k">if</span> <span class="n">l</span> <span class="o">=~</span> <span class="sr">/^\s*#/</span>
-  <span class="nb">id</span><span class="p">,</span> <span class="nb">name</span> <span class="o">=</span> <span class="n">l</span><span class="o">.</span><span class="n">split</span>
-  <span class="n">rt_tables</span><span class="o">[</span><span class="nb">name</span><span class="o">]</span> <span class="o">=</span> <span class="nb">id</span>
+<span class="n">rt_tables</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="no">Hash</span><span class="o">.</span><span class="n">new</span>
+<span class="no">File</span><span class="o">.</span><span class="n">readlines</span><span class="p">(</span><span class="no">RT_TABLES</span><span class="p">)</span><span class="o">.</span><span class="n">each</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="o">|</span><span class="n">l</span><span class="o">|</span>
+<span class="w">  </span><span class="k">next</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">l</span><span class="w"> </span><span class="o">=~</span> <span class="sr">/^\s*#/</span>
+<span class="w">  </span><span class="nb">id</span><span class="p">,</span><span class="w"> </span><span class="nb">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">l</span><span class="o">.</span><span class="n">split</span>
+<span class="w">  </span><span class="n">rt_tables</span><span class="o">[</span><span class="nb">name</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">id</span>
 <span class="k">end</span>
 
-<span class="n">data</span> <span class="o">=</span> <span class="no">YAML</span><span class="o">.</span><span class="n">load_file</span> <span class="no">File</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">__dir__</span><span class="p">,</span> <span class="s1">&#39;special.yml&#39;</span><span class="p">)</span>
-<span class="n">data</span><span class="o">[</span><span class="s1">&#39;routes&#39;</span><span class="o">].</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">fn</span><span class="p">,</span> <span class="n">setups</span><span class="o">|</span>
-  <span class="n">confdir</span> <span class="o">=</span> <span class="no">File</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="no">BASEDIR</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">fn</span><span class="si">}</span><span class="s2">.network.d&quot;</span><span class="p">)</span>
-  <span class="no">FileUtils</span><span class="o">.</span><span class="n">mkdir_p</span> <span class="n">confdir</span>
+<span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="no">YAML</span><span class="o">.</span><span class="n">load_file</span><span class="w"> </span><span class="no">File</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">__dir__</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;special.yml&#39;</span><span class="p">)</span>
+<span class="n">data</span><span class="o">[</span><span class="s1">&#39;routes&#39;</span><span class="o">].</span><span class="n">each</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="o">|</span><span class="n">fn</span><span class="p">,</span><span class="w"> </span><span class="n">setups</span><span class="o">|</span>
+<span class="w">  </span><span class="n">confdir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="no">File</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="no">BASEDIR</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">#{</span><span class="n">fn</span><span class="si">}</span><span class="s2">.network.d&quot;</span><span class="p">)</span>
+<span class="w">  </span><span class="no">FileUtils</span><span class="o">.</span><span class="n">mkdir_p</span><span class="w"> </span><span class="n">confdir</span>
 
-  <span class="n">setups</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">config</span><span class="o">|</span>
-    <span class="n">table</span> <span class="o">=</span> <span class="n">config</span><span class="o">[</span><span class="s1">&#39;table&#39;</span><span class="o">]</span>
-    <span class="n">gateway</span> <span class="o">=</span> <span class="n">config</span><span class="o">[</span><span class="s1">&#39;gateway&#39;</span><span class="o">]</span>
-    <span class="no">File</span><span class="o">.</span><span class="n">open</span> <span class="no">File</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">confdir</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">config</span><span class="o">[</span><span class="s1">&#39;name&#39;</span><span class="o">]</span><span class="si">}</span><span class="s2">.conf&quot;</span><span class="p">),</span> <span class="s1">&#39;w&#39;</span> <span class="k">do</span> <span class="o">|</span><span class="n">f</span><span class="o">|</span>
-      <span class="n">config</span><span class="o">[</span><span class="s1">&#39;routes&#39;</span><span class="o">].</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">dst</span><span class="o">|</span>
-        <span class="n">t</span> <span class="o">=</span> <span class="s2">&quot;[Route]</span><span class="se">\n</span><span class="s2">Destination=</span><span class="si">#{</span><span class="n">dst</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
-        <span class="n">t</span> <span class="o">+=</span> <span class="s2">&quot;Table=</span><span class="si">#{</span><span class="n">rt_tables</span><span class="o">.</span><span class="n">fetch</span> <span class="n">table</span><span class="p">,</span> <span class="n">table</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="k">if</span> <span class="n">table</span>
-        <span class="n">t</span> <span class="o">+=</span> <span class="s2">&quot;Gateway=</span><span class="si">#{</span><span class="n">gateway</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="k">if</span> <span class="n">gateway</span>
-        <span class="n">f</span><span class="o">.</span><span class="n">write</span> <span class="n">t</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
-      <span class="k">end</span>
-    <span class="k">end</span>
-  <span class="k">end</span>
+<span class="w">  </span><span class="n">setups</span><span class="o">.</span><span class="n">each</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="o">|</span><span class="n">config</span><span class="o">|</span>
+<span class="w">    </span><span class="n">table</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">config</span><span class="o">[</span><span class="s1">&#39;table&#39;</span><span class="o">]</span>
+<span class="w">    </span><span class="n">gateway</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">config</span><span class="o">[</span><span class="s1">&#39;gateway&#39;</span><span class="o">]</span>
+<span class="w">    </span><span class="no">File</span><span class="o">.</span><span class="n">open</span><span class="w"> </span><span class="no">File</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">confdir</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">#{</span><span class="n">config</span><span class="o">[</span><span class="s1">&#39;name&#39;</span><span class="o">]</span><span class="si">}</span><span class="s2">.conf&quot;</span><span class="p">),</span><span class="w"> </span><span class="s1">&#39;w&#39;</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="o">|</span><span class="n">f</span><span class="o">|</span>
+<span class="w">      </span><span class="n">config</span><span class="o">[</span><span class="s1">&#39;routes&#39;</span><span class="o">].</span><span class="n">each</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="o">|</span><span class="n">dst</span><span class="o">|</span>
+<span class="w">        </span><span class="n">t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;[Route]</span><span class="se">\n</span><span class="s2">Destination=</span><span class="si">#{</span><span class="n">dst</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+<span class="w">        </span><span class="n">t</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="s2">&quot;Table=</span><span class="si">#{</span><span class="n">rt_tables</span><span class="o">.</span><span class="n">fetch</span><span class="w"> </span><span class="n">table</span><span class="p">,</span><span class="w"> </span><span class="n">table</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">table</span>
+<span class="w">        </span><span class="n">t</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="s2">&quot;Gateway=</span><span class="si">#{</span><span class="n">gateway</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">gateway</span>
+<span class="w">        </span><span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+<span class="w">      </span><span class="k">end</span>
+<span class="w">    </span><span class="k">end</span>
+<span class="w">  </span><span class="k">end</span>
 <span class="k">end</span>
 </code></pre></div>
 </details>
 <div class="admonition bug">
 <p class="admonition-title">route-all.service 有很多注意事项</p>
 <p>为了清理开机自动产生的 32766 和 32767 两条路由规则，我们同时为 <code>systemd-networkd.service</code> 添加了两个 <code>ExecStartPre</code> 如下：</p>
-<div class="highlight"><pre><span></span><code><span class="k">[Service]</span><span class="w"></span>
-<span class="na">ExecStartPre</span><span class="o">=</span><span class="s">-+/sbin/ip rule delete from all table main pref 32766</span><span class="w"></span>
-<span class="na">ExecStartPre</span><span class="o">=</span><span class="s">-+/sbin/ip rule delete from all table default pref 32767</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="k">[Service]</span>
+<span class="na">ExecStartPre</span><span class="o">=</span><span class="s">-+/sbin/ip rule delete from all table main pref 32766</span>
+<span class="na">ExecStartPre</span><span class="o">=</span><span class="s">-+/sbin/ip rule delete from all table default pref 32767</span>
 </code></pre></div>
 <p>另附完整的 <code>route-all.service</code> 文件：</p>
-<div class="highlight"><pre><span></span><code><span class="k">[Unit]</span><span class="w"></span>
-<span class="na">Description</span><span class="o">=</span><span class="s">Generate routes for systemd-networkd</span><span class="w"></span>
-<span class="na">Before</span><span class="o">=</span><span class="s">systemd-networkd.service</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="k">[Unit]</span>
+<span class="na">Description</span><span class="o">=</span><span class="s">Generate routes for systemd-networkd</span>
+<span class="na">Before</span><span class="o">=</span><span class="s">systemd-networkd.service</span>
 
-<span class="k">[Service]</span><span class="w"></span>
-<span class="na">Type</span><span class="o">=</span><span class="s">oneshot</span><span class="w"></span>
-<span class="na">ExecStart</span><span class="o">=</span><span class="s">/bin/bash /usr/local/network_config/route-all.sh</span><span class="w"></span>
-<span class="na">ExecStart</span><span class="o">=</span><span class="s">/usr/local/network_config/special.rb</span><span class="w"></span>
-<span class="na">RemainAfterExit</span><span class="o">=</span><span class="s">true</span><span class="w"></span>
+<span class="k">[Service]</span>
+<span class="na">Type</span><span class="o">=</span><span class="s">oneshot</span>
+<span class="na">ExecStart</span><span class="o">=</span><span class="s">/bin/bash /usr/local/network_config/route-all.sh</span>
+<span class="na">ExecStart</span><span class="o">=</span><span class="s">/usr/local/network_config/special.rb</span>
+<span class="na">RemainAfterExit</span><span class="o">=</span><span class="s">true</span>
 
-<span class="k">[Install]</span><span class="w"></span>
-<span class="na">WantedBy</span><span class="o">=</span><span class="s">network.target systemd-networkd.service</span><span class="w"></span>
-<span class="na">Wants</span><span class="o">=</span><span class="s">systemd-networkd.service</span><span class="w"></span>
+<span class="k">[Install]</span>
+<span class="na">WantedBy</span><span class="o">=</span><span class="s">network.target systemd-networkd.service</span>
+<span class="na">Wants</span><span class="o">=</span><span class="s">systemd-networkd.service</span>
 </code></pre></div>
 </div>
 
@@ -1981,42 +1981,6 @@ gen_route china.txt <span class="m">218</span>.104.71.161 unicom China <span cla
       </main>
       
         <footer class="md-footer">
-  
-    
-    <nav class="md-footer__inner md-grid" aria-label="Footer" >
-      
-        
-        <a href="../" class="md-footer__link md-footer__link--prev" aria-label="Previous: Interfaces" rel="prev">
-          <div class="md-footer__button md-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
-          </div>
-          <div class="md-footer__title">
-            <div class="md-ellipsis">
-              <span class="md-footer__direction">
-                Previous
-              </span>
-              Interfaces
-            </div>
-          </div>
-        </a>
-      
-      
-        
-        <a href="../misc/" class="md-footer__link md-footer__link--next" aria-label="Next: Misc" rel="next">
-          <div class="md-footer__title">
-            <div class="md-ellipsis">
-              <span class="md-footer__direction">
-                Next
-              </span>
-              Misc
-            </div>
-          </div>
-          <div class="md-footer__button md-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
-          </div>
-        </a>
-      
-    </nav>
   
   <div class="md-footer-meta md-typeset">
     <div class="md-footer-meta__inner md-grid">
@@ -2065,12 +2029,11 @@ gen_route china.txt <span class="m">218</span>.104.71.161 unicom China <span cla
       <div class="md-dialog__inner md-typeset"></div>
     </div>
     
-    <script id="__config" type="application/json">{"base": "../../../../..", "features": ["content.code.annotate", "navigation.indexes", "navigation.sections", "navigation.top"], "search": "../../../../../assets/javascripts/workers/search.16e2a7d4.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "../../../../..", "features": ["content.code.annotate", "navigation.indexes", "navigation.sections", "navigation.top"], "search": "../../../../../assets/javascripts/workers/search.12658920.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../../../../../assets/javascripts/bundle.5a2dcb6a.min.js"></script>
+      <script src="../../../../../assets/javascripts/bundle.5cf534bf.min.js"></script>
       
-    
     
   </body>
 </html>

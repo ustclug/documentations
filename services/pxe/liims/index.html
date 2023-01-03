@@ -14,8 +14,14 @@
       
         <link rel="canonical" href="https://docs.ustclug.org/services/pxe/liims/">
       
+      
+        <link rel="prev" href="../../light/">
+      
+      
+        <link rel="next" href="../pxe/">
+      
       <link rel="icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-8.5.10">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.0.1">
     
     
       
@@ -23,11 +29,10 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.975780f9.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.3bd4f189.min.css">
       
         
         <link rel="stylesheet" href="../../../assets/stylesheets/palette.2505c338.min.css">
-        
       
       
 
@@ -117,8 +122,6 @@
       <form class="md-header__option" data-md-component="palette">
         
           
-          
-          
           <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="teal"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
           
             <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
@@ -126,8 +129,6 @@
             </label>
           
         
-          
-          
           
           <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="green" data-md-color-accent="green"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_2">
           
@@ -1881,10 +1882,9 @@
                 
                   
 
-  <a href="https://github.com/ustclug/documentations/edit/master/docs/services/pxe/liims.md" title="Edit this page" class="md-content__button md-icon">
-    
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
-  </a>
+  
+  
+
 
 
 <h1 id="liims">LIIMS<a class="headerlink" href="#liims" title="Permanent link">&para;</a></h1>
@@ -1897,7 +1897,7 @@
 <p>It is strongly advised to clone liimstrap and read through it when reading this document.</p>
 <h2 id="_1">启动配置<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <p>配置文件在 <code>/home/pxe/tftp/grub/grub.cfg.d</code>，若要允许新机器启动 liims 镜像，创建一个符号链接到对应的配置文件（目前的镜像是 <code>liims220222</code>）：</p>
-<div class="highlight"><pre><span></span><code>ln -s liims220222 <span class="m">02</span>:23:45:67:89:ab
+<div class="highlight"><pre><span></span><code>ln<span class="w"> </span>-s<span class="w"> </span>liims220222<span class="w"> </span><span class="m">02</span>:23:45:67:89:ab
 </code></pre></div>
 <h2 id="_2">启动镜像<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
 <p>位于 <code>/home/pxe/nfsroot/&lt;category&gt;/&lt;name&gt;</code>，其中 <code>&lt;name&gt;</code> 就是镜像名称（例如 <code>liims160909</code>）。目前有两种部署方式：一种是 NFS as rootfs，文件夹中就是整个 rootfs，直接修改这里的文件，机器重启后就会载入。（注意：覆盖文件可能导致已有的机器运行错误）</p>
@@ -1912,17 +1912,17 @@
 <p>构建后需要推送到服务器上的 <code>/nfsroot/liims</code> 下，并设置 /usr 的所有者为 liims。机器的默认 pxe 启动配置在 <code>/home/pxe/tftp/pxelinux.cfg/</code> 下</p>
 <h3 id="qemu">示例 qemu 调试方法<a class="headerlink" href="#qemu" title="Permanent link">&para;</a></h3>
 <p>创建并挂载临时镜像:</p>
-<div class="highlight"><pre><span></span><code>dd <span class="k">if</span><span class="o">=</span>/dev/zero <span class="nv">of</span><span class="o">=</span>liims.img <span class="nv">bs</span><span class="o">=</span>4k <span class="nv">count</span><span class="o">=</span><span class="m">1200000</span>
-mkfs.ext4 liims.img
-mount -o loop liims.img /mnt
+<div class="highlight"><pre><span></span><code>dd<span class="w"> </span><span class="k">if</span><span class="o">=</span>/dev/zero<span class="w"> </span><span class="nv">of</span><span class="o">=</span>liims.img<span class="w"> </span><span class="nv">bs</span><span class="o">=</span>4k<span class="w"> </span><span class="nv">count</span><span class="o">=</span><span class="m">1200000</span>
+mkfs.ext4<span class="w"> </span>liims.img
+mount<span class="w"> </span>-o<span class="w"> </span>loop<span class="w"> </span>liims.img<span class="w"> </span>/mnt
 </code></pre></div>
 <p>假设当前路径为 liimstrap，修改 <code>initcpio/mkinitcpio.conf</code>，去掉 HOOKS 中的 <code>liims_root</code>，增加 <code>block</code>（仅调试时需要）。 使用 liimstrap 制作镜像 <code>./liimstrap /mnt</code>。完成后使用 qemu 打开调试:</p>
-<div class="highlight"><pre><span></span><code>qemu -kernel /mnt/boot/vmlinuz-lts<span class="se">\</span>
-     -initrd /mnt/boot/initramfs-linux-lts.img<span class="se">\</span>
-     -hda liims.img<span class="se">\</span>
-     -netdev user,id<span class="o">=</span>mynet0,net<span class="o">=</span><span class="m">114</span>.214.188.0/24,dhcpstart<span class="o">=</span><span class="m">114</span>.214.188.9<span class="se">\</span>
-     -device i82557a,netdev<span class="o">=</span>mynet0<span class="se">\</span>
-     -append <span class="s2">&quot;root=/dev/sda rootflags=rw&quot;</span>
+<div class="highlight"><pre><span></span><code>qemu<span class="w"> </span>-kernel<span class="w"> </span>/mnt/boot/vmlinuz-lts<span class="se">\</span>
+<span class="w">     </span>-initrd<span class="w"> </span>/mnt/boot/initramfs-linux-lts.img<span class="se">\</span>
+<span class="w">     </span>-hda<span class="w"> </span>liims.img<span class="se">\</span>
+<span class="w">     </span>-netdev<span class="w"> </span>user,id<span class="o">=</span>mynet0,net<span class="o">=</span><span class="m">114</span>.214.188.0/24,dhcpstart<span class="o">=</span><span class="m">114</span>.214.188.9<span class="se">\</span>
+<span class="w">     </span>-device<span class="w"> </span>i82557a,netdev<span class="o">=</span>mynet0<span class="se">\</span>
+<span class="w">     </span>-append<span class="w"> </span><span class="s2">&quot;root=/dev/sda rootflags=rw&quot;</span>
 </code></pre></div>
 <p>注：其中 netdev 中的 ip 段可以自由选取，<code>device</code> 中的设备名通过 <code>qemu -device \?</code> 查看后选择任一网络设备即可</p>
 <h2 id="monitor">查询机监控<a class="headerlink" href="#monitor" title="Permanent link">&para;</a></h2>
@@ -1953,42 +1953,6 @@ mount -o loop liims.img /mnt
       </main>
       
         <footer class="md-footer">
-  
-    
-    <nav class="md-footer__inner md-grid" aria-label="Footer" >
-      
-        
-        <a href="../../light/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Light" rel="prev">
-          <div class="md-footer__button md-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
-          </div>
-          <div class="md-footer__title">
-            <div class="md-ellipsis">
-              <span class="md-footer__direction">
-                Previous
-              </span>
-              Light
-            </div>
-          </div>
-        </a>
-      
-      
-        
-        <a href="../pxe/" class="md-footer__link md-footer__link--next" aria-label="Next: PXE" rel="next">
-          <div class="md-footer__title">
-            <div class="md-ellipsis">
-              <span class="md-footer__direction">
-                Next
-              </span>
-              PXE
-            </div>
-          </div>
-          <div class="md-footer__button md-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
-          </div>
-        </a>
-      
-    </nav>
   
   <div class="md-footer-meta md-typeset">
     <div class="md-footer-meta__inner md-grid">
@@ -2037,12 +2001,11 @@ mount -o loop liims.img /mnt
       <div class="md-dialog__inner md-typeset"></div>
     </div>
     
-    <script id="__config" type="application/json">{"base": "../../..", "features": ["content.code.annotate", "navigation.indexes", "navigation.sections", "navigation.top"], "search": "../../../assets/javascripts/workers/search.16e2a7d4.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["content.code.annotate", "navigation.indexes", "navigation.sections", "navigation.top"], "search": "../../../assets/javascripts/workers/search.12658920.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.5a2dcb6a.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.5cf534bf.min.js"></script>
       
-    
     
   </body>
 </html>

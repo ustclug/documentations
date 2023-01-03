@@ -14,8 +14,14 @@
       
         <link rel="canonical" href="https://docs.ustclug.org/services/mirrors/4/volumes/">
       
+      
+        <link rel="prev" href="../">
+      
+      
+        <link rel="next" href="../networking/">
+      
       <link rel="icon" href="../../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-8.5.10">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.0.1">
     
     
       
@@ -23,11 +29,10 @@
       
     
     
-      <link rel="stylesheet" href="../../../../assets/stylesheets/main.975780f9.min.css">
+      <link rel="stylesheet" href="../../../../assets/stylesheets/main.3bd4f189.min.css">
       
         
         <link rel="stylesheet" href="../../../../assets/stylesheets/palette.2505c338.min.css">
-        
       
       
 
@@ -117,8 +122,6 @@
       <form class="md-header__option" data-md-component="palette">
         
           
-          
-          
           <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="teal"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
           
             <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
@@ -126,8 +129,6 @@
             </label>
           
         
-          
-          
           
           <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="green" data-md-color-accent="green"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_2">
           
@@ -1883,10 +1884,9 @@
                 
                   
 
-  <a href="https://github.com/ustclug/documentations/edit/master/docs/services/mirrors/4/volumes.md" title="Edit this page" class="md-content__button md-icon">
-    
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
-  </a>
+  
+  
+
 
 
 <h1 id="volumes-on-mirrors4">Volumes on mirrors4<a class="headerlink" href="#volumes-on-mirrors4" title="Permanent link">&para;</a></h1>
@@ -1929,24 +1929,24 @@ Device     Start        End    Sectors  Size Type
 <h2 id="lvm">LVM<a class="headerlink" href="#lvm" title="Permanent link">&para;</a></h2>
 <p>把 sda3 和 sdb3 都放进 LVM：</p>
 <div class="highlight"><pre><span></span><code><span class="c1"># fdisk 分区完毕，w 写入退出</span>
-pvcreate /dev/sda3 /dev/sdb3
-vgcreate lug /dev/sda3 /dev/sdb3
+pvcreate<span class="w"> </span>/dev/sda3<span class="w"> </span>/dev/sdb3
+vgcreate<span class="w"> </span>lug<span class="w"> </span>/dev/sda3<span class="w"> </span>/dev/sdb3
 </code></pre></div>
 <p>创建 rootfs，这里以 RAID1 的方式（<code>--type mirror</code> 或 <code>--type raid1</code>）创建这个分区，这样即使 sda / sdb 坏掉一整组之后还有 rootfs 可以用。</p>
-<div class="highlight"><pre><span></span><code>lvcreate -n root -L 32G --type mirror -m <span class="m">2</span> lug
-mkfs.ext4 /dev/lug/root
+<div class="highlight"><pre><span></span><code>lvcreate<span class="w"> </span>-n<span class="w"> </span>root<span class="w"> </span>-L<span class="w"> </span>32G<span class="w"> </span>--type<span class="w"> </span>mirror<span class="w"> </span>-m<span class="w"> </span><span class="m">2</span><span class="w"> </span>lug
+mkfs.ext4<span class="w"> </span>/dev/lug/root
 </code></pre></div>
 <p>创建 home，这里反正不怕坏，用 RAID0（<code>--type striped</code> 或 <code>--type raid0</code>）。</p>
-<div class="highlight"><pre><span></span><code>lvcreate -n root -L 64G --type striped -i <span class="m">2</span> lug
-mkfs.ext4 /dev/lug/home
+<div class="highlight"><pre><span></span><code>lvcreate<span class="w"> </span>-n<span class="w"> </span>root<span class="w"> </span>-L<span class="w"> </span>64G<span class="w"> </span>--type<span class="w"> </span>striped<span class="w"> </span>-i<span class="w"> </span><span class="m">2</span><span class="w"> </span>lug
+mkfs.ext4<span class="w"> </span>/dev/lug/home
 </code></pre></div>
 <p>创建放镜像的分区，这次要用 xfs</p>
 <div class="admonition warning">
 <p class="admonition-title">XFS 不支持缩小</p>
 <p>因此我们在初装时选择为其分配 48 TiB 的空间，而不是 VG lug 的剩余全部——这样方便以后维护</p>
 </div>
-<div class="highlight"><pre><span></span><code>lvcreate -n repo -L 48T --type striped -i <span class="m">2</span> lug
-mkfs.xfs /dev/lug/repo
+<div class="highlight"><pre><span></span><code>lvcreate<span class="w"> </span>-n<span class="w"> </span>repo<span class="w"> </span>-L<span class="w"> </span>48T<span class="w"> </span>--type<span class="w"> </span>striped<span class="w"> </span>-i<span class="w"> </span><span class="m">2</span><span class="w"> </span>lug
+mkfs.xfs<span class="w"> </span>/dev/lug/repo
 </code></pre></div>
 <p>其实本来要调一下参的，不过根据 <a href="https://wiki.archlinux.org/index.php/XFS#Performance">Arch Wiki</a>，<code>mkfs.xfs</code> 的默认参数就是最优的，所以我们决定不动了。</p>
 <h3 id="ssd">SSD<a class="headerlink" href="#ssd" title="Permanent link">&para;</a></h3>
@@ -1957,18 +1957,18 @@ mkfs.xfs /dev/lug/repo
 </div>
 <p>在 SSD 上新建一个 VG：</p>
 <div class="highlight"><pre><span></span><code><span class="c1"># fdisk 创建唯一一个分区 sdc1，保存退出</span>
-pvcreate /dev/sdc1
-vgcreate ssd /dev/sdc1
+pvcreate<span class="w"> </span>/dev/sdc1
+vgcreate<span class="w"> </span>ssd<span class="w"> </span>/dev/sdc1
 </code></pre></div>
 <p>创建 Docker 数据盘：</p>
-<div class="highlight"><pre><span></span><code>lvcreate -L 8G -n docker ssd
-mkfs.ext4 /dev/ssd/docker
+<div class="highlight"><pre><span></span><code>lvcreate<span class="w"> </span>-L<span class="w"> </span>8G<span class="w"> </span>-n<span class="w"> </span>docker<span class="w"> </span>ssd
+mkfs.ext4<span class="w"> </span>/dev/ssd/docker
 </code></pre></div>
 <p><strong>重要</strong>：创建缓存盘和缓存元数据盘。根据 <a href="https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/6/html/logical_volume_manager_administration/lvm_cache_volume_creation">Red Hat Documentation</a> 的介绍，先手动创建数据盘和元数据盘，然后将他们合并为一个 cache pool。大小方面，文章的参考是 2G data ↔ 12M meta，这里我们有接近 2 TB 的 data，就分配 16 GB 作为 meta 吧。</p>
-<div class="highlight"><pre><span></span><code>lvcreate -L 16G -n mcache_meta ssd
-lvcreate -l <span class="m">100</span>%FREE -n mcache ssd
-lvreduce -l -2048 ssd/mcache
-lvconvert --type cache-pool --poolmetadata ssd/mcache_meta --cachemode writethrough -c 1M --config allocation/cache_pool_max_chunks<span class="o">=</span><span class="m">2000000</span> ssd/mcache
+<div class="highlight"><pre><span></span><code>lvcreate<span class="w"> </span>-L<span class="w"> </span>16G<span class="w"> </span>-n<span class="w"> </span>mcache_meta<span class="w"> </span>ssd
+lvcreate<span class="w"> </span>-l<span class="w"> </span><span class="m">100</span>%FREE<span class="w"> </span>-n<span class="w"> </span>mcache<span class="w"> </span>ssd
+lvreduce<span class="w"> </span>-l<span class="w"> </span>-2048<span class="w"> </span>ssd/mcache
+lvconvert<span class="w"> </span>--type<span class="w"> </span>cache-pool<span class="w"> </span>--poolmetadata<span class="w"> </span>ssd/mcache_meta<span class="w"> </span>--cachemode<span class="w"> </span>writethrough<span class="w"> </span>-c<span class="w"> </span>1M<span class="w"> </span>--config<span class="w"> </span>allocation/cache_pool_max_chunks<span class="o">=</span><span class="m">2000000</span><span class="w"> </span>ssd/mcache
 </code></pre></div>
 <p><del>这里的缓存模式采用 passthrough，即写入动作绕过缓存直接写回原设备（当然啦，写入都是由从上游同步产生的），另外两种 writeback 和 writethrough 都会写入缓存，不是我们想要的。</del> passthrough 模式中，读写都会绕过 cache，唯一的作用是 write hit 会使得 cache 对应的块失效。</p>
 <p><del>这里使用 writeback 模式，因为仓库数据没了还能再同步，使用 writeback 提升性能更合适。</del></p>
@@ -1995,18 +1995,18 @@ lvconvert --type cache-pool --poolmetadata ssd/mcache_meta --cachemode writethro
 <p>当出现 dirty blocks（且 cache policy 为 cleaner 时），无法正常 flush。网络上可以找到的这个 <a href="https://bugzilla.redhat.com/show_bug.cgi?id=1668163">bug</a> 的解决方法是增大 migration_threshold 的值（在新版本 LVM 中，migration_threshold 默认至少会是 chunk size 的 8 倍，在我们的配置下就是 16384 = 2048 * 8。这个版本的 LVM 暂时不在 Buster 中），但是经过测试，单纯增大 migration_threshold 没有任何效果。Jiahao 翻了一下 dm-cache 的源代码，发现 flush 的条件在 <a href="https://elixir.bootlin.com/linux/latest/source/drivers/md/dm-cache-target.c#L1649">https://elixir.bootlin.com/linux/latest/source/drivers/md/dm-cache-target.c#L1649</a>，只在状态为 IDLE 时才会 flush。IDLE 的第一个条件需要 inflight io = 0，比较苛刻，可能是无法正常 flush 的原因。</p>
 <p>一个扭曲的解决方法是：先把 migration_threshold 设置得很大（设大小为 x），然后马上缩小，这样就能把 x 那么多大小的脏块弄掉（原理暂时不明，需要补充）。基于这个方法，可以写一个脚本来做 flush 的工作：</p>
 <div class="highlight"><pre><span></span><code><span class="c1"># dirty hack</span>
-sudo lvchange --cachepolicy cleaner lug/repo
-<span class="k">for</span> i <span class="k">in</span> <span class="sb">`</span>seq <span class="m">1</span> <span class="m">1500</span><span class="sb">`</span><span class="p">;</span> <span class="k">do</span> sudo lvchange --cachesettings <span class="nv">migration_threshold</span><span class="o">=</span><span class="m">2113536</span> lug/repo <span class="o">&amp;&amp;</span> sudo lvchange --cachesettings <span class="nv">migration_threshold</span><span class="o">=</span><span class="m">16384</span> lug/repo <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="nv">$i</span> <span class="o">&amp;&amp;</span> sleep <span class="m">15</span><span class="p">;</span> <span class="k">done</span><span class="p">;</span>
+sudo<span class="w"> </span>lvchange<span class="w"> </span>--cachepolicy<span class="w"> </span>cleaner<span class="w"> </span>lug/repo
+<span class="k">for</span><span class="w"> </span>i<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="sb">`</span>seq<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="m">1500</span><span class="sb">`</span><span class="p">;</span><span class="w"> </span><span class="k">do</span><span class="w"> </span>sudo<span class="w"> </span>lvchange<span class="w"> </span>--cachesettings<span class="w"> </span><span class="nv">migration_threshold</span><span class="o">=</span><span class="m">2113536</span><span class="w"> </span>lug/repo<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>sudo<span class="w"> </span>lvchange<span class="w"> </span>--cachesettings<span class="w"> </span><span class="nv">migration_threshold</span><span class="o">=</span><span class="m">16384</span><span class="w"> </span>lug/repo<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="nv">$i</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>sleep<span class="w"> </span><span class="m">15</span><span class="p">;</span><span class="w"> </span><span class="k">done</span><span class="p">;</span>
 <span class="c1"># 需要确认没有脏块。如果还有的话继续执行（次数调小一些）</span>
 <span class="c1"># 如果是从 writeback 切换，需要先把模式切到 writethrough</span>
 <span class="c1"># 然后再修改 cachepolicy 到 smq</span>
-sudo lvchange --cachepolicy smq lug/repo
+sudo<span class="w"> </span>lvchange<span class="w"> </span>--cachepolicy<span class="w"> </span>smq<span class="w"> </span>lug/repo
 </code></pre></div>
 <p>在执行时，可以查看：</p>
-<div class="highlight"><pre><span></span><code>sudo dmsetup status lug-repo
+<div class="highlight"><pre><span></span><code>sudo<span class="w"> </span>dmsetup<span class="w"> </span>status<span class="w"> </span>lug-repo
 <span class="c1"># 在 &quot;metadata2&quot; 前面的前面的数字就是 dirty block 的数量</span>
 <span class="c1"># 如果不在执行 lvchange（没有进程抢占了 LVM 的锁），可以执行以下命令确认脏块数量以及其他一些参数。</span>
-sudo lvs -o name,cache_policy,cache_settings,chunk_size,cache_used_blocks,cache_dirty_blocks /dev/mapper/lug-repo
+sudo<span class="w"> </span>lvs<span class="w"> </span>-o<span class="w"> </span>name,cache_policy,cache_settings,chunk_size,cache_used_blocks,cache_dirty_blocks<span class="w"> </span>/dev/mapper/lug-repo
 </code></pre></div>
 </li>
 <li>
@@ -2021,13 +2021,13 @@ sudo lvs -o name,cache_policy,cache_settings,chunk_size,cache_used_blocks,cache_
 <p>临时修复版本：<a href="https://github.com/taoky/grub/releases/tag/2.02%2Bdfsg1-20%2Bdeb10u4taoky3_amd64">https://github.com/taoky/grub/releases/tag/2.02%2Bdfsg1-20%2Bdeb10u4taoky3_amd64</a>。目前已部署，且设置了 <code>apt hold</code>。</p>
 </div>
 <p>所以接下来要合并 VG，然后才能为仓库卷加上缓存。</p>
-<div class="highlight"><pre><span></span><code>lvchange -a n ssd/docker
-vgmerge lug ssd
-lvconvert --type cache --cachepool lug/mcache lug/repo
+<div class="highlight"><pre><span></span><code>lvchange<span class="w"> </span>-a<span class="w"> </span>n<span class="w"> </span>ssd/docker
+vgmerge<span class="w"> </span>lug<span class="w"> </span>ssd
+lvconvert<span class="w"> </span>--type<span class="w"> </span>cache<span class="w"> </span>--cachepool<span class="w"> </span>lug/mcache<span class="w"> </span>lug/repo
 </code></pre></div>
 <p>接下来挂上 Docker 卷（注意 VG 名已经从 ssd 变成了 lug）：</p>
-<div class="highlight"><pre><span></span><code>lvchange -a y lug/docker
-mount /dev/lug/docker /var/lib/docker
+<div class="highlight"><pre><span></span><code>lvchange<span class="w"> </span>-a<span class="w"> </span>y<span class="w"> </span>lug/docker
+mount<span class="w"> </span>/dev/lug/docker<span class="w"> </span>/var/lib/docker
 </code></pre></div>
 <h3 id="repo">repo 扩容<a class="headerlink" href="#repo" title="Permanent link">&para;</a></h3>
 <p>查看当前逻辑卷信息：</p>
@@ -2063,7 +2063,7 @@ mount /dev/lug/docker /var/lib/docker
 # xfs_growfs /srv
 </code></pre></div>
 <p>然后恢复 cache（参考上面 mcache_meta 和 mcache 逻辑卷的配置，<strong>请注意在理解命令后再执行</strong>！）：</p>
-<div class="highlight"><pre><span></span><code># lvcreate -L 16G -n mcache_meta lug /dev/sdc1
+<div class="highlight"><pre><span></span><code># lvcreate -L 16G -n mcache_meta lug /dev/sdc1  # SSD 设备路径重启后可能会变化
 # lvcreate -l 100%FREE -n mcache lug /dev/sdc1
 # lvreduce -l -2048 lug/mcache
 # lvconvert --type cache-pool --poolmetadata lug/mcache_meta --cachemode writethrough -c 1M --config allocation/cache_pool_max_chunks=2000000 lug/mcache
@@ -2071,7 +2071,7 @@ mount /dev/lug/docker /var/lib/docker
 </code></pre></div>
 <div class="admonition danger">
 <p class="admonition-title">坑 5</p>
-<p>新建时在倒数第二步的 <code>lvconvert</code> 可能会卡死超过半小时（但是最后还是能完成的），栈的信息显示栈顶函数是 <code>submit_bio_wait()</code>，有可能是在等 SSD discarding 完成。</p>
+<p>新建时在倒数第二步的 <code>lvconvert</code> 可能会卡死超过半小时（但是最后还是能完成的），栈的信息显示栈顶函数是 <code>submit_bio_wait()</code>，在清零对应的 block range，因为 RAID 卡不支持下传 discarding 所以会很慢，需要等一段时间。</p>
 </div>
 <h2 id="fstab">fstab<a class="headerlink" href="#fstab" title="Permanent link">&para;</a></h2>
 <p>分区完毕后给 <code>/etc/fstab</code> 补上相关的内容并挂载：</p>
@@ -2101,42 +2101,6 @@ mount /dev/lug/docker /var/lib/docker
       </main>
       
         <footer class="md-footer">
-  
-    
-    <nav class="md-footer__inner md-grid" aria-label="Footer" >
-      
-        
-        <a href="../" class="md-footer__link md-footer__link--prev" aria-label="Previous: Overview" rel="prev">
-          <div class="md-footer__button md-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
-          </div>
-          <div class="md-footer__title">
-            <div class="md-ellipsis">
-              <span class="md-footer__direction">
-                Previous
-              </span>
-              Overview
-            </div>
-          </div>
-        </a>
-      
-      
-        
-        <a href="../networking/" class="md-footer__link md-footer__link--next" aria-label="Next: Interfaces" rel="next">
-          <div class="md-footer__title">
-            <div class="md-ellipsis">
-              <span class="md-footer__direction">
-                Next
-              </span>
-              Interfaces
-            </div>
-          </div>
-          <div class="md-footer__button md-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
-          </div>
-        </a>
-      
-    </nav>
   
   <div class="md-footer-meta md-typeset">
     <div class="md-footer-meta__inner md-grid">
@@ -2185,12 +2149,11 @@ mount /dev/lug/docker /var/lib/docker
       <div class="md-dialog__inner md-typeset"></div>
     </div>
     
-    <script id="__config" type="application/json">{"base": "../../../..", "features": ["content.code.annotate", "navigation.indexes", "navigation.sections", "navigation.top"], "search": "../../../../assets/javascripts/workers/search.16e2a7d4.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "../../../..", "features": ["content.code.annotate", "navigation.indexes", "navigation.sections", "navigation.top"], "search": "../../../../assets/javascripts/workers/search.12658920.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../../../../assets/javascripts/bundle.5a2dcb6a.min.js"></script>
+      <script src="../../../../assets/javascripts/bundle.5cf534bf.min.js"></script>
       
-    
     
   </body>
 </html>

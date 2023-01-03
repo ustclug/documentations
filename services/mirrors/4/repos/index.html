@@ -14,8 +14,14 @@
       
         <link rel="canonical" href="https://docs.ustclug.org/services/mirrors/4/repos/">
       
+      
+        <link rel="prev" href="../networking/misc/">
+      
+      
+        <link rel="next" href="../../3/">
+      
       <link rel="icon" href="../../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-8.5.10">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.0.1">
     
     
       
@@ -23,11 +29,10 @@
       
     
     
-      <link rel="stylesheet" href="../../../../assets/stylesheets/main.975780f9.min.css">
+      <link rel="stylesheet" href="../../../../assets/stylesheets/main.3bd4f189.min.css">
       
         
         <link rel="stylesheet" href="../../../../assets/stylesheets/palette.2505c338.min.css">
-        
       
       
 
@@ -117,8 +122,6 @@
       <form class="md-header__option" data-md-component="palette">
         
           
-          
-          
           <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="teal"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
           
             <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
@@ -126,8 +129,6 @@
             </label>
           
         
-          
-          
           
           <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="green" data-md-color-accent="green"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_2">
           
@@ -1909,10 +1910,9 @@
                 
                   
 
-  <a href="https://github.com/ustclug/documentations/edit/master/docs/services/mirrors/4/repos.md" title="Edit this page" class="md-content__button md-icon">
-    
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
-  </a>
+  
+  
+
 
 
 <h1 id="repositories">Repositories<a class="headerlink" href="#repositories" title="Permanent link">&para;</a></h1>
@@ -1924,13 +1924,13 @@
 <h2 id="_1">添加一个新仓库<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <h3 id="xfs-project">创建 XFS project<a class="headerlink" href="#xfs-project" title="Permanent link">&para;</a></h3>
 <p>为新仓库创建 XFS quota 以便于监视容量。首先检查 <code>/etc/projects</code> 和 <code>/etc/projid</code>，找到大于 1000 的 ID 序列，找出下一个 ID（例如 1111，下面使用这个作为例子）。</p>
-<div class="highlight"><pre><span></span><code>mkdir /srv/repo/example
+<div class="highlight"><pre><span></span><code>mkdir<span class="w"> </span>/srv/repo/example
 </code></pre></div>
 <p>编辑 <code>/etc/projects</code>，加入如下一行</p>
 <div class="highlight"><pre><span></span><code>1111:/srv/repo/example
 </code></pre></div>
 <p>然后执行：</p>
-<div class="highlight"><pre><span></span><code>xfs_quota -x -c <span class="s1">&#39;project -s 1111&#39;</span>
+<div class="highlight"><pre><span></span><code>xfs_quota<span class="w"> </span>-x<span class="w"> </span>-c<span class="w"> </span><span class="s1">&#39;project -s 1111&#39;</span>
 </code></pre></div>
 <p>编辑 <code>/etc/projid</code>，加入如下一行</p>
 <div class="highlight"><pre><span></span><code>example:1111
@@ -1943,45 +1943,45 @@
 <div class="highlight"><pre><span></span><code><span class="ch">#!/bin/bash</span>
 
 <span class="c1"># Determine largest project ID</span>
-next_id<span class="o">()</span> <span class="o">{</span>
-  <span class="nb">local</span> <span class="nv">PROJID</span><span class="o">=</span><span class="k">$(</span>cut -d<span class="s1">&#39;:&#39;</span> -f1 /etc/projects <span class="p">|</span> sort -n <span class="p">|</span> tail -1<span class="k">)</span>
-  <span class="nb">echo</span> <span class="k">$((</span><span class="o">++</span>PROJID<span class="k">))</span>
+next_id<span class="o">()</span><span class="w"> </span><span class="o">{</span>
+<span class="w">  </span><span class="nb">local</span><span class="w"> </span><span class="nv">PROJID</span><span class="o">=</span><span class="k">$(</span>cut<span class="w"> </span>-d<span class="s1">&#39;:&#39;</span><span class="w"> </span>-f1<span class="w"> </span>/etc/projects<span class="w"> </span><span class="p">|</span><span class="w"> </span>sort<span class="w"> </span>-n<span class="w"> </span><span class="p">|</span><span class="w"> </span>tail<span class="w"> </span>-1<span class="k">)</span>
+<span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="k">$((</span><span class="o">++</span>PROJID<span class="k">))</span>
 <span class="o">}</span>
 
 <span class="nv">BASE</span><span class="o">=</span><span class="s2">&quot;/srv/repo&quot;</span>
-<span class="nb">readonly</span> BASE
+<span class="nb">readonly</span><span class="w"> </span>BASE
 
-<span class="k">if</span> <span class="o">[</span> <span class="s2">&quot;</span><span class="nv">$1</span><span class="s2">&quot;</span> <span class="o">=</span> <span class="s2">&quot;-m&quot;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
-  <span class="nv">MKDIR</span><span class="o">=</span>yes
-  <span class="nb">shift</span>
+<span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$1</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;-m&quot;</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">  </span><span class="nv">MKDIR</span><span class="o">=</span>yes
+<span class="w">  </span><span class="nb">shift</span>
 <span class="k">fi</span>
 
-<span class="k">while</span> <span class="o">[</span> <span class="nv">$#</span> -ne <span class="m">0</span> <span class="o">]</span><span class="p">;</span> <span class="k">do</span>
-  <span class="nv">N</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">1</span><span class="p">//</span><span class="se">\/</span><span class="p">/</span><span class="si">}</span><span class="s2">&quot;</span>
-  <span class="nb">shift</span>
-  <span class="k">if</span> grep -q <span class="s2">&quot;</span><span class="nv">$BASE</span><span class="s2">/</span><span class="nv">$N</span><span class="s2">\$&quot;</span> /etc/projects<span class="p">;</span> <span class="k">then</span>
-    <span class="nb">echo</span> <span class="s2">&quot;Repo </span><span class="nv">$N</span><span class="s2"> exists, skipped.&quot;</span> &gt;<span class="p">&amp;</span><span class="m">2</span>
-    <span class="k">continue</span>
-  <span class="k">fi</span>
+<span class="k">while</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="nv">$#</span><span class="w"> </span>-ne<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="w">  </span><span class="nv">N</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">1</span><span class="p">//</span><span class="se">\/</span><span class="p">/</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="w">  </span><span class="nb">shift</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span>grep<span class="w"> </span>-q<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$BASE</span><span class="s2">/</span><span class="nv">$N</span><span class="s2">\$&quot;</span><span class="w"> </span>/etc/projects<span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Repo </span><span class="nv">$N</span><span class="s2"> exists, skipped.&quot;</span><span class="w"> </span>&gt;<span class="p">&amp;</span><span class="m">2</span>
+<span class="w">    </span><span class="k">continue</span>
+<span class="w">  </span><span class="k">fi</span>
 
-  <span class="k">if</span> <span class="o">[</span> ! -e <span class="s2">&quot;</span><span class="nv">$BASE</span><span class="s2">/</span><span class="nv">$N</span><span class="s2">&quot;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
-    <span class="k">if</span> <span class="o">[</span> -n <span class="s2">&quot;</span><span class="nv">$MKDIR</span><span class="s2">&quot;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
-      <span class="nb">echo</span> <span class="s2">&quot;Path </span><span class="nv">$BASE</span><span class="s2">/</span><span class="nv">$N</span><span class="s2"> does not exist, creating directory.&quot;</span> &gt;<span class="p">&amp;</span><span class="m">2</span>
-      mkdir -p <span class="s2">&quot;</span><span class="nv">$BASE</span><span class="s2">/</span><span class="nv">$N</span><span class="s2">&quot;</span>
-    <span class="k">else</span>
-      <span class="nb">echo</span> <span class="s2">&quot;Path </span><span class="nv">$BASE</span><span class="s2">/</span><span class="nv">$N</span><span class="s2"> does not exist, ignored.&quot;</span> &gt;<span class="p">&amp;</span><span class="m">2</span>
-      <span class="k">continue</span>
-    <span class="k">fi</span>
-  <span class="k">elif</span> <span class="o">[</span> ! -d <span class="s2">&quot;</span><span class="nv">$BASE</span><span class="s2">/</span><span class="nv">$N</span><span class="s2">&quot;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
-    <span class="nb">echo</span> <span class="s2">&quot;Path </span><span class="nv">$BASE</span><span class="s2">/</span><span class="nv">$N</span><span class="s2"> is not a directory, ignored.&quot;</span> &gt;<span class="p">&amp;</span><span class="m">2</span>
-    <span class="k">continue</span>
-  <span class="k">fi</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>!<span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$BASE</span><span class="s2">/</span><span class="nv">$N</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>-n<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$MKDIR</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">      </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Path </span><span class="nv">$BASE</span><span class="s2">/</span><span class="nv">$N</span><span class="s2"> does not exist, creating directory.&quot;</span><span class="w"> </span>&gt;<span class="p">&amp;</span><span class="m">2</span>
+<span class="w">      </span>mkdir<span class="w"> </span>-p<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$BASE</span><span class="s2">/</span><span class="nv">$N</span><span class="s2">&quot;</span>
+<span class="w">    </span><span class="k">else</span>
+<span class="w">      </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Path </span><span class="nv">$BASE</span><span class="s2">/</span><span class="nv">$N</span><span class="s2"> does not exist, ignored.&quot;</span><span class="w"> </span>&gt;<span class="p">&amp;</span><span class="m">2</span>
+<span class="w">      </span><span class="k">continue</span>
+<span class="w">    </span><span class="k">fi</span>
+<span class="w">  </span><span class="k">elif</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>!<span class="w"> </span>-d<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$BASE</span><span class="s2">/</span><span class="nv">$N</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Path </span><span class="nv">$BASE</span><span class="s2">/</span><span class="nv">$N</span><span class="s2"> is not a directory, ignored.&quot;</span><span class="w"> </span>&gt;<span class="p">&amp;</span><span class="m">2</span>
+<span class="w">    </span><span class="k">continue</span>
+<span class="w">  </span><span class="k">fi</span>
 
-  <span class="nv">ID</span><span class="o">=</span><span class="s2">&quot;</span><span class="k">$(</span>next_id<span class="k">)</span><span class="s2">&quot;</span>
-  <span class="nb">echo</span> <span class="s2">&quot;</span><span class="nv">$ID</span><span class="s2">:</span><span class="nv">$BASE</span><span class="s2">/</span><span class="nv">$N</span><span class="s2">&quot;</span> &gt;&gt; /etc/projects
-  <span class="nb">echo</span> <span class="s2">&quot;</span><span class="nv">$N</span><span class="s2">:</span><span class="nv">$ID</span><span class="s2">&quot;</span> &gt;&gt; /etc/projid
-  xfs_quota -x -c <span class="s2">&quot;project -s </span><span class="nv">$ID</span><span class="s2">&quot;</span> <span class="p">&amp;</span>&gt;/dev/null
-  <span class="nb">echo</span> <span class="s2">&quot;Added </span><span class="nv">$N</span><span class="s2"> (ID </span><span class="nv">$ID</span><span class="s2">)&quot;</span>
+<span class="w">  </span><span class="nv">ID</span><span class="o">=</span><span class="s2">&quot;</span><span class="k">$(</span>next_id<span class="k">)</span><span class="s2">&quot;</span>
+<span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$ID</span><span class="s2">:</span><span class="nv">$BASE</span><span class="s2">/</span><span class="nv">$N</span><span class="s2">&quot;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>/etc/projects
+<span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$N</span><span class="s2">:</span><span class="nv">$ID</span><span class="s2">&quot;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>/etc/projid
+<span class="w">  </span>xfs_quota<span class="w"> </span>-x<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;project -s </span><span class="nv">$ID</span><span class="s2">&quot;</span><span class="w"> </span><span class="p">&amp;</span>&gt;/dev/null
+<span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Added </span><span class="nv">$N</span><span class="s2"> (ID </span><span class="nv">$ID</span><span class="s2">)&quot;</span>
 <span class="k">done</span>
 </code></pre></div>
 <h3 id="_3">添加同步配置<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h3>
@@ -2013,42 +2013,6 @@ next_id<span class="o">()</span> <span class="o">{</span>
       </main>
       
         <footer class="md-footer">
-  
-    
-    <nav class="md-footer__inner md-grid" aria-label="Footer" >
-      
-        
-        <a href="../networking/misc/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Misc" rel="prev">
-          <div class="md-footer__button md-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
-          </div>
-          <div class="md-footer__title">
-            <div class="md-ellipsis">
-              <span class="md-footer__direction">
-                Previous
-              </span>
-              Misc
-            </div>
-          </div>
-        </a>
-      
-      
-        
-        <a href="../../3/" class="md-footer__link md-footer__link--next" aria-label="Next: Auxiliary (3)" rel="next">
-          <div class="md-footer__title">
-            <div class="md-ellipsis">
-              <span class="md-footer__direction">
-                Next
-              </span>
-              Auxiliary (3)
-            </div>
-          </div>
-          <div class="md-footer__button md-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
-          </div>
-        </a>
-      
-    </nav>
   
   <div class="md-footer-meta md-typeset">
     <div class="md-footer-meta__inner md-grid">
@@ -2097,12 +2061,11 @@ next_id<span class="o">()</span> <span class="o">{</span>
       <div class="md-dialog__inner md-typeset"></div>
     </div>
     
-    <script id="__config" type="application/json">{"base": "../../../..", "features": ["content.code.annotate", "navigation.indexes", "navigation.sections", "navigation.top"], "search": "../../../../assets/javascripts/workers/search.16e2a7d4.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "../../../..", "features": ["content.code.annotate", "navigation.indexes", "navigation.sections", "navigation.top"], "search": "../../../../assets/javascripts/workers/search.12658920.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../../../../assets/javascripts/bundle.5a2dcb6a.min.js"></script>
+      <script src="../../../../assets/javascripts/bundle.5cf534bf.min.js"></script>
       
-    
     
   </body>
 </html>

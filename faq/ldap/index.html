@@ -14,8 +14,14 @@
       
         <link rel="canonical" href="https://docs.ustclug.org/faq/ldap/">
       
+      
+        <link rel="prev" href="../dns/">
+      
+      
+        <link rel="next" href="../nginx/">
+      
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-8.5.10">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.0.1">
     
     
       
@@ -23,11 +29,10 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.975780f9.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.3bd4f189.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.2505c338.min.css">
-        
       
       
 
@@ -117,8 +122,6 @@
       <form class="md-header__option" data-md-component="palette">
         
           
-          
-          
           <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="teal"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
           
             <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
@@ -126,8 +129,6 @@
             </label>
           
         
-          
-          
           
           <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="green" data-md-color-accent="green"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_2">
           
@@ -1851,10 +1852,9 @@
                 
                   
 
-  <a href="https://github.com/ustclug/documentations/edit/master/docs/faq/ldap.md" title="Edit this page" class="md-content__button md-icon">
-    
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
-  </a>
+  
+  
+
 
 
 <h1 id="ldap">LDAP 套件问题<a class="headerlink" href="#ldap" title="Permanent link">&para;</a></h1>
@@ -1904,7 +1904,7 @@ Stack trace:
 <ol>
 <li>
 <p>TLS/SSL</p>
-<div class="highlight"><pre><span></span><code><span class="gp"># </span>ldapmodify -H ldapi:/// -Y EXTERNAL &lt;&lt; EOF
+<div class="highlight"><pre><span></span><code><span class="gp"># </span>ldapmodify<span class="w"> </span>-H<span class="w"> </span>ldapi:///<span class="w"> </span>-Y<span class="w"> </span>EXTERNAL<span class="w"> </span>&lt;&lt;<span class="w"> </span>EOF
 <span class="go">&gt; dn: cn=config</span>
 <span class="go">&gt; changetype: modify</span>
 <span class="go">&gt; replace: olcTLSCertificateFile</span>
@@ -1921,7 +1921,7 @@ Stack trace:
 </li>
 <li>
 <p>加载 pw-sha2.la（若使用 ssha512/256 则需要加载）</p>
-<div class="highlight"><pre><span></span><code><span class="gp"># </span>ldapmodify -H ldapi:/// -Y EXTERNAL &lt;&lt; EOF
+<div class="highlight"><pre><span></span><code><span class="gp"># </span>ldapmodify<span class="w"> </span>-H<span class="w"> </span>ldapi:///<span class="w"> </span>-Y<span class="w"> </span>EXTERNAL<span class="w"> </span>&lt;&lt;<span class="w"> </span>EOF
 <span class="go">&gt; dn: cn=module,cn=config</span>
 <span class="go">&gt; cn: module</span>
 <span class="go">&gt; objectClass: olcModuleList</span>
@@ -1933,7 +1933,7 @@ Stack trace:
 </li>
 <li>
 <p>为 sudoUser 设置 index</p>
-<div class="highlight"><pre><span></span><code><span class="gp"># </span>ldapadd -Y EXTERNAL -H ldapi:/// &lt;&lt; EOF
+<div class="highlight"><pre><span></span><code><span class="gp"># </span>ldapadd<span class="w"> </span>-Y<span class="w"> </span>EXTERNAL<span class="w"> </span>-H<span class="w"> </span>ldapi:///<span class="w"> </span>&lt;&lt;<span class="w"> </span>EOF
 <span class="go">&gt; dn: olcDatabase={1}mdb,cn=config</span>
 <span class="go">&gt; changetype: modify</span>
 <span class="go">&gt; add: olcDbIndex</span>
@@ -1945,7 +1945,7 @@ Stack trace:
 <li>
 <p>更改默认密码存储选项（可选）</p>
 <p>更改为 crypt/yescrypt</p>
-<div class="highlight"><pre><span></span><code><span class="gp"># </span>ldapmodify -Y EXTERNAL -H ldapi:/// &lt;&lt; EOF
+<div class="highlight"><pre><span></span><code><span class="gp"># </span>ldapmodify<span class="w"> </span>-Y<span class="w"> </span>EXTERNAL<span class="w"> </span>-H<span class="w"> </span>ldapi:///<span class="w"> </span>&lt;&lt;<span class="w"> </span>EOF
 <span class="go">&gt; dn: olcDatabase={-1}frontend,cn=config</span>
 <span class="go">&gt; add: olcPasswordHash</span>
 <span class="go">&gt; olcPasswordHash: {CRYPT}</span>
@@ -1955,13 +1955,13 @@ Stack trace:
 <span class="go">&gt; olcPasswordCryptSaltFormat: $y$j9T$%s</span>
 </code></pre></div>
 <p>更改为 ssha512（需要 pw-sha2.la，也可参照上述 yescrypt 的配置更改为 crypt/ssha512）</p>
-<div class="highlight"><pre><span></span><code><span class="gp"># </span>ldapmodify -Y EXTERNAL -H ldapi:/// &lt;&lt; EOF
+<div class="highlight"><pre><span></span><code><span class="gp"># </span>ldapmodify<span class="w"> </span>-Y<span class="w"> </span>EXTERNAL<span class="w"> </span>-H<span class="w"> </span>ldapi:///<span class="w"> </span>&lt;&lt;<span class="w"> </span>EOF
 <span class="go">&gt; dn: olcDatabase={-1}frontend,cn=config</span>
 <span class="go">&gt; add: olcPasswordHash</span>
 <span class="go">&gt; olcPasswordHash: {SSHA512}</span>
 </code></pre></div>
 <p>如果报错已经存在，可以用 replace 选项，以 crypt/yescrypt 为例：</p>
-<div class="highlight"><pre><span></span><code><span class="gp"># </span>ldapmodify -Y EXTERNAL -H ldapi:/// &lt;&lt; EOF
+<div class="highlight"><pre><span></span><code><span class="gp"># </span>ldapmodify<span class="w"> </span>-Y<span class="w"> </span>EXTERNAL<span class="w"> </span>-H<span class="w"> </span>ldapi:///<span class="w"> </span>&lt;&lt;<span class="w"> </span>EOF
 <span class="go">&gt; dn: olcDatabase={-1}frontend,cn=config</span>
 <span class="go">&gt; changetype: modify</span>
 <span class="go">&gt; replace: olcPasswordHash</span>
@@ -1995,42 +1995,6 @@ Stack trace:
       </main>
       
         <footer class="md-footer">
-  
-    
-    <nav class="md-footer__inner md-grid" aria-label="Footer" >
-      
-        
-        <a href="../dns/" class="md-footer__link md-footer__link--prev" aria-label="Previous: DNS" rel="prev">
-          <div class="md-footer__button md-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
-          </div>
-          <div class="md-footer__title">
-            <div class="md-ellipsis">
-              <span class="md-footer__direction">
-                Previous
-              </span>
-              DNS
-            </div>
-          </div>
-        </a>
-      
-      
-        
-        <a href="../nginx/" class="md-footer__link md-footer__link--next" aria-label="Next: Nginx" rel="next">
-          <div class="md-footer__title">
-            <div class="md-ellipsis">
-              <span class="md-footer__direction">
-                Next
-              </span>
-              Nginx
-            </div>
-          </div>
-          <div class="md-footer__button md-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
-          </div>
-        </a>
-      
-    </nav>
   
   <div class="md-footer-meta md-typeset">
     <div class="md-footer-meta__inner md-grid">
@@ -2079,12 +2043,11 @@ Stack trace:
       <div class="md-dialog__inner md-typeset"></div>
     </div>
     
-    <script id="__config" type="application/json">{"base": "../..", "features": ["content.code.annotate", "navigation.indexes", "navigation.sections", "navigation.top"], "search": "../../assets/javascripts/workers/search.16e2a7d4.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "../..", "features": ["content.code.annotate", "navigation.indexes", "navigation.sections", "navigation.top"], "search": "../../assets/javascripts/workers/search.12658920.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.5a2dcb6a.min.js"></script>
+      <script src="../../assets/javascripts/bundle.5cf534bf.min.js"></script>
       
-    
     
   </body>
 </html>

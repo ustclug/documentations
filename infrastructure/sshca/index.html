@@ -14,8 +14,14 @@
       
         <link rel="canonical" href="https://docs.ustclug.org/infrastructure/sshca/">
       
+      
+        <link rel="prev" href="../ldap/">
+      
+      
+        <link rel="next" href="../auth-dns/">
+      
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-8.5.10">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.0.1">
     
     
       
@@ -23,11 +29,10 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.975780f9.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.3bd4f189.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.2505c338.min.css">
-        
       
       
 
@@ -117,8 +122,6 @@
       <form class="md-header__option" data-md-component="palette">
         
           
-          
-          
           <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="teal"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
           
             <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
@@ -126,8 +129,6 @@
             </label>
           
         
-          
-          
           
           <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="green" data-md-color-accent="green"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_2">
           
@@ -1853,10 +1854,9 @@
                 
                   
 
-  <a href="https://github.com/ustclug/documentations/edit/master/docs/infrastructure/sshca.md" title="Edit this page" class="md-content__button md-icon">
-    
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
-  </a>
+  
+  
+
 
 
 <h1 id="ssh-certificate-authentication">SSH Certificate Authentication<a class="headerlink" href="#ssh-certificate-authentication" title="Permanent link">&para;</a></h1>
@@ -1882,31 +1882,31 @@
 </div>
 <p>Copy the file <code>/etc/ssh/ssh_host_rsa_key.pub</code> from target server.</p>
 <p>Then, run <code>ssh-keygen</code> to issue a public key. For example:</p>
-<div class="highlight"><pre><span></span><code>ssh-keygen -s /path/to/ssh_ca <span class="se">\</span>
-           -I blog <span class="se">\</span>
-           -h <span class="se">\</span>
-           -n blog.s.ustclug.org,blog.p.ustclug.org,10.254.0.15,202.141.176.98,202.141.160.98 <span class="se">\</span>
-           ssh_host_rsa_key.pub
+<div class="highlight"><pre><span></span><code>ssh-keygen<span class="w"> </span>-s<span class="w"> </span>/path/to/ssh_ca<span class="w"> </span><span class="se">\</span>
+<span class="w">           </span>-I<span class="w"> </span>blog<span class="w"> </span><span class="se">\</span>
+<span class="w">           </span>-h<span class="w"> </span><span class="se">\</span>
+<span class="w">           </span>-n<span class="w"> </span>blog.s.ustclug.org,blog.p.ustclug.org,10.254.0.15,202.141.176.98,202.141.160.98<span class="w"> </span><span class="se">\</span>
+<span class="w">           </span>ssh_host_rsa_key.pub
 </code></pre></div>
 <p>Then, copy the certificate file <code>ssh_host_rsa_key-cert.pub</code> back to target server.</p>
 <p>At last, add the following lines to <code>/etc/ssh/sshd_config</code>:</p>
-<div class="highlight"><pre><span></span><code>HostKey /etc/ssh/ssh_host_rsa_key
-HostCertificate /etc/ssh/ssh_host_rsa_key-cert.pub
+<div class="highlight"><pre><span></span><code>HostKey<span class="w"> </span>/etc/ssh/ssh_host_rsa_key
+HostCertificate<span class="w"> </span>/etc/ssh/ssh_host_rsa_key-cert.pub
 </code></pre></div>
 <p>Certificate will take effect after SSH daemon is reloaded (<code>systemctl reload ssh</code>).</p>
 <h2 id="issue-a-client-certificate">Issue a client certificate<a class="headerlink" href="#issue-a-client-certificate" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code>ssh-keygen -s /path/to/ssh_ca <span class="se">\</span>
-           -I certificate_identity <span class="se">\</span>
-           -n principals <span class="se">\</span>
-           -O options <span class="se">\</span>
-           -V validity_interval <span class="se">\</span>
-           public_key_file
+<div class="highlight"><pre><span></span><code>ssh-keygen<span class="w"> </span>-s<span class="w"> </span>/path/to/ssh_ca<span class="w"> </span><span class="se">\</span>
+<span class="w">           </span>-I<span class="w"> </span>certificate_identity<span class="w"> </span><span class="se">\</span>
+<span class="w">           </span>-n<span class="w"> </span>principals<span class="w"> </span><span class="se">\</span>
+<span class="w">           </span>-O<span class="w"> </span>options<span class="w"> </span><span class="se">\</span>
+<span class="w">           </span>-V<span class="w"> </span>validity_interval<span class="w"> </span><span class="se">\</span>
+<span class="w">           </span>public_key_file
 </code></pre></div>
 <p>For example:</p>
-<div class="highlight"><pre><span></span><code>ssh-keygen -s /path/to/ssh_ca -I <span class="s2">&quot;Yifan Gao&quot;</span> -n yifan -V -5m:+365d yifan.pub
+<div class="highlight"><pre><span></span><code>ssh-keygen<span class="w"> </span>-s<span class="w"> </span>/path/to/ssh_ca<span class="w"> </span>-I<span class="w"> </span><span class="s2">&quot;Yifan Gao&quot;</span><span class="w"> </span>-n<span class="w"> </span>yifan<span class="w"> </span>-V<span class="w"> </span>-5m:+365d<span class="w"> </span>yifan.pub
 </code></pre></div>
 <p>In general, <em>certificate_identity</em> is the user's full name, and <em>principals</em> is the system username. The certificate identity is used to identify certificates and is logged in system logs. In addition, one certificate can carry multiply <em>principals</em>, like:</p>
-<div class="highlight"><pre><span></span><code>ssh-keygen -s /path/to/ssh_ca -I <span class="s2">&quot;Yifan Gao&quot;</span> -n yifan,root,liims -V -5m:+365d yifan.pub
+<div class="highlight"><pre><span></span><code>ssh-keygen<span class="w"> </span>-s<span class="w"> </span>/path/to/ssh_ca<span class="w"> </span>-I<span class="w"> </span><span class="s2">&quot;Yifan Gao&quot;</span><span class="w"> </span>-n<span class="w"> </span>yifan,root,liims<span class="w"> </span>-V<span class="w"> </span>-5m:+365d<span class="w"> </span>yifan.pub
 </code></pre></div>
 <p>It authorizes the certificate owner to login to any server as <code>yifan</code>, <code>root</code> or <code>liims</code> user.</p>
 <div class="admonition note">
@@ -1938,42 +1938,6 @@ HostCertificate /etc/ssh/ssh_host_rsa_key-cert.pub
       </main>
       
         <footer class="md-footer">
-  
-    
-    <nav class="md-footer__inner md-grid" aria-label="Footer" >
-      
-        
-        <a href="../ldap/" class="md-footer__link md-footer__link--prev" aria-label="Previous: LDAP: Servers Unified Authentication" rel="prev">
-          <div class="md-footer__button md-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
-          </div>
-          <div class="md-footer__title">
-            <div class="md-ellipsis">
-              <span class="md-footer__direction">
-                Previous
-              </span>
-              LDAP: Servers Unified Authentication
-            </div>
-          </div>
-        </a>
-      
-      
-        
-        <a href="../auth-dns/" class="md-footer__link md-footer__link--next" aria-label="Next: Authoritative DNS" rel="next">
-          <div class="md-footer__title">
-            <div class="md-ellipsis">
-              <span class="md-footer__direction">
-                Next
-              </span>
-              Authoritative DNS
-            </div>
-          </div>
-          <div class="md-footer__button md-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
-          </div>
-        </a>
-      
-    </nav>
   
   <div class="md-footer-meta md-typeset">
     <div class="md-footer-meta__inner md-grid">
@@ -2022,12 +1986,11 @@ HostCertificate /etc/ssh/ssh_host_rsa_key-cert.pub
       <div class="md-dialog__inner md-typeset"></div>
     </div>
     
-    <script id="__config" type="application/json">{"base": "../..", "features": ["content.code.annotate", "navigation.indexes", "navigation.sections", "navigation.top"], "search": "../../assets/javascripts/workers/search.16e2a7d4.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "../..", "features": ["content.code.annotate", "navigation.indexes", "navigation.sections", "navigation.top"], "search": "../../assets/javascripts/workers/search.12658920.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.5a2dcb6a.min.js"></script>
+      <script src="../../assets/javascripts/bundle.5cf534bf.min.js"></script>
       
-    
     
   </body>
 </html>
