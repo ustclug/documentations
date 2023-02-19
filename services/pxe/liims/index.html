@@ -1926,7 +1926,7 @@
 <span class="w">    </span><span class="nt">&quot;mac&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;0223456789ab&quot;</span>
 <span class="p">}</span>
 </code></pre></div>
-<p>注意此处的 MAC 地址没有冒号。</p>
+<p>注意此处的 MAC 地址没有冒号。添加完成后，运行 <code>systemctl reload liims-monitor.service</code> 使监控页面重新载入此配置文件。</p>
 <h2 id="_1">启动镜像<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <p>位于 <code>/home/pxe/nfsroot/&lt;category&gt;/&lt;name&gt;</code>，其中 <code>&lt;name&gt;</code> 就是镜像名称（例如 <code>liims160909</code>）。目前有两种部署方式：一种是 NFS as rootfs，文件夹中就是整个 rootfs，直接修改这里的文件，机器重启后就会载入。（注意：覆盖文件可能导致已有的机器运行错误）</p>
 <p>另一种是打包压缩为 squashfs，此时文件夹下三个文件分别为 vmlinuz（kernel）, initrd.img 和 root.sfs（squashfs 镜像）。如果需要修改，可以使用 <code>unsquashfs</code> 解压缩，修改完成后参考仓库中 deploy 文件再压缩为 squashfs。</p>
