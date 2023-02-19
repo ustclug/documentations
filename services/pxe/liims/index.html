@@ -1959,7 +1959,7 @@ mount<span class="w"> </span>-o<span class="w"> </span>loop<span class="w"> </sp
 <div class="admonition tip">
 <p class="admonition-title">添加新机器</p>
 <p><del>修改 <a href="https://github.com/ustclug/liimstrap/blob/master/monitor/clients.json">https://github.com/ustclug/liimstrap/blob/master/monitor/clients.json</a> 后，在 pxe 上 clone 并在当前目录 build。使用 docker-run-script 中对应脚本执行容器即可。</del></p>
-<p>修改 clients.json 之后 <code>systemctl reload liims-monitor.service</code> 即可。</p>
+<p>修改 <code>/etc/liims-monitor/clients.json</code> 之后 <code>systemctl reload liims-monitor.service</code> 即可。</p>
 </div>
 
 
