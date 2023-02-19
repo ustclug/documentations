@@ -10,13 +10,33 @@ Git Repository:
 
 It is strongly advised to clone liimstrap and read through it when reading this document.
 
-## 启动配置
+## 启动配置 {#add-machine}
 
-配置文件在 `/home/pxe/tftp/grub/grub.cfg.d`，若要允许新机器启动 liims 镜像，创建一个符号链接到对应的配置文件（目前的镜像是 `liims220222`）：
+配置文件在 `/home/pxe/tftp/grub/grub.cfg.d`，若要允许新机器启动 liims 镜像，创建一个符号链接到对应的配置文件。例如：
 
 ```shell
-ln -s liims220222 02:23:45:67:89:ab
+ln -s common_el 02:23:45:67:89:ab
 ```
+
+目前我们通过几个符号链接将配置文件“分组”，MAC 地址对应的符号链接应该链接到这些分组上。已有的分组如下：
+
+- `common_el`：EL 即 East-campus Library（东图）
+- `common_wl`：WL 即 West-campus Library（西图）
+- `common_sl`：SL 即 South-campus Library（南图）
+- `common_iat`：IAT 即先研院
+- `common_gx`：GaoXin 高新校区
+- `test`：测试镜像
+
+除此之外，还需要编辑 `/etc/liims-monitor/clients.json`，在 machines 中添加 MAC 地址对应的对象，格式如下：
+
+```json title="/etc/liims-monitor/clients.json"
+{
+    "name": "东区三楼东01",
+    "mac": "0223456789ab"
+}
+```
+
+注意此处的 MAC 地址没有冒号。添加完成后，运行 `systemctl reload liims-monitor.service` 使监控页面重新载入此配置文件。
 
 ## 启动镜像
 
@@ -69,4 +89,4 @@ qemu -kernel /mnt/boot/vmlinuz-lts\
 
     ~~修改 <https://github.com/ustclug/liimstrap/blob/master/monitor/clients.json> 后，在 pxe 上 clone 并在当前目录 build。使用 docker-run-script 中对应脚本执行容器即可。~~
 
-    修改 clients.json 之后 `systemctl reload liims-monitor.service` 即可。
+    修改 `/etc/liims-monitor/clients.json` 之后 `systemctl reload liims-monitor.service` 即可。
