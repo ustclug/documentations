@@ -134,8 +134,8 @@ nav:
     - LUG VPN: "services/vpn.md"
     - Light: "services/light.md"
     - PXE:
+      - "services/pxe/index.md"
       - LIIMS: "services/pxe/liims.md"
-      - PXE: "services/pxe/pxe.md"
     - FTP: "services/ftp.md"
     - Generate 204: "services/generate-204.md"
     - Discontinued Services: "services/discontinued.md"
