@@ -1581,6 +1581,19 @@
     启动配置
   </a>
   
+    <nav class="md-nav" aria-label="启动配置">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#lib-api" class="md-nav__link">
+    为图书馆老师开放的接口
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -1845,6 +1858,19 @@
     启动配置
   </a>
   
+    <nav class="md-nav" aria-label="启动配置">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#lib-api" class="md-nav__link">
+    为图书馆老师开放的接口
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -1920,13 +1946,21 @@
 <li><code>common_gx</code>：GaoXin 高新校区</li>
 <li><code>test</code>：测试镜像</li>
 </ul>
-<p>除此之外，还需要编辑 <code>/etc/liims-monitor/clients.json</code>，在 machines 中添加 MAC 地址对应的对象，格式如下：</p>
-<div class="highlight"><span class="filename">/etc/liims-monitor/clients.json</span><pre><span></span><code><span class="p">{</span>
-<span class="w">    </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;东区三楼东01&quot;</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;mac&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;0223456789ab&quot;</span>
-<span class="p">}</span>
+<p>除此之外，还需要在查询机监控程序中添加该 MAC 地址，见下方<a href="#monitor">查询机监控</a>。</p>
+<h3 id="lib-api">为图书馆老师开放的接口<a class="headerlink" href="#lib-api" title="Permanent link">&para;</a></h3>
+<p>图书馆老师可以通过 SSH 登录机器直接创建所需的符号链接（但是还需要我们来改监控程序的 json）。相关配置如下：</p>
+<div class="highlight"><span class="filename">/etc/sudoers.d/sonnie</span><pre><span></span><code>sonnie ALL=(pxe) NOPASSWD: /home/pxe/tftp/grub/grub.cfg.d/add_host.py *
 </code></pre></div>
-<p>注意此处的 MAC 地址没有冒号。添加完成后，运行 <code>systemctl reload liims-monitor.service</code> 使监控页面重新载入此配置文件。</p>
+<div class="highlight"><span class="filename">/etc/ssh/sshd_config</span><pre><span></span><code>Match User sonnie
+    AllowUsers sonnie
+    PubkeyAuthentication yes
+    AuthorizedKeysFile .ssh/authorized_keys
+</code></pre></div>
+<div class="admonition abstract">
+<p class="admonition-title">/etc/nsswitch.conf</p>
+<p>把 sudoers 一行中的 ldap 移到 files 前面。</p>
+<p>默认情况下 ldap 在 files 后面，那么来自 LDAP 的 sudo rules 会排在 sudoers 文件中的 rules 的后面，而 sudo 是后面的规则优先级更高，会导致无法 NOPASSWD 运行脚本。</p>
+</div>
 <h2 id="_1">启动镜像<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <p>位于 <code>/home/pxe/nfsroot/&lt;category&gt;/&lt;name&gt;</code>，其中 <code>&lt;name&gt;</code> 就是镜像名称（例如 <code>liims160909</code>）。目前有两种部署方式：一种是 NFS as rootfs，文件夹中就是整个 rootfs，直接修改这里的文件，机器重启后就会载入。（注意：覆盖文件可能导致已有的机器运行错误）</p>
 <p>另一种是打包压缩为 squashfs，此时文件夹下三个文件分别为 vmlinuz（kernel）, initrd.img 和 root.sfs（squashfs 镜像）。如果需要修改，可以使用 <code>unsquashfs</code> 解压缩，修改完成后参考仓库中 deploy 文件再压缩为 squashfs。</p>
@@ -1960,6 +1994,11 @@ mount<span class="w"> </span>-o<span class="w"> </span>loop<span class="w"> </sp
 <p class="admonition-title">添加新机器</p>
 <p><del>修改 <a href="https://github.com/ustclug/liimstrap/blob/master/monitor/clients.json">https://github.com/ustclug/liimstrap/blob/master/monitor/clients.json</a> 后，在 pxe 上 clone 并在当前目录 build。使用 docker-run-script 中对应脚本执行容器即可。</del></p>
 <p>修改 <code>/etc/liims-monitor/clients.json</code> 之后 <code>systemctl reload liims-monitor.service</code> 即可。</p>
+<div class="highlight"><span class="filename">/etc/liims-monitor/clients.json</span><pre><span></span><code><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;东区三楼东01&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;mac&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;0223456789ab&quot;</span>
+<span class="p">}</span>
+</code></pre></div>
 </div>
 
 
