@@ -271,12 +271,12 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://docs.ustclug.org/services/pxe/liims/</loc>
+         <loc>https://docs.ustclug.org/services/pxe/</loc>
          <lastmod>2023-02-23</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://docs.ustclug.org/services/pxe/pxe/</loc>
+         <loc>https://docs.ustclug.org/services/pxe/liims/</loc>
          <lastmod>2023-02-23</lastmod>
          <changefreq>daily</changefreq>
     </url>
