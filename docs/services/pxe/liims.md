@@ -27,16 +27,28 @@ ln -s common_el 02:23:45:67:89:ab
 - `common_gx`：GaoXin 高新校区
 - `test`：测试镜像
 
-除此之外，还需要编辑 `/etc/liims-monitor/clients.json`，在 machines 中添加 MAC 地址对应的对象，格式如下：
+除此之外，还需要在查询机监控程序中添加该 MAC 地址，见下方[查询机监控](#monitor)。
 
-```json title="/etc/liims-monitor/clients.json"
-{
-    "name": "东区三楼东01",
-    "mac": "0223456789ab"
-}
+### 为图书馆老师开放的接口 {#lib-api}
+
+图书馆老师可以通过 SSH 登录机器直接创建所需的符号链接（但是还需要我们来改监控程序的 json）。相关配置如下：
+
+```conf title="/etc/sudoers.d/sonnie"
+sonnie ALL=(pxe) NOPASSWD: /home/pxe/tftp/grub/grub.cfg.d/add_host.py *
 ```
 
-注意此处的 MAC 地址没有冒号。添加完成后，运行 `systemctl reload liims-monitor.service` 使监控页面重新载入此配置文件。
+```conf title="/etc/ssh/sshd_config"
+Match User sonnie
+    AllowUsers sonnie
+    PubkeyAuthentication yes
+    AuthorizedKeysFile .ssh/authorized_keys
+```
+
+!!! abstract "/etc/nsswitch.conf"
+
+    把 sudoers 一行中的 ldap 移到 files 前面。
+
+    默认情况下 ldap 在 files 后面，那么来自 LDAP 的 sudo rules 会排在 sudoers 文件中的 rules 的后面，而 sudo 是后面的规则优先级更高，会导致无法 NOPASSWD 运行脚本。
 
 ## 启动镜像
 
@@ -90,3 +102,10 @@ qemu -kernel /mnt/boot/vmlinuz-lts\
     ~~修改 <https://github.com/ustclug/liimstrap/blob/master/monitor/clients.json> 后，在 pxe 上 clone 并在当前目录 build。使用 docker-run-script 中对应脚本执行容器即可。~~
 
     修改 `/etc/liims-monitor/clients.json` 之后 `systemctl reload liims-monitor.service` 即可。
+
+    ```json title="/etc/liims-monitor/clients.json"
+    {
+        "name": "东区三楼东01",
+        "mac": "0223456789ab"
+    }
+    ```
