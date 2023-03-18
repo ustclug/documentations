@@ -29,3 +29,9 @@ esxcli software vib install -v=/tmp/vmware-esx-MegaCli-8.07.07.vib --no-sig-chec
 ```
 
 然后进入 `/opt/lsi/MegaCLI` 目录执行 `MegaCli`.
+
+## ssacli (HPE Smart Array)
+
+pve-6 的 RAID 方案是 HPE Smart Array。对应使用方法可以参考 <https://gist.github.com/mrpeardotnet/a9ce41da99936c0175600f484fa20d03>。
+
+对应主机需要安装 <https://downloads.linux.hpe.com/SDR/repo/mcp/Debian/pool/non-free/ssacli-5.30-6.0_amd64.deb>（HPE 源实在太慢了）。
