@@ -25,7 +25,7 @@ Users 是用来添加和配置用户信息的地方。最主要的功能位于�
         小心输出的顺序，最大的 UID 不一定是最后一个（而且事实上经常不是），建议配合 sed, awk, sort 之类的命令妥善处理，例如
 
         ```shell
-        getent passwd | cut -d: -f3 | sort -n
+        getent -s ldap passwd | cut -d: -f3 | sort -n
         ```
 
         同时还有若干 UID 很大但是离散的特殊账号，很容易分辨。显然新 UID 是 2000 开始连续的最大 UID + 1.
@@ -227,7 +227,7 @@ nscd -i group
 
 ## LDAP CLI 工具使用说明
 
-这里以 `ldappasswd` 为例，其余 ladp-series 指令与其大致相同：
+这里以 `ldappasswd` 为例，其余 ldap 系列指令与其大致相同：
 
 LDAP 利用 dn 来定位一个用户，以下指令可以列出所有用户及其 dn：
 
