@@ -21,7 +21,7 @@
         <link rel="next" href="../auth-dns/">
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.1.8">
+      <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.9">
     
     
       
@@ -29,10 +29,10 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.ded33207.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.85bb2934.min.css">
       
         
-        <link rel="stylesheet" href="../../assets/stylesheets/palette.a0c5b2b5.min.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.a6bdf11c.min.css">
       
       
 
@@ -660,23 +660,49 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#trust-all-lug-servers-in-one-go" class="md-nav__link">
-    Trust all LUG servers in one go
+  <a href="#server-setup" class="md-nav__link">
+    Server setup
+  </a>
+  
+    <nav class="md-nav" aria-label="Server setup">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#trustedusercakeys" class="md-nav__link">
+    Configure server to accept client certificates
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
+        
+          <li class="md-nav__item">
   <a href="#issue-a-server-certificate" class="md-nav__link">
     Issue a server certificate
   </a>
   
 </li>
+        
+      </ul>
+    </nav>
+  
+</li>
       
         <li class="md-nav__item">
+  <a href="#client-setup" class="md-nav__link">
+    Client setup
+  </a>
+  
+    <nav class="md-nav" aria-label="Client setup">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
   <a href="#issue-a-client-certificate" class="md-nav__link">
     Issue a client certificate
   </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -1837,23 +1863,49 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#trust-all-lug-servers-in-one-go" class="md-nav__link">
-    Trust all LUG servers in one go
+  <a href="#server-setup" class="md-nav__link">
+    Server setup
+  </a>
+  
+    <nav class="md-nav" aria-label="Server setup">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#trustedusercakeys" class="md-nav__link">
+    Configure server to accept client certificates
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
+        
+          <li class="md-nav__item">
   <a href="#issue-a-server-certificate" class="md-nav__link">
     Issue a server certificate
   </a>
   
 </li>
+        
+      </ul>
+    </nav>
+  
+</li>
       
         <li class="md-nav__item">
+  <a href="#client-setup" class="md-nav__link">
+    Client setup
+  </a>
+  
+    <nav class="md-nav" aria-label="Client setup">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
   <a href="#issue-a-client-certificate" class="md-nav__link">
     Issue a client certificate
   </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -1877,16 +1929,23 @@
 
 <h1 id="ssh-certificate-authentication">SSH Certificate Authentication<a class="headerlink" href="#ssh-certificate-authentication" title="Permanent link">&para;</a></h1>
 <p>Discussion: <a href="https://groups.google.com/d/topic/lug-internal/K7bDLKTGHXw/discussion">SSH 升级到证书登陆方案讨论</a></p>
-<p>Usage: <a href="https://groups.google.com/d/topic/lug-internal/2iQQ30qhbQ8/discussion">SSH 证书认证的使用方法</a></p>
+<p>Usage: <a href="https://groups.google.com/d/topic/lug-internal/2iQQ30qhbQ8/discussion">SSH 证书认证的使用方法</a> (See also: <a href="https://ibug.io/p/30">iBug's blog</a>)</p>
 <h2 id="introduction">Introduction<a class="headerlink" href="#introduction" title="Permanent link">&para;</a></h2>
 <p>An SSH Certificate Authority (CA) is a trusted key pair that issues certificates. It has the same format as a regular SSH private-public key pair (it <em>is</em>, in fact). </p>
 <p>Certificates can be used for authentication on both the server side and the client side. But certificates cannot issue new certificates (i.e. no chains), it is the very difference from X.509 certificate system.</p>
-<h2 id="trust-all-lug-servers-in-one-go">Trust all LUG servers in one go<a class="headerlink" href="#trust-all-lug-servers-in-one-go" title="Permanent link">&para;</a></h2>
-<p>Add the following line to your <code>known_hosts</code>:</p>
-<div class="highlight"><pre><span></span><code>@cert-authority * ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC1Bxw9AXoZvc9HTe5o4f7/qOROcmzvlcO5oofoF3pewtRnhNpcd/DwmxSblqpj/cjLYkE32mSCzMYY8X0CRFyMJsgSIDC4i4LXDNU0e8PbB2NIQAAeyfJEU5m/Dn1tPw9WvPtPqHCRvgSwnRfzYngMVWROgV2Qe6pOqTTgetEYfb5gkDc2i1M7yfTp3H3ExfrDKwOKPc/9UYOADMFU6u1fJN+4epLETilHC1ubtBeVi23pn1K+LDy06Gwhq1MLljCM7gFBMrmv894HrOHU4WrzLUlfkiDt2cyXLb4qPWYqilBFLUjU92kjmiI/EwB/8pR1WmdU7FoYpdgBHNr3NT53 LUG-CA
+<h2 id="server-setup">Server setup<a class="headerlink" href="#server-setup" title="Permanent link">&para;</a></h2>
+<h3 id="trustedusercakeys">Configure server to accept client certificates<a class="headerlink" href="#trustedusercakeys" title="Permanent link">&para;</a></h3>
+<p>First drop our public key to <code>/etc/ssh/ssh_user_ca</code>:</p>
+<div class="highlight"><span class="filename">/etc/ssh/ssh_user_ca</span><pre><span></span><code>ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC1Bxw9AXoZvc9HTe5o4f7/qOROcmzvlcO5oofoF3pewtRnhNpcd/DwmxSblqpj/cjLYkE32mSCzMYY8X0CRFyMJsgSIDC4i4LXDNU0e8PbB2NIQAAeyfJEU5m/Dn1tPw9WvPtPqHCRvgSwnRfzYngMVWROgV2Qe6pOqTTgetEYfb5gkDc2i1M7yfTp3H3ExfrDKwOKPc/9UYOADMFU6u1fJN+4epLETilHC1ubtBeVi23pn1K+LDy06Gwhq1MLljCM7gFBMrmv894HrOHU4WrzLUlfkiDt2cyXLb4qPWYqilBFLUjU92kjmiI/EwB/8pR1WmdU7FoYpdgBHNr3NT53 LUG-CA
 </code></pre></div>
-<p>And when you log in to a LUG server, it is automatically trusted. If you find a machine that does not support this setup, report it to CTO.</p>
-<h2 id="issue-a-server-certificate">Issue a server certificate<a class="headerlink" href="#issue-a-server-certificate" title="Permanent link">&para;</a></h2>
+<p>Then add the following line to sshd config (Debian 11+):</p>
+<div class="highlight"><span class="filename">/etc/ssh/sshd_config.d/ustclug.conf</span><pre><span></span><code>TrustedUserCAKeys<span class="w"> </span>/etc/ssh/ssh_user_ca
+</code></pre></div>
+<div class="admonition warning">
+<p class="admonition-title">Old version config (&lt;= Debian 10)</p>
+<p>On Debian 10 (buster) or older, <code>sshd_config</code> does not support the <code>Include</code> directive. Thus any extra setting must be added in the main <code>sshd_config</code> file directly.</p>
+</div>
+<h3 id="issue-a-server-certificate">Issue a server certificate<a class="headerlink" href="#issue-a-server-certificate" title="Permanent link">&para;</a></h3>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>When signing certificates using OpenSSH &lt;= 8.1, add <code>-t rsa-sha2-512</code> to the <code>ssh-keygen</code> command. More details can be found here: <a href="https://ibug.io/p/35">https://ibug.io/p/35</a></p>
@@ -1905,17 +1964,26 @@
 <span class="w">           </span>ssh_host_rsa_key.pub
 </code></pre></div>
 <p>Then, copy the certificate file <code>ssh_host_rsa_key-cert.pub</code> back to target server.</p>
-<p>At last, add the following lines to <code>/etc/ssh/sshd_config</code>:</p>
-<div class="highlight"><pre><span></span><code>HostKey<span class="w"> </span>/etc/ssh/ssh_host_rsa_key
+<p>At last, add the following lines to sshd config:</p>
+<div class="highlight"><span class="filename">/etc/ssh/sshd_config.d/ustclug.conf</span><pre><span></span><code>HostKey<span class="w"> </span>/etc/ssh/ssh_host_rsa_key
 HostCertificate<span class="w"> </span>/etc/ssh/ssh_host_rsa_key-cert.pub
 </code></pre></div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>See the same warning block <a href="#trustedusercakeys">above</a>.</p>
+</div>
 <p>Certificate will take effect after SSH daemon is reloaded (<code>systemctl reload ssh</code>).</p>
-<h2 id="issue-a-client-certificate">Issue a client certificate<a class="headerlink" href="#issue-a-client-certificate" title="Permanent link">&para;</a></h2>
+<h2 id="client-setup">Client setup<a class="headerlink" href="#client-setup" title="Permanent link">&para;</a></h2>
+<p>Add the following line to your <code>known_hosts</code>:</p>
+<div class="highlight"><span class="filename">~/.ssh/known_hosts</span><pre><span></span><code>@cert-authority * ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC1Bxw9AXoZvc9HTe5o4f7/qOROcmzvlcO5oofoF3pewtRnhNpcd/DwmxSblqpj/cjLYkE32mSCzMYY8X0CRFyMJsgSIDC4i4LXDNU0e8PbB2NIQAAeyfJEU5m/Dn1tPw9WvPtPqHCRvgSwnRfzYngMVWROgV2Qe6pOqTTgetEYfb5gkDc2i1M7yfTp3H3ExfrDKwOKPc/9UYOADMFU6u1fJN+4epLETilHC1ubtBeVi23pn1K+LDy06Gwhq1MLljCM7gFBMrmv894HrOHU4WrzLUlfkiDt2cyXLb4qPWYqilBFLUjU92kjmiI/EwB/8pR1WmdU7FoYpdgBHNr3NT53 LUG-CA
+</code></pre></div>
+<p>And when you log in to a LUG server, it is automatically trusted. If you find a machine that does not support this setup, report it to CTO.</p>
+<h3 id="issue-a-client-certificate">Issue a client certificate<a class="headerlink" href="#issue-a-client-certificate" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code>ssh-keygen<span class="w"> </span>-s<span class="w"> </span>/path/to/ssh_ca<span class="w"> </span><span class="se">\</span>
 <span class="w">           </span>-I<span class="w"> </span>certificate_identity<span class="w"> </span><span class="se">\</span>
 <span class="w">           </span>-n<span class="w"> </span>principals<span class="w"> </span><span class="se">\</span>
-<span class="w">           </span>-O<span class="w"> </span>options<span class="w"> </span><span class="se">\</span>
-<span class="w">           </span>-V<span class="w"> </span>validity_interval<span class="w"> </span><span class="se">\</span>
+<span class="w">          </span><span class="o">[</span>-O<span class="w"> </span>options<span class="o">]</span><span class="w"> </span><span class="se">\</span>
+<span class="w">          </span><span class="o">[</span>-V<span class="w"> </span>validity_interval<span class="o">]</span><span class="w"> </span><span class="se">\</span>
 <span class="w">           </span>public_key_file
 </code></pre></div>
 <p>For example:</p>
@@ -2006,10 +2074,10 @@ HostCertificate<span class="w"> </span>/etc/ssh/ssh_host_rsa_key-cert.pub
       <div class="md-dialog__inner md-typeset"></div>
     </div>
     
-    <script id="__config" type="application/json">{"base": "../..", "features": ["content.code.annotate", "navigation.indexes", "navigation.sections", "navigation.top"], "search": "../../assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "../..", "features": ["content.code.annotate", "content.code.copy", "navigation.indexes", "navigation.sections", "navigation.top"], "search": "../../assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.51198bba.min.js"></script>
+      <script src="../../assets/javascripts/bundle.fac441b0.min.js"></script>
       
     
   </body>
