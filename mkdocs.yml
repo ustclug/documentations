@@ -35,6 +35,7 @@ theme:
     repo: octicons/mark-github-16
   features:
     - content.code.annotate
+    - content.code.copy
     - navigation.indexes
     - navigation.sections
     - navigation.top
