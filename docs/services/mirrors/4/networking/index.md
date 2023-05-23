@@ -114,3 +114,33 @@ IPv6AcceptRA=false
 !!! question "为什么 Gateway 被注释掉了"
 
     根据 [systemd 官方文档](https://www.freedesktop.org/software/systemd/man/systemd.network.html#Gateway=)，在 `[Network]` 一节出现的 `Gateway=` 等价于一个单独的、仅包含一行 `Gateway=` 的 `[Route]` 节。由于我们需要深度[自定义路由](route.md)，这里不方便采用这个过于简洁的设定（例如各种默认值 `Table=main` 等）。
+
+## Docker network
+
+针对个别不支持 bind address 的同步工具，我们通过将其放入特定的 docker network 来实现选择线路的功能。
+
+```shell title="创建命令"
+docker network create --driver=bridge --subnet=172.17.4.1/24 -o "com.docker.network.bridge.name=dockerC" cernet
+docker network create --driver=bridge --subnet=172.17.5.1/24 -o "com.docker.network.bridge.name=dockerT" telecom
+docker network create --driver=bridge --subnet=172.17.6.1/24 -o "com.docker.network.bridge.name=dockerM" mobile
+docker network create --driver=bridge --subnet=172.17.7.1/24 -o "com.docker.network.bridge.name=dockerU" unicom
+docker network create --driver=bridge --ipv6 --subnet=172.17.8.1/24 --subnet=fd00:6::/64 -o "com.docker.network.bridge.name=dockerC6" cernet6
+docker network create --driver=bridge --subnet=172.17.9.1/24 -o "com.docker.network.bridge.name=dockerV" lugvpn
+```
+
+然后使用 systemd-networkd 对创建好的 docker network 网段配置规则路由。
+
+```ini title="/etc/systemd/network/cernet.network"
+# Docker Cernet
+[RoutingPolicyRule]
+From=172.17.4.0/24
+Table=1011
+Priority=5
+
+[RoutingPolicyRule]
+From=172.17.8.0/24
+Table=1011
+Priority=5
+```
+
+其他几个文件类似，只需要修改网段和 Table 即可。
