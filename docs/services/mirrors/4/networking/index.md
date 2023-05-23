@@ -144,3 +144,16 @@ Priority=5
 ```
 
 其他几个文件类似，只需要修改网段和 Table 即可。
+
+### Docker network: cernet6
+
+由于一些程序或系统环境在双栈网络中仍然会优先尝试 IPv4，我们将 cernet6 网络的 v4 公网访问屏蔽掉。
+
+```shell title="rules.v4"
+*filter
+:FORWARD DROP [0:0]
+# ...
+-A FORWARD -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+-A FORWARD -i dockerC6 -j REJECT
+-A FORWARD -i docker+ -j ACCEPT
+```
