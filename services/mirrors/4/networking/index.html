@@ -1812,6 +1812,19 @@
     Docker network
   </a>
   
+    <nav class="md-nav" aria-label="Docker network">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#docker-network-cernet6" class="md-nav__link">
+    Docker network: cernet6
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
     </ul>
@@ -1942,6 +1955,15 @@ docker<span class="w"> </span>network<span class="w"> </span>create<span class="
 <span class="na">Priority</span><span class="o">=</span><span class="s">5</span>
 </code></pre></div>
 <p>其他几个文件类似，只需要修改网段和 Table 即可。</p>
+<h3 id="docker-network-cernet6">Docker network: cernet6<a class="headerlink" href="#docker-network-cernet6" title="Permanent link">&para;</a></h3>
+<p>由于一些程序或系统环境在双栈网络中仍然会优先尝试 IPv4，我们将 cernet6 网络的 v4 公网访问屏蔽掉。</p>
+<div class="highlight"><span class="filename">rules.v4</span><pre><span></span><code>*filter
+:FORWARD<span class="w"> </span>DROP<span class="w"> </span><span class="o">[</span><span class="m">0</span>:0<span class="o">]</span>
+<span class="c1"># ...</span>
+-A<span class="w"> </span>FORWARD<span class="w"> </span>-m<span class="w"> </span>conntrack<span class="w"> </span>--ctstate<span class="w"> </span>ESTABLISHED,RELATED<span class="w"> </span>-j<span class="w"> </span>ACCEPT
+-A<span class="w"> </span>FORWARD<span class="w"> </span>-i<span class="w"> </span>dockerC6<span class="w"> </span>-j<span class="w"> </span>REJECT
+-A<span class="w"> </span>FORWARD<span class="w"> </span>-i<span class="w"> </span>docker+<span class="w"> </span>-j<span class="w"> </span>ACCEPT
+</code></pre></div>
 
 
 
