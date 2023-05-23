@@ -1921,13 +1921,16 @@
 <p>根据 <a href="https://www.freedesktop.org/software/systemd/man/systemd.network.html#Gateway=">systemd 官方文档</a>，在 <code>[Network]</code> 一节出现的 <code>Gateway=</code> 等价于一个单独的、仅包含一行 <code>Gateway=</code> 的 <code>[Route]</code> 节。由于我们需要深度<a href="route/">自定义路由</a>，这里不方便采用这个过于简洁的设定（例如各种默认值 <code>Table=main</code> 等）。</p>
 </div>
 <h2 id="docker-network">Docker network<a class="headerlink" href="#docker-network" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>network<span class="w"> </span>create<span class="w"> </span>--driver<span class="o">=</span>bridge<span class="w"> </span>--subnet<span class="o">=</span><span class="m">172</span>.17.4.1/24<span class="w"> </span>-o<span class="w"> </span><span class="s2">&quot;com.docker.network.bridge.name=dockerC&quot;</span><span class="w"> </span>cernet
+<p>针对个别不支持 bind address 的同步工具，我们通过将其放入特定的 docker network 来实现选择线路的功能。</p>
+<div class="highlight"><span class="filename">创建命令</span><pre><span></span><code>docker<span class="w"> </span>network<span class="w"> </span>create<span class="w"> </span>--driver<span class="o">=</span>bridge<span class="w"> </span>--subnet<span class="o">=</span><span class="m">172</span>.17.4.1/24<span class="w"> </span>-o<span class="w"> </span><span class="s2">&quot;com.docker.network.bridge.name=dockerC&quot;</span><span class="w"> </span>cernet
 docker<span class="w"> </span>network<span class="w"> </span>create<span class="w"> </span>--driver<span class="o">=</span>bridge<span class="w"> </span>--subnet<span class="o">=</span><span class="m">172</span>.17.5.1/24<span class="w"> </span>-o<span class="w"> </span><span class="s2">&quot;com.docker.network.bridge.name=dockerT&quot;</span><span class="w"> </span>telecom
 docker<span class="w"> </span>network<span class="w"> </span>create<span class="w"> </span>--driver<span class="o">=</span>bridge<span class="w"> </span>--subnet<span class="o">=</span><span class="m">172</span>.17.6.1/24<span class="w"> </span>-o<span class="w"> </span><span class="s2">&quot;com.docker.network.bridge.name=dockerM&quot;</span><span class="w"> </span>mobile
 docker<span class="w"> </span>network<span class="w"> </span>create<span class="w"> </span>--driver<span class="o">=</span>bridge<span class="w"> </span>--subnet<span class="o">=</span><span class="m">172</span>.17.7.1/24<span class="w"> </span>-o<span class="w"> </span><span class="s2">&quot;com.docker.network.bridge.name=dockerU&quot;</span><span class="w"> </span>unicom
 docker<span class="w"> </span>network<span class="w"> </span>create<span class="w"> </span>--driver<span class="o">=</span>bridge<span class="w"> </span>--ipv6<span class="w"> </span>--subnet<span class="o">=</span><span class="m">172</span>.17.8.1/24<span class="w"> </span>--subnet<span class="o">=</span>fd00:6::/64<span class="w"> </span>-o<span class="w"> </span><span class="s2">&quot;com.docker.network.bridge.name=dockerC6&quot;</span><span class="w"> </span>cernet6
+docker<span class="w"> </span>network<span class="w"> </span>create<span class="w"> </span>--driver<span class="o">=</span>bridge<span class="w"> </span>--subnet<span class="o">=</span><span class="m">172</span>.17.9.1/24<span class="w"> </span>-o<span class="w"> </span><span class="s2">&quot;com.docker.network.bridge.name=dockerV&quot;</span><span class="w"> </span>lugvpn
 </code></pre></div>
-<div class="highlight"><span class="filename">cernet.network</span><pre><span></span><code><span class="c1"># Docker Cernet</span>
+<p>然后使用 systemd-networkd 对创建好的 docker network 网段配置规则路由。</p>
+<div class="highlight"><span class="filename">/etc/systemd/network/cernet.network</span><pre><span></span><code><span class="c1"># Docker Cernet</span>
 <span class="k">[RoutingPolicyRule]</span>
 <span class="na">From</span><span class="o">=</span><span class="s">172.17.4.0/24</span>
 <span class="na">Table</span><span class="o">=</span><span class="s">1011</span>
@@ -1938,6 +1941,7 @@ docker<span class="w"> </span>network<span class="w"> </span>create<span class="
 <span class="na">Table</span><span class="o">=</span><span class="s">1011</span>
 <span class="na">Priority</span><span class="o">=</span><span class="s">5</span>
 </code></pre></div>
+<p>其他几个文件类似，只需要修改网段和 Table 即可。</p>
 
 
 
