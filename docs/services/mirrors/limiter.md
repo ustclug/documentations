@@ -95,17 +95,17 @@
 
 代码位于 [/etc/nginx/lua/header_filter.lua](https://git.lug.ustc.edu.cn/mirrors/nginx-config/blob/master/lua/header_filter.lua)
 
-针对大文件下载，限制每个仓库的总带宽为 1Gbps，以避免大文件流量占满总带宽。
+针对大文件下载，限制每个 ~~仓库~~ 文件的总带宽为 1Gbps，以避免大文件流量占满总带宽。
 
 !!! warning "注意事项"
 
-    如果有多个仓库面临高压力访问，总带宽依然可能被占满
+    如果有多个 ~~仓库~~ 文件面临高压力访问，总带宽依然可能被占满
 
-具体做法为，设置下载速度阈值 = 1Gbps / (该仓库大文件的同时连接数+1)
+具体做法为，设置下载速度阈值 = 1Gbps / (该 ~~仓库~~ 大文件的同时连接数+1)
 
 当下载的文件无穷大时，将出现最差情形，即用户被分配到的下载速率服从类调和级数，函数发散。实际情况下，早期用户下载完成后连接释放，最终带宽将收敛到 1Gbps。
 
-注：大文件定义为 HTTP Content-Length > 512M 的文件
+注：大文件定义参照目前的 lua 脚本配置。
 
 ### Nginx JavaScript 挑战 {#nginx-js-challenge}
 
