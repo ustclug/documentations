@@ -21,7 +21,7 @@
         <link rel="next" href="../mail-list/">
       
       <link rel="icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.15">
+      <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.16">
     
     
       
@@ -2189,14 +2189,14 @@
 <p>限制器之间相互独立，当被触发的所有限制器产生不一致的等待时间时，应用最长的等待时间。</p>
 <h3 id="large-files">大文件下载速度限制<a class="headerlink" href="#large-files" title="Permanent link">&para;</a></h3>
 <p>代码位于 <a href="https://git.lug.ustc.edu.cn/mirrors/nginx-config/blob/master/lua/header_filter.lua">/etc/nginx/lua/header_filter.lua</a></p>
-<p>针对大文件下载，限制每个仓库的总带宽为 1Gbps，以避免大文件流量占满总带宽。</p>
+<p>针对大文件下载，限制每个 <del>仓库</del> 文件的总带宽为 1Gbps，以避免大文件流量占满总带宽。</p>
 <div class="admonition warning">
 <p class="admonition-title">注意事项</p>
-<p>如果有多个仓库面临高压力访问，总带宽依然可能被占满</p>
+<p>如果有多个 <del>仓库</del> 文件面临高压力访问，总带宽依然可能被占满</p>
 </div>
-<p>具体做法为，设置下载速度阈值 = 1Gbps / (该仓库大文件的同时连接数+1)</p>
+<p>具体做法为，设置下载速度阈值 = 1Gbps / (该 <del>仓库</del> 大文件的同时连接数+1)</p>
 <p>当下载的文件无穷大时，将出现最差情形，即用户被分配到的下载速率服从类调和级数，函数发散。实际情况下，早期用户下载完成后连接释放，最终带宽将收敛到 1Gbps。</p>
-<p>注：大文件定义为 HTTP Content-Length &gt; 512M 的文件</p>
+<p>注：大文件定义参照目前的 lua 脚本配置。</p>
 <h3 id="nginx-js-challenge">Nginx JavaScript 挑战<a class="headerlink" href="#nginx-js-challenge" title="Permanent link">&para;</a></h3>
 <p>代码位于 <a href="https://git.lug.ustc.edu.cn/mirrors/nginx-config/blob/master/sites-available/iso.mirrors.ustc.edu.cn">/etc/nginx/sites-available/iso.mirrors.ustc.edu.cn</a></p>
 <p>为了抵抗“迅雷攻击”。对于特定类型的文件，开启了 JS 挑战。 如果客户端 User-Agent 为 Mozilla（即浏览器），则发送一段包含 JS 脚本的页面，检验运行的结果。如果挑战失败，则返回错误。</p>
@@ -2347,7 +2347,7 @@ add<span class="w"> </span>ustcnet<span class="w"> </span><span class="m">202</s
     <script id="__config" type="application/json">{"base": "../../..", "features": ["content.code.annotate", "content.code.copy", "navigation.indexes", "navigation.sections", "navigation.top"], "search": "../../../assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.b4d07000.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.a51614de.min.js"></script>
       
     
   </body>
