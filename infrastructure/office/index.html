@@ -25,7 +25,7 @@
     
     
       
-        <title>Office 365 - LUG @ USTC</title>
+        <title>Office 365 and Mail - LUG @ USTC</title>
       
     
     
@@ -114,7 +114,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Office 365
+              Office 365 and Mail
             
           </span>
         </div>
@@ -685,12 +685,12 @@
       
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
-          Office 365
+          Office 365 and Mail
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <a href="./" class="md-nav__link md-nav__link--active">
-        Office 365
+        Office 365 and Mail
       </a>
       
         
@@ -2106,6 +2106,11 @@ Zeyu Gao (高泽豫) &lt;zeyugao@ustclug.org&gt;
 <p>需要添加新身份时，点击右下角「管理标识」，添加对应的标识。对于 hackergame，可以配置如下：</p>
 <p><img alt="Thunderbird - 2" src="../img/thunderbird-2.png" /></p>
 <p>配置完成后，在编写邮件时，就可以选择新的标识了，并且发件人名称、回复地址和签名都会自动设置好（抄送还是要自己设置，别忘了！）</p>
+<details class="info">
+<summary>使用 Thunderbird 配置学校邮箱需要的额外设置</summary>
+<p>james: "thunderbird某次升级后出了一个bug，连接时服务器返回支持utf8，tb发了一个命令enable utf8，服务器正常返回后，tb有bug认为一直在等服务器应答。"</p>
+<p>所以如果需要使用 Thunderbird 从 mail.ustc.edu.cn 收发邮件，需要做以下的配置：Edit -&gt; Settings，在 "General" 中拖到最下面选择 "Config Editor..."。在新弹出的高级配置的标签中输入 utf8，将 <code>mail.server.default.allow_utf8_accpet</code> 的值从 true 改成 false。这个设置不会影响其他邮箱的使用。</p>
+</details>
 <h2 id="gmail">Gmail<a class="headerlink" href="#gmail" title="Permanent link">&para;</a></h2>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
