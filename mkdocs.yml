@@ -90,7 +90,7 @@ nav:
     - Authoritative DNS: "infrastructure/auth-dns.md"
     - SSL Certificates: "infrastructure/ssl.md"
     - Monitor: "infrastructure/monitor.md"
-    - Office 365: "infrastructure/office.md"
+    - Office 365 and Mail: "infrastructure/office.md"
     - GitHub: infrastructure/github.md
     - Mail Agent: infrastructure/mail.md
     - RAID: infrastructure/raid.md
