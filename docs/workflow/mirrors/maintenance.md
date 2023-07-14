@@ -1,3 +1,7 @@
+---
+icon: material/database-cog
+---
+
 # 开源软件镜像站维护方式
 
 科大开源软件镜像站是 [LUG 最重要的服务之一](https://lug.ustc.edu.cn/wiki/lug/services/start)，因此维护操作必须谨慎。

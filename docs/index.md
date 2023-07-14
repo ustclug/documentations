@@ -1,5 +1,6 @@
 ---
 ᴴₒᴴₒᴴₒ: true
+icon: material/home
 ---
 
 # LUG @ USTC Documentation

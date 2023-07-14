@@ -1,10 +1,14 @@
+---
+icon: material/layers-plus
+---
+
 # Create new server in LUGi
 
-!!! note "We no longer have a vSphere cluster, so the vSphere section is left only for references."
+!!! note "We no longer have a vSphere cluster, so anything mentioning vSphere is left only for references."
 
 ## Create VM in vCenter
 
-vCenter 地址：vcenter2.vm.ustclug.org
+vCenter 地址：`vcenter2.vm.ustclug.org`
 
 按照提示创建虚拟机
 
@@ -17,11 +21,11 @@ vCenter 地址：vcenter2.vm.ustclug.org
         - VMware Tools
             - 打开 Sync time with Host
 
-### Install OS
+### Install OS (vSphere)
 
-Notes:
+!!! note
 
-将网络改为 cernet，以便用 DHCP 获得 IP 地址，用 PXE 安装系统。
+    将网络改为 cernet，以便用 DHCP 获得 IP 地址，用 PXE 安装系统。
 
 几个关键配置：
 
@@ -81,7 +85,7 @@ wget -O /media/vdp/pve/images/<path>.qcow2 https://mirrors.ustc.edu.cn/<...>.qco
 
     此步骤也可以替换为 chroot 进去后使用 `passwd` 修改或清空密码。如果你不够熟悉 shadow 文件的格式，这样做更安全。
 
-对于 ZFS 和 LVM 存储的磁盘，可以直接挂载 `/dev/zvol/<...>` 或 `/dev/<vg>/<lv>`。对于 Qcow2 文件的磁盘，可以参考[这个 Gist][gist] 使用 `qemu-nbd` 工具来挂载。其中 `nbd` 是 Linux 原生的内核模块，可以放心 modprobe。
+对于 ZFS 和 LVM 存储的磁盘，可以直接挂载 `/dev/zvol/<...>` 或 `/dev/<vg>/<lv>`（你可能需要使用 `kpartx` 工具加载分区）。对于 Qcow2 文件的磁盘，可以参考[这个 Gist][gist] 使用 `qemu-nbd` 工具来挂载。其中 `nbd` 是 Linux 原生的内核模块，可以放心 modprobe。
 
   [gist]: https://gist.github.com/shamil/62935d9b456a6f9877b5
 

@@ -1,3 +1,7 @@
+---
+icon: material/note-check
+---
+
 # New Server Setup Checklist
 
 ## NTP Date

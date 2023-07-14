@@ -1,3 +1,7 @@
+---
+icon: material/account-plus
+---
+
 # 在 LDAP 中添加新用户
 
 ## 新建 LDAP 用户
