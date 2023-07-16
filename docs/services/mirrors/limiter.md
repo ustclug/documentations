@@ -198,7 +198,7 @@ ipset add blacklist6 2001:db8:114:514::/64
 
 与 iptables 类似，ipset 也需要持久化。封禁名单的文件位于（mirrors4）`/usr/local/network_config/iptables/blacklist.list`，修改此文件增减条目后运行该目录下的 `apply.sh` 即可。
 
-请在修改封禁名单后，使用 `ss -K dst 192.0.2.0/24` 关闭已经建立的连接。
+由于封禁仅对新建立的连接有效，请在修改封禁名单后，使用 `ss -K dst 对应的网段` 关闭已经建立的连接（例如对于以上两行规则，命令分别为 `ss -K dst 192.0.2.0/24` 与 `ss -K dst 2001:db8:114:514::/64`）。
 
 ### ipset 持久化 {#ipset-persistent}
 
