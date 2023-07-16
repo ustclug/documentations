@@ -2570,12 +2570,10 @@
 </ol>
 <p>备注：</p>
 <ul>
-<li>例外：<ol>
+<li>例外：</li>
 <li>apt/yum 仓库的索引文件不受限制。</li>
 <li>AOSP 仓库不限制全局请求数（git objects 太多了，用户反馈见 <a href="https://github.com/ustclug/discussions/issues/397">https://github.com/ustclug/discussions/issues/397</a>）。</li>
-</ol>
-</li>
-<li>案例：曾遇到过攻击者分布式请求同一个大文件，导致 IO、网络同时过载。 基于 IP 地址的限制措施对于源地址池很大的攻击往往没有效果，限制单文件的请求速率能够有效缓解这类攻击。</li>
+<li>案例：曾遇到过攻击者分布式请求同一个大文件，导致 IO、网络同时过载。基于 IP 地址的限制措施对于源地址池很大的攻击往往没有效果，限制单文件的请求速率能够有效缓解这类攻击。</li>
 </ul>
 <p>具体参数参考下表：</p>
 <table>
@@ -2669,12 +2667,12 @@
 <p class="admonition-title">注意事项</p>
 <p>如果有多个 <del>仓库</del> 文件面临高压力访问，总带宽依然可能被占满</p>
 </div>
-<p>具体做法为，设置下载速度阈值 = 1Gbps / (该 <del>仓库</del> 大文件的同时连接数+1)</p>
+<p>具体做法为，设置下载速度阈值 = 1Gbps / (该 <del>仓库</del> 大文件的同时连接数 +1)</p>
 <p>当下载的文件无穷大时，将出现最差情形，即用户被分配到的下载速率服从类调和级数，函数发散。实际情况下，早期用户下载完成后连接释放，最终带宽将收敛到 1Gbps。</p>
 <p>注：大文件定义参照目前的 lua 脚本配置。</p>
 <h3 id="nginx-js-challenge">Nginx JavaScript 挑战<a class="headerlink" href="#nginx-js-challenge" title="Permanent link">&para;</a></h3>
 <p>代码位于 <a href="https://git.lug.ustc.edu.cn/mirrors/nginx-config/blob/master/sites-available/iso.mirrors.ustc.edu.cn">/etc/nginx/sites-available/iso.mirrors.ustc.edu.cn</a></p>
-<p>为了抵抗“迅雷攻击”。对于特定类型的文件，开启了 JS 挑战。 如果客户端 User-Agent 为 Mozilla（即浏览器），则发送一段包含 JS 脚本的页面，检验运行的结果。如果挑战失败，则返回错误。</p>
+<p>为了抵抗“迅雷攻击”。对于特定类型的文件，开启了 JS 挑战。如果客户端 User-Agent 为 Mozilla（即浏览器），则发送一段包含 JS 脚本的页面，检验运行的结果。如果挑战失败，则返回错误。</p>
 <p>被保护的文件类型有：</p>
 <ul>
 <li>iso</li>
@@ -2686,7 +2684,7 @@
 </ul>
 <h3 id="robots">爬虫限制<a class="headerlink" href="#robots" title="Permanent link">&para;</a></h3>
 <p>代码位于 <a href="https://git.lug.ustc.edu.cn/mirrors/nginx-config/blob/master/snippets/robots">/etc/nginx/snippets/robots</a></p>
-<p>如果客户端 User-Agent 包含 Spider、Robot 关键字， 则禁止其访问仓库内容。避免由于频繁列目录带来大量 IO 负载。</p>
+<p>如果客户端 User-Agent 包含 Spider、Robot 关键字，则禁止其访问仓库内容。避免由于频繁列目录带来大量 IO 负载。</p>
 <h3 id="rsync-connections">Rsync 总连接数限制<a class="headerlink" href="#rsync-connections" title="Permanent link">&para;</a></h3>
 <p>Rsync 服务设置了总连接数限制。即：当建立的连接数到达某个阈值后，拒绝之后收到的连接。</p>
 <div class="admonition note">
@@ -2707,7 +2705,7 @@
 <p>这里使用了 TBF（令牌桶）算法，后面的 burst 和 latency 参数意义可以参见 <code>man tc-tbf</code>。
 具体而言，latency 没有推荐值，但 burst 要求至少为 <code>rate / HZ</code>，HZ = 100 时 10Mbps 至少约 10MB。
 HZ 的值需要从内核的编译参数中查看：<code>egrep '^CONFIG_HZ_[0-9]+' /boot/config-`uname -r`</code>。现代发行版提供的内核中这个值一般为 250。</p>
-<p>参考资料: <a href="https://unix.stackexchange.com/a/100797/211239">Bucket size in tbf</a></p>
+<p>参考资料：<a href="https://unix.stackexchange.com/a/100797/211239">Bucket size in tbf</a></p>
 <p>目前部署的限制有：</p>
 <ul>
 <li>unicom 1500Mbit（学校出口带宽 2 Gbps）</li>
@@ -2736,6 +2734,7 @@ ipset 将某个 IP 匹配到一个集合中，iptables 再针对某一集合进�
 ipset<span class="w"> </span>add<span class="w"> </span>blacklist6<span class="w"> </span><span class="m">2001</span>:db8:114:514::/64
 </code></pre></div>
 <p>与 iptables 类似，ipset 也需要持久化。封禁名单的文件位于（mirrors4）<code>/usr/local/network_config/iptables/blacklist.list</code>，修改此文件增减条目后运行该目录下的 <code>apply.sh</code> 即可。</p>
+<p>请在修改封禁名单后，使用 <code>ss -K dst 192.0.2.0/24</code> 关闭已经建立的连接。</p>
 <h3 id="ipset-persistent">ipset 持久化<a class="headerlink" href="#ipset-persistent" title="Permanent link">&para;</a></h3>
 <p>我们使用软件源里的 <code>ipset-persistent</code> 包来帮助 ipset 在开机时自动恢复，该软件包会在开机加载 iptables 前先从 <code>/etc/iptables/ipsets</code> 中恢复 ipset 以确保 iptables 中的引用能正确处理。</p>
 <p>因为 ipset-persistent 在开机时自动加载，我们选择仅加载一个较小的子集，包含必要配置（create set）和较少发生变化的内容（如 ustcnet 的网段）。目前 <code>/etc/iptables/ipsets</code> 包含以下内容：</p>
