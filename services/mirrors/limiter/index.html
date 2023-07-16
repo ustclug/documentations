@@ -2734,7 +2734,7 @@ ipset 将某个 IP 匹配到一个集合中，iptables 再针对某一集合进�
 ipset<span class="w"> </span>add<span class="w"> </span>blacklist6<span class="w"> </span><span class="m">2001</span>:db8:114:514::/64
 </code></pre></div>
 <p>与 iptables 类似，ipset 也需要持久化。封禁名单的文件位于（mirrors4）<code>/usr/local/network_config/iptables/blacklist.list</code>，修改此文件增减条目后运行该目录下的 <code>apply.sh</code> 即可。</p>
-<p>请在修改封禁名单后，使用 <code>ss -K dst 192.0.2.0/24</code> 关闭已经建立的连接。</p>
+<p>由于封禁仅对新建立的连接有效，请在修改封禁名单后，使用 <code>ss -K dst 对应的网段</code> 关闭已经建立的连接（例如对于以上两行规则，命令分别为 <code>ss -K dst 192.0.2.0/24</code> 与 <code>ss -K dst 2001:db8:114:514::/64</code>）。</p>
 <h3 id="ipset-persistent">ipset 持久化<a class="headerlink" href="#ipset-persistent" title="Permanent link">&para;</a></h3>
 <p>我们使用软件源里的 <code>ipset-persistent</code> 包来帮助 ipset 在开机时自动恢复，该软件包会在开机加载 iptables 前先从 <code>/etc/iptables/ipsets</code> 中恢复 ipset 以确保 iptables 中的引用能正确处理。</p>
 <p>因为 ipset-persistent 在开机时自动加载，我们选择仅加载一个较小的子集，包含必要配置（create set）和较少发生变化的内容（如 ustcnet 的网段）。目前 <code>/etc/iptables/ipsets</code> 包含以下内容：</p>
