@@ -57,7 +57,7 @@
 
 1. 全局请求速率限制器：对所有请求，限制单 IP 的请求速率。
 2. 全局请求数限制器：对于所有请求，**检测**单 IP 在一天内的累计请求数。超过阈值后，降低该 IP 的*全局请求速率限制器*的阈值。
-3. HEAD 请求数限制器：对于 HTTP Method == HEAD 类型的请求，**检测**单 IP 在一天内的累计请求数。超过阈值后，开启 *HEAD 请求速率限制器*。
+3. HEAD 请求数限制器：对于 HTTP Method == HEAD 类型的请求，**检测**单 IP 在一天内的累计请求数。超过阈值后，开启 _HEAD 请求速率限制器_。
 4. HEAD 请求速率限制器：对于 HTTP Method == HEAD 类型的请求，限制单 IP 的请求速率。**该限制器默认关闭。**
 5. 断点续传请求速率限制器：对于断点续传类型的请求，限制单 IP 的请求速率。
 6. 断点续传连接数限制器：对于断点续传类型的请求，限制单 IP **单 URI** 的连接数。
@@ -67,9 +67,9 @@
 备注：
 
 - 例外：
-    1. apt/yum 仓库的索引文件不受限制。
-    2. AOSP 仓库不限制全局请求数（git objects 太多了，用户反馈见 <https://github.com/ustclug/discussions/issues/397>）。
-- 案例：曾遇到过攻击者分布式请求同一个大文件，导致 IO、网络同时过载。 基于 IP 地址的限制措施对于源地址池很大的攻击往往没有效果，限制单文件的请求速率能够有效缓解这类攻击。
+  1. apt/yum 仓库的索引文件不受限制。
+  2. AOSP 仓库不限制全局请求数（git objects 太多了，用户反馈见 <https://github.com/ustclug/discussions/issues/397>）。
+- 案例：曾遇到过攻击者分布式请求同一个大文件，导致 IO、网络同时过载。基于 IP 地址的限制措施对于源地址池很大的攻击往往没有效果，限制单文件的请求速率能够有效缓解这类攻击。
 
 具体参数参考下表：
 
@@ -101,7 +101,7 @@
 
     如果有多个 ~~仓库~~ 文件面临高压力访问，总带宽依然可能被占满
 
-具体做法为，设置下载速度阈值 = 1Gbps / (该 ~~仓库~~ 大文件的同时连接数+1)
+具体做法为，设置下载速度阈值 = 1Gbps / (该 ~~仓库~~ 大文件的同时连接数 +1)
 
 当下载的文件无穷大时，将出现最差情形，即用户被分配到的下载速率服从类调和级数，函数发散。实际情况下，早期用户下载完成后连接释放，最终带宽将收敛到 1Gbps。
 
@@ -111,7 +111,7 @@
 
 代码位于 [/etc/nginx/sites-available/iso.mirrors.ustc.edu.cn](https://git.lug.ustc.edu.cn/mirrors/nginx-config/blob/master/sites-available/iso.mirrors.ustc.edu.cn)
 
-为了抵抗“迅雷攻击”。对于特定类型的文件，开启了 JS 挑战。 如果客户端 User-Agent 为 Mozilla（即浏览器），则发送一段包含 JS 脚本的页面，检验运行的结果。如果挑战失败，则返回错误。
+为了抵抗“迅雷攻击”。对于特定类型的文件，开启了 JS 挑战。如果客户端 User-Agent 为 Mozilla（即浏览器），则发送一段包含 JS 脚本的页面，检验运行的结果。如果挑战失败，则返回错误。
 
 被保护的文件类型有：
 
@@ -126,7 +126,7 @@
 
 代码位于 [/etc/nginx/snippets/robots](https://git.lug.ustc.edu.cn/mirrors/nginx-config/blob/master/snippets/robots)
 
-如果客户端 User-Agent 包含 Spider、Robot 关键字， 则禁止其访问仓库内容。避免由于频繁列目录带来大量 IO 负载。
+如果客户端 User-Agent 包含 Spider、Robot 关键字，则禁止其访问仓库内容。避免由于频繁列目录带来大量 IO 负载。
 
 ### Rsync 总连接数限制 {#rsync-connections}
 
@@ -135,7 +135,7 @@ Rsync 服务设置了总连接数限制。即：当建立的连接数到达某�
 !!! note "历史记录"
 
     以前 HTTP 和 Rsync 服务由同一台服务器提供，由于白天 HTTP 访问压力较大，夜晚 HTTP 访问量较小，为了实现错峰同步，保证白天 HTTP 的服务质量，因此针对不同时段设置了不同的阈值，具体如下：
-    
+
     - 23:00 ~ 8:00：最多 60 个连接
     - 8:00 ~ 23:00：最多 30 个连接
 
@@ -157,7 +157,7 @@ tc qdisc add dev <interface> root handle 1: tbf rate 1500Mbit burst 750K latency
 具体而言，latency 没有推荐值，但 burst 要求至少为 `rate / HZ`，HZ = 100 时 10Mbps 至少约 10MB。
 HZ 的值需要从内核的编译参数中查看：`` egrep '^CONFIG_HZ_[0-9]+' /boot/config-`uname -r` ``。现代发行版提供的内核中这个值一般为 250。
 
-参考资料: [Bucket size in tbf](https://unix.stackexchange.com/a/100797/211239)
+参考资料：[Bucket size in tbf](https://unix.stackexchange.com/a/100797/211239)
 
 目前部署的限制有：
 
@@ -197,6 +197,8 @@ ipset add blacklist6 2001:db8:114:514::/64
 ```
 
 与 iptables 类似，ipset 也需要持久化。封禁名单的文件位于（mirrors4）`/usr/local/network_config/iptables/blacklist.list`，修改此文件增减条目后运行该目录下的 `apply.sh` 即可。
+
+请在修改封禁名单后，使用 `ss -K dst 192.0.2.0/24` 关闭已经建立的连接。
 
 ### ipset 持久化 {#ipset-persistent}
 
