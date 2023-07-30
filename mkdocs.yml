@@ -120,6 +120,7 @@ nav:
       - Docker: "services/mirrors/docker.md"
       - IPMI: "services/mirrors/ipmi.md"
       - ZFS: "services/mirrors/zfs.md"
+      - Genindex: "services/mirrors/genindex.md"
       - HTTP Service: "#"
       - Rsync Service: "#"
       - Reverse Proxy: "#"
