@@ -2503,14 +2503,13 @@ next_id<span class="o">()</span><span class="w"> </span><span class="o">{</span>
 <p>写好新仓库的配置文件之后运行 <code>yuki reload</code>，然后 <code>yuki sync &lt;repo&gt;</code> 就可以开始初次同步了。</p>
 <h3 id="git-srvgit">为 Git 类型仓库添加软链接至 <code>/srv/git</code><a class="headerlink" href="#git-srvgit" title="Permanent link">&para;</a></h3>
 <p><code>git-daemon.service</code> 根据 <code>/srv/git</code> 下的内容对外提供 Git 服务。所以如果是 git 类型的仓库，需要添加软链接，否则无法使用 <code>git://</code> 的协议访问。（<code>http(s)://</code> 协议没有问题）</p>
-<details class="info">
-<summary>Git 仓库服务的其他相关配置</summary>
+<div class="admonition info">
+<p class="admonition-title">Git 仓库服务的其他相关配置</p>
 <p>部分克隆配置 (See <a href="https://github.com/ustclug/discussions/issues/432">https://github.com/ustclug/discussions/issues/432</a>)：</p>
-<div class="highlight"><pre><span></span><code>$ cat /etc/gitconfig 
-[uploadpack]
-  allowfilter = true
+<div class="highlight"><span class="filename">/etc/gitconfig</span><pre><span></span><code><span class="k">[uploadpack]</span>
+<span class="w">    </span><span class="na">allowfilter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">true</span>
 </code></pre></div>
-</details>
+</div>
 <h3 id="quota">查看 quota 情况<a class="headerlink" href="#quota" title="Permanent link">&para;</a></h3>
 <p>运行以下命令：</p>
 <div class="highlight"><pre><span></span><code>xfs_quota -c &#39;df -h&#39;
