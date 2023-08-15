@@ -95,14 +95,13 @@ done
 
 `git-daemon.service` 根据 `/srv/git` 下的内容对外提供 Git 服务。所以如果是 git 类型的仓库，需要添加软链接，否则无法使用 `git://` 的协议访问。（`http(s)://` 协议没有问题）
 
-??? info "Git 仓库服务的其他相关配置"
+!!! info "Git 仓库服务的其他相关配置"
 
     部分克隆配置 (See <https://github.com/ustclug/discussions/issues/432>)：
 
-    ```
-    $ cat /etc/gitconfig 
+    ```ini title="/etc/gitconfig "
     [uploadpack]
-      allowfilter = true
+        allowfilter = true
     ```
 
 ### 查看 quota 情况
