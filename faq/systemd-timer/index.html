@@ -22,7 +22,7 @@
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.5.1, mkdocs-material-9.2.0-b2">
+      <meta name="generator" content="mkdocs-1.5.2, mkdocs-material-9.2.0-b3">
     
     
       
@@ -33,7 +33,7 @@
       <link rel="stylesheet" href="../../assets/stylesheets/main.83068744.min.css">
       
         
-        <link rel="stylesheet" href="../../assets/stylesheets/palette.ecc896b0.min.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.85d0ee34.min.css">
       
       
 
@@ -2290,34 +2290,34 @@
 <li>啰嗦、难写。</li>
 </ul>
 <p>所以以下给出一个模板，方便在创建新定时任务的时候使用。这里的例子是 mirrors2 从 mirrors4 获取压缩后的日志。以下文件均放在 <code>/etc/systemd/system</code>。</p>
-<div class="highlight"><span class="filename">m4log.service</span><pre><span></span><code>[Unit]
-Description=Mirrors4 log backup
-Documentation=man:rsync(1)
-After=network.target
-StartLimitIntervalSec=0
+<div class="highlight"><span class="filename">m4log.service</span><pre><span></span><code><span class="k">[Unit]</span>
+<span class="na">Description</span><span class="o">=</span><span class="s">Mirrors4 log backup</span>
+<span class="na">Documentation</span><span class="o">=</span><span class="s">man:rsync(1)</span>
+<span class="na">After</span><span class="o">=</span><span class="s">network.target</span>
+<span class="na">StartLimitIntervalSec</span><span class="o">=</span><span class="s">0</span>
 
-[Service]
-Type=simple
-User=mirror
-Group=mirror
-ExecStart=rsync -rltpv --include=*/ --include=*.xz --exclude=* m4log:/ /var/m4log/
-Restart=on-failure
-RestartSec=3
+<span class="k">[Service]</span>
+<span class="na">Type</span><span class="o">=</span><span class="s">simple</span>
+<span class="na">User</span><span class="o">=</span><span class="s">mirror</span>
+<span class="na">Group</span><span class="o">=</span><span class="s">mirror</span>
+<span class="na">ExecStart</span><span class="o">=</span><span class="s">rsync -rltpv --include=*/ --include=*.xz --exclude=* m4log:/ /var/m4log/</span>
+<span class="na">Restart</span><span class="o">=</span><span class="s">on-failure</span>
+<span class="na">RestartSec</span><span class="o">=</span><span class="s">3</span>
 </code></pre></div>
-<div class="highlight"><span class="filename">m4log.timer</span><pre><span></span><code>[Unit]
-Description=Mirrors4 log backup timer
-Documentation=man:rsync(1)
-After=network.target
-StartLimitIntervalSec=0
+<div class="highlight"><span class="filename">m4log.timer</span><pre><span></span><code><span class="k">[Unit]</span>
+<span class="na">Description</span><span class="o">=</span><span class="s">Mirrors4 log backup timer</span>
+<span class="na">Documentation</span><span class="o">=</span><span class="s">man:rsync(1)</span>
+<span class="na">After</span><span class="o">=</span><span class="s">network.target</span>
+<span class="na">StartLimitIntervalSec</span><span class="o">=</span><span class="s">0</span>
 
-[Timer]
-OnCalendar=*-*-* 7:13:00
-RandomizedDelaySec=60s
-Persistent=true
-Unit=m4log.service
+<span class="k">[Timer]</span>
+<span class="na">OnCalendar</span><span class="o">=</span><span class="s">*-*-* 7:13:00</span>
+<span class="na">RandomizedDelaySec</span><span class="o">=</span><span class="s">60s</span>
+<span class="na">Persistent</span><span class="o">=</span><span class="s">true</span>
+<span class="na">Unit</span><span class="o">=</span><span class="s">m4log.service</span>
 
-[Install]
-WantedBy=timer.target
+<span class="k">[Install]</span>
+<span class="na">WantedBy</span><span class="o">=</span><span class="s">timer.target</span>
 </code></pre></div>
 <p>关于 OnCalendar 的触发时间，可以参考 systemd 的 <a href="https://www.freedesktop.org/software/systemd/man/systemd.time.html#Calendar%20Events">Calendar Events</a> 说明，并用 <code>systemd-analyze calendar</code> 来检验正确性，也可以用 <code>systemctl list-timers</code> 观察 Timer 下次触发的时间是否符合预期。</p>
 <p>下面是一些常用命令：</p>
