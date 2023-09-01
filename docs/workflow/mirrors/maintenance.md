@@ -32,7 +32,8 @@ mirrors 使用了内核模块提供一些功能支持，如 ZFS。因此只要�
 
 参考命令：
 
-```
+```bash
+# 一部分 IPMI 的 interface 是 lanplus 而不是 lan，比如说 mirrors3
 ipmitool -I lan -H IPMI的IP -U 用户名 -a mc reset cold
 ```
 
@@ -41,4 +42,4 @@ ipmitool -I lan -H IPMI的IP -U 用户名 -a mc reset cold
 另外:
 
 - 据说还可以用它设置串口输出从而实现类似 KVM 的效果，但是没有测试过，也不知道如何实现。
-- mirrors3 的 IPMI (iDRAC) 是 broken 的，就算 reset cold 了也没用。
+- ~~mirrors3 的 IPMI (iDRAC) 是 broken 的，就算 reset cold 了也没用。~~
