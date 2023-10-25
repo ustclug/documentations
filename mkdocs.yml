@@ -55,16 +55,16 @@ extra_css:
 markdown_extensions:
   - admonition
   - attr_list
-  - codehilite
   - footnotes
   - markdown.extensions.def_list
-  - meta
   - pymdownx.details
   - pymdownx.emoji:
-      emoji_index: !!python/name:materialx.emoji.twemoji
-      emoji_generator: !!python/name:materialx.emoji.to_svg
-  - pymdownx.tilde
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.highlight:
+      anchor_linenums: true
   - pymdownx.superfences
+  - pymdownx.tilde
   - toc:
       permalink: true
 
@@ -92,6 +92,7 @@ nav:
     - Monitor: "infrastructure/monitor.md"
     - Office 365 and Mail: "infrastructure/office.md"
     - GitHub: infrastructure/github.md
+    - Docker Hub: infrastructure/dockerhub.md
     - Mail Agent: infrastructure/mail.md
     - RAID: infrastructure/raid.md
     - Discontinued Infrastructure:
