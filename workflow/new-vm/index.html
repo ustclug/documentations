@@ -2574,12 +2574,12 @@
 </div>
 <p>在 Proxmox VE 上，通过 web 界面创建新虚拟机后，可以使用普通方式安装系统，也可以直接导入发行版提供的虚拟机镜像（需要通过 SSH 登录 Proxmox VE 或 NFS 服务器）。</p>
 <p>下面以 Debian 为例，创建一个新虚拟机，然后打开 <a href="https://mirrors.ustc.edu.cn/debian-cdimage/cloud/bullseye/">https://mirrors.ustc.edu.cn/debian-cdimage/cloud/bullseye/</a>，点击最新的目录（出于未知原因 latest 链接是坏的），复制 <code>debian-11-genericcloud-amd64-&lt;date&gt;-&lt;rev&gt;</code> 的链接（推荐使用 genericcloud 而不是 generic，其预装 <code>linux-image-cloud-amd64</code>，相比于“完整版”内核精简掉了大部分物理设备的驱动程序，适用于虚拟机环境），然后登录 Proxmox VE 或 vdp（NFS 服务器），使用以下命令直接下载镜像至虚拟机磁盘：</p>
-<div class="highlight"><pre><span></span><code><span class="c1"># Proxmox VE (ZFS / LVM), use RAW</span>
-wget<span class="w"> </span>-O<span class="w"> </span>/dev/zvol/rpool/data/vm-&lt;id&gt;-disk-0<span class="w"> </span>https://mirrors.ustc.edu.cn/&lt;...&gt;.raw
-wget<span class="w"> </span>-O<span class="w"> </span>/dev/&lt;vg&gt;/&lt;lv&gt;<span class="w"> </span>https://mirrors.ustc.edu.cn/&lt;...&gt;.raw
-
-<span class="c1"># vdp over NFS, use QCOW2</span>
-wget<span class="w"> </span>-O<span class="w"> </span>/media/vdp/pve/images/&lt;path&gt;.qcow2<span class="w"> </span>https://mirrors.ustc.edu.cn/&lt;...&gt;.qcow2
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># Proxmox VE (ZFS / LVM), use RAW</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>wget<span class="w"> </span>-O<span class="w"> </span>/dev/zvol/rpool/data/vm-&lt;id&gt;-disk-0<span class="w"> </span>https://mirrors.ustc.edu.cn/&lt;...&gt;.raw
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>wget<span class="w"> </span>-O<span class="w"> </span>/dev/&lt;vg&gt;/&lt;lv&gt;<span class="w"> </span>https://mirrors.ustc.edu.cn/&lt;...&gt;.raw
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="c1"># vdp over NFS, use QCOW2</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>wget<span class="w"> </span>-O<span class="w"> </span>/media/vdp/pve/images/&lt;path&gt;.qcow2<span class="w"> </span>https://mirrors.ustc.edu.cn/&lt;...&gt;.qcow2
 </code></pre></div>
 <p>然后在 web 界面指定虚拟机的磁盘（如有需要）。</p>
 <h3 id="reset-password">Reset password<a class="headerlink" href="#reset-password" title="Permanent link">&para;</a></h3>

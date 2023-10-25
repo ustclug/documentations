@@ -2445,29 +2445,29 @@
 <p>Debian 9+ 可以直接从 apt 源安装 <code>tinc</code> 包。</p>
 <p><em>不早说这玩意有个 Git 仓库？？</em><a href="https://git.lug.ustc.edu.cn/ustclug/tinc-configure">https://git.lug.ustc.edu.cn/ustclug/tinc-configure</a></p>
 <p>既然有仓库所以要做的事情比较简单，进入 <code>/etc/tinc</code> 目录准备和 Git 仓库同步配置：</p>
-<div class="highlight"><pre><span></span><code>git<span class="w"> </span>init
-git<span class="w"> </span>remote<span class="w"> </span>add<span class="w"> </span>origin<span class="w"> </span>https://git.lug.ustc.edu.cn/ustclug/tinc-configure.git
-git<span class="w"> </span>fetch<span class="w"> </span>origin<span class="w"> </span>master
-git<span class="w"> </span>reset<span class="w"> </span>--hard<span class="w"> </span>FETCH_HEAD
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>git<span class="w"> </span>init
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>git<span class="w"> </span>remote<span class="w"> </span>add<span class="w"> </span>origin<span class="w"> </span>https://git.lug.ustc.edu.cn/ustclug/tinc-configure.git
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>git<span class="w"> </span>fetch<span class="w"> </span>origin<span class="w"> </span>master
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>git<span class="w"> </span>reset<span class="w"> </span>--hard<span class="w"> </span>FETCH_HEAD
 </code></pre></div>
 <p>注意 <code>git reset</code> 会覆盖部分文件，建议在全新安装 <code>tinc</code> 之后进行同步配置。</p>
 <p>配置完成后执行 <code>systemctl enable tinc@ustclug.service</code> 使 tinc 能够开机启动。</p>
 <h3 id="_2">加入主机<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h3>
 <p>首先需要在新主机上生成密钥：</p>
-<div class="highlight"><pre><span></span><code>tincd<span class="w"> </span>-n<span class="w"> </span>ustclug<span class="w"> </span>-K
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>tincd<span class="w"> </span>-n<span class="w"> </span>ustclug<span class="w"> </span>-K
 </code></pre></div>
 <p>然后在 <code>/etc/tinc/ustclug/hosts/$HOST</code> 最后补上一行：</p>
-<div class="highlight"><pre><span></span><code>Address = [这台机器的公网IP]
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>Address = [这台机器的公网IP]
 </code></pre></div>
 <p>把新增的这个文件提交进 Git 仓库，并在 <code>{ldap,board,gateway-el,gateway-nic}.s.ustclug.org</code> 等多台机器上通过 <code>git pull</code> 更新，并 <code>systemctl reload tinc@ustclug.service</code>。</p>
 <h3 id="ip">内网 IP<a class="headerlink" href="#ip" title="Permanent link">&para;</a></h3>
 <p><strong>测试的时候</strong>，你可以直接通过 <code>ifconfig</code> 等方式指定一个临时的 IP，注意不要与已有的内网 IP 冲突：</p>
-<div class="highlight"><pre><span></span><code>ifconfig<span class="w"> </span><span class="m">10</span>.254.0.xxx/21<span class="w"> </span>ustclug
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>ifconfig<span class="w"> </span><span class="m">10</span>.254.0.xxx/21<span class="w"> </span>ustclug
 </code></pre></div>
 <p>这时候应该能从其他机器 ping 通这个 IP。</p>
 <p>指定静态内网 IP 的正确方法是在 DNS 中添加一条这样的记录：</p>
-<div class="highlight"><pre><span></span><code>$ORIGIN s.ustclug.org
-&lt;HOST&gt;  600     IN A    &lt;Intranet IP&gt;
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>$ORIGIN s.ustclug.org
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>&lt;HOST&gt;  600     IN A    &lt;Intranet IP&gt;
 </code></pre></div>
 <p>然后在机器上重启 <code>systemctl restart tinc@ustclug.service</code> 就能自动获取了。</p>
 <h2 id="ssh">配置 SSH 侦听内网地址<a class="headerlink" href="#ssh" title="Permanent link">&para;</a></h2>
@@ -2476,45 +2476,45 @@ git<span class="w"> </span>reset<span class="w"> </span>--hard<span class="w"> <
 <p>对于 Debian 11+ 的系统，建议保持 <code>sshd_config</code> 不动，将自定义的配置写入 <code>sshd_config.d/ustclug.conf</code>，以减少更新 ssh 软件包时的配置文件冲突。注意如果这么做的话需要把配置文件里的 <code>Subsystem sftp</code> 删掉，否则 sshd 会报错“重复指定了 Subsystem sshd”。</p>
 </div>
 <p>以下配置供参考，复制时注意修改 <code>Match LocalAddress</code> 后面的内容（内网地址和 AllowGroups 最后的名称）：</p>
-<div class="highlight"><span class="filename">/etc/ssh/sshd_config</span><pre><span></span><code>AddressFamily<span class="w"> </span>inet
-UseDNS<span class="w"> </span>no
-
-HostKey<span class="w"> </span>/etc/ssh/ssh_host_rsa_key
-HostCertificate<span class="w"> </span>/etc/ssh/ssh_host_rsa_key-cert.pub
-TrustedUserCAKeys<span class="w"> </span>/etc/ssh/ssh_user_ca
-RevokedKeys<span class="w"> </span>/etc/ssh/ssh_revoked_keys
-
-PasswordAuthentication<span class="w"> </span>no
-PubkeyAuthentication<span class="w"> </span>no
-ChallengeResponseAuthentication<span class="w"> </span>no
-UsePAM<span class="w"> </span>yes<span class="w"> </span><span class="c1"># LDAP for Debian</span>
-
-AcceptEnv<span class="w"> </span>LANG<span class="w"> </span>LC_*
-X11Forwarding<span class="w"> </span>yes
-PrintLastLog<span class="w"> </span>no
-PrintMotd<span class="w"> </span>no
-Subsystem<span class="w"> </span>sftp<span class="w"> </span>/usr/lib/openssh/sftp-server
-
-Match<span class="w"> </span>LocalAddress<span class="w"> </span><span class="m">10</span>.254.0.0
-<span class="w">    </span>AllowGroups<span class="w"> </span>ssh_local<span class="w"> </span>super_manager<span class="w"> </span>ssh_groupname
-<span class="w">    </span>PasswordAuthentication<span class="w"> </span>yes
-<span class="w">    </span>PubkeyAuthentication<span class="w"> </span>yes
-
-<span class="c1"># Public IP access = root-only</span>
-Match<span class="w"> </span>LocalAddress<span class="w"> </span><span class="m">202</span>.38.95.110,202.141.160.110,202.141.176.110,218.104.71.170
-<span class="w">    </span>AllowUsers<span class="w"> </span>root
-<span class="w">    </span>PubkeyAuthentication<span class="w"> </span>yes
-<span class="w">    </span>AuthorizedKeysFile<span class="w"> </span>/dev/null<span class="w">  </span><span class="c1"># 屏蔽公钥，仅允许证书登录</span>
-
-<span class="c1"># For SSH Push trigger</span>
-Match<span class="w"> </span>User<span class="w"> </span>mirror
-<span class="w">    </span>AllowUsers<span class="w"> </span>mirror
-<span class="w">    </span>AuthenticationMethods<span class="w"> </span>publickey
-<span class="w">    </span>PermitTTY<span class="w"> </span>no
-<span class="w">    </span>PermitTunnel<span class="w"> </span>no
-<span class="w">    </span>X11Forwarding<span class="w"> </span>no
-
-Match<span class="w"> </span>All<span class="w"> </span><span class="c1">#(1)</span>
+<div class="highlight"><span class="filename">/etc/ssh/sshd_config</span><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>AddressFamily<span class="w"> </span>inet
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>UseDNS<span class="w"> </span>no
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>HostKey<span class="w"> </span>/etc/ssh/ssh_host_rsa_key
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>HostCertificate<span class="w"> </span>/etc/ssh/ssh_host_rsa_key-cert.pub
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>TrustedUserCAKeys<span class="w"> </span>/etc/ssh/ssh_user_ca
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>RevokedKeys<span class="w"> </span>/etc/ssh/ssh_revoked_keys
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>PasswordAuthentication<span class="w"> </span>no
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a>PubkeyAuthentication<span class="w"> </span>no
+<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a>ChallengeResponseAuthentication<span class="w"> </span>no
+<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a>UsePAM<span class="w"> </span>yes<span class="w"> </span><span class="c1"># LDAP for Debian</span>
+<a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a>
+<a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a>AcceptEnv<span class="w"> </span>LANG<span class="w"> </span>LC_*
+<a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a>X11Forwarding<span class="w"> </span>yes
+<a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a>PrintLastLog<span class="w"> </span>no
+<a id="__codelineno-5-17" name="__codelineno-5-17" href="#__codelineno-5-17"></a>PrintMotd<span class="w"> </span>no
+<a id="__codelineno-5-18" name="__codelineno-5-18" href="#__codelineno-5-18"></a>Subsystem<span class="w"> </span>sftp<span class="w"> </span>/usr/lib/openssh/sftp-server
+<a id="__codelineno-5-19" name="__codelineno-5-19" href="#__codelineno-5-19"></a>
+<a id="__codelineno-5-20" name="__codelineno-5-20" href="#__codelineno-5-20"></a>Match<span class="w"> </span>LocalAddress<span class="w"> </span><span class="m">10</span>.254.0.0
+<a id="__codelineno-5-21" name="__codelineno-5-21" href="#__codelineno-5-21"></a><span class="w">    </span>AllowGroups<span class="w"> </span>ssh_local<span class="w"> </span>super_manager<span class="w"> </span>ssh_groupname
+<a id="__codelineno-5-22" name="__codelineno-5-22" href="#__codelineno-5-22"></a><span class="w">    </span>PasswordAuthentication<span class="w"> </span>yes
+<a id="__codelineno-5-23" name="__codelineno-5-23" href="#__codelineno-5-23"></a><span class="w">    </span>PubkeyAuthentication<span class="w"> </span>yes
+<a id="__codelineno-5-24" name="__codelineno-5-24" href="#__codelineno-5-24"></a>
+<a id="__codelineno-5-25" name="__codelineno-5-25" href="#__codelineno-5-25"></a><span class="c1"># Public IP access = root-only</span>
+<a id="__codelineno-5-26" name="__codelineno-5-26" href="#__codelineno-5-26"></a>Match<span class="w"> </span>LocalAddress<span class="w"> </span><span class="m">202</span>.38.95.110,202.141.160.110,202.141.176.110,218.104.71.170
+<a id="__codelineno-5-27" name="__codelineno-5-27" href="#__codelineno-5-27"></a><span class="w">    </span>AllowUsers<span class="w"> </span>root
+<a id="__codelineno-5-28" name="__codelineno-5-28" href="#__codelineno-5-28"></a><span class="w">    </span>PubkeyAuthentication<span class="w"> </span>yes
+<a id="__codelineno-5-29" name="__codelineno-5-29" href="#__codelineno-5-29"></a><span class="w">    </span>AuthorizedKeysFile<span class="w"> </span>/dev/null<span class="w">  </span><span class="c1"># 屏蔽公钥，仅允许证书登录</span>
+<a id="__codelineno-5-30" name="__codelineno-5-30" href="#__codelineno-5-30"></a>
+<a id="__codelineno-5-31" name="__codelineno-5-31" href="#__codelineno-5-31"></a><span class="c1"># For SSH Push trigger</span>
+<a id="__codelineno-5-32" name="__codelineno-5-32" href="#__codelineno-5-32"></a>Match<span class="w"> </span>User<span class="w"> </span>mirror
+<a id="__codelineno-5-33" name="__codelineno-5-33" href="#__codelineno-5-33"></a><span class="w">    </span>AllowUsers<span class="w"> </span>mirror
+<a id="__codelineno-5-34" name="__codelineno-5-34" href="#__codelineno-5-34"></a><span class="w">    </span>AuthenticationMethods<span class="w"> </span>publickey
+<a id="__codelineno-5-35" name="__codelineno-5-35" href="#__codelineno-5-35"></a><span class="w">    </span>PermitTTY<span class="w"> </span>no
+<a id="__codelineno-5-36" name="__codelineno-5-36" href="#__codelineno-5-36"></a><span class="w">    </span>PermitTunnel<span class="w"> </span>no
+<a id="__codelineno-5-37" name="__codelineno-5-37" href="#__codelineno-5-37"></a><span class="w">    </span>X11Forwarding<span class="w"> </span>no
+<a id="__codelineno-5-38" name="__codelineno-5-38" href="#__codelineno-5-38"></a>
+<a id="__codelineno-5-39" name="__codelineno-5-39" href="#__codelineno-5-39"></a>Match<span class="w"> </span>All<span class="w"> </span><span class="c1">#(1)</span>
 </code></pre></div>
 <ol>
 <li>OpenSSH 6.5p1 以上可以使用 <code>Match All</code> 来结束上面的 Match 块。由于 <code>Include</code> 指令出现在 <code>/etc/ssh/sshd_config</code> 的最上面，而接下来的内容都是全局设置，因此使用 <code>Match All</code> 保证原先的内容继续作用于全局，而不是像上面这个例子一样变成 <code>Match User mirror</code> 的设置。</li>

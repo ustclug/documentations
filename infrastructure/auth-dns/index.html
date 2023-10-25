@@ -2426,17 +2426,17 @@
   <a href="https://github.com/zhsj/dockerfile/tree/master/bind9">https://github.com/zhsj/dockerfile/tree/master/bind9</a></li>
 </ul>
 <p>The bind configuration repository is only visible to admins because private key is included.</p>
-<div class="highlight"><pre><span></span><code><span class="c1"># copy the ssh key https://github.com/ustclug/auth-dns/blob/master/git_pull_key</span>
-<span class="c1"># to ~/.ssh/id_ed25519</span>
-
-<span class="c1"># now get the conf</span>
-git<span class="w"> </span>clone<span class="w"> </span>git@github.com:ustclug/auth-dns.git<span class="w"> </span>/var/lib/bind
-
-<span class="c1"># delete the ssh key</span>
-rm<span class="w"> </span>~/.ssh/id_ed25519
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># copy the ssh key https://github.com/ustclug/auth-dns/blob/master/git_pull_key</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="c1"># to ~/.ssh/id_ed25519</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="c1"># now get the conf</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>git<span class="w"> </span>clone<span class="w"> </span>git@github.com:ustclug/auth-dns.git<span class="w"> </span>/var/lib/bind
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="c1"># delete the ssh key</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>rm<span class="w"> </span>~/.ssh/id_ed25519
 </code></pre></div>
-<div class="highlight"><pre><span></span><code>docker run --restart=always -v /var/lib/bind/:/etc/bind \
-       --net host -it -d --name=auth-dns zhusj/bind9
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>docker run --restart=always -v /var/lib/bind/:/etc/bind \
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>       --net host -it -d --name=auth-dns zhusj/bind9
 </code></pre></div>
 <h2 id="update-dns-record">Update DNS Record<a class="headerlink" href="#update-dns-record" title="Permanent link">&para;</a></h2>
 <p>Just commit your changes to the configuration repository.

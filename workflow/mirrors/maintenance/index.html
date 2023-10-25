@@ -2494,8 +2494,8 @@
 <h3 id="ipmitool"><code>ipmitool</code> 简介<a class="headerlink" href="#ipmitool" title="Permanent link">&para;</a></h3>
 <p>尽管几乎我们机器的 IPMI 都有 Web 界面，但是 Web 界面不一定靠谱，可能会出现故障。此时，我们可以使用 <code>ipmitool</code> 重置 IPMI 的状态（系统配置不会改变）</p>
 <p>参考命令：</p>
-<div class="highlight"><pre><span></span><code><span class="c1"># 一部分 IPMI 的 interface 是 lanplus 而不是 lan，比如说 mirrors3</span>
-ipmitool<span class="w"> </span>-I<span class="w"> </span>lan<span class="w"> </span>-H<span class="w"> </span>IPMI的IP<span class="w"> </span>-U<span class="w"> </span>用户名<span class="w"> </span>-a<span class="w"> </span>mc<span class="w"> </span>reset<span class="w"> </span>cold
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># 一部分 IPMI 的 interface 是 lanplus 而不是 lan，比如说 mirrors3</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>ipmitool<span class="w"> </span>-I<span class="w"> </span>lan<span class="w"> </span>-H<span class="w"> </span>IPMI的IP<span class="w"> </span>-U<span class="w"> </span>用户名<span class="w"> </span>-a<span class="w"> </span>mc<span class="w"> </span>reset<span class="w"> </span>cold
 </code></pre></div>
 <p>具体详情可以看 <code>ipmitool</code> 的 manpage。</p>
 <p>另外:</p>

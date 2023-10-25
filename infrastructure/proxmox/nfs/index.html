@@ -2397,15 +2397,15 @@
 <p>在 storage.cfg 设置中，NFS 挂载到 <code>/mnt/nfs-el</code>，设置的参数为 <code>soft,noexec,nosuid,nodev</code>。设置为 <code>hard</code> 会导致 NFS 下线时重试无限次，大概率导致系统卡死，其他几个参数主要是为了安全。</p>
 <p>其中，根据 PVE 的要求，虚拟机磁盘文件需要放在 <code>images/&lt;vmid&gt;</code> 目录下才会被自动检测到。若一开始没有按要求放置文件或添加了新文件，可以使用 <code>qm rescan</code> 扫描新的磁盘文件。也可以直接使用 <code>qm set</code> 命令或手动编辑虚拟机配置文件指定磁盘文件的路径，这两种方法没有此限制。</p>
 <p>另外，由于整个 storage.cfg 文件在集群中共享，需要手动指定 <code>nodes</code> 以免 NIC 的两台 PVE 主机尝试挂载。</p>
-<div class="highlight"><span class="filename">/etc/pve/storage.cfg</span><pre><span></span><code>nfs: nfs-el
-        export /media/vdp/pve
-        path /mnt/nfs-el
-        server nfs-el.vm.ustclug.org
-        options soft,noexec,nosuid,nodev
-        content iso,images
-        nodes pve-2,pve-4,pve-6
-        shared 1
-        prune-backups keep-all=1
+<div class="highlight"><span class="filename">/etc/pve/storage.cfg</span><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>nfs: nfs-el
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>        export /media/vdp/pve
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>        path /mnt/nfs-el
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>        server nfs-el.vm.ustclug.org
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>        options soft,noexec,nosuid,nodev
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>        content iso,images
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>        nodes pve-2,pve-4,pve-6
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>        shared 1
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>        prune-backups keep-all=1
 </code></pre></div>
 <p>storage.cfg 的全部配置内容可以参考 <a href="https://pve.proxmox.com/wiki/Storage">https://pve.proxmox.com/wiki/Storage</a>。</p>
 

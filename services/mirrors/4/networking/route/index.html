@@ -2392,57 +2392,57 @@
 <h1 id="routing-on-mirrors4">Routing on mirrors4<a class="headerlink" href="#routing-on-mirrors4" title="Permanent link">&para;</a></h1>
 <p>由于 mirrors4 没有使用 ifupdown 作为网络管理系统，而是采用 systemd-networkd，因此我们没有 <code>pre-up</code>, <code>up</code>, <code>down</code>, <code>post-down</code> 等运行命令的方式，所以 mirrors2 上使用的那套脚本（<code>ip-route.sh</code> 等）无法直接在 mirrors4 上继续使用。</p>
 <p>好在我们使用 <code>up</code> 等运行命令只是为了配置路由，因此换了个办法，整了个新脚本把 IP 地址列表（来自 <a href="https://github.com/gaoyifan/china-operator-ip">gaoyifan/china-operator-ip</a>）转换成 networkd 所使用的配置文件格式。代码不长：</p>
-<div class="highlight"><pre><span></span><code><span class="ch">#!/bin/bash</span>
-
-<span class="nv">ROOT_IP_LIST</span><span class="o">=</span>/usr/local/network_config/iplist
-<span class="nv">ROOT_RT</span><span class="o">=</span>/run/systemd/network
-
-gen_route<span class="o">()</span><span class="w"> </span><span class="o">{</span>
-<span class="w">  </span><span class="nv">IPLIST</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$ROOT_IP_LIST</span><span class="s2">/</span><span class="nv">$1</span><span class="s2">&quot;</span>
-<span class="w">  </span><span class="nv">GW</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$2</span><span class="s2">&quot;</span>
-<span class="w">  </span><span class="nv">DEV</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$3</span><span class="s2">&quot;</span>
-<span class="w">  </span><span class="c1"># Convert table to number</span>
-<span class="w">  </span><span class="nv">TABLENAME</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$4</span><span class="s2">&quot;</span>
-<span class="w">  </span><span class="nv">TABLE</span><span class="o">=</span><span class="s2">&quot;</span><span class="k">$(</span>awk<span class="w"> </span><span class="s1">&#39;substr($0, 1, 1) != &quot;#&quot; &amp;&amp; $2 == &quot;&#39;</span><span class="s2">&quot;</span><span class="nv">$TABLENAME</span><span class="s2">&quot;</span><span class="s1">&#39;&quot; { print $1 }&#39;</span><span class="w"> </span>/etc/iproute2/rt_tables<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-1<span class="k">)</span><span class="s2">&quot;</span>
-<span class="w">  </span><span class="nv">PRIORITY</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$5</span><span class="s2">&quot;</span>
-
-<span class="w">  </span><span class="nv">F</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$ROOT_RT</span><span class="s2">/</span><span class="nv">$DEV</span><span class="s2">.network.d&quot;</span>
-<span class="w">  </span>mkdir<span class="w"> </span>-p<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$F</span><span class="s2">&quot;</span>
-<span class="w">  </span><span class="nv">F</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$F</span><span class="s2">/route-</span><span class="si">${</span><span class="nv">TABLENAME</span><span class="p">,,</span><span class="si">}</span><span class="s2">.conf&quot;</span>
-
-<span class="w">  </span><span class="nb">echo</span><span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;[RoutingPolicyRule]\nTable=</span><span class="nv">$TABLE</span><span class="s2">\nPriority=</span><span class="nv">$PRIORITY</span><span class="s2">\n&quot;</span><span class="w"> </span>&gt;<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$F</span><span class="s2">&quot;</span>
-<span class="w">  </span>awk<span class="w"> </span><span class="s1">&#39;{ print &quot;[Route]\nDestination=&quot; $1 &quot;\nGateway=&#39;</span><span class="s2">&quot;</span><span class="nv">$GW</span><span class="s2">&quot;</span><span class="s1">&#39;\nTable=&#39;</span><span class="s2">&quot;</span><span class="nv">$TABLE</span><span class="s2">&quot;</span><span class="s1">&#39;\n&quot; }&#39;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$IPLIST</span><span class="s2">&quot;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$F</span><span class="s2">&quot;</span>
-<span class="o">}</span>
-
-gen_route<span class="w"> </span>ustcnet.txt<span class="w"> </span><span class="m">202</span>.38.95.126<span class="w"> </span>cernet<span class="w"> </span>Ustcnet<span class="w"> </span><span class="m">5</span>
-gen_route<span class="w"> </span>cernet.txt<span class="w"> </span><span class="m">202</span>.38.95.126<span class="w"> </span>cernet<span class="w"> </span>Cernet<span class="w"> </span><span class="m">6</span>
-gen_route<span class="w"> </span>telecom.txt<span class="w"> </span><span class="m">202</span>.141.160.126<span class="w"> </span>telecom<span class="w"> </span>Telecom<span class="w"> </span><span class="m">6</span>
-gen_route<span class="w"> </span>mobile.txt<span class="w"> </span><span class="m">202</span>.141.176.126<span class="w"> </span>mobile<span class="w"> </span>Mobile<span class="w"> </span><span class="m">6</span>
-gen_route<span class="w"> </span>unicom.txt<span class="w"> </span><span class="m">218</span>.104.71.161<span class="w"> </span>unicom<span class="w"> </span>Unicom<span class="w"> </span><span class="m">6</span>
-gen_route<span class="w"> </span>china.txt<span class="w"> </span><span class="m">218</span>.104.71.161<span class="w"> </span>unicom<span class="w"> </span>China<span class="w"> </span><span class="m">7</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="ch">#!/bin/bash</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="nv">ROOT_IP_LIST</span><span class="o">=</span>/usr/local/network_config/iplist
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="nv">ROOT_RT</span><span class="o">=</span>/run/systemd/network
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>gen_route<span class="o">()</span><span class="w"> </span><span class="o">{</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">  </span><span class="nv">IPLIST</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$ROOT_IP_LIST</span><span class="s2">/</span><span class="nv">$1</span><span class="s2">&quot;</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">  </span><span class="nv">GW</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$2</span><span class="s2">&quot;</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">  </span><span class="nv">DEV</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$3</span><span class="s2">&quot;</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">  </span><span class="c1"># Convert table to number</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="w">  </span><span class="nv">TABLENAME</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$4</span><span class="s2">&quot;</span>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="w">  </span><span class="nv">TABLE</span><span class="o">=</span><span class="s2">&quot;</span><span class="k">$(</span>awk<span class="w"> </span><span class="s1">&#39;substr($0, 1, 1) != &quot;#&quot; &amp;&amp; $2 == &quot;&#39;</span><span class="s2">&quot;</span><span class="nv">$TABLENAME</span><span class="s2">&quot;</span><span class="s1">&#39;&quot; { print $1 }&#39;</span><span class="w"> </span>/etc/iproute2/rt_tables<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-1<span class="k">)</span><span class="s2">&quot;</span>
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="w">  </span><span class="nv">PRIORITY</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$5</span><span class="s2">&quot;</span>
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="w">  </span><span class="nv">F</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$ROOT_RT</span><span class="s2">/</span><span class="nv">$DEV</span><span class="s2">.network.d&quot;</span>
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="w">  </span>mkdir<span class="w"> </span>-p<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$F</span><span class="s2">&quot;</span>
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="w">  </span><span class="nv">F</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$F</span><span class="s2">/route-</span><span class="si">${</span><span class="nv">TABLENAME</span><span class="p">,,</span><span class="si">}</span><span class="s2">.conf&quot;</span>
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="w">  </span><span class="nb">echo</span><span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;[RoutingPolicyRule]\nTable=</span><span class="nv">$TABLE</span><span class="s2">\nPriority=</span><span class="nv">$PRIORITY</span><span class="s2">\n&quot;</span><span class="w"> </span>&gt;<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$F</span><span class="s2">&quot;</span>
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="w">  </span>awk<span class="w"> </span><span class="s1">&#39;{ print &quot;[Route]\nDestination=&quot; $1 &quot;\nGateway=&#39;</span><span class="s2">&quot;</span><span class="nv">$GW</span><span class="s2">&quot;</span><span class="s1">&#39;\nTable=&#39;</span><span class="s2">&quot;</span><span class="nv">$TABLE</span><span class="s2">&quot;</span><span class="s1">&#39;\n&quot; }&#39;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$IPLIST</span><span class="s2">&quot;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$F</span><span class="s2">&quot;</span>
+<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a><span class="o">}</span>
+<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>
+<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>gen_route<span class="w"> </span>ustcnet.txt<span class="w"> </span><span class="m">202</span>.38.95.126<span class="w"> </span>cernet<span class="w"> </span>Ustcnet<span class="w"> </span><span class="m">5</span>
+<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>gen_route<span class="w"> </span>cernet.txt<span class="w"> </span><span class="m">202</span>.38.95.126<span class="w"> </span>cernet<span class="w"> </span>Cernet<span class="w"> </span><span class="m">6</span>
+<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>gen_route<span class="w"> </span>telecom.txt<span class="w"> </span><span class="m">202</span>.141.160.126<span class="w"> </span>telecom<span class="w"> </span>Telecom<span class="w"> </span><span class="m">6</span>
+<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>gen_route<span class="w"> </span>mobile.txt<span class="w"> </span><span class="m">202</span>.141.176.126<span class="w"> </span>mobile<span class="w"> </span>Mobile<span class="w"> </span><span class="m">6</span>
+<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>gen_route<span class="w"> </span>unicom.txt<span class="w"> </span><span class="m">218</span>.104.71.161<span class="w"> </span>unicom<span class="w"> </span>Unicom<span class="w"> </span><span class="m">6</span>
+<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>gen_route<span class="w"> </span>china.txt<span class="w"> </span><span class="m">218</span>.104.71.161<span class="w"> </span>unicom<span class="w"> </span>China<span class="w"> </span><span class="m">7</span>
 </code></pre></div>
 <p>这个仓库里有很多个 txt 文件，每个文件对应一个 ISP 的地址列表，每行一个 CIDR。脚本中的 <code>gen_route</code> 函数根据参数读取文件，并转换成下面这样的格式：</p>
-<div class="highlight"><pre><span></span><code><span class="k">[Route]</span>
-<span class="na">Destination</span><span class="o">=</span><span class="s">1.0.0.0/24</span>
-<span class="na">Gateway</span><span class="o">=</span><span class="s">202.38.95.126</span>
-<span class="na">Table</span><span class="o">=</span><span class="s">1011</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="k">[Route]</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="na">Destination</span><span class="o">=</span><span class="s">1.0.0.0/24</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="na">Gateway</span><span class="o">=</span><span class="s">202.38.95.126</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="na">Table</span><span class="o">=</span><span class="s">1011</span>
 </code></pre></div>
 <p>这样一个 <code>[Route]</code> 节对应<strong>一条</strong>路由规则，整个 txt 的转换结果输出到 <code>/run/systemd/network/cernet.network.d/route-example.conf</code>。其中 <code>cernet.network.d/*.conf</code> 用于向现有的配置中添加内容（与 systemd service 类似），而 <code>/run</code> 目录（按理来说）重启会清空，适合放置这些用于动态生成的内容。另外由于路由规则（<code>ip rule</code>）也由 networkd 管理和生成了，因此每个 <code>route-xxx.conf</code> 开头会包含一个 <code>[RoutingPolicyRule]</code> 节用于生成路由表对应的路由规则。</p>
 <p>注意路由表是用名称指定的，从 <code>/etc/iproute2/rt_tables</code> 中查出对应的数字 ID。这个文件本来也是 <code>ip</code> 命令所使用的（注意它的目录名叫 <code>iproute2</code>）。</p>
 <p>最后给这个脚本配个 service，让它在 networkd 之前运行：</p>
-<div class="highlight"><pre><span></span><code><span class="c1"># WARNING: This is NOT the final configuration file!</span>
-<span class="k">[Unit]</span>
-<span class="na">Description</span><span class="o">=</span><span class="s">Generate routes for systemd-networkd</span>
-<span class="na">Before</span><span class="o">=</span><span class="s">systemd-networkd.service</span>
-
-<span class="k">[Service]</span>
-<span class="na">Type</span><span class="o">=</span><span class="s">oneshot</span>
-<span class="na">ExecStart</span><span class="o">=</span><span class="s">/bin/bash /usr/local/network_config/route-all.sh</span>
-<span class="na">RemainAfterExit</span><span class="o">=</span><span class="s">true</span>
-
-<span class="k">[Install]</span>
-<span class="na">WantedBy</span><span class="o">=</span><span class="s">network.target systemd-networkd.service</span>
-<span class="na">Wants</span><span class="o">=</span><span class="s">systemd-networkd.service</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># WARNING: This is NOT the final configuration file!</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="k">[Unit]</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="na">Description</span><span class="o">=</span><span class="s">Generate routes for systemd-networkd</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="na">Before</span><span class="o">=</span><span class="s">systemd-networkd.service</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="k">[Service]</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="na">Type</span><span class="o">=</span><span class="s">oneshot</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="na">ExecStart</span><span class="o">=</span><span class="s">/bin/bash /usr/local/network_config/route-all.sh</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="na">RemainAfterExit</span><span class="o">=</span><span class="s">true</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="k">[Install]</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="na">WantedBy</span><span class="o">=</span><span class="s">network.target systemd-networkd.service</span>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="na">Wants</span><span class="o">=</span><span class="s">systemd-networkd.service</span>
 </code></pre></div>
 <p>这个文件存到 <code>/etc/systemd/system/route-all.service</code>，reload 再 enable 就可以了。</p>
 <div class="admonition bug">
@@ -2452,79 +2452,79 @@ gen_route<span class="w"> </span>china.txt<span class="w"> </span><span class="m
 </div>
 <h2 id="special-routing">Special routing<a class="headerlink" href="#special-routing" title="Permanent link">&para;</a></h2>
 <p>部分 IP 需要配置特殊路由规则时（而不是使用默认），编辑 <code>/usr/local/network_config/special.yml</code>，其格式如下：</p>
-<div class="highlight"><pre><span></span><code><span class="nt">routes</span><span class="p">:</span><span class="w"> </span><span class="c1"># Root key，保留</span>
-<span class="w">  </span><span class="nt">lugvpn</span><span class="p">:</span><span class="w"> </span><span class="c1"># /etc/systemd/network 中对应的 .network 文件名</span>
-<span class="w">    </span><span class="c1"># 下面是一个路由文件的配置，一个文件共享一个 table 和 gateway 设置</span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">route-special</span><span class="w"> </span><span class="c1"># 将要创建的 .conf 文件名，可以随意</span>
-<span class="w">      </span><span class="nt">table</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Special</span><span class="w"> </span><span class="c1"># 路由表，即 ip route add table 后面的参数，数字或表名</span>
-<span class="w">      </span><span class="nt">gateway</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"> </span><span class="c1"># 是否包含网关，或者 ip route 的 via 参数</span>
-<span class="w">      </span><span class="nt">routes</span><span class="p">:</span><span class="w"> </span><span class="c1"># 所有的路由条目</span>
-<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.2.3.4</span>
-<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5.6.7.8/28</span>
-<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2001:db8::2333/64</span>
-
-<span class="w">  </span><span class="nt">cernet</span><span class="p">:</span><span class="w"> </span><span class="c1"># 更多的配置</span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nt">routes</span><span class="p">:</span><span class="w"> </span><span class="c1"># Root key，保留</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span><span class="nt">lugvpn</span><span class="p">:</span><span class="w"> </span><span class="c1"># /etc/systemd/network 中对应的 .network 文件名</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">    </span><span class="c1"># 下面是一个路由文件的配置，一个文件共享一个 table 和 gateway 设置</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">route-special</span><span class="w"> </span><span class="c1"># 将要创建的 .conf 文件名，可以随意</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">      </span><span class="nt">table</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Special</span><span class="w"> </span><span class="c1"># 路由表，即 ip route add table 后面的参数，数字或表名</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">      </span><span class="nt">gateway</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"> </span><span class="c1"># 是否包含网关，或者 ip route 的 via 参数</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">      </span><span class="nt">routes</span><span class="p">:</span><span class="w"> </span><span class="c1"># 所有的路由条目</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.2.3.4</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5.6.7.8/28</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2001:db8::2333/64</span>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="w">  </span><span class="nt">cernet</span><span class="p">:</span><span class="w"> </span><span class="c1"># 更多的配置</span>
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">...</span>
 </code></pre></div>
 <p>修改 <code>special.yml</code> 之后重启 <code>route-all.service</code>。该服务会自动导致 <code>systemd-networkd.service</code> 重启并载入新的路由配置信息。</p>
 <details class="tips">
 <summary>special.rb 处理脚本（放在这备份）</summary>
-<div class="highlight"><pre><span></span><code><span class="ch">#!/usr/bin/ruby</span>
-
-<span class="nb">require</span><span class="w"> </span><span class="s1">&#39;fileutils&#39;</span>
-<span class="nb">require</span><span class="w"> </span><span class="s1">&#39;yaml&#39;</span>
-
-<span class="no">BASEDIR</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;/run/systemd/network&#39;</span>
-<span class="no">RT_TABLES</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;/etc/iproute2/rt_tables&#39;</span>
-
-<span class="n">rt_tables</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="no">Hash</span><span class="o">.</span><span class="n">new</span>
-<span class="no">File</span><span class="o">.</span><span class="n">readlines</span><span class="p">(</span><span class="no">RT_TABLES</span><span class="p">)</span><span class="o">.</span><span class="n">each</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="o">|</span><span class="n">l</span><span class="o">|</span>
-<span class="w">  </span><span class="k">next</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">l</span><span class="w"> </span><span class="o">=~</span> <span class="sr">/^\s*#/</span>
-<span class="w">  </span><span class="nb">id</span><span class="p">,</span><span class="w"> </span><span class="nb">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">l</span><span class="o">.</span><span class="n">split</span>
-<span class="w">  </span><span class="n">rt_tables</span><span class="o">[</span><span class="nb">name</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">id</span>
-<span class="k">end</span>
-
-<span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="no">YAML</span><span class="o">.</span><span class="n">load_file</span><span class="w"> </span><span class="no">File</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">__dir__</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;special.yml&#39;</span><span class="p">)</span>
-<span class="n">data</span><span class="o">[</span><span class="s1">&#39;routes&#39;</span><span class="o">].</span><span class="n">each</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="o">|</span><span class="n">fn</span><span class="p">,</span><span class="w"> </span><span class="n">setups</span><span class="o">|</span>
-<span class="w">  </span><span class="n">confdir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="no">File</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="no">BASEDIR</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">#{</span><span class="n">fn</span><span class="si">}</span><span class="s2">.network.d&quot;</span><span class="p">)</span>
-<span class="w">  </span><span class="no">FileUtils</span><span class="o">.</span><span class="n">mkdir_p</span><span class="w"> </span><span class="n">confdir</span>
-
-<span class="w">  </span><span class="n">setups</span><span class="o">.</span><span class="n">each</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="o">|</span><span class="n">config</span><span class="o">|</span>
-<span class="w">    </span><span class="n">table</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">config</span><span class="o">[</span><span class="s1">&#39;table&#39;</span><span class="o">]</span>
-<span class="w">    </span><span class="n">gateway</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">config</span><span class="o">[</span><span class="s1">&#39;gateway&#39;</span><span class="o">]</span>
-<span class="w">    </span><span class="no">File</span><span class="o">.</span><span class="n">open</span><span class="w"> </span><span class="no">File</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">confdir</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">#{</span><span class="n">config</span><span class="o">[</span><span class="s1">&#39;name&#39;</span><span class="o">]</span><span class="si">}</span><span class="s2">.conf&quot;</span><span class="p">),</span><span class="w"> </span><span class="s1">&#39;w&#39;</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="o">|</span><span class="n">f</span><span class="o">|</span>
-<span class="w">      </span><span class="n">config</span><span class="o">[</span><span class="s1">&#39;routes&#39;</span><span class="o">].</span><span class="n">each</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="o">|</span><span class="n">dst</span><span class="o">|</span>
-<span class="w">        </span><span class="n">t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;[Route]</span><span class="se">\n</span><span class="s2">Destination=</span><span class="si">#{</span><span class="n">dst</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
-<span class="w">        </span><span class="n">t</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="s2">&quot;Table=</span><span class="si">#{</span><span class="n">rt_tables</span><span class="o">.</span><span class="n">fetch</span><span class="w"> </span><span class="n">table</span><span class="p">,</span><span class="w"> </span><span class="n">table</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">table</span>
-<span class="w">        </span><span class="n">t</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="s2">&quot;Gateway=</span><span class="si">#{</span><span class="n">gateway</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">gateway</span>
-<span class="w">        </span><span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
-<span class="w">      </span><span class="k">end</span>
-<span class="w">    </span><span class="k">end</span>
-<span class="w">  </span><span class="k">end</span>
-<span class="k">end</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="ch">#!/usr/bin/ruby</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="nb">require</span><span class="w"> </span><span class="s1">&#39;fileutils&#39;</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="nb">require</span><span class="w"> </span><span class="s1">&#39;yaml&#39;</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="no">BASEDIR</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;/run/systemd/network&#39;</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="no">RT_TABLES</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;/etc/iproute2/rt_tables&#39;</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="n">rt_tables</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="no">Hash</span><span class="o">.</span><span class="n">new</span>
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="no">File</span><span class="o">.</span><span class="n">readlines</span><span class="p">(</span><span class="no">RT_TABLES</span><span class="p">)</span><span class="o">.</span><span class="n">each</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="o">|</span><span class="n">l</span><span class="o">|</span>
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="w">  </span><span class="k">next</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">l</span><span class="w"> </span><span class="o">=~</span> <span class="sr">/^\s*#/</span>
+<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="w">  </span><span class="nb">id</span><span class="p">,</span><span class="w"> </span><span class="nb">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">l</span><span class="o">.</span><span class="n">split</span>
+<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="w">  </span><span class="n">rt_tables</span><span class="o">[</span><span class="nb">name</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">id</span>
+<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a><span class="k">end</span>
+<a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a>
+<a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="no">YAML</span><span class="o">.</span><span class="n">load_file</span><span class="w"> </span><span class="no">File</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">__dir__</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;special.yml&#39;</span><span class="p">)</span>
+<a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a><span class="n">data</span><span class="o">[</span><span class="s1">&#39;routes&#39;</span><span class="o">].</span><span class="n">each</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="o">|</span><span class="n">fn</span><span class="p">,</span><span class="w"> </span><span class="n">setups</span><span class="o">|</span>
+<a id="__codelineno-4-18" name="__codelineno-4-18" href="#__codelineno-4-18"></a><span class="w">  </span><span class="n">confdir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="no">File</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="no">BASEDIR</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">#{</span><span class="n">fn</span><span class="si">}</span><span class="s2">.network.d&quot;</span><span class="p">)</span>
+<a id="__codelineno-4-19" name="__codelineno-4-19" href="#__codelineno-4-19"></a><span class="w">  </span><span class="no">FileUtils</span><span class="o">.</span><span class="n">mkdir_p</span><span class="w"> </span><span class="n">confdir</span>
+<a id="__codelineno-4-20" name="__codelineno-4-20" href="#__codelineno-4-20"></a>
+<a id="__codelineno-4-21" name="__codelineno-4-21" href="#__codelineno-4-21"></a><span class="w">  </span><span class="n">setups</span><span class="o">.</span><span class="n">each</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="o">|</span><span class="n">config</span><span class="o">|</span>
+<a id="__codelineno-4-22" name="__codelineno-4-22" href="#__codelineno-4-22"></a><span class="w">    </span><span class="n">table</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">config</span><span class="o">[</span><span class="s1">&#39;table&#39;</span><span class="o">]</span>
+<a id="__codelineno-4-23" name="__codelineno-4-23" href="#__codelineno-4-23"></a><span class="w">    </span><span class="n">gateway</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">config</span><span class="o">[</span><span class="s1">&#39;gateway&#39;</span><span class="o">]</span>
+<a id="__codelineno-4-24" name="__codelineno-4-24" href="#__codelineno-4-24"></a><span class="w">    </span><span class="no">File</span><span class="o">.</span><span class="n">open</span><span class="w"> </span><span class="no">File</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">confdir</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">#{</span><span class="n">config</span><span class="o">[</span><span class="s1">&#39;name&#39;</span><span class="o">]</span><span class="si">}</span><span class="s2">.conf&quot;</span><span class="p">),</span><span class="w"> </span><span class="s1">&#39;w&#39;</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="o">|</span><span class="n">f</span><span class="o">|</span>
+<a id="__codelineno-4-25" name="__codelineno-4-25" href="#__codelineno-4-25"></a><span class="w">      </span><span class="n">config</span><span class="o">[</span><span class="s1">&#39;routes&#39;</span><span class="o">].</span><span class="n">each</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="o">|</span><span class="n">dst</span><span class="o">|</span>
+<a id="__codelineno-4-26" name="__codelineno-4-26" href="#__codelineno-4-26"></a><span class="w">        </span><span class="n">t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;[Route]</span><span class="se">\n</span><span class="s2">Destination=</span><span class="si">#{</span><span class="n">dst</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+<a id="__codelineno-4-27" name="__codelineno-4-27" href="#__codelineno-4-27"></a><span class="w">        </span><span class="n">t</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="s2">&quot;Table=</span><span class="si">#{</span><span class="n">rt_tables</span><span class="o">.</span><span class="n">fetch</span><span class="w"> </span><span class="n">table</span><span class="p">,</span><span class="w"> </span><span class="n">table</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">table</span>
+<a id="__codelineno-4-28" name="__codelineno-4-28" href="#__codelineno-4-28"></a><span class="w">        </span><span class="n">t</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="s2">&quot;Gateway=</span><span class="si">#{</span><span class="n">gateway</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">gateway</span>
+<a id="__codelineno-4-29" name="__codelineno-4-29" href="#__codelineno-4-29"></a><span class="w">        </span><span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+<a id="__codelineno-4-30" name="__codelineno-4-30" href="#__codelineno-4-30"></a><span class="w">      </span><span class="k">end</span>
+<a id="__codelineno-4-31" name="__codelineno-4-31" href="#__codelineno-4-31"></a><span class="w">    </span><span class="k">end</span>
+<a id="__codelineno-4-32" name="__codelineno-4-32" href="#__codelineno-4-32"></a><span class="w">  </span><span class="k">end</span>
+<a id="__codelineno-4-33" name="__codelineno-4-33" href="#__codelineno-4-33"></a><span class="k">end</span>
 </code></pre></div>
 </details>
 <div class="admonition bug">
 <p class="admonition-title">route-all.service 有很多注意事项</p>
 <p>为了清理开机自动产生的 32766 和 32767 两条路由规则，我们同时为 <code>systemd-networkd.service</code> 添加了两个 <code>ExecStartPre</code> 如下：</p>
-<div class="highlight"><pre><span></span><code><span class="k">[Service]</span>
-<span class="na">ExecStartPre</span><span class="o">=</span><span class="s">-+/sbin/ip rule delete from all table main pref 32766</span>
-<span class="na">ExecStartPre</span><span class="o">=</span><span class="s">-+/sbin/ip rule delete from all table default pref 32767</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="k">[Service]</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="na">ExecStartPre</span><span class="o">=</span><span class="s">-+/sbin/ip rule delete from all table main pref 32766</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="na">ExecStartPre</span><span class="o">=</span><span class="s">-+/sbin/ip rule delete from all table default pref 32767</span>
 </code></pre></div>
 <p>另附完整的 <code>route-all.service</code> 文件：</p>
-<div class="highlight"><pre><span></span><code><span class="k">[Unit]</span>
-<span class="na">Description</span><span class="o">=</span><span class="s">Generate routes for systemd-networkd</span>
-<span class="na">Before</span><span class="o">=</span><span class="s">systemd-networkd.service</span>
-
-<span class="k">[Service]</span>
-<span class="na">Type</span><span class="o">=</span><span class="s">oneshot</span>
-<span class="na">ExecStart</span><span class="o">=</span><span class="s">/bin/bash /usr/local/network_config/route-all.sh</span>
-<span class="na">ExecStart</span><span class="o">=</span><span class="s">/usr/local/network_config/special.rb</span>
-<span class="na">RemainAfterExit</span><span class="o">=</span><span class="s">true</span>
-
-<span class="k">[Install]</span>
-<span class="na">WantedBy</span><span class="o">=</span><span class="s">network.target systemd-networkd.service</span>
-<span class="na">Wants</span><span class="o">=</span><span class="s">systemd-networkd.service</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="k">[Unit]</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="na">Description</span><span class="o">=</span><span class="s">Generate routes for systemd-networkd</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="na">Before</span><span class="o">=</span><span class="s">systemd-networkd.service</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="k">[Service]</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="na">Type</span><span class="o">=</span><span class="s">oneshot</span>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="na">ExecStart</span><span class="o">=</span><span class="s">/bin/bash /usr/local/network_config/route-all.sh</span>
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="na">ExecStart</span><span class="o">=</span><span class="s">/usr/local/network_config/special.rb</span>
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="na">RemainAfterExit</span><span class="o">=</span><span class="s">true</span>
+<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a>
+<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a><span class="k">[Install]</span>
+<a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a><span class="na">WantedBy</span><span class="o">=</span><span class="s">network.target systemd-networkd.service</span>
+<a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a><span class="na">Wants</span><span class="o">=</span><span class="s">systemd-networkd.service</span>
 </code></pre></div>
 </div>
 

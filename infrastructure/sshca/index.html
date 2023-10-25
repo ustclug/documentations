@@ -2486,10 +2486,10 @@
 <h2 id="server-setup">Server setup<a class="headerlink" href="#server-setup" title="Permanent link">&para;</a></h2>
 <h3 id="trustedusercakeys">Configure server to accept client certificates<a class="headerlink" href="#trustedusercakeys" title="Permanent link">&para;</a></h3>
 <p>First drop our public key to <code>/etc/ssh/ssh_user_ca</code>:</p>
-<div class="highlight"><span class="filename">/etc/ssh/ssh_user_ca</span><pre><span></span><code>ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC1Bxw9AXoZvc9HTe5o4f7/qOROcmzvlcO5oofoF3pewtRnhNpcd/DwmxSblqpj/cjLYkE32mSCzMYY8X0CRFyMJsgSIDC4i4LXDNU0e8PbB2NIQAAeyfJEU5m/Dn1tPw9WvPtPqHCRvgSwnRfzYngMVWROgV2Qe6pOqTTgetEYfb5gkDc2i1M7yfTp3H3ExfrDKwOKPc/9UYOADMFU6u1fJN+4epLETilHC1ubtBeVi23pn1K+LDy06Gwhq1MLljCM7gFBMrmv894HrOHU4WrzLUlfkiDt2cyXLb4qPWYqilBFLUjU92kjmiI/EwB/8pR1WmdU7FoYpdgBHNr3NT53 LUG-CA
+<div class="highlight"><span class="filename">/etc/ssh/ssh_user_ca</span><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC1Bxw9AXoZvc9HTe5o4f7/qOROcmzvlcO5oofoF3pewtRnhNpcd/DwmxSblqpj/cjLYkE32mSCzMYY8X0CRFyMJsgSIDC4i4LXDNU0e8PbB2NIQAAeyfJEU5m/Dn1tPw9WvPtPqHCRvgSwnRfzYngMVWROgV2Qe6pOqTTgetEYfb5gkDc2i1M7yfTp3H3ExfrDKwOKPc/9UYOADMFU6u1fJN+4epLETilHC1ubtBeVi23pn1K+LDy06Gwhq1MLljCM7gFBMrmv894HrOHU4WrzLUlfkiDt2cyXLb4qPWYqilBFLUjU92kjmiI/EwB/8pR1WmdU7FoYpdgBHNr3NT53 LUG-CA
 </code></pre></div>
 <p>Then add the following line to sshd config (Debian 11+):</p>
-<div class="highlight"><span class="filename">/etc/ssh/sshd_config.d/ustclug.conf</span><pre><span></span><code>TrustedUserCAKeys<span class="w"> </span>/etc/ssh/ssh_user_ca
+<div class="highlight"><span class="filename">/etc/ssh/sshd_config.d/ustclug.conf</span><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>TrustedUserCAKeys<span class="w"> </span>/etc/ssh/ssh_user_ca
 </code></pre></div>
 <div class="admonition warning">
 <p class="admonition-title">Old version config (&lt;= Debian 10)</p>
@@ -2507,16 +2507,16 @@
 </div>
 <p>Copy the file <code>/etc/ssh/ssh_host_rsa_key.pub</code> from target server.</p>
 <p>Then, run <code>ssh-keygen</code> to issue a public key. For example:</p>
-<div class="highlight"><pre><span></span><code>ssh-keygen<span class="w"> </span>-s<span class="w"> </span>/path/to/ssh_ca<span class="w"> </span><span class="se">\</span>
-<span class="w">           </span>-I<span class="w"> </span>blog<span class="w"> </span><span class="se">\</span>
-<span class="w">           </span>-h<span class="w"> </span><span class="se">\</span>
-<span class="w">           </span>-n<span class="w"> </span>blog.s.ustclug.org,blog.p.ustclug.org,10.254.0.15,202.141.176.98,202.141.160.98<span class="w"> </span><span class="se">\</span>
-<span class="w">           </span>ssh_host_rsa_key.pub
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>ssh-keygen<span class="w"> </span>-s<span class="w"> </span>/path/to/ssh_ca<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">           </span>-I<span class="w"> </span>blog<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">           </span>-h<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">           </span>-n<span class="w"> </span>blog.s.ustclug.org,blog.p.ustclug.org,10.254.0.15,202.141.176.98,202.141.160.98<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">           </span>ssh_host_rsa_key.pub
 </code></pre></div>
 <p>Then, copy the certificate file <code>ssh_host_rsa_key-cert.pub</code> back to target server.</p>
 <p>At last, add the following lines to sshd config:</p>
-<div class="highlight"><span class="filename">/etc/ssh/sshd_config.d/ustclug.conf</span><pre><span></span><code>HostKey<span class="w"> </span>/etc/ssh/ssh_host_rsa_key
-HostCertificate<span class="w"> </span>/etc/ssh/ssh_host_rsa_key-cert.pub
+<div class="highlight"><span class="filename">/etc/ssh/sshd_config.d/ustclug.conf</span><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>HostKey<span class="w"> </span>/etc/ssh/ssh_host_rsa_key
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>HostCertificate<span class="w"> </span>/etc/ssh/ssh_host_rsa_key-cert.pub
 </code></pre></div>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
@@ -2525,22 +2525,22 @@ HostCertificate<span class="w"> </span>/etc/ssh/ssh_host_rsa_key-cert.pub
 <p>Certificate will take effect after SSH daemon is reloaded (<code>systemctl reload ssh</code>).</p>
 <h2 id="client-setup">Client setup<a class="headerlink" href="#client-setup" title="Permanent link">&para;</a></h2>
 <p>Add the following line to your <code>known_hosts</code>:</p>
-<div class="highlight"><span class="filename">~/.ssh/known_hosts</span><pre><span></span><code>@cert-authority * ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC1Bxw9AXoZvc9HTe5o4f7/qOROcmzvlcO5oofoF3pewtRnhNpcd/DwmxSblqpj/cjLYkE32mSCzMYY8X0CRFyMJsgSIDC4i4LXDNU0e8PbB2NIQAAeyfJEU5m/Dn1tPw9WvPtPqHCRvgSwnRfzYngMVWROgV2Qe6pOqTTgetEYfb5gkDc2i1M7yfTp3H3ExfrDKwOKPc/9UYOADMFU6u1fJN+4epLETilHC1ubtBeVi23pn1K+LDy06Gwhq1MLljCM7gFBMrmv894HrOHU4WrzLUlfkiDt2cyXLb4qPWYqilBFLUjU92kjmiI/EwB/8pR1WmdU7FoYpdgBHNr3NT53 LUG-CA
+<div class="highlight"><span class="filename">~/.ssh/known_hosts</span><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>@cert-authority * ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC1Bxw9AXoZvc9HTe5o4f7/qOROcmzvlcO5oofoF3pewtRnhNpcd/DwmxSblqpj/cjLYkE32mSCzMYY8X0CRFyMJsgSIDC4i4LXDNU0e8PbB2NIQAAeyfJEU5m/Dn1tPw9WvPtPqHCRvgSwnRfzYngMVWROgV2Qe6pOqTTgetEYfb5gkDc2i1M7yfTp3H3ExfrDKwOKPc/9UYOADMFU6u1fJN+4epLETilHC1ubtBeVi23pn1K+LDy06Gwhq1MLljCM7gFBMrmv894HrOHU4WrzLUlfkiDt2cyXLb4qPWYqilBFLUjU92kjmiI/EwB/8pR1WmdU7FoYpdgBHNr3NT53 LUG-CA
 </code></pre></div>
 <p>And when you log in to a LUG server, it is automatically trusted. If you find a machine that does not support this setup, report it to CTO.</p>
 <h3 id="issue-a-client-certificate">Issue a client certificate<a class="headerlink" href="#issue-a-client-certificate" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code>ssh-keygen<span class="w"> </span>-s<span class="w"> </span>/path/to/ssh_ca<span class="w"> </span><span class="se">\</span>
-<span class="w">           </span>-I<span class="w"> </span>certificate_identity<span class="w"> </span><span class="se">\</span>
-<span class="w">           </span>-n<span class="w"> </span>principals<span class="w"> </span><span class="se">\</span>
-<span class="w">          </span><span class="o">[</span>-O<span class="w"> </span>options<span class="o">]</span><span class="w"> </span><span class="se">\</span>
-<span class="w">          </span><span class="o">[</span>-V<span class="w"> </span>validity_interval<span class="o">]</span><span class="w"> </span><span class="se">\</span>
-<span class="w">           </span>public_key_file
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>ssh-keygen<span class="w"> </span>-s<span class="w"> </span>/path/to/ssh_ca<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">           </span>-I<span class="w"> </span>certificate_identity<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">           </span>-n<span class="w"> </span>principals<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">          </span><span class="o">[</span>-O<span class="w"> </span>options<span class="o">]</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="w">          </span><span class="o">[</span>-V<span class="w"> </span>validity_interval<span class="o">]</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="w">           </span>public_key_file
 </code></pre></div>
 <p>For example:</p>
-<div class="highlight"><pre><span></span><code>ssh-keygen<span class="w"> </span>-s<span class="w"> </span>/path/to/ssh_ca<span class="w"> </span>-I<span class="w"> </span><span class="s2">&quot;Yifan Gao&quot;</span><span class="w"> </span>-n<span class="w"> </span>yifan<span class="w"> </span>-V<span class="w"> </span>-5m:+365d<span class="w"> </span>yifan.pub
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>ssh-keygen<span class="w"> </span>-s<span class="w"> </span>/path/to/ssh_ca<span class="w"> </span>-I<span class="w"> </span><span class="s2">&quot;Yifan Gao&quot;</span><span class="w"> </span>-n<span class="w"> </span>yifan<span class="w"> </span>-V<span class="w"> </span>-5m:+365d<span class="w"> </span>yifan.pub
 </code></pre></div>
 <p>In general, <em>certificate_identity</em> is the user's full name, and <em>principals</em> is the system username. The certificate identity is used to identify certificates and is logged in system logs. In addition, one certificate can carry multiply <em>principals</em>, like:</p>
-<div class="highlight"><pre><span></span><code>ssh-keygen<span class="w"> </span>-s<span class="w"> </span>/path/to/ssh_ca<span class="w"> </span>-I<span class="w"> </span><span class="s2">&quot;Yifan Gao&quot;</span><span class="w"> </span>-n<span class="w"> </span>yifan,root,liims<span class="w"> </span>-V<span class="w"> </span>-5m:+365d<span class="w"> </span>yifan.pub
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>ssh-keygen<span class="w"> </span>-s<span class="w"> </span>/path/to/ssh_ca<span class="w"> </span>-I<span class="w"> </span><span class="s2">&quot;Yifan Gao&quot;</span><span class="w"> </span>-n<span class="w"> </span>yifan,root,liims<span class="w"> </span>-V<span class="w"> </span>-5m:+365d<span class="w"> </span>yifan.pub
 </code></pre></div>
 <p>It authorizes the certificate owner to login to any server as <code>yifan</code>, <code>root</code> or <code>liims</code> user.</p>
 <div class="admonition note">

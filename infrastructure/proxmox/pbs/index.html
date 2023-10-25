@@ -2422,9 +2422,9 @@
 <h2 id="pbs">安装 PBS<a class="headerlink" href="#pbs" title="Permanent link">&para;</a></h2>
 <p>PBS 可以使用安装光盘 iso 安装或直接加装在现有的对应版本的 Debian 系统上，这两种安装方式都有官方的<a href="https://pbs.proxmox.com/docs/installation.html">说明文档</a>。</p>
 <p>我们的 esxi-5 是使用 PVE 的安装盘先装成 PVE，再在上面额外加装 PBS 的。由于 PVE 和 PBS 共享了大量组件，因此在 PVE 上加装 PBS 就只剩下很简单的一些步骤了：</p>
-<div class="highlight"><pre><span></span><code><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;deb http://mirrors.ustc.edu.cn/proxmox/debian/pbs bullseye pbs-no-subscription&quot;</span><span class="w"> </span>&gt;<span class="w"> </span>/etc/apt/sources.list.d/pbs.list
-apt<span class="w"> </span>update
-apt<span class="w"> </span>install<span class="w"> </span>proxmox-backup
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;deb http://mirrors.ustc.edu.cn/proxmox/debian/pbs bullseye pbs-no-subscription&quot;</span><span class="w"> </span>&gt;<span class="w"> </span>/etc/apt/sources.list.d/pbs.list
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>apt<span class="w"> </span>update
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>apt<span class="w"> </span>install<span class="w"> </span>proxmox-backup
 </code></pre></div>
 <p>该过程仅安装了总量为 150+ MB 的 8 个包，就有 PBS 可用了。</p>
 <h2 id="pbs-new-user">创建新用户<a class="headerlink" href="#pbs-new-user" title="Permanent link">&para;</a></h2>

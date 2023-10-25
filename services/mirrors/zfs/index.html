@@ -2498,34 +2498,34 @@
 <h1 id="zfs">ZFS<a class="headerlink" href="#zfs" title="Permanent link">&para;</a></h1>
 <h2 id="configuration">Configuration<a class="headerlink" href="#configuration" title="Permanent link">&para;</a></h2>
 <p><em>/etc/modprobe.d/zfs.conf</em></p>
-<div class="highlight"><pre><span></span><code>options zfs zfs_arc_max=137438953472
-options zfs l2arc_write_max=52428800
-options zfs zfs_arc_meta_min=17179869184
-options zfs l2arc_noprefetch=0
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>options zfs zfs_arc_max=137438953472
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>options zfs l2arc_write_max=52428800
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>options zfs zfs_arc_meta_min=17179869184
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>options zfs l2arc_noprefetch=0
 </code></pre></div>
 <p>refer to <code>man zfs-module-parameters</code>.</p>
 <h2 id="common-operations">Common Operations<a class="headerlink" href="#common-operations" title="Permanent link">&para;</a></h2>
 <h3 id="get-zpool-status">Get zpool status<a class="headerlink" href="#get-zpool-status" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code>zpool<span class="w"> </span>status
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>zpool<span class="w"> </span>status
 </code></pre></div>
 <h3 id="get-io-status">Get IO status<a class="headerlink" href="#get-io-status" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code>zpool<span class="w"> </span>iostat<span class="w"> </span>-v<span class="w"> </span><span class="m">1</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>zpool<span class="w"> </span>iostat<span class="w"> </span>-v<span class="w"> </span><span class="m">1</span>
 </code></pre></div>
 <h3 id="replace-disk">Replace Disk<a class="headerlink" href="#replace-disk" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code>zpool<span class="w"> </span>replace<span class="w"> </span>pool0<span class="w"> </span>old-disk<span class="w"> </span>new-disk
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>zpool<span class="w"> </span>replace<span class="w"> </span>pool0<span class="w"> </span>old-disk<span class="w"> </span>new-disk
 </code></pre></div>
 <h3 id="new-zfs-file-system">New ZFS file system<a class="headerlink" href="#new-zfs-file-system" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code>zfs<span class="w"> </span>create<span class="w"> </span><span class="o">[</span>-o<span class="w"> </span><span class="nv">mountpoint</span><span class="o">=</span><span class="nv">$mountpoint</span><span class="o">]</span><span class="w"> </span><span class="nv">$filesystem</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>zfs<span class="w"> </span>create<span class="w"> </span><span class="o">[</span>-o<span class="w"> </span><span class="nv">mountpoint</span><span class="o">=</span><span class="nv">$mountpoint</span><span class="o">]</span><span class="w"> </span><span class="nv">$filesystem</span>
 </code></pre></div>
 <p>Example:</p>
-<div class="highlight"><pre><span></span><code>zfs<span class="w"> </span>create<span class="w"> </span>-o<span class="w"> </span><span class="nv">mountpoint</span><span class="o">=</span>/srv/repo/debian<span class="w"> </span>pool0/repo/debian
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>zfs<span class="w"> </span>create<span class="w"> </span>-o<span class="w"> </span><span class="nv">mountpoint</span><span class="o">=</span>/srv/repo/debian<span class="w"> </span>pool0/repo/debian
 </code></pre></div>
 <p>If mountpoint is not specified, then it's inherited from the parent with a subpath appended, e.g. when <code>pool0/example</code> is mounted on <code>/mnt/haha</code> then <code>pool0/example/test</code> will by default mount on <code>/mnt/haha/test</code>.</p>
 <h3 id="destory-zfs-file-system">Destory ZFS file system<a class="headerlink" href="#destory-zfs-file-system" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code>zfs<span class="w"> </span>destroy<span class="w"> </span><span class="nv">$filesystem</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>zfs<span class="w"> </span>destroy<span class="w"> </span><span class="nv">$filesystem</span>
 </code></pre></div>
 <p>Example:</p>
-<div class="highlight"><pre><span></span><code>zfs<span class="w"> </span>destroy<span class="w"> </span>pool0/repo/debian
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>zfs<span class="w"> </span>destroy<span class="w"> </span>pool0/repo/debian
 </code></pre></div>
 <h3 id="traps">Traps<a class="headerlink" href="#traps" title="Permanent link">&para;</a></h3>
 <p><del>Do <strong>NOT</strong> install <code>zfs-dkms</code> and related packages from Debian backports repositories. They'll easily break when upgrading.</del></p>

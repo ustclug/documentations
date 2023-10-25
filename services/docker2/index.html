@@ -2512,9 +2512,9 @@
 <h2 id="special-configurations">Special configurations<a class="headerlink" href="#special-configurations" title="Permanent link">&para;</a></h2>
 <h3 id="network-interfaces">Network interfaces<a class="headerlink" href="#network-interfaces" title="Permanent link">&para;</a></h3>
 <p>We use udev rules to assign consistent names to network interfaces, identified by their MAC addresses.</p>
-<div class="highlight"><span class="filename">/etc/udev/rules.d/70-persistent-net.rules</span><pre><span></span><code><span class="na">SUBSYSTEM</span><span class="o">=</span><span class="s">=&quot;net&quot;, ACTION==&quot;add&quot;, DRIVERS==&quot;?*&quot;, ATTR{address}==&quot;00:50:56:9f:00:22&quot;, NAME=&quot;Telecom&quot;</span>
-<span class="na">SUBSYSTEM</span><span class="o">=</span><span class="s">=&quot;net&quot;, ACTION==&quot;add&quot;, DRIVERS==&quot;?*&quot;, ATTR{address}==&quot;00:50:56:9f:00:5b&quot;, NAME=&quot;Mobile&quot;</span>
-<span class="na">SUBSYSTEM</span><span class="o">=</span><span class="s">=&quot;net&quot;, ACTION==&quot;add&quot;, DRIVERS==&quot;?*&quot;, ATTR{address}==&quot;00:50:56:9f:00:5d&quot;, NAME=&quot;ustclug&quot;</span>
+<div class="highlight"><span class="filename">/etc/udev/rules.d/70-persistent-net.rules</span><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="na">SUBSYSTEM</span><span class="o">=</span><span class="s">=&quot;net&quot;, ACTION==&quot;add&quot;, DRIVERS==&quot;?*&quot;, ATTR{address}==&quot;00:50:56:9f:00:22&quot;, NAME=&quot;Telecom&quot;</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="na">SUBSYSTEM</span><span class="o">=</span><span class="s">=&quot;net&quot;, ACTION==&quot;add&quot;, DRIVERS==&quot;?*&quot;, ATTR{address}==&quot;00:50:56:9f:00:5b&quot;, NAME=&quot;Mobile&quot;</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="na">SUBSYSTEM</span><span class="o">=</span><span class="s">=&quot;net&quot;, ACTION==&quot;add&quot;, DRIVERS==&quot;?*&quot;, ATTR{address}==&quot;00:50:56:9f:00:5d&quot;, NAME=&quot;ustclug&quot;</span>
 </code></pre></div>
 <p>We then refer to these interfaces using their new names in <code>/etc/network/interfaces</code> to ensure consistent network configuration.</p>
 <div class="admonition note">
@@ -2524,23 +2524,23 @@
 <li>将 <code>/etc/udev/rules.d/70-persistent-net.rules</code> 中 <code>Policy</code> 更名为 <code>ustclug</code>；</li>
 <li>
 <p>在 <code>/etc/network/interfaces</code> 中设置 <code>Policy</code> 和 <code>ustclug</code> 两个 interface 的相关配置如下：</p>
-<div class="highlight"><pre><span></span><code>auto Policy
-iface Policy inet static
-    address 10.254.0.16/21
-    pre-up ip link add $IFACE link ustclug type macvlan mode bridge
-    post-down ip link del $IFACE
-
-auto ustclug
-iface ustclug inet manual
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>auto Policy
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>iface Policy inet static
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>    address 10.254.0.16/21
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>    pre-up ip link add $IFACE link ustclug type macvlan mode bridge
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>    post-down ip link del $IFACE
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>auto ustclug
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>iface ustclug inet manual
 </code></pre></div>
 </li>
 </ol>
 </div>
 <h3 id="docker-daemon-service">Docker daemon service<a class="headerlink" href="#docker-daemon-service" title="Permanent link">&para;</a></h3>
 <p>docker2 上面的 Docker 使用 macvlan 来将虚拟机接入 lugi 内网，因此将 macvlan 的主端口 Policy 配置为 <code>docker.service</code> 的强依赖。</p>
-<div class="highlight"><span class="filename">systemctl edit docker.service</span><pre><span></span><code><span class="k">[Unit]</span>
-<span class="na">BindsTo</span><span class="o">=</span><span class="s">sys-subsystem-net-devices-Policy.device</span>
-<span class="na">After</span><span class="o">=</span><span class="s">sys-subsystem-net-devices-Policy.device</span>
+<div class="highlight"><span class="filename">systemctl edit docker.service</span><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="k">[Unit]</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="na">BindsTo</span><span class="o">=</span><span class="s">sys-subsystem-net-devices-Policy.device</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="na">After</span><span class="o">=</span><span class="s">sys-subsystem-net-devices-Policy.device</span>
 </code></pre></div>
 <p>实际上 <code>After=network-online.target</code> 就够了，但是出于历史原因使用了 <code>BindsTo</code> 强依赖内网端口，这是因为 docker2 曾经单独运行 tinc 接入内网，而 tinc 的端口只在 tinc 启动后才会出现（才能分出 macvlan 子端口），因此使用 <code>BindsTo</code> 保证 docker 随该端口的出现和消失而启动/停止。</p>
 <p>2022 年 1 月 15 日以后 docker2 与其他虚拟机一样通过 gateway-nic 桥接的 tinc 接入内网，不再单独运行 tinc。</p>
@@ -2555,24 +2555,24 @@ iface ustclug inet manual
 </div>
 <p>出于未知原因有时候外部主机会无法主动连通 Docker 容器（可能与 ARP 有关），但是如果某个容器先 ping 了一下外部主机，就能双向连通了。</p>
 <p>由于我们暂未找到正常的解决方案，因此使用 “ping daemon” 作为一个 workaround，在容器中运行 ping 保持外部主机的连通性。</p>
-<div class="highlight"><span class="filename">docker-pingd@.service</span><pre><span></span><code><span class="k">[Unit]</span>
-<span class="na">Description</span><span class="o">=</span><span class="s">Docker pingd service %I</span>
-<span class="na">Documentation</span><span class="o">=</span><span class="s">man:ping(8)</span>
-<span class="na">After</span><span class="o">=</span><span class="s">network.target</span>
-<span class="na">StartLimitIntervalSec</span><span class="o">=</span><span class="s">0</span>
-
-<span class="k">[Service]</span>
-<span class="na">Type</span><span class="o">=</span><span class="s">simple</span>
-<span class="na">User</span><span class="o">=</span><span class="s">root</span>
-<span class="na">Group</span><span class="o">=</span><span class="s">root</span>
-<span class="na">ExecStart</span><span class="o">=</span><span class="s">/bin/sh -c &#39;IVAR=&quot;%i&quot;</span><span class="c1">; exec /usr/bin/docker exec &quot;$${IVAR%:*}&quot; ping -q -s 32 &quot;$${IVAR#*:}&quot;&#39;</span>
-<span class="na">ExecStop</span><span class="o">=</span><span class="s">/bin/kill -s INT $MAINPID</span>
-<span class="na">Restart</span><span class="o">=</span><span class="s">on-failure</span>
-<span class="na">RestartSec</span><span class="o">=</span><span class="s">3</span>
-
-<span class="k">[Install]</span>
-<span class="na">WantedBy</span><span class="o">=</span><span class="s">multi-user.target</span>
-<span class="na">Alias</span><span class="o">=</span><span class="s">docker-ping@.service</span>
+<div class="highlight"><span class="filename">docker-pingd@.service</span><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="k">[Unit]</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="na">Description</span><span class="o">=</span><span class="s">Docker pingd service %I</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="na">Documentation</span><span class="o">=</span><span class="s">man:ping(8)</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="na">After</span><span class="o">=</span><span class="s">network.target</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="na">StartLimitIntervalSec</span><span class="o">=</span><span class="s">0</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="k">[Service]</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="na">Type</span><span class="o">=</span><span class="s">simple</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="na">User</span><span class="o">=</span><span class="s">root</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="na">Group</span><span class="o">=</span><span class="s">root</span>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="na">ExecStart</span><span class="o">=</span><span class="s">/bin/sh -c &#39;IVAR=&quot;%i&quot;</span><span class="c1">; exec /usr/bin/docker exec &quot;$${IVAR%:*}&quot; ping -q -s 32 &quot;$${IVAR#*:}&quot;&#39;</span>
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="na">ExecStop</span><span class="o">=</span><span class="s">/bin/kill -s INT $MAINPID</span>
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="na">Restart</span><span class="o">=</span><span class="s">on-failure</span>
+<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="na">RestartSec</span><span class="o">=</span><span class="s">3</span>
+<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a>
+<a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a><span class="k">[Install]</span>
+<a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a><span class="na">WantedBy</span><span class="o">=</span><span class="s">multi-user.target</span>
+<a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a><span class="na">Alias</span><span class="o">=</span><span class="s">docker-ping@.service</span>
 </code></pre></div>
 <p>使用方式：<code>systemctl enable docker-pingd@container:host.service</code>，<code>container</code> 换成容器名，<code>host</code> 换成 ping 的目标。</p>
 <p>Trick 介绍：Systemd service 配置暂不支持多个模板参数 <code>%i</code>，因此调用 shell 来解析参数。Ref: <a href="https://github.com/systemd/systemd/issues/14895#issuecomment-612270690">https://github.com/systemd/systemd/issues/14895#issuecomment-612270690</a></p>
@@ -2583,10 +2583,10 @@ iface ustclug inet manual
 </div>
 <p>servers 与旧 planet 使用 WordPress，托管在 docker2 上。<s>因为 docker2 现在磁盘 IO 很慢，所以可能会出现一些额外的问题。</s></p>
 <p>推荐使用 <a href="https://wp-cli.org/#installing">https://wp-cli.org/#installing</a>。命令：</p>
-<div class="highlight"><pre><span></span><code>chmod<span class="w"> </span>+x<span class="w"> </span>wp-cli.phar
-mv<span class="w"> </span>wp-cli.phar<span class="w"> </span>/usr/local/bin/wp
-<span class="nb">cd</span><span class="w"> </span>/var/www/public/
-sudo<span class="w"> </span>-u<span class="w"> </span>www-data<span class="w"> </span>--<span class="w"> </span>wp<span class="w"> </span>core<span class="w"> </span>update<span class="w"> </span>--version<span class="o">=</span><span class="m">5</span>.8.1<span class="w"> </span>/tmp/wordpress-5.8.1.zip
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>chmod<span class="w"> </span>+x<span class="w"> </span>wp-cli.phar
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>mv<span class="w"> </span>wp-cli.phar<span class="w"> </span>/usr/local/bin/wp
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="nb">cd</span><span class="w"> </span>/var/www/public/
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>sudo<span class="w"> </span>-u<span class="w"> </span>www-data<span class="w"> </span>--<span class="w"> </span>wp<span class="w"> </span>core<span class="w"> </span>update<span class="w"> </span>--version<span class="o">=</span><span class="m">5</span>.8.1<span class="w"> </span>/tmp/wordpress-5.8.1.zip
 </code></pre></div>
 <p>容器里 sudo 要手动装。</p>
 <p>以下内容仅供参考。</p>
@@ -2596,7 +2596,7 @@ sudo<span class="w"> </span>-u<span class="w"> </span>www-data<span class="w"> <
 <li>文件 <code>wp-admin/includes/update.php</code>，将函数 <code>get_core_checksums()</code> 中对应的部分修改为 <code>$doing_cron ? 30 : 30</code>。</li>
 </ul>
 <p>如果出现「另一更新正在运行」，且确认不在更新，可以在数据库的 <code>wordpress</code> 表中执行：</p>
-<div class="highlight"><pre><span></span><code><span class="k">DELETE</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">wp_options</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">option_name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;core_updater.lock&#39;</span><span class="p">;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="k">DELETE</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">wp_options</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">option_name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;core_updater.lock&#39;</span><span class="p">;</span>
 </code></pre></div>
 <h3 id="docker">看起来正在运行但是没有进程的 Docker 容器<a class="headerlink" href="#docker" title="Permanent link">&para;</a></h3>
 <p>2021/10/25 发现某容器显示正在运行，但是实际没有进程。后发现为 Docker 的 bug，在容器进程被 cgroups 干掉之后可能会出现此情况。</p>

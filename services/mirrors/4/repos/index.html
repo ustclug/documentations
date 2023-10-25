@@ -2490,65 +2490,65 @@
 <h2 id="_1">添加一个新仓库<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <h3 id="xfs-project">创建 XFS project<a class="headerlink" href="#xfs-project" title="Permanent link">&para;</a></h3>
 <p>为新仓库创建 XFS quota 以便于监视容量。首先检查 <code>/etc/projects</code> 和 <code>/etc/projid</code>，找到大于 1000 的 ID 序列，找出下一个 ID（例如 1111，下面使用这个作为例子）。</p>
-<div class="highlight"><pre><span></span><code>mkdir<span class="w"> </span>/srv/repo/example
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>mkdir<span class="w"> </span>/srv/repo/example
 </code></pre></div>
 <p>编辑 <code>/etc/projects</code>，加入如下一行</p>
-<div class="highlight"><pre><span></span><code>1111:/srv/repo/example
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>1111:/srv/repo/example
 </code></pre></div>
 <p>然后执行：</p>
-<div class="highlight"><pre><span></span><code>xfs_quota<span class="w"> </span>-x<span class="w"> </span>-c<span class="w"> </span><span class="s1">&#39;project -s 1111&#39;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>xfs_quota<span class="w"> </span>-x<span class="w"> </span>-c<span class="w"> </span><span class="s1">&#39;project -s 1111&#39;</span>
 </code></pre></div>
 <p>编辑 <code>/etc/projid</code>，加入如下一行</p>
-<div class="highlight"><pre><span></span><code>example:1111
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>example:1111
 </code></pre></div>
 <div class="admonition info">
 <p class="admonition-title">信息</p>
 <p>我们的镜像管理器 Yuki 根据镜像目录的最后一段名称（即 basename）来从 XFS 中获取容量信息，因此 <code>/etc/projid</code> 文件内容正确才能使 Yuki 得到正确的容量。</p>
 </div>
 <h4 id="_2">便捷配置脚本<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h4>
-<div class="highlight"><pre><span></span><code><span class="ch">#!/bin/bash</span>
-
-<span class="c1"># Determine largest project ID</span>
-next_id<span class="o">()</span><span class="w"> </span><span class="o">{</span>
-<span class="w">  </span><span class="nb">local</span><span class="w"> </span><span class="nv">PROJID</span><span class="o">=</span><span class="k">$(</span>cut<span class="w"> </span>-d<span class="s1">&#39;:&#39;</span><span class="w"> </span>-f1<span class="w"> </span>/etc/projects<span class="w"> </span><span class="p">|</span><span class="w"> </span>sort<span class="w"> </span>-n<span class="w"> </span><span class="p">|</span><span class="w"> </span>tail<span class="w"> </span>-1<span class="k">)</span>
-<span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="k">$((</span><span class="o">++</span><span class="nv">PROJID</span><span class="k">))</span>
-<span class="o">}</span>
-
-<span class="nv">BASE</span><span class="o">=</span><span class="s2">&quot;/srv/repo&quot;</span>
-<span class="nb">readonly</span><span class="w"> </span>BASE
-
-<span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$1</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;-m&quot;</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
-<span class="w">  </span><span class="nv">MKDIR</span><span class="o">=</span>yes
-<span class="w">  </span><span class="nb">shift</span>
-<span class="k">fi</span>
-
-<span class="k">while</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="nv">$#</span><span class="w"> </span>-ne<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">do</span>
-<span class="w">  </span><span class="nv">N</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">1</span><span class="p">//</span><span class="se">\/</span><span class="p">/</span><span class="si">}</span><span class="s2">&quot;</span>
-<span class="w">  </span><span class="nb">shift</span>
-<span class="w">  </span><span class="k">if</span><span class="w"> </span>grep<span class="w"> </span>-q<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$BASE</span><span class="s2">/</span><span class="nv">$N</span><span class="s2">\$&quot;</span><span class="w"> </span>/etc/projects<span class="p">;</span><span class="w"> </span><span class="k">then</span>
-<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Repo </span><span class="nv">$N</span><span class="s2"> exists, skipped.&quot;</span><span class="w"> </span>&gt;<span class="p">&amp;</span><span class="m">2</span>
-<span class="w">    </span><span class="k">continue</span>
-<span class="w">  </span><span class="k">fi</span>
-
-<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>!<span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$BASE</span><span class="s2">/</span><span class="nv">$N</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
-<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>-n<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$MKDIR</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
-<span class="w">      </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Path </span><span class="nv">$BASE</span><span class="s2">/</span><span class="nv">$N</span><span class="s2"> does not exist, creating directory.&quot;</span><span class="w"> </span>&gt;<span class="p">&amp;</span><span class="m">2</span>
-<span class="w">      </span>mkdir<span class="w"> </span>-p<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$BASE</span><span class="s2">/</span><span class="nv">$N</span><span class="s2">&quot;</span>
-<span class="w">    </span><span class="k">else</span>
-<span class="w">      </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Path </span><span class="nv">$BASE</span><span class="s2">/</span><span class="nv">$N</span><span class="s2"> does not exist, ignored.&quot;</span><span class="w"> </span>&gt;<span class="p">&amp;</span><span class="m">2</span>
-<span class="w">      </span><span class="k">continue</span>
-<span class="w">    </span><span class="k">fi</span>
-<span class="w">  </span><span class="k">elif</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>!<span class="w"> </span>-d<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$BASE</span><span class="s2">/</span><span class="nv">$N</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
-<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Path </span><span class="nv">$BASE</span><span class="s2">/</span><span class="nv">$N</span><span class="s2"> is not a directory, ignored.&quot;</span><span class="w"> </span>&gt;<span class="p">&amp;</span><span class="m">2</span>
-<span class="w">    </span><span class="k">continue</span>
-<span class="w">  </span><span class="k">fi</span>
-
-<span class="w">  </span><span class="nv">ID</span><span class="o">=</span><span class="s2">&quot;</span><span class="k">$(</span>next_id<span class="k">)</span><span class="s2">&quot;</span>
-<span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$ID</span><span class="s2">:</span><span class="nv">$BASE</span><span class="s2">/</span><span class="nv">$N</span><span class="s2">&quot;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>/etc/projects
-<span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$N</span><span class="s2">:</span><span class="nv">$ID</span><span class="s2">&quot;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>/etc/projid
-<span class="w">  </span>xfs_quota<span class="w"> </span>-x<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;project -s </span><span class="nv">$ID</span><span class="s2">&quot;</span><span class="w"> </span><span class="p">&amp;</span>&gt;/dev/null
-<span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Added </span><span class="nv">$N</span><span class="s2"> (ID </span><span class="nv">$ID</span><span class="s2">)&quot;</span>
-<span class="k">done</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="ch">#!/bin/bash</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="c1"># Determine largest project ID</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>next_id<span class="o">()</span><span class="w"> </span><span class="o">{</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">  </span><span class="nb">local</span><span class="w"> </span><span class="nv">PROJID</span><span class="o">=</span><span class="k">$(</span>cut<span class="w"> </span>-d<span class="s1">&#39;:&#39;</span><span class="w"> </span>-f1<span class="w"> </span>/etc/projects<span class="w"> </span><span class="p">|</span><span class="w"> </span>sort<span class="w"> </span>-n<span class="w"> </span><span class="p">|</span><span class="w"> </span>tail<span class="w"> </span>-1<span class="k">)</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="k">$((</span><span class="o">++</span><span class="nv">PROJID</span><span class="k">))</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="o">}</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="nv">BASE</span><span class="o">=</span><span class="s2">&quot;/srv/repo&quot;</span>
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="nb">readonly</span><span class="w"> </span>BASE
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a>
+<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$1</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;-m&quot;</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="w">  </span><span class="nv">MKDIR</span><span class="o">=</span>yes
+<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a><span class="w">  </span><span class="nb">shift</span>
+<a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a><span class="k">fi</span>
+<a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a>
+<a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a><span class="k">while</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="nv">$#</span><span class="w"> </span>-ne<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<a id="__codelineno-4-18" name="__codelineno-4-18" href="#__codelineno-4-18"></a><span class="w">  </span><span class="nv">N</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">1</span><span class="p">//</span><span class="se">\/</span><span class="p">/</span><span class="si">}</span><span class="s2">&quot;</span>
+<a id="__codelineno-4-19" name="__codelineno-4-19" href="#__codelineno-4-19"></a><span class="w">  </span><span class="nb">shift</span>
+<a id="__codelineno-4-20" name="__codelineno-4-20" href="#__codelineno-4-20"></a><span class="w">  </span><span class="k">if</span><span class="w"> </span>grep<span class="w"> </span>-q<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$BASE</span><span class="s2">/</span><span class="nv">$N</span><span class="s2">\$&quot;</span><span class="w"> </span>/etc/projects<span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<a id="__codelineno-4-21" name="__codelineno-4-21" href="#__codelineno-4-21"></a><span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Repo </span><span class="nv">$N</span><span class="s2"> exists, skipped.&quot;</span><span class="w"> </span>&gt;<span class="p">&amp;</span><span class="m">2</span>
+<a id="__codelineno-4-22" name="__codelineno-4-22" href="#__codelineno-4-22"></a><span class="w">    </span><span class="k">continue</span>
+<a id="__codelineno-4-23" name="__codelineno-4-23" href="#__codelineno-4-23"></a><span class="w">  </span><span class="k">fi</span>
+<a id="__codelineno-4-24" name="__codelineno-4-24" href="#__codelineno-4-24"></a>
+<a id="__codelineno-4-25" name="__codelineno-4-25" href="#__codelineno-4-25"></a><span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>!<span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$BASE</span><span class="s2">/</span><span class="nv">$N</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<a id="__codelineno-4-26" name="__codelineno-4-26" href="#__codelineno-4-26"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>-n<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$MKDIR</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<a id="__codelineno-4-27" name="__codelineno-4-27" href="#__codelineno-4-27"></a><span class="w">      </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Path </span><span class="nv">$BASE</span><span class="s2">/</span><span class="nv">$N</span><span class="s2"> does not exist, creating directory.&quot;</span><span class="w"> </span>&gt;<span class="p">&amp;</span><span class="m">2</span>
+<a id="__codelineno-4-28" name="__codelineno-4-28" href="#__codelineno-4-28"></a><span class="w">      </span>mkdir<span class="w"> </span>-p<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$BASE</span><span class="s2">/</span><span class="nv">$N</span><span class="s2">&quot;</span>
+<a id="__codelineno-4-29" name="__codelineno-4-29" href="#__codelineno-4-29"></a><span class="w">    </span><span class="k">else</span>
+<a id="__codelineno-4-30" name="__codelineno-4-30" href="#__codelineno-4-30"></a><span class="w">      </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Path </span><span class="nv">$BASE</span><span class="s2">/</span><span class="nv">$N</span><span class="s2"> does not exist, ignored.&quot;</span><span class="w"> </span>&gt;<span class="p">&amp;</span><span class="m">2</span>
+<a id="__codelineno-4-31" name="__codelineno-4-31" href="#__codelineno-4-31"></a><span class="w">      </span><span class="k">continue</span>
+<a id="__codelineno-4-32" name="__codelineno-4-32" href="#__codelineno-4-32"></a><span class="w">    </span><span class="k">fi</span>
+<a id="__codelineno-4-33" name="__codelineno-4-33" href="#__codelineno-4-33"></a><span class="w">  </span><span class="k">elif</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>!<span class="w"> </span>-d<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$BASE</span><span class="s2">/</span><span class="nv">$N</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<a id="__codelineno-4-34" name="__codelineno-4-34" href="#__codelineno-4-34"></a><span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Path </span><span class="nv">$BASE</span><span class="s2">/</span><span class="nv">$N</span><span class="s2"> is not a directory, ignored.&quot;</span><span class="w"> </span>&gt;<span class="p">&amp;</span><span class="m">2</span>
+<a id="__codelineno-4-35" name="__codelineno-4-35" href="#__codelineno-4-35"></a><span class="w">    </span><span class="k">continue</span>
+<a id="__codelineno-4-36" name="__codelineno-4-36" href="#__codelineno-4-36"></a><span class="w">  </span><span class="k">fi</span>
+<a id="__codelineno-4-37" name="__codelineno-4-37" href="#__codelineno-4-37"></a>
+<a id="__codelineno-4-38" name="__codelineno-4-38" href="#__codelineno-4-38"></a><span class="w">  </span><span class="nv">ID</span><span class="o">=</span><span class="s2">&quot;</span><span class="k">$(</span>next_id<span class="k">)</span><span class="s2">&quot;</span>
+<a id="__codelineno-4-39" name="__codelineno-4-39" href="#__codelineno-4-39"></a><span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$ID</span><span class="s2">:</span><span class="nv">$BASE</span><span class="s2">/</span><span class="nv">$N</span><span class="s2">&quot;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>/etc/projects
+<a id="__codelineno-4-40" name="__codelineno-4-40" href="#__codelineno-4-40"></a><span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$N</span><span class="s2">:</span><span class="nv">$ID</span><span class="s2">&quot;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>/etc/projid
+<a id="__codelineno-4-41" name="__codelineno-4-41" href="#__codelineno-4-41"></a><span class="w">  </span>xfs_quota<span class="w"> </span>-x<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;project -s </span><span class="nv">$ID</span><span class="s2">&quot;</span><span class="w"> </span><span class="p">&amp;</span>&gt;/dev/null
+<a id="__codelineno-4-42" name="__codelineno-4-42" href="#__codelineno-4-42"></a><span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Added </span><span class="nv">$N</span><span class="s2"> (ID </span><span class="nv">$ID</span><span class="s2">)&quot;</span>
+<a id="__codelineno-4-43" name="__codelineno-4-43" href="#__codelineno-4-43"></a><span class="k">done</span>
 </code></pre></div>
 <h3 id="_3">添加同步配置<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h3>
 <p>照着 <code>/home/mirror/repos</code> 下的现有文件自己研究一下吧，这个不难。需要注意的就一点，文件名结尾必须是 <code>.yaml</code>（而不能是 <code>.yml</code>），这是 Yuki 代码里写的。</p>
@@ -2558,13 +2558,13 @@ next_id<span class="o">()</span><span class="w"> </span><span class="o">{</span>
 <div class="admonition info">
 <p class="admonition-title">Git 仓库服务的其他相关配置</p>
 <p>部分克隆配置 (See <a href="https://github.com/ustclug/discussions/issues/432">https://github.com/ustclug/discussions/issues/432</a>)：</p>
-<div class="highlight"><span class="filename">/etc/gitconfig</span><pre><span></span><code><span class="k">[uploadpack]</span>
-<span class="w">    </span><span class="na">allowfilter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">true</span>
+<div class="highlight"><span class="filename">/etc/gitconfig</span><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="k">[uploadpack]</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">    </span><span class="na">allowfilter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">true</span>
 </code></pre></div>
 </div>
 <h3 id="quota">查看 quota 情况<a class="headerlink" href="#quota" title="Permanent link">&para;</a></h3>
 <p>运行以下命令：</p>
-<div class="highlight"><pre><span></span><code>xfs_quota -c &#39;df -h&#39;
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>xfs_quota -c &#39;df -h&#39;
 </code></pre></div>
 
 

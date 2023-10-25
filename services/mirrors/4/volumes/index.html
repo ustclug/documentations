@@ -2464,55 +2464,55 @@
 </div>
 <p>操作系统看到三个硬盘：两个 RAID6 大盘（40 TB / 36.4 TiB）和一个 SSD（2 TB / 1.86 TiB）。设两个大盘为 /dev/sda 和 /dev/sdb，SSD 为 /dev/sdc。</p>
 <p>由于启动分区不能放在 LVM 上，因此以如下方式创建分区：</p>
-<div class="highlight"><pre><span></span><code>root@mirrors4:~# fdisk -l /dev/sda
-Disk /dev/sda: 36.4 TiB, 40001177911296 bytes, 78127300608 sectors
-Disk model: MR9361-8i
-Units: sectors of 1 * 512 = 512 bytes
-Sector size (logical/physical): 512 bytes / 4096 bytes
-I/O size (minimum/optimal): 262144 bytes / 262144 bytes
-Disklabel type: gpt
-Disk identifier: AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA
-
-Device       Start         End     Sectors  Size Type
-/dev/sda1     2048        4095        2048    1M BIOS boot
-/dev/sda2     4096     1052671     1048576  512M EFI System
-/dev/sda3  1052672 78127300574 78126247903 36.4T Linux LVM
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>root@mirrors4:~# fdisk -l /dev/sda
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>Disk /dev/sda: 36.4 TiB, 40001177911296 bytes, 78127300608 sectors
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>Disk model: MR9361-8i
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>Units: sectors of 1 * 512 = 512 bytes
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>Sector size (logical/physical): 512 bytes / 4096 bytes
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>I/O size (minimum/optimal): 262144 bytes / 262144 bytes
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>Disklabel type: gpt
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>Disk identifier: AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>Device       Start         End     Sectors  Size Type
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>/dev/sda1     2048        4095        2048    1M BIOS boot
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>/dev/sda2     4096     1052671     1048576  512M EFI System
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>/dev/sda3  1052672 78127300574 78126247903 36.4T Linux LVM
 </code></pre></div>
 <p>sdb 的参数完全一样。</p>
 <p>实际的启动分区为 /dev/sda2，将其 dd 到 /dev/sdb2 做备份。</p>
 <p>然后是 SSD 的分区：</p>
-<div class="highlight"><pre><span></span><code>Disk /dev/sdc: 1.8 TiB, 1919816826880 bytes, 3749642240 sectors
-Disk model: MR9361-8i
-Units: sectors of 1 * 512 = 512 bytes
-Sector size (logical/physical): 512 bytes / 4096 bytes
-I/O size (minimum/optimal): 65536 bytes / 65536 bytes
-Disklabel type: gpt
-Disk identifier: AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA
-
-Device     Start        End    Sectors  Size Type
-/dev/sdc1   2048 3749642206 3749640159  1.8T Linux LVM
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>Disk /dev/sdc: 1.8 TiB, 1919816826880 bytes, 3749642240 sectors
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>Disk model: MR9361-8i
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>Units: sectors of 1 * 512 = 512 bytes
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>Sector size (logical/physical): 512 bytes / 4096 bytes
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>I/O size (minimum/optimal): 65536 bytes / 65536 bytes
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>Disklabel type: gpt
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>Disk identifier: AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>Device     Start        End    Sectors  Size Type
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>/dev/sdc1   2048 3749642206 3749640159  1.8T Linux LVM
 </code></pre></div>
 <h2 id="lvm">LVM<a class="headerlink" href="#lvm" title="Permanent link">&para;</a></h2>
 <p>把 sda3 和 sdb3 都放进 LVM：</p>
-<div class="highlight"><pre><span></span><code><span class="c1"># fdisk 分区完毕，w 写入退出</span>
-pvcreate<span class="w"> </span>/dev/sda3<span class="w"> </span>/dev/sdb3
-vgcreate<span class="w"> </span>lug<span class="w"> </span>/dev/sda3<span class="w"> </span>/dev/sdb3
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># fdisk 分区完毕，w 写入退出</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>pvcreate<span class="w"> </span>/dev/sda3<span class="w"> </span>/dev/sdb3
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>vgcreate<span class="w"> </span>lug<span class="w"> </span>/dev/sda3<span class="w"> </span>/dev/sdb3
 </code></pre></div>
 <p>创建 rootfs，这里以 RAID1 的方式（<code>--type mirror</code> 或 <code>--type raid1</code>）创建这个分区，这样即使 sda / sdb 坏掉一整组之后还有 rootfs 可以用。</p>
-<div class="highlight"><pre><span></span><code>lvcreate<span class="w"> </span>-n<span class="w"> </span>root<span class="w"> </span>-L<span class="w"> </span>32G<span class="w"> </span>--type<span class="w"> </span>mirror<span class="w"> </span>-m<span class="w"> </span><span class="m">2</span><span class="w"> </span>lug
-mkfs.ext4<span class="w"> </span>/dev/lug/root
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>lvcreate<span class="w"> </span>-n<span class="w"> </span>root<span class="w"> </span>-L<span class="w"> </span>32G<span class="w"> </span>--type<span class="w"> </span>mirror<span class="w"> </span>-m<span class="w"> </span><span class="m">2</span><span class="w"> </span>lug
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>mkfs.ext4<span class="w"> </span>/dev/lug/root
 </code></pre></div>
 <p>创建 home，这里反正不怕坏，用 RAID0（<code>--type striped</code> 或 <code>--type raid0</code>）。</p>
-<div class="highlight"><pre><span></span><code>lvcreate<span class="w"> </span>-n<span class="w"> </span>root<span class="w"> </span>-L<span class="w"> </span>64G<span class="w"> </span>--type<span class="w"> </span>striped<span class="w"> </span>-i<span class="w"> </span><span class="m">2</span><span class="w"> </span>lug
-mkfs.ext4<span class="w"> </span>/dev/lug/home
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>lvcreate<span class="w"> </span>-n<span class="w"> </span>root<span class="w"> </span>-L<span class="w"> </span>64G<span class="w"> </span>--type<span class="w"> </span>striped<span class="w"> </span>-i<span class="w"> </span><span class="m">2</span><span class="w"> </span>lug
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>mkfs.ext4<span class="w"> </span>/dev/lug/home
 </code></pre></div>
 <p>创建放镜像的分区，这次要用 xfs</p>
 <div class="admonition warning">
 <p class="admonition-title">XFS 不支持缩小</p>
 <p>因此我们在初装时选择为其分配 48 TiB 的空间，而不是 VG lug 的剩余全部——这样方便以后维护</p>
 </div>
-<div class="highlight"><pre><span></span><code>lvcreate<span class="w"> </span>-n<span class="w"> </span>repo<span class="w"> </span>-L<span class="w"> </span>48T<span class="w"> </span>--type<span class="w"> </span>striped<span class="w"> </span>-i<span class="w"> </span><span class="m">2</span><span class="w"> </span>lug
-mkfs.xfs<span class="w"> </span>/dev/lug/repo
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>lvcreate<span class="w"> </span>-n<span class="w"> </span>repo<span class="w"> </span>-L<span class="w"> </span>48T<span class="w"> </span>--type<span class="w"> </span>striped<span class="w"> </span>-i<span class="w"> </span><span class="m">2</span><span class="w"> </span>lug
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>mkfs.xfs<span class="w"> </span>/dev/lug/repo
 </code></pre></div>
 <p>其实本来要调一下参的，不过根据 <a href="https://wiki.archlinux.org/index.php/XFS#Performance">Arch Wiki</a>，<code>mkfs.xfs</code> 的默认参数就是最优的，所以我们决定不动了。</p>
 <h3 id="ssd">SSD<a class="headerlink" href="#ssd" title="Permanent link">&para;</a></h3>
@@ -2522,19 +2522,19 @@ mkfs.xfs<span class="w"> </span>/dev/lug/repo
 <p>虽然似乎没有这样做（先创建单独的 VG 再合并）的必要，但是这么做一定不会出错，就这样吧。</p>
 </div>
 <p>在 SSD 上新建一个 VG：</p>
-<div class="highlight"><pre><span></span><code><span class="c1"># fdisk 创建唯一一个分区 sdc1，保存退出</span>
-pvcreate<span class="w"> </span>/dev/sdc1
-vgcreate<span class="w"> </span>ssd<span class="w"> </span>/dev/sdc1
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="c1"># fdisk 创建唯一一个分区 sdc1，保存退出</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>pvcreate<span class="w"> </span>/dev/sdc1
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>vgcreate<span class="w"> </span>ssd<span class="w"> </span>/dev/sdc1
 </code></pre></div>
 <p>创建 Docker 数据盘：</p>
-<div class="highlight"><pre><span></span><code>lvcreate<span class="w"> </span>-L<span class="w"> </span>8G<span class="w"> </span>-n<span class="w"> </span>docker<span class="w"> </span>ssd
-mkfs.ext4<span class="w"> </span>/dev/ssd/docker
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>lvcreate<span class="w"> </span>-L<span class="w"> </span>8G<span class="w"> </span>-n<span class="w"> </span>docker<span class="w"> </span>ssd
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>mkfs.ext4<span class="w"> </span>/dev/ssd/docker
 </code></pre></div>
 <p><strong>重要</strong>：创建缓存盘和缓存元数据盘。根据 <a href="https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/6/html/logical_volume_manager_administration/lvm_cache_volume_creation">Red Hat Documentation</a> 的介绍，先手动创建数据盘和元数据盘，然后将他们合并为一个 cache pool。大小方面，文章的参考是 2G data ↔ 12M meta，这里我们有接近 2 TB 的 data，就分配 16 GB 作为 meta 吧。</p>
-<div class="highlight"><pre><span></span><code>lvcreate<span class="w"> </span>-L<span class="w"> </span>16G<span class="w"> </span>-n<span class="w"> </span>mcache_meta<span class="w"> </span>ssd
-lvcreate<span class="w"> </span>-l<span class="w"> </span><span class="m">100</span>%FREE<span class="w"> </span>-n<span class="w"> </span>mcache<span class="w"> </span>ssd
-lvreduce<span class="w"> </span>-l<span class="w"> </span>-2048<span class="w"> </span>ssd/mcache
-lvconvert<span class="w"> </span>--type<span class="w"> </span>cache-pool<span class="w"> </span>--poolmetadata<span class="w"> </span>ssd/mcache_meta<span class="w"> </span>--cachemode<span class="w"> </span>writethrough<span class="w"> </span>-c<span class="w"> </span>1M<span class="w"> </span>--config<span class="w"> </span>allocation/cache_pool_max_chunks<span class="o">=</span><span class="m">2000000</span><span class="w"> </span>ssd/mcache
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>lvcreate<span class="w"> </span>-L<span class="w"> </span>16G<span class="w"> </span>-n<span class="w"> </span>mcache_meta<span class="w"> </span>ssd
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>lvcreate<span class="w"> </span>-l<span class="w"> </span><span class="m">100</span>%FREE<span class="w"> </span>-n<span class="w"> </span>mcache<span class="w"> </span>ssd
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>lvreduce<span class="w"> </span>-l<span class="w"> </span>-2048<span class="w"> </span>ssd/mcache
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>lvconvert<span class="w"> </span>--type<span class="w"> </span>cache-pool<span class="w"> </span>--poolmetadata<span class="w"> </span>ssd/mcache_meta<span class="w"> </span>--cachemode<span class="w"> </span>writethrough<span class="w"> </span>-c<span class="w"> </span>1M<span class="w"> </span>--config<span class="w"> </span>allocation/cache_pool_max_chunks<span class="o">=</span><span class="m">2000000</span><span class="w"> </span>ssd/mcache
 </code></pre></div>
 <p><del>这里的缓存模式采用 passthrough，即写入动作绕过缓存直接写回原设备（当然啦，写入都是由从上游同步产生的），另外两种 writeback 和 writethrough 都会写入缓存，不是我们想要的。</del> passthrough 模式中，读写都会绕过 cache，唯一的作用是 write hit 会使得 cache 对应的块失效。</p>
 <p><del>这里使用 writeback 模式，因为仓库数据没了还能再同步，使用 writeback 提升性能更合适。</del></p>
@@ -2542,7 +2542,7 @@ lvconvert<span class="w"> </span>--type<span class="w"> </span>cache-pool<span c
 <div class="admonition danger">
 <p class="admonition-title">坑</p>
 <p>直接使用 lvconvert(8) 尝试合并会导致吐槽，这是上面 lvreduce(8) 的原因。</p>
-<div class="highlight"><pre><span></span><code>Volume group &quot;ssd&quot; has insufficient free space (0 extents): 2048 required.
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>Volume group &quot;ssd&quot; has insufficient free space (0 extents): 2048 required.
 </code></pre></div>
 </div>
 <div class="admonition note">
@@ -2560,19 +2560,19 @@ lvconvert<span class="w"> </span>--type<span class="w"> </span>cache-pool<span c
 <li>
 <p>当出现 dirty blocks（且 cache policy 为 cleaner 时），无法正常 flush。网络上可以找到的这个 <a href="https://bugzilla.redhat.com/show_bug.cgi?id=1668163">bug</a> 的解决方法是增大 migration_threshold 的值（在新版本 LVM 中，migration_threshold 默认至少会是 chunk size 的 8 倍，在我们的配置下就是 16384 = 2048 * 8。这个版本的 LVM 暂时不在 Buster 中），但是经过测试，单纯增大 migration_threshold 没有任何效果。Jiahao 翻了一下 dm-cache 的源代码，发现 flush 的条件在 <a href="https://elixir.bootlin.com/linux/latest/source/drivers/md/dm-cache-target.c#L1649">https://elixir.bootlin.com/linux/latest/source/drivers/md/dm-cache-target.c#L1649</a>，只在状态为 IDLE 时才会 flush。IDLE 的第一个条件需要 inflight io = 0，比较苛刻，可能是无法正常 flush 的原因。</p>
 <p>一个扭曲的解决方法是：先把 migration_threshold 设置得很大（设大小为 x），然后马上缩小，这样就能把 x 那么多大小的脏块弄掉（原理暂时不明，需要补充）。基于这个方法，可以写一个脚本来做 flush 的工作：</p>
-<div class="highlight"><pre><span></span><code><span class="c1"># dirty hack</span>
-sudo<span class="w"> </span>lvchange<span class="w"> </span>--cachepolicy<span class="w"> </span>cleaner<span class="w"> </span>lug/repo
-<span class="k">for</span><span class="w"> </span>i<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="sb">`</span>seq<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="m">1500</span><span class="sb">`</span><span class="p">;</span><span class="w"> </span><span class="k">do</span><span class="w"> </span>sudo<span class="w"> </span>lvchange<span class="w"> </span>--cachesettings<span class="w"> </span><span class="nv">migration_threshold</span><span class="o">=</span><span class="m">2113536</span><span class="w"> </span>lug/repo<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>sudo<span class="w"> </span>lvchange<span class="w"> </span>--cachesettings<span class="w"> </span><span class="nv">migration_threshold</span><span class="o">=</span><span class="m">16384</span><span class="w"> </span>lug/repo<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="nv">$i</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>sleep<span class="w"> </span><span class="m">15</span><span class="p">;</span><span class="w"> </span><span class="k">done</span><span class="p">;</span>
-<span class="c1"># 需要确认没有脏块。如果还有的话继续执行（次数调小一些）</span>
-<span class="c1"># 如果是从 writeback 切换，需要先把模式切到 writethrough</span>
-<span class="c1"># 然后再修改 cachepolicy 到 smq</span>
-sudo<span class="w"> </span>lvchange<span class="w"> </span>--cachepolicy<span class="w"> </span>smq<span class="w"> </span>lug/repo
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="c1"># dirty hack</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>sudo<span class="w"> </span>lvchange<span class="w"> </span>--cachepolicy<span class="w"> </span>cleaner<span class="w"> </span>lug/repo
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="k">for</span><span class="w"> </span>i<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="sb">`</span>seq<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="m">1500</span><span class="sb">`</span><span class="p">;</span><span class="w"> </span><span class="k">do</span><span class="w"> </span>sudo<span class="w"> </span>lvchange<span class="w"> </span>--cachesettings<span class="w"> </span><span class="nv">migration_threshold</span><span class="o">=</span><span class="m">2113536</span><span class="w"> </span>lug/repo<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>sudo<span class="w"> </span>lvchange<span class="w"> </span>--cachesettings<span class="w"> </span><span class="nv">migration_threshold</span><span class="o">=</span><span class="m">16384</span><span class="w"> </span>lug/repo<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="nv">$i</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>sleep<span class="w"> </span><span class="m">15</span><span class="p">;</span><span class="w"> </span><span class="k">done</span><span class="p">;</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="c1"># 需要确认没有脏块。如果还有的话继续执行（次数调小一些）</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="c1"># 如果是从 writeback 切换，需要先把模式切到 writethrough</span>
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="c1"># 然后再修改 cachepolicy 到 smq</span>
+<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a>sudo<span class="w"> </span>lvchange<span class="w"> </span>--cachepolicy<span class="w"> </span>smq<span class="w"> </span>lug/repo
 </code></pre></div>
 <p>在执行时，可以查看：</p>
-<div class="highlight"><pre><span></span><code>sudo<span class="w"> </span>dmsetup<span class="w"> </span>status<span class="w"> </span>lug-repo
-<span class="c1"># 在 &quot;metadata2&quot; 前面的前面的数字就是 dirty block 的数量</span>
-<span class="c1"># 如果不在执行 lvchange（没有进程抢占了 LVM 的锁），可以执行以下命令确认脏块数量以及其他一些参数。</span>
-sudo<span class="w"> </span>lvs<span class="w"> </span>-o<span class="w"> </span>name,cache_policy,cache_settings,chunk_size,cache_used_blocks,cache_dirty_blocks<span class="w"> </span>/dev/mapper/lug-repo
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>sudo<span class="w"> </span>dmsetup<span class="w"> </span>status<span class="w"> </span>lug-repo
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="c1"># 在 &quot;metadata2&quot; 前面的前面的数字就是 dirty block 的数量</span>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="c1"># 如果不在执行 lvchange（没有进程抢占了 LVM 的锁），可以执行以下命令确认脏块数量以及其他一些参数。</span>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>sudo<span class="w"> </span>lvs<span class="w"> </span>-o<span class="w"> </span>name,cache_policy,cache_settings,chunk_size,cache_used_blocks,cache_dirty_blocks<span class="w"> </span>/dev/mapper/lug-repo
 </code></pre></div>
 </li>
 <li>
@@ -2587,53 +2587,53 @@ sudo<span class="w"> </span>lvs<span class="w"> </span>-o<span class="w"> </span
 <p>临时修复版本：<a href="https://github.com/taoky/grub/releases/tag/2.02%2Bdfsg1-20%2Bdeb10u4taoky3_amd64">https://github.com/taoky/grub/releases/tag/2.02%2Bdfsg1-20%2Bdeb10u4taoky3_amd64</a>。目前已部署，且设置了 <code>apt hold</code>。</p>
 </div>
 <p>所以接下来要合并 VG，然后才能为仓库卷加上缓存。</p>
-<div class="highlight"><pre><span></span><code>lvchange<span class="w"> </span>-a<span class="w"> </span>n<span class="w"> </span>ssd/docker
-vgmerge<span class="w"> </span>lug<span class="w"> </span>ssd
-lvconvert<span class="w"> </span>--type<span class="w"> </span>cache<span class="w"> </span>--cachepool<span class="w"> </span>lug/mcache<span class="w"> </span>lug/repo
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>lvchange<span class="w"> </span>-a<span class="w"> </span>n<span class="w"> </span>ssd/docker
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>vgmerge<span class="w"> </span>lug<span class="w"> </span>ssd
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>lvconvert<span class="w"> </span>--type<span class="w"> </span>cache<span class="w"> </span>--cachepool<span class="w"> </span>lug/mcache<span class="w"> </span>lug/repo
 </code></pre></div>
 <p>接下来挂上 Docker 卷（注意 VG 名已经从 ssd 变成了 lug）：</p>
-<div class="highlight"><pre><span></span><code>lvchange<span class="w"> </span>-a<span class="w"> </span>y<span class="w"> </span>lug/docker
-mount<span class="w"> </span>/dev/lug/docker<span class="w"> </span>/var/lib/docker
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>lvchange<span class="w"> </span>-a<span class="w"> </span>y<span class="w"> </span>lug/docker
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>mount<span class="w"> </span>/dev/lug/docker<span class="w"> </span>/var/lib/docker
 </code></pre></div>
 <h3 id="repo">repo 扩容<a class="headerlink" href="#repo" title="Permanent link">&para;</a></h3>
 <p>查看当前逻辑卷信息：</p>
-<div class="highlight"><pre><span></span><code># lvs -a -o +devices
-  LV              VG  Attr       LSize   Pool     Origin       Data%  Meta%  Move Log         Cpy%Sync Convert Devices
-  backup          lug -wi-ao----   8.00g                                                                       /dev/sda3(6307840)
-  docker          lug -wi-ao----  64.00g                                                                       /dev/sdc1(0)
-  docker2         lug -wi-a----- 300.00g                                                                       /dev/sda3(7925248)
-  home            lug -wi-ao----  64.00g                                                                       /dev/sda3(8192),/dev/sdb3(8193)
-  log             lug -wi-ao---- 300.00g                                                                       /dev/sda3(6309888),/dev/sdb3(6307841)
-  log             lug -wi-ao---- 300.00g                                                                       /dev/sda3(7888896),/dev/sdb3(7882753)
-  [lvol0_pmspare] lug ewi-------  16.00g                                                                       /dev/sda3(7884800)
-  [mcache]        lug Cwi---C---   1.50t                       99.99  0.12                    0.00             mcache_cdata(0)
-  [mcache_cdata]  lug Cwi-ao----   1.50t                                                                       /dev/sdc1(20480)
-  [mcache_cmeta]  lug ewi-ao----  16.00g                                                                       /dev/sdc1(16384)
-  repo            lug Cwi-aoC---  60.00t [mcache] [repo_corig] 99.99  0.12                    0.00             repo_corig(0)
-  [repo_corig]    lug owi-aoC---  60.00t                                                                       /dev/sda3(16384),/dev/sdb3(16385)
-  [repo_corig]    lug owi-aoC---  60.00t                                                                       /dev/sda3(6311936),/dev/sdb3(6309889)
-  root            lug mwi-aom---  32.00g                                          [root_mlog] 100.00           root_mimage_0(0),root_mimage_1(0)
-  [root_mimage_0] lug iwi-aom---  32.00g                                                                       /dev/sda3(0)
-  [root_mimage_1] lug iwi-aom---  32.00g                                                                       /dev/sdb3(0)
-  [root_mlog]     lug lwi-aom---   4.00m                                                                       /dev/sdb3(8192)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a># lvs -a -o +devices
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>  LV              VG  Attr       LSize   Pool     Origin       Data%  Meta%  Move Log         Cpy%Sync Convert Devices
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>  backup          lug -wi-ao----   8.00g                                                                       /dev/sda3(6307840)
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a>  docker          lug -wi-ao----  64.00g                                                                       /dev/sdc1(0)
+<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a>  docker2         lug -wi-a----- 300.00g                                                                       /dev/sda3(7925248)
+<a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a>  home            lug -wi-ao----  64.00g                                                                       /dev/sda3(8192),/dev/sdb3(8193)
+<a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a>  log             lug -wi-ao---- 300.00g                                                                       /dev/sda3(6309888),/dev/sdb3(6307841)
+<a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a>  log             lug -wi-ao---- 300.00g                                                                       /dev/sda3(7888896),/dev/sdb3(7882753)
+<a id="__codelineno-14-9" name="__codelineno-14-9" href="#__codelineno-14-9"></a>  [lvol0_pmspare] lug ewi-------  16.00g                                                                       /dev/sda3(7884800)
+<a id="__codelineno-14-10" name="__codelineno-14-10" href="#__codelineno-14-10"></a>  [mcache]        lug Cwi---C---   1.50t                       99.99  0.12                    0.00             mcache_cdata(0)
+<a id="__codelineno-14-11" name="__codelineno-14-11" href="#__codelineno-14-11"></a>  [mcache_cdata]  lug Cwi-ao----   1.50t                                                                       /dev/sdc1(20480)
+<a id="__codelineno-14-12" name="__codelineno-14-12" href="#__codelineno-14-12"></a>  [mcache_cmeta]  lug ewi-ao----  16.00g                                                                       /dev/sdc1(16384)
+<a id="__codelineno-14-13" name="__codelineno-14-13" href="#__codelineno-14-13"></a>  repo            lug Cwi-aoC---  60.00t [mcache] [repo_corig] 99.99  0.12                    0.00             repo_corig(0)
+<a id="__codelineno-14-14" name="__codelineno-14-14" href="#__codelineno-14-14"></a>  [repo_corig]    lug owi-aoC---  60.00t                                                                       /dev/sda3(16384),/dev/sdb3(16385)
+<a id="__codelineno-14-15" name="__codelineno-14-15" href="#__codelineno-14-15"></a>  [repo_corig]    lug owi-aoC---  60.00t                                                                       /dev/sda3(6311936),/dev/sdb3(6309889)
+<a id="__codelineno-14-16" name="__codelineno-14-16" href="#__codelineno-14-16"></a>  root            lug mwi-aom---  32.00g                                          [root_mlog] 100.00           root_mimage_0(0),root_mimage_1(0)
+<a id="__codelineno-14-17" name="__codelineno-14-17" href="#__codelineno-14-17"></a>  [root_mimage_0] lug iwi-aom---  32.00g                                                                       /dev/sda3(0)
+<a id="__codelineno-14-18" name="__codelineno-14-18" href="#__codelineno-14-18"></a>  [root_mimage_1] lug iwi-aom---  32.00g                                                                       /dev/sdb3(0)
+<a id="__codelineno-14-19" name="__codelineno-14-19" href="#__codelineno-14-19"></a>  [root_mlog]     lug lwi-aom---   4.00m                                                                       /dev/sdb3(8192)
 </code></pre></div>
 <p>检查 cache 是否有 dirty block：</p>
-<div class="highlight"><pre><span></span><code>$ sudo lvs -o name,cache_policy,cache_settings,chunk_size,cache_used_blocks,cache_dirty_blocks /dev/mapper/lug-repo
-  LV   CachePolicy CacheSettings Chunk CacheUsedBlocks  CacheDirtyBlocks
-  repo smq                       1.00m          1048551                0
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>$ sudo lvs -o name,cache_policy,cache_settings,chunk_size,cache_used_blocks,cache_dirty_blocks /dev/mapper/lug-repo
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>  LV   CachePolicy CacheSettings Chunk CacheUsedBlocks  CacheDirtyBlocks
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a>  repo smq                       1.00m          1048551                0
 </code></pre></div>
 <p>（正常重启之后可能会出现 dirty block，原因不明。如果看到有的话，那只能 <del>再次进入痛苦的轮回</del> 用上述的方法清除，并且清除的时候对系统负载影响很大，因为落盘的时候其他进程对应的 IO 会被暂停，在相对平衡时间和负载的命令下，估计需要 10 小时的时间。）</p>
 <p>然后 uncache、扩容：</p>
-<div class="highlight"><pre><span></span><code># lvconvert --uncache lug/repo
-# lvextend -L +5T lug/repo
-# xfs_growfs /srv
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a># lvconvert --uncache lug/repo
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a># lvextend -L +5T lug/repo
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a># xfs_growfs /srv
 </code></pre></div>
 <p>然后恢复 cache（参考上面 mcache_meta 和 mcache 逻辑卷的配置，<strong>请注意在理解命令后再执行</strong>！）：</p>
-<div class="highlight"><pre><span></span><code># lvcreate -L 16G -n mcache_meta lug /dev/sdc1  # SSD 设备路径重启后可能会变化
-# lvcreate -l 100%FREE -n mcache lug /dev/sdc1
-# lvreduce -l -2048 lug/mcache
-# lvconvert --type cache-pool --poolmetadata lug/mcache_meta --cachemode writethrough -c 1M --config allocation/cache_pool_max_chunks=2000000 lug/mcache
-# lvconvert --type cache --cachepool lug/mcache lug/repo
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a># lvcreate -L 16G -n mcache_meta lug /dev/sdc1  # SSD 设备路径重启后可能会变化
+<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a># lvcreate -l 100%FREE -n mcache lug /dev/sdc1
+<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a># lvreduce -l -2048 lug/mcache
+<a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a># lvconvert --type cache-pool --poolmetadata lug/mcache_meta --cachemode writethrough -c 1M --config allocation/cache_pool_max_chunks=2000000 lug/mcache
+<a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a># lvconvert --type cache --cachepool lug/mcache lug/repo
 </code></pre></div>
 <div class="admonition danger">
 <p class="admonition-title">坑 5</p>
@@ -2641,10 +2641,10 @@ mount<span class="w"> </span>/dev/lug/docker<span class="w"> </span>/var/lib/doc
 </div>
 <h2 id="fstab">fstab<a class="headerlink" href="#fstab" title="Permanent link">&para;</a></h2>
 <p>分区完毕后给 <code>/etc/fstab</code> 补上相关的内容并挂载：</p>
-<div class="highlight"><pre><span></span><code>/dev/mapper/lug-home   /home           ext4 defaults             0 2
-/dev/mapper/lug-docker /var/lib/docker ext4 defaults             0 2
-/dev/mapper/lug-repo   /srv            xfs  defaults,pqnoenforce 0 2
-/dev/mapper/lug-log    /var/log        ext4 defaults             0 2
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>/dev/mapper/lug-home   /home           ext4 defaults             0 2
+<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a>/dev/mapper/lug-docker /var/lib/docker ext4 defaults             0 2
+<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a>/dev/mapper/lug-repo   /srv            xfs  defaults,pqnoenforce 0 2
+<a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a>/dev/mapper/lug-log    /var/log        ext4 defaults             0 2
 </code></pre></div>
 <p>（这个 log 分区前面没提，反正像模像样知道就行了）</p>
 

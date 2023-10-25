@@ -2684,80 +2684,80 @@
 <li>网络信息中心可用的 IP 段为 10.38.95.0/24（网关 95.254）</li>
 </ul>
 <p>Debian 和 Proxmox 的软件更新使用 mirrors.ustc.edu.cn 即可，若有需要访问校外（如 GitHub 等），请写 hosts 并配置路由，以 GitHub 为例：</p>
-<div class="highlight"><pre><span></span><code><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;20.205.243.166 github.com&quot;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>/etc/hosts
-ip<span class="w"> </span>route<span class="w"> </span>replace<span class="w"> </span><span class="m">20</span>.205.243.166<span class="w"> </span>via<span class="w"> </span><span class="o">(</span>?<span class="o">)</span><span class="w"> </span>dev<span class="w"> </span><span class="o">(</span>?<span class="o">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;20.205.243.166 github.com&quot;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>/etc/hosts
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>ip<span class="w"> </span>route<span class="w"> </span>replace<span class="w"> </span><span class="m">20</span>.205.243.166<span class="w"> </span>via<span class="w"> </span><span class="o">(</span>?<span class="o">)</span><span class="w"> </span>dev<span class="w"> </span><span class="o">(</span>?<span class="o">)</span>
 </code></pre></div>
 <p>其中 <code>via</code> 选择 gateway-el 或 gateway-nic 的内网地址，<code>dev</code> 选择桥接内网的 vmbr。</p>
 <h3 id="pve-firewall">防火墙<a class="headerlink" href="#pve-firewall" title="Permanent link">&para;</a></h3>
 <p>我们不使用 Proxmox 自带的防火墙功能，但 pve-firewall 仍然会尝试部署或恢复防火墙设置，因此需要禁用相关设置及服务：</p>
-<div class="highlight"><span class="filename">/etc/pve/nodes/$(hostname -s)/host.fw</span><pre><span></span><code><span class="k">[OPTIONS]</span>
-<span class="na">enable</span><span class="o">:</span><span class="w"> </span><span class="s">0</span>
+<div class="highlight"><span class="filename">/etc/pve/nodes/$(hostname -s)/host.fw</span><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="k">[OPTIONS]</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="na">enable</span><span class="o">:</span><span class="w"> </span><span class="s">0</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code>systemctl<span class="w"> </span>stop<span class="w"> </span>pve-firewall.service
-systemctl<span class="w"> </span>disable<span class="w"> </span>pve-firewall.service
-systemctl<span class="w"> </span>mask<span class="w"> </span>pve-firewall.service
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>systemctl<span class="w"> </span>stop<span class="w"> </span>pve-firewall.service
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>systemctl<span class="w"> </span>disable<span class="w"> </span>pve-firewall.service
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>systemctl<span class="w"> </span>mask<span class="w"> </span>pve-firewall.service
 </code></pre></div>
 <p><strong>可选内容</strong>：同时安装 <code>iptables-persistent</code> 软件包，并利用 iptables 将 443 端口转发到 8006 端口方便使用。</p>
-<div class="highlight"><pre><span></span><code>update-alternatives<span class="w"> </span>--set<span class="w"> </span>iptables<span class="w"> </span>/usr/sbin/iptables-nft
-update-alternatives<span class="w"> </span>--set<span class="w"> </span>ip6tables<span class="w"> </span>/usr/sbin/ip6tables-nft
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>update-alternatives<span class="w"> </span>--set<span class="w"> </span>iptables<span class="w"> </span>/usr/sbin/iptables-nft
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>update-alternatives<span class="w"> </span>--set<span class="w"> </span>ip6tables<span class="w"> </span>/usr/sbin/ip6tables-nft
 </code></pre></div>
-<div class="highlight"><span class="filename">/etc/iptables/rules.v4</span><pre><span></span><code>*nat
-PREROUTING<span class="w"> </span>ACCEPT<span class="w"> </span><span class="o">[</span><span class="m">0</span>:0<span class="o">]</span>
-INPUT<span class="w"> </span>ACCEPT<span class="w"> </span><span class="o">[</span><span class="m">0</span>:0<span class="o">]</span>
-OUTPUT<span class="w"> </span>ACCEPT<span class="w"> </span><span class="o">[</span><span class="m">0</span>:0<span class="o">]</span>
-POSTROUTING<span class="w"> </span>ACCEPT<span class="w"> </span><span class="o">[</span><span class="m">0</span>:0<span class="o">]</span>
--A<span class="w"> </span>PREROUTING<span class="w"> </span>-p<span class="w"> </span>tcp<span class="w"> </span>--dport<span class="w"> </span><span class="m">443</span><span class="w"> </span>-m<span class="w"> </span>addrtype<span class="w"> </span>--dst-type<span class="w"> </span>LOCAL<span class="w"> </span>-j<span class="w"> </span>REDIRECT<span class="w"> </span>--to-ports<span class="w"> </span><span class="m">8006</span>
-COMMIT
+<div class="highlight"><span class="filename">/etc/iptables/rules.v4</span><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>*nat
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>PREROUTING<span class="w"> </span>ACCEPT<span class="w"> </span><span class="o">[</span><span class="m">0</span>:0<span class="o">]</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>INPUT<span class="w"> </span>ACCEPT<span class="w"> </span><span class="o">[</span><span class="m">0</span>:0<span class="o">]</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>OUTPUT<span class="w"> </span>ACCEPT<span class="w"> </span><span class="o">[</span><span class="m">0</span>:0<span class="o">]</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>POSTROUTING<span class="w"> </span>ACCEPT<span class="w"> </span><span class="o">[</span><span class="m">0</span>:0<span class="o">]</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>-A<span class="w"> </span>PREROUTING<span class="w"> </span>-p<span class="w"> </span>tcp<span class="w"> </span>--dport<span class="w"> </span><span class="m">443</span><span class="w"> </span>-m<span class="w"> </span>addrtype<span class="w"> </span>--dst-type<span class="w"> </span>LOCAL<span class="w"> </span>-j<span class="w"> </span>REDIRECT<span class="w"> </span>--to-ports<span class="w"> </span><span class="m">8006</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>COMMIT
 </code></pre></div>
 <p>删掉 <code>rules.v6</code> 文件，然后运行 <code>systemctl restart netfilter-persistent.service</code> 载入 iptables 规则。</p>
 <h3 id="ntp">NTP 时间<a class="headerlink" href="#ntp" title="Permanent link">&para;</a></h3>
 <p>Proxmox 默认使用 chrony 软件和 Debian 提供的 NTP pool，这些服务器都在校外，使用校园网 IP 无法连通，需要改成校园网的 NTP 服务器：</p>
-<div class="highlight"><span class="filename">/etc/chrony/chrony.conf</span><pre><span></span><code><span class="c1"># Use Debian vendor zone.</span>
-<span class="c1">#pool 2.debian.pool.ntp.org iburst</span>
-server<span class="w"> </span>time.ustc.edu.cn<span class="w"> </span>iburst
+<div class="highlight"><span class="filename">/etc/chrony/chrony.conf</span><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c1"># Use Debian vendor zone.</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="c1">#pool 2.debian.pool.ntp.org iburst</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>server<span class="w"> </span>time.ustc.edu.cn<span class="w"> </span>iburst
 </code></pre></div>
 <p>然后运行 <code>systemctl restart chrony.service</code> 重启服务。</p>
 <h3 id="ssl">SSL 证书<a class="headerlink" href="#ssl" title="Permanent link">&para;</a></h3>
 <p>参见 <a href="../../ssl/">SSL 证书</a>，正好 vdp 上面运行了 LUG FTP 而因此配置了证书的自动更新，利用 vdp 提供的 NFS 服务，我们在 vdp 上的证书更新脚本中添加了将 vm 证书复制到 NFS 目录的功能，然后由 pve-6 部署到各个主机上。</p>
 <p>下面是 pve-6 上的脚本：</p>
-<div class="highlight"><span class="filename">/etc/cron.daily/sync-cert</span><pre><span></span><code><span class="ch">#!/bin/bash -e</span>
-
-<span class="nv">SRC</span><span class="o">=</span><span class="s2">&quot;/etc/pve/nodes/</span><span class="k">$(</span>hostname<span class="w"> </span>-s<span class="k">)</span><span class="s2">&quot;</span>
-<span class="nv">DSTROOT</span><span class="o">=</span><span class="s2">&quot;/etc/pve/nodes&quot;</span>
-<span class="nv">CERTSRC</span><span class="o">=</span><span class="s2">&quot;/mnt/nfs-el/cert&quot;</span>
-
-cp<span class="w"> </span>-u<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$CERTSRC</span><span class="s2">/privkey.pem&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$SRC</span><span class="s2">/pveproxy-ssl.key&quot;</span>
-cp<span class="w"> </span>-u<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$CERTSRC</span><span class="s2">/fullchain.pem&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$SRC</span><span class="s2">/pveproxy-ssl.pem&quot;</span>
-systemctl<span class="w"> </span>reload<span class="w"> </span>pveproxy.service
-
-<span class="k">for</span><span class="w"> </span>DST<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$DSTROOT</span><span class="s2">&quot;</span>/*<span class="p">;</span><span class="w"> </span><span class="k">do</span>
-<span class="w">  </span><span class="o">[</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$DST</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$SRC</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">]</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="k">continue</span>
-<span class="w">  </span><span class="nv">node</span><span class="o">=</span><span class="s2">&quot;</span><span class="k">$(</span>basename<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$DST</span><span class="s2">&quot;</span><span class="k">)</span><span class="s2">&quot;</span>
-<span class="w">  </span>cp<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$SRC</span><span class="s2">/pveproxy-ssl.key&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$SRC</span><span class="s2">/pveproxy-ssl.pem&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$DST</span><span class="s2">/&quot;</span>
-<span class="w">  </span>ssh<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$node</span><span class="s2">&quot;</span><span class="w"> </span><span class="s1">&#39;systemctl reload pveproxy.service&#39;</span><span class="w"> </span><span class="p">&amp;</span>
-<span class="k">done</span>
-<span class="nb">wait</span>
+<div class="highlight"><span class="filename">/etc/cron.daily/sync-cert</span><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="ch">#!/bin/bash -e</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="nv">SRC</span><span class="o">=</span><span class="s2">&quot;/etc/pve/nodes/</span><span class="k">$(</span>hostname<span class="w"> </span>-s<span class="k">)</span><span class="s2">&quot;</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="nv">DSTROOT</span><span class="o">=</span><span class="s2">&quot;/etc/pve/nodes&quot;</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="nv">CERTSRC</span><span class="o">=</span><span class="s2">&quot;/mnt/nfs-el/cert&quot;</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>cp<span class="w"> </span>-u<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$CERTSRC</span><span class="s2">/privkey.pem&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$SRC</span><span class="s2">/pveproxy-ssl.key&quot;</span>
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>cp<span class="w"> </span>-u<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$CERTSRC</span><span class="s2">/fullchain.pem&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$SRC</span><span class="s2">/pveproxy-ssl.pem&quot;</span>
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a>systemctl<span class="w"> </span>reload<span class="w"> </span>pveproxy.service
+<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a>
+<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a><span class="k">for</span><span class="w"> </span>DST<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$DSTROOT</span><span class="s2">&quot;</span>/*<span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a><span class="w">  </span><span class="o">[</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$DST</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$SRC</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">]</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="k">continue</span>
+<a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a><span class="w">  </span><span class="nv">node</span><span class="o">=</span><span class="s2">&quot;</span><span class="k">$(</span>basename<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$DST</span><span class="s2">&quot;</span><span class="k">)</span><span class="s2">&quot;</span>
+<a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a><span class="w">  </span>cp<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$SRC</span><span class="s2">/pveproxy-ssl.key&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$SRC</span><span class="s2">/pveproxy-ssl.pem&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$DST</span><span class="s2">/&quot;</span>
+<a id="__codelineno-6-15" name="__codelineno-6-15" href="#__codelineno-6-15"></a><span class="w">  </span>ssh<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$node</span><span class="s2">&quot;</span><span class="w"> </span><span class="s1">&#39;systemctl reload pveproxy.service&#39;</span><span class="w"> </span><span class="p">&amp;</span>
+<a id="__codelineno-6-16" name="__codelineno-6-16" href="#__codelineno-6-16"></a><span class="k">done</span>
+<a id="__codelineno-6-17" name="__codelineno-6-17" href="#__codelineno-6-17"></a><span class="nb">wait</span>
 </code></pre></div>
 <p>由于 PVE 和 PBS 的数据不互通，因此 esxi-5 上的相同位置有<strong>另一个</strong>脚本为 PBS 部署证书：</p>
-<div class="highlight"><span class="filename">/etc/cron.daily/sync-cert</span><pre><span></span><code><span class="ch">#!/bin/bash</span>
-
-<span class="nv">SRC</span><span class="o">=</span><span class="s2">&quot;/etc/pve/nodes/</span><span class="k">$(</span>hostname<span class="w"> </span>-s<span class="k">)</span><span class="s2">&quot;</span>
-<span class="nv">DST</span><span class="o">=</span><span class="s2">&quot;/etc/proxmox-backup&quot;</span>
-
-<span class="k">if</span><span class="w"> </span>!<span class="w"> </span>cmp<span class="w"> </span>-s<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$SRC</span><span class="s2">/pveproxy-ssl.pem&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$DST</span><span class="s2">/proxy.pem&quot;</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
-<span class="w">  </span>cp<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$SRC</span><span class="s2">/pveproxy-ssl.key&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$DST</span><span class="s2">/proxy.key&quot;</span>
-<span class="w">  </span>cp<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$SRC</span><span class="s2">/pveproxy-ssl.pem&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$DST</span><span class="s2">/proxy.pem&quot;</span>
-<span class="w">  </span>systemctl<span class="w"> </span>reload<span class="w"> </span>proxmox-backup-proxy.service
-<span class="k">fi</span>
-<span class="nb">exit</span><span class="w"> </span><span class="m">0</span>
-
-<span class="c1"># Unreachable code, leaving here for reference</span>
-<span class="k">if</span><span class="w"> </span><span class="nb">command</span><span class="w"> </span>-v<span class="w"> </span>openssl<span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="p">;</span><span class="w"> </span><span class="k">then</span>
-<span class="w">  </span><span class="nv">FP</span><span class="o">=</span><span class="s2">&quot;</span><span class="k">$(</span>openssl<span class="w"> </span>x509<span class="w"> </span>-noout<span class="w"> </span>-fingerprint<span class="w"> </span>-sha256<span class="w"> </span>-inform<span class="w"> </span>pem<span class="w"> </span>-in<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$DST</span><span class="s2">/proxy.pem&quot;</span><span class="k">)</span><span class="s2">&quot;</span>
-<span class="w">  </span><span class="nv">FP</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">FP</span><span class="p">##*=</span><span class="si">}</span><span class="s2">&quot;</span>
-<span class="w">  </span>pvesm<span class="w"> </span><span class="nb">set</span><span class="w"> </span>esxi-5-data<span class="w"> </span>--finerprint<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$FP</span><span class="s2">&quot;</span>
-<span class="w">  </span>pvesm<span class="w"> </span><span class="nb">set</span><span class="w"> </span>esxi-5-vdp2<span class="w"> </span>--finerprint<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$FP</span><span class="s2">&quot;</span>
-<span class="k">fi</span>
+<div class="highlight"><span class="filename">/etc/cron.daily/sync-cert</span><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="ch">#!/bin/bash</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="nv">SRC</span><span class="o">=</span><span class="s2">&quot;/etc/pve/nodes/</span><span class="k">$(</span>hostname<span class="w"> </span>-s<span class="k">)</span><span class="s2">&quot;</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="nv">DST</span><span class="o">=</span><span class="s2">&quot;/etc/proxmox-backup&quot;</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="k">if</span><span class="w"> </span>!<span class="w"> </span>cmp<span class="w"> </span>-s<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$SRC</span><span class="s2">/pveproxy-ssl.pem&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$DST</span><span class="s2">/proxy.pem&quot;</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="w">  </span>cp<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$SRC</span><span class="s2">/pveproxy-ssl.key&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$DST</span><span class="s2">/proxy.key&quot;</span>
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="w">  </span>cp<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$SRC</span><span class="s2">/pveproxy-ssl.pem&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$DST</span><span class="s2">/proxy.pem&quot;</span>
+<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a><span class="w">  </span>systemctl<span class="w"> </span>reload<span class="w"> </span>proxmox-backup-proxy.service
+<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a><span class="k">fi</span>
+<a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a><span class="nb">exit</span><span class="w"> </span><span class="m">0</span>
+<a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a>
+<a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a><span class="c1"># Unreachable code, leaving here for reference</span>
+<a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a><span class="k">if</span><span class="w"> </span><span class="nb">command</span><span class="w"> </span>-v<span class="w"> </span>openssl<span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<a id="__codelineno-7-15" name="__codelineno-7-15" href="#__codelineno-7-15"></a><span class="w">  </span><span class="nv">FP</span><span class="o">=</span><span class="s2">&quot;</span><span class="k">$(</span>openssl<span class="w"> </span>x509<span class="w"> </span>-noout<span class="w"> </span>-fingerprint<span class="w"> </span>-sha256<span class="w"> </span>-inform<span class="w"> </span>pem<span class="w"> </span>-in<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$DST</span><span class="s2">/proxy.pem&quot;</span><span class="k">)</span><span class="s2">&quot;</span>
+<a id="__codelineno-7-16" name="__codelineno-7-16" href="#__codelineno-7-16"></a><span class="w">  </span><span class="nv">FP</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">FP</span><span class="p">##*=</span><span class="si">}</span><span class="s2">&quot;</span>
+<a id="__codelineno-7-17" name="__codelineno-7-17" href="#__codelineno-7-17"></a><span class="w">  </span>pvesm<span class="w"> </span><span class="nb">set</span><span class="w"> </span>esxi-5-data<span class="w"> </span>--finerprint<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$FP</span><span class="s2">&quot;</span>
+<a id="__codelineno-7-18" name="__codelineno-7-18" href="#__codelineno-7-18"></a><span class="w">  </span>pvesm<span class="w"> </span><span class="nb">set</span><span class="w"> </span>esxi-5-vdp2<span class="w"> </span>--finerprint<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$FP</span><span class="s2">&quot;</span>
+<a id="__codelineno-7-19" name="__codelineno-7-19" href="#__codelineno-7-19"></a><span class="k">fi</span>
 </code></pre></div>
 <h2 id="pve-5">pve-5<a class="headerlink" href="#pve-5" title="Permanent link">&para;</a></h2>
 <p>pve-5 位于网络中心，配置为 2× <del>Xeon E5-2603 v4 (Broadwell 6C6T, 1.70 GHz, no HT, no Turbo Boost)</del> Xeon E5-2667 v4 (Broadwell 8C16T, 3.20 GHz, Max 3.60 GHz)，256 GB 内存和一大堆 SSD（2× 三星 240 GB SATA + 10x Intel DC S4500 1.92 TB SATA）。我们将两块 240 GB 的盘组成一个 LVM VG，分配 16 GB 的 rootfs（LVM mirror）和 8 GB 的 swap，其余空间给一个 thinpool。十块 1.92 TB 的盘组成一个 RAIDZ2 的 zpool，用于存储虚拟机等数据。</p>
@@ -2774,48 +2774,48 @@ systemctl<span class="w"> </span>reload<span class="w"> </span>pveproxy.service
 <p>网络配置与 pve-5 相似，其上有两个千兆网卡 enp3s0 和 enp4s0。enp3s0 连接网络中心的交换机，桥接不同的 VLAN 网络给虚拟机，并且各 vmbrX 的数字和端口与 pve-5 一致；而 enp4s0 连接一个外部阵列（vdp2），使用 iSCSI 访问该阵列。</p>
 <p>由于我们只有一个 gateway-nic，而 pve-5 和 esxi-5 两个主机都依赖 gw-nic 桥接的 tinc 来接入内网，因此我们在 pve-5 和 esxi-5 之间拉了一条 GRETAP 隧道，并在两个主机上分别将 VTEP 桥接到 vmbr1。</p>
 <p>参考配置：</p>
-<div class="highlight"><span class="filename">pve-5:/etc/network/interfaces</span><pre><span></span><code>auto<span class="w"> </span>gretap0esxi-5
-iface<span class="w"> </span>gretap0esxi-5<span class="w"> </span>inet<span class="w"> </span>manual
-<span class="w">    </span>pre-up<span class="w"> </span>ip<span class="w"> </span>link<span class="w"> </span>add<span class="w"> </span>name<span class="w"> </span><span class="nv">$IFACE</span><span class="w"> </span>mtu<span class="w"> </span><span class="nv">$IF_MTU</span><span class="w"> </span><span class="nb">type</span><span class="w"> </span>gretap<span class="w"> </span><span class="nb">local</span><span class="w"> </span><span class="m">10</span>.38.95.115<span class="w"> </span>remote<span class="w"> </span><span class="m">10</span>.38.95.111
-<span class="w">    </span>post-down<span class="w"> </span>ip<span class="w"> </span>link<span class="w"> </span>delete<span class="w"> </span><span class="nv">$IFACE</span>
-<span class="w">    </span>mtu<span class="w"> </span><span class="m">1500</span>
-
-auto<span class="w"> </span>vmbr1
-iface<span class="w"> </span>vmbr1<span class="w"> </span>inet<span class="w"> </span>static
-<span class="w">    </span>address<span class="w"> </span><span class="m">10</span>.254.0.240/21
-<span class="w">    </span>bridge-ports<span class="w"> </span>gretap0esxi-5
-<span class="w">    </span>bridge-stp<span class="w"> </span>off
-<span class="w">    </span>bridge-fd<span class="w"> </span><span class="m">0</span>
+<div class="highlight"><span class="filename">pve-5:/etc/network/interfaces</span><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>auto<span class="w"> </span>gretap0esxi-5
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>iface<span class="w"> </span>gretap0esxi-5<span class="w"> </span>inet<span class="w"> </span>manual
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="w">    </span>pre-up<span class="w"> </span>ip<span class="w"> </span>link<span class="w"> </span>add<span class="w"> </span>name<span class="w"> </span><span class="nv">$IFACE</span><span class="w"> </span>mtu<span class="w"> </span><span class="nv">$IF_MTU</span><span class="w"> </span><span class="nb">type</span><span class="w"> </span>gretap<span class="w"> </span><span class="nb">local</span><span class="w"> </span><span class="m">10</span>.38.95.115<span class="w"> </span>remote<span class="w"> </span><span class="m">10</span>.38.95.111
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="w">    </span>post-down<span class="w"> </span>ip<span class="w"> </span>link<span class="w"> </span>delete<span class="w"> </span><span class="nv">$IFACE</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="w">    </span>mtu<span class="w"> </span><span class="m">1500</span>
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>
+<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a>auto<span class="w"> </span>vmbr1
+<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a>iface<span class="w"> </span>vmbr1<span class="w"> </span>inet<span class="w"> </span>static
+<a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a><span class="w">    </span>address<span class="w"> </span><span class="m">10</span>.254.0.240/21
+<a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a><span class="w">    </span>bridge-ports<span class="w"> </span>gretap0esxi-5
+<a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a><span class="w">    </span>bridge-stp<span class="w"> </span>off
+<a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a><span class="w">    </span>bridge-fd<span class="w"> </span><span class="m">0</span>
 </code></pre></div>
 <p>esxi-5 这端的配置则将对应的 iface 名称和 IP 地址等全部对换即可。</p>
 <div class="admonition note">
 <p class="admonition-title">MTU 问题</p>
 <p>2022 年 2 月处理内网 tinc ARP 问题时发现 esxi-5 和 pve-5 的 vmbr1 MTU 都被设置成了 1462（GRETAP 的默认 MTU）。我们不确定 MTU 问题与 tinc 是否相关，但保险起见我们还是将该 GRETAP 界面的 MTU 设置成了 1500（GRE 具有分片功能）。</p>
-<div class="highlight"><pre><span></span><code><span class="gd">-pre-up ip link add name $IFACE type gretap local 10.38.95.115 remote 10.38.95.111</span>
-<span class="gi">+pre-up ip link add name $IFACE mtu $IF_MTU type gretap local 10.38.95.115 remote 10.38.95.111</span>
-<span class="w"> </span>post-down ip link delete $IFACE
-<span class="gi">+mtu 1500</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="gd">-pre-up ip link add name $IFACE type gretap local 10.38.95.115 remote 10.38.95.111</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="gi">+pre-up ip link add name $IFACE mtu $IF_MTU type gretap local 10.38.95.115 remote 10.38.95.111</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="w"> </span>post-down ip link delete $IFACE
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="gi">+mtu 1500</span>
 </code></pre></div>
 </div>
 <h3 id="iscsi">iSCSI<a class="headerlink" href="#iscsi" title="Permanent link">&para;</a></h3>
 <p>由于我们没有研究清楚 open-iscsi 的开机自动挂载机制，因此我们选择直接 override 对应的 service 来完成这个任务：</p>
-<div class="highlight"><span class="filename">$ systemctl edit open-iscsi.service</span><pre><span></span><code><span class="k">[Service]</span>
-<span class="na">ExecStart</span><span class="o">=</span>
-<span class="na">ExecStart</span><span class="o">=</span><span class="s">/sbin/iscsiadm -d8 -m node -p 192.168.10.1:3260 --login</span>
-<span class="na">ExecStart</span><span class="o">=</span><span class="s">/lib/open-iscsi/activate-storage.sh</span>
+<div class="highlight"><span class="filename">$ systemctl edit open-iscsi.service</span><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="k">[Service]</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="na">ExecStart</span><span class="o">=</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="na">ExecStart</span><span class="o">=</span><span class="s">/sbin/iscsiadm -d8 -m node -p 192.168.10.1:3260 --login</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="na">ExecStart</span><span class="o">=</span><span class="s">/lib/open-iscsi/activate-storage.sh</span>
 </code></pre></div>
 <p>若 iSCSI 连接成功，应该可以在系统中看到一个新的硬盘，容量为 14.55 TiB，型号显示为 RS-3116I-S42-6。</p>
 <h3 id="rootfs-backup">rootfs 备份<a class="headerlink" href="#rootfs-backup" title="Permanent link">&para;</a></h3>
 <p>尽管 esxi-5 的 rootfs 也使用了 LVM mirror 在两块 SSD 上镜像，但是我们不太信任这块 RAID 卡，因此我们将 esxi-5 的 rootfs 每天备份到 vdp2 上。为了避免在 vdp2 掉线的时候乱“备份”，我们使用一个 systemd 服务，设置了 <a href="https://www.freedesktop.org/software/systemd/man/systemd.unit.html#RequiresMountsFor="><code>RequiresMountsFor</code> 依赖</a>：</p>
-<div class="highlight"><span class="filename">/etc/systemd/system/rootfs-backup.service</span><pre><span></span><code><span class="k">[Unit]</span>
-<span class="na">Description</span><span class="o">=</span><span class="s">Backup rootfs to vdp2</span>
-<span class="na">RequiresMountsFor</span><span class="o">=</span><span class="s">/mnt/vdp2</span>
-
-<span class="k">[Service]</span>
-<span class="na">Type</span><span class="o">=</span><span class="s">oneshot</span>
-<span class="na">ExecStart</span><span class="o">=</span><span class="s">/usr/bin/rsync -aHAXx --delete / /mnt/vdp2/rootfs/</span>
+<div class="highlight"><span class="filename">/etc/systemd/system/rootfs-backup.service</span><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="k">[Unit]</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="na">Description</span><span class="o">=</span><span class="s">Backup rootfs to vdp2</span>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="na">RequiresMountsFor</span><span class="o">=</span><span class="s">/mnt/vdp2</span>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="k">[Service]</span>
+<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="na">Type</span><span class="o">=</span><span class="s">oneshot</span>
+<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a><span class="na">ExecStart</span><span class="o">=</span><span class="s">/usr/bin/rsync -aHAXx --delete / /mnt/vdp2/rootfs/</span>
 </code></pre></div>
-<div class="highlight"><span class="filename">crontab</span><pre><span></span><code>21 4 * * * systemctl start rootfs-backup.service
+<div class="highlight"><span class="filename">crontab</span><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>21 4 * * * systemctl start rootfs-backup.service
 </code></pre></div>
 <h3 id="esxi-5-others">其他记录<a class="headerlink" href="#esxi-5-others" title="Permanent link">&para;</a></h3>
 <p>esxi-5 于 2021/8 发现自带阵列有两块坏盘，在更换后发现 storage "root"（存放 vcenter 虚拟机，组建 RAID 1 后大小 1.8 TB）无法正常 rebuild，并且 vcenter 虚拟机的 vmdk 文件有 4 个出现 I/O error。此后 vcenter 虚拟机已经迁移到 storage "data" (RAID10, 7.2 TB) 并正常工作。</p>

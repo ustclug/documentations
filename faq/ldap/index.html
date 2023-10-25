@@ -2428,17 +2428,17 @@
 <div class="admonition bug">
 <p class="admonition-title">User 界面打开时报错</p>
 <p>如果在 GOsa 中创建了一个新用户，却没有在最后为他设置密码，就会出现此问题，打开 User 界面后会有报错：</p>
-<div class="highlight"><pre><span></span><code>Fatal error: Uncaught ArgumentCountError: Too few arguments to function userManagement::filterLockLabel(), 0 passed in /usr/share/gosa/include/class_listing.inc on line 856 and exactly 1 expected in /usr/share/gosa/plugins/admin/users/class_userManagement.inc:856
-Stack trace:
-#0 /usr/share/gosa/include/class_listing.inc(856): userManagement::filterLockLabel()
-#1 /usr/share/gosa/include/class_listing.inc(980): listing-&gt;processElementFilter(&#39;%{filter:lockLa...&#39;, Array, 50)
-#2 /usr/share/gosa/include/class_listing.inc(853): listing-&gt;filterActions(&#39;cn=...,ou=...&#39;, 50, Array)
-#3 /usr/share/gosa/include/class_listing.inc(764): listing-&gt;processElementFilter(&#39;%{filter:action...&#39;, Array, 50)
-#4 /usr/share/gosa/include/class_listing.inc(407): listing-&gt;renderCell(&#39;%{filter:action...&#39;, Array, 50)
-#5 /usr/share/gosa/include/class_management.inc(233): listing-&gt;render()
-#6 /usr/share/gosa/include/class_management.inc(222): management-&gt;renderList()
-#7 /usr/share/gosa/plugins/admin/users/main.inc(44): management-&gt;execute()
-#8 /usr/sh in /usr/share/gosa/plugins/admin/users/class_userManagement.inc on line 856
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>Fatal error: Uncaught ArgumentCountError: Too few arguments to function userManagement::filterLockLabel(), 0 passed in /usr/share/gosa/include/class_listing.inc on line 856 and exactly 1 expected in /usr/share/gosa/plugins/admin/users/class_userManagement.inc:856
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>Stack trace:
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>#0 /usr/share/gosa/include/class_listing.inc(856): userManagement::filterLockLabel()
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>#1 /usr/share/gosa/include/class_listing.inc(980): listing-&gt;processElementFilter(&#39;%{filter:lockLa...&#39;, Array, 50)
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>#2 /usr/share/gosa/include/class_listing.inc(853): listing-&gt;filterActions(&#39;cn=...,ou=...&#39;, 50, Array)
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>#3 /usr/share/gosa/include/class_listing.inc(764): listing-&gt;processElementFilter(&#39;%{filter:action...&#39;, Array, 50)
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>#4 /usr/share/gosa/include/class_listing.inc(407): listing-&gt;renderCell(&#39;%{filter:action...&#39;, Array, 50)
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>#5 /usr/share/gosa/include/class_management.inc(233): listing-&gt;render()
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>#6 /usr/share/gosa/include/class_management.inc(222): management-&gt;renderList()
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>#7 /usr/share/gosa/plugins/admin/users/main.inc(44): management-&gt;execute()
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>#8 /usr/sh in /usr/share/gosa/plugins/admin/users/class_userManagement.inc on line 856
 </code></pre></div>
 <p>这是因为 GOsa 无法读取到用户密码的 Hash，而 LDAP 却允许用户没有密码。
 只需为新的用户设置密码或删除新的用户即可。</p>
@@ -2470,73 +2470,73 @@ Stack trace:
 <ol>
 <li>
 <p>TLS/SSL</p>
-<div class="highlight"><pre><span></span><code><span class="gp"># </span>ldapmodify<span class="w"> </span>-H<span class="w"> </span>ldapi:///<span class="w"> </span>-Y<span class="w"> </span>EXTERNAL<span class="w"> </span>&lt;&lt;<span class="w"> </span>EOF
-<span class="go">&gt; dn: cn=config</span>
-<span class="go">&gt; changetype: modify</span>
-<span class="go">&gt; replace: olcTLSCertificateFile</span>
-<span class="go">&gt; olcTLSCertificateFile: /etc/ldap/ssl/slapd-server.crt</span>
-<span class="go">&gt; -</span>
-<span class="go">&gt; replace: olcTLSCACertificateFile</span>
-<span class="go">&gt; olcTLSCACertificateFile: /etc/ldap/ssl/slapd-ca-cert.pem</span>
-<span class="go">&gt; -</span>
-<span class="go">&gt; replace: olcTLSCertificateKeyFile</span>
-<span class="go">&gt; olcTLSCertificateKeyFile: /etc/ldap/ssl/slapd-server.key</span>
-<span class="go">&gt;</span>
-<span class="go">&gt; EOF</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="gp"># </span>ldapmodify<span class="w"> </span>-H<span class="w"> </span>ldapi:///<span class="w"> </span>-Y<span class="w"> </span>EXTERNAL<span class="w"> </span>&lt;&lt;<span class="w"> </span>EOF
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="go">&gt; dn: cn=config</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="go">&gt; changetype: modify</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="go">&gt; replace: olcTLSCertificateFile</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="go">&gt; olcTLSCertificateFile: /etc/ldap/ssl/slapd-server.crt</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="go">&gt; -</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="go">&gt; replace: olcTLSCACertificateFile</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="go">&gt; olcTLSCACertificateFile: /etc/ldap/ssl/slapd-ca-cert.pem</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="go">&gt; -</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="go">&gt; replace: olcTLSCertificateKeyFile</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="go">&gt; olcTLSCertificateKeyFile: /etc/ldap/ssl/slapd-server.key</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="go">&gt;</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="go">&gt; EOF</span>
 </code></pre></div>
 </li>
 <li>
 <p>加载 pw-sha2.la（若使用 ssha512/256 则需要加载）</p>
-<div class="highlight"><pre><span></span><code><span class="gp"># </span>ldapmodify<span class="w"> </span>-H<span class="w"> </span>ldapi:///<span class="w"> </span>-Y<span class="w"> </span>EXTERNAL<span class="w"> </span>&lt;&lt;<span class="w"> </span>EOF
-<span class="go">&gt; dn: cn=module,cn=config</span>
-<span class="go">&gt; cn: module</span>
-<span class="go">&gt; objectClass: olcModuleList</span>
-<span class="go">&gt; olcModulePath: /usr/lib/ldap/</span>
-<span class="go">&gt; olcModuleLoad: pw-sha2.la</span>
-<span class="go">&gt;</span>
-<span class="go">&gt; EOF</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="gp"># </span>ldapmodify<span class="w"> </span>-H<span class="w"> </span>ldapi:///<span class="w"> </span>-Y<span class="w"> </span>EXTERNAL<span class="w"> </span>&lt;&lt;<span class="w"> </span>EOF
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="go">&gt; dn: cn=module,cn=config</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="go">&gt; cn: module</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="go">&gt; objectClass: olcModuleList</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="go">&gt; olcModulePath: /usr/lib/ldap/</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="go">&gt; olcModuleLoad: pw-sha2.la</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="go">&gt;</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="go">&gt; EOF</span>
 </code></pre></div>
 </li>
 <li>
 <p>为 sudoUser 设置 index</p>
-<div class="highlight"><pre><span></span><code><span class="gp"># </span>ldapadd<span class="w"> </span>-Y<span class="w"> </span>EXTERNAL<span class="w"> </span>-H<span class="w"> </span>ldapi:///<span class="w"> </span>&lt;&lt;<span class="w"> </span>EOF
-<span class="go">&gt; dn: olcDatabase={1}mdb,cn=config</span>
-<span class="go">&gt; changetype: modify</span>
-<span class="go">&gt; add: olcDbIndex</span>
-<span class="go">&gt; olcDbIndex: sudoUser eq,sub</span>
-<span class="go">&gt;</span>
-<span class="go">&gt; EOF</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="gp"># </span>ldapadd<span class="w"> </span>-Y<span class="w"> </span>EXTERNAL<span class="w"> </span>-H<span class="w"> </span>ldapi:///<span class="w"> </span>&lt;&lt;<span class="w"> </span>EOF
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="go">&gt; dn: olcDatabase={1}mdb,cn=config</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="go">&gt; changetype: modify</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="go">&gt; add: olcDbIndex</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="go">&gt; olcDbIndex: sudoUser eq,sub</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="go">&gt;</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="go">&gt; EOF</span>
 </code></pre></div>
 </li>
 <li>
 <p>更改默认密码存储选项（可选）</p>
 <p>更改为 crypt/yescrypt</p>
-<div class="highlight"><pre><span></span><code><span class="gp"># </span>ldapmodify<span class="w"> </span>-Y<span class="w"> </span>EXTERNAL<span class="w"> </span>-H<span class="w"> </span>ldapi:///<span class="w"> </span>&lt;&lt;<span class="w"> </span>EOF
-<span class="go">&gt; dn: olcDatabase={-1}frontend,cn=config</span>
-<span class="go">&gt; add: olcPasswordHash</span>
-<span class="go">&gt; olcPasswordHash: {CRYPT}</span>
-<span class="go">&gt; </span>
-<span class="go">&gt; dn: cn=config</span>
-<span class="go">&gt; add: olcPasswordCryptSaltFormat</span>
-<span class="go">&gt; olcPasswordCryptSaltFormat: $y$j9T$%s</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="gp"># </span>ldapmodify<span class="w"> </span>-Y<span class="w"> </span>EXTERNAL<span class="w"> </span>-H<span class="w"> </span>ldapi:///<span class="w"> </span>&lt;&lt;<span class="w"> </span>EOF
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="go">&gt; dn: olcDatabase={-1}frontend,cn=config</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="go">&gt; add: olcPasswordHash</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="go">&gt; olcPasswordHash: {CRYPT}</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="go">&gt; </span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="go">&gt; dn: cn=config</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="go">&gt; add: olcPasswordCryptSaltFormat</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="go">&gt; olcPasswordCryptSaltFormat: $y$j9T$%s</span>
 </code></pre></div>
 <p>更改为 ssha512（需要 pw-sha2.la，也可参照上述 yescrypt 的配置更改为 crypt/ssha512）</p>
-<div class="highlight"><pre><span></span><code><span class="gp"># </span>ldapmodify<span class="w"> </span>-Y<span class="w"> </span>EXTERNAL<span class="w"> </span>-H<span class="w"> </span>ldapi:///<span class="w"> </span>&lt;&lt;<span class="w"> </span>EOF
-<span class="go">&gt; dn: olcDatabase={-1}frontend,cn=config</span>
-<span class="go">&gt; add: olcPasswordHash</span>
-<span class="go">&gt; olcPasswordHash: {SSHA512}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="gp"># </span>ldapmodify<span class="w"> </span>-Y<span class="w"> </span>EXTERNAL<span class="w"> </span>-H<span class="w"> </span>ldapi:///<span class="w"> </span>&lt;&lt;<span class="w"> </span>EOF
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="go">&gt; dn: olcDatabase={-1}frontend,cn=config</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="go">&gt; add: olcPasswordHash</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="go">&gt; olcPasswordHash: {SSHA512}</span>
 </code></pre></div>
 <p>如果报错已经存在，可以用 replace 选项，以 crypt/yescrypt 为例：</p>
-<div class="highlight"><pre><span></span><code><span class="gp"># </span>ldapmodify<span class="w"> </span>-Y<span class="w"> </span>EXTERNAL<span class="w"> </span>-H<span class="w"> </span>ldapi:///<span class="w"> </span>&lt;&lt;<span class="w"> </span>EOF
-<span class="go">&gt; dn: olcDatabase={-1}frontend,cn=config</span>
-<span class="go">&gt; changetype: modify</span>
-<span class="go">&gt; replace: olcPasswordHash</span>
-<span class="go">&gt; olcPasswordHash: {CRYPT}</span>
-<span class="go">&gt; </span>
-<span class="go">&gt; dn: cn=config</span>
-<span class="go">&gt; changetype: modify</span>
-<span class="go">&gt; replace: olcPasswordCryptSaltFormat</span>
-<span class="go">&gt; olcPasswordCryptSaltFormat: $y$j9T$%s</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="gp"># </span>ldapmodify<span class="w"> </span>-Y<span class="w"> </span>EXTERNAL<span class="w"> </span>-H<span class="w"> </span>ldapi:///<span class="w"> </span>&lt;&lt;<span class="w"> </span>EOF
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="go">&gt; dn: olcDatabase={-1}frontend,cn=config</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="go">&gt; changetype: modify</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="go">&gt; replace: olcPasswordHash</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="go">&gt; olcPasswordHash: {CRYPT}</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="go">&gt; </span>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="go">&gt; dn: cn=config</span>
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="go">&gt; changetype: modify</span>
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="go">&gt; replace: olcPasswordCryptSaltFormat</span>
+<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="go">&gt; olcPasswordCryptSaltFormat: $y$j9T$%s</span>
 </code></pre></div>
 <p>注意在使用上述 hash 方式的时候进入 gosa 用户页面时可能会报错 Cannot find a suitable password method for the current hash</p>
 </li>

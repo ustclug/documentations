@@ -2445,17 +2445,17 @@
 <h2 id="ntp-date">NTP Date<a class="headerlink" href="#ntp-date" title="Permanent link">&para;</a></h2>
 <p>Install either <code>chrony</code> or <code>systemd-timesyncd</code>. Usually chrony comes pre-installed so it's easily forgot.</p>
 <p>Replace the default NTP pool with USTC's NTP server <code>time.ustc.edu.cn</code>, like this:</p>
-<div class="highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">/etc/chrony/chrony.conf</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">7</span>
-<span class="normal">8</span>
-<span class="normal">9</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="c1"># Use Debian vendor zone.</span>
-<span class="c1">#pool 2.debian.pool.ntp.org iburst</span>
-server<span class="w"> </span>time.ustc.edu.cn<span class="w"> </span>iburst
+<div class="highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">/etc/chrony/chrony.conf</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-7">7</a></span>
+<span class="normal"><a href="#__codelineno-0-8">8</a></span>
+<span class="normal"><a href="#__codelineno-0-9">9</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-7" name="__codelineno-0-7"></a><span class="c1"># Use Debian vendor zone.</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8"></a><span class="c1">#pool 2.debian.pool.ntp.org iburst</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9"></a>server<span class="w"> </span>time.ustc.edu.cn<span class="w"> </span>iburst
 </code></pre></div></td></tr></table></div>
 <h2 id="time-zone">Time zone<a class="headerlink" href="#time-zone" title="Permanent link">&para;</a></h2>
 <p>Run <code>dpkg-reconfigure tzdata</code> and select Asia/Shanghai as the timezone. Reboot the server.</p>
 <h2 id="use-nft-backend-for-iptables">Use nft-backend for iptables<a class="headerlink" href="#use-nft-backend-for-iptables" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code>update-alternatives<span class="w"> </span>--set<span class="w"> </span>iptables<span class="w"> </span>/usr/sbin/iptables-nft
-update-alternatives<span class="w"> </span>--set<span class="w"> </span>ip6tables<span class="w"> </span>/usr/sbin/ip6tables-nft
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>update-alternatives<span class="w"> </span>--set<span class="w"> </span>iptables<span class="w"> </span>/usr/sbin/iptables-nft
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>update-alternatives<span class="w"> </span>--set<span class="w"> </span>ip6tables<span class="w"> </span>/usr/sbin/ip6tables-nft
 </code></pre></div>
 <h2 id="update-resolvconf">Update resolv.conf<a class="headerlink" href="#update-resolvconf" title="Permanent link">&para;</a></h2>
 <h2 id="install-console-setup">Install console-setup<a class="headerlink" href="#install-console-setup" title="Permanent link">&para;</a></h2>

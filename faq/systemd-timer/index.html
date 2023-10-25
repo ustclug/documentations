@@ -2342,34 +2342,34 @@
 <li>啰嗦、难写。</li>
 </ul>
 <p>所以以下给出一个模板，方便在创建新定时任务的时候使用。这里的例子是 mirrors2 从 mirrors4 获取压缩后的日志。以下文件均放在 <code>/etc/systemd/system</code>。</p>
-<div class="highlight"><span class="filename">m4log.service</span><pre><span></span><code><span class="k">[Unit]</span>
-<span class="na">Description</span><span class="o">=</span><span class="s">Mirrors4 log backup</span>
-<span class="na">Documentation</span><span class="o">=</span><span class="s">man:rsync(1)</span>
-<span class="na">After</span><span class="o">=</span><span class="s">network.target</span>
-<span class="na">StartLimitIntervalSec</span><span class="o">=</span><span class="s">0</span>
-
-<span class="k">[Service]</span>
-<span class="na">Type</span><span class="o">=</span><span class="s">simple</span>
-<span class="na">User</span><span class="o">=</span><span class="s">mirror</span>
-<span class="na">Group</span><span class="o">=</span><span class="s">mirror</span>
-<span class="na">ExecStart</span><span class="o">=</span><span class="s">rsync -rltpv --include=*/ --include=*.xz --exclude=* m4log:/ /var/m4log/</span>
-<span class="na">Restart</span><span class="o">=</span><span class="s">on-failure</span>
-<span class="na">RestartSec</span><span class="o">=</span><span class="s">3</span>
+<div class="highlight"><span class="filename">m4log.service</span><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">[Unit]</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="na">Description</span><span class="o">=</span><span class="s">Mirrors4 log backup</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="na">Documentation</span><span class="o">=</span><span class="s">man:rsync(1)</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="na">After</span><span class="o">=</span><span class="s">network.target</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="na">StartLimitIntervalSec</span><span class="o">=</span><span class="s">0</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="k">[Service]</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="na">Type</span><span class="o">=</span><span class="s">simple</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="na">User</span><span class="o">=</span><span class="s">mirror</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="na">Group</span><span class="o">=</span><span class="s">mirror</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="na">ExecStart</span><span class="o">=</span><span class="s">rsync -rltpv --include=*/ --include=*.xz --exclude=* m4log:/ /var/m4log/</span>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="na">Restart</span><span class="o">=</span><span class="s">on-failure</span>
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="na">RestartSec</span><span class="o">=</span><span class="s">3</span>
 </code></pre></div>
-<div class="highlight"><span class="filename">m4log.timer</span><pre><span></span><code><span class="k">[Unit]</span>
-<span class="na">Description</span><span class="o">=</span><span class="s">Mirrors4 log backup timer</span>
-<span class="na">Documentation</span><span class="o">=</span><span class="s">man:rsync(1)</span>
-<span class="na">After</span><span class="o">=</span><span class="s">network.target</span>
-<span class="na">StartLimitIntervalSec</span><span class="o">=</span><span class="s">0</span>
-
-<span class="k">[Timer]</span>
-<span class="na">OnCalendar</span><span class="o">=</span><span class="s">*-*-* 7:13:00</span>
-<span class="na">RandomizedDelaySec</span><span class="o">=</span><span class="s">60s</span>
-<span class="na">Persistent</span><span class="o">=</span><span class="s">true</span>
-<span class="na">Unit</span><span class="o">=</span><span class="s">m4log.service</span>
-
-<span class="k">[Install]</span>
-<span class="na">WantedBy</span><span class="o">=</span><span class="s">timer.target</span>
+<div class="highlight"><span class="filename">m4log.timer</span><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="k">[Unit]</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="na">Description</span><span class="o">=</span><span class="s">Mirrors4 log backup timer</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="na">Documentation</span><span class="o">=</span><span class="s">man:rsync(1)</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="na">After</span><span class="o">=</span><span class="s">network.target</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="na">StartLimitIntervalSec</span><span class="o">=</span><span class="s">0</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="k">[Timer]</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="na">OnCalendar</span><span class="o">=</span><span class="s">*-*-* 7:13:00</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="na">RandomizedDelaySec</span><span class="o">=</span><span class="s">60s</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="na">Persistent</span><span class="o">=</span><span class="s">true</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="na">Unit</span><span class="o">=</span><span class="s">m4log.service</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="k">[Install]</span>
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="na">WantedBy</span><span class="o">=</span><span class="s">timer.target</span>
 </code></pre></div>
 <p>关于 OnCalendar 的触发时间，可以参考 systemd 的 <a href="https://www.freedesktop.org/software/systemd/man/systemd.time.html#Calendar%20Events">Calendar Events</a> 说明，并用 <code>systemd-analyze calendar</code> 来检验正确性，也可以用 <code>systemctl list-timers</code> 观察 Timer 下次触发的时间是否符合预期。</p>
 <p>下面是一些常用命令：</p>

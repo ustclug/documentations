@@ -2506,40 +2506,40 @@
 <h3 id="iptables-mangle-rt_tables-and-ip-rule">iptables mangle, rt_tables and ip rule<a class="headerlink" href="#iptables-mangle-rt_tables-and-ip-rule" title="Permanent link">&para;</a></h3>
 <p><strong>The following example is for demonstration purposes only.</strong></p>
 <p>You can get current status by <code>iptables -t mangle -S</code>. It is expected to see something like this:</p>
-<div class="highlight"><pre><span></span><code>-A DemonstrateManglePrerouting -m statistic --mode nth --every 1 --packet 0 -j MARK --set-xmark 0x12345/0xffffffff
-// ...
--A PREOUT -m mark --mark 0x0 -j DemonstrateManglePrerouting
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>-A DemonstrateManglePrerouting -m statistic --mode nth --every 1 --packet 0 -j MARK --set-xmark 0x12345/0xffffffff
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>// ...
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>-A PREOUT -m mark --mark 0x0 -j DemonstrateManglePrerouting
 </code></pre></div>
 <p>In this case, all packages to <code>DemonstrateManglePrerouting</code> chain will get <code>fwmark</code> <code>0x12345</code> (= <code>74565</code>).</p>
 <p>Check <code>ip rule</code> for that:</p>
-<div class="highlight"><pre><span></span><code>// ...
-10: from all fwmark 0x12345 lookup ExtraDemoTunnel
-// ...
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>// ...
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>10: from all fwmark 0x12345 lookup ExtraDemoTunnel
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>// ...
 </code></pre></div>
 <p>You can get tunnel information in <code>ip a</code>:</p>
-<div class="highlight"><pre><span></span><code>29: ExtraDemoTunnel: &lt;POINTOPOINT,NOARP,UP,LOWER_UP&gt; mtu 1420 qdisc noqueue state UNKNOWN group default qlen 1000
-    link/none
-    inet 192.168.252.17 peer 192.168.253.17/32 brd 192.168.252.17 scope global ExtraDemoTunnel
-       valid_lft forever preferred_lft forever
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>29: ExtraDemoTunnel: &lt;POINTOPOINT,NOARP,UP,LOWER_UP&gt; mtu 1420 qdisc noqueue state UNKNOWN group default qlen 1000
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>    link/none
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>    inet 192.168.252.17 peer 192.168.253.17/32 brd 192.168.252.17 scope global ExtraDemoTunnel
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>       valid_lft forever preferred_lft forever
 </code></pre></div>
 <p>Here <code>192.168.252.17</code> is the local server of tunnel, and <code>192.168.253.17</code> is the remote server.</p>
 <p>Let's check <code>/etc/network/interfaces.d</code>:</p>
-<div class="highlight"><span class="filename">/etc/network/interfaces.d/03ExtraDemoTunnel</span><pre><span></span><code>auto ExtraDemoTunnel
-iface ExtraDemoTunnel inet static
-    address 192.168.252.17
-    netmask 255.255.255.255
-    pre-up ip link add dev $IFACE type wireguard
-    post-down ip link del dev $IFACE
-    up wg set $IFACE listen-port 4601 private-key /etc/wireguard/privkey peer pkeypkeypkeypkeypkeypkeypkeypkeypkeypkeypkey endpoint 23.3.3.3:4600 allowed-ips 0.0.0.0/0
-    up ip route replace default dev $IFACE table $IFACE
-    up ip rule add from all fwmark 74565 table $IFACE prio 10
-    pointopoint 192.168.253.17
+<div class="highlight"><span class="filename">/etc/network/interfaces.d/03ExtraDemoTunnel</span><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>auto ExtraDemoTunnel
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>iface ExtraDemoTunnel inet static
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>    address 192.168.252.17
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>    netmask 255.255.255.255
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>    pre-up ip link add dev $IFACE type wireguard
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>    post-down ip link del dev $IFACE
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>    up wg set $IFACE listen-port 4601 private-key /etc/wireguard/privkey peer pkeypkeypkeypkeypkeypkeypkeypkeypkeypkeypkey endpoint 23.3.3.3:4600 allowed-ips 0.0.0.0/0
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>    up ip route replace default dev $IFACE table $IFACE
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>    up ip rule add from all fwmark 74565 table $IFACE prio 10
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>    pointopoint 192.168.253.17
 </code></pre></div>
 <p>Here we know that this is a wireguard tunnel, and the endpoint is <code>23.3.3.3:4600</code>. The fwmark here is <code>74565</code> (in decimal).</p>
 <p>Why is <code>74565</code> set? Let's check <code>/etc/iproute2/rt_tables</code>!</p>
-<div class="highlight"><pre><span></span><code>// ...
-74565   ExtraDemoTunnel
-// ...
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>// ...
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>74565   ExtraDemoTunnel
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>// ...
 </code></pre></div>
 <p>For wireguard, you can use <code>wg</code> to check status. If you find that the "received" is 0 in transferred, something is going wrong.</p>
 <h2 id="issues">Issues &amp; resolution<a class="headerlink" href="#issues" title="Permanent link">&para;</a></h2>
@@ -2547,7 +2547,7 @@ iface ExtraDemoTunnel inet static
 <p>In early March 2022 we noticed Light connectivity issues from outside USTCnet, which was narrowed down to connections bypassing Linux Conntrack mechanism.</p>
 <p>Thanks to TUNA group we learned about <code>/proc/sys/net/ipv4/vs/conntrack</code>, which at the time the problem was located, was zero. Settings this to 1 solved the problem.</p>
 <p>However after writing <code>net.ipv4.vs.conntrack = 1</code> to <code>/etc/sysctl.d/10-ipvs-conntrack.conf</code> and rebooting, the problem returned. Checking <code>systemctl status systemd-sysctl.service</code> we noticed this:</p>
-<div class="highlight"><pre><span></span><code>Mar 05 00:00:00 gateway-el systemd-sysctl[218]: Couldn&#39;t write &#39;0&#39; to &#39;net/ipv4/vs/conntrack&#39;, ignoring: No such file or directory
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>Mar 05 00:00:00 gateway-el systemd-sysctl[218]: Couldn&#39;t write &#39;0&#39; to &#39;net/ipv4/vs/conntrack&#39;, ignoring: No such file or directory
 </code></pre></div>
 <p>Adding <code>ip_vs</code> to <code>/etc/modules</code> and rebooting again correctly fixed the problem.</p>
 <p>This is because the module was automatically loaded the first time <code>ipvsadm</code> is called (namely, <code>/etc/init.d/ipvsadm</code>), which happened at a very late stage. Adding to <code>/etc/modules</code> gets the module loaded earlier (and before <code>systemd-sysctl.service</code>) so it worked.</p>

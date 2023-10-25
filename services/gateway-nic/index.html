@@ -2498,103 +2498,103 @@
 <p>The virtual disk of the old gateway-nic was copied onto pve-5, located at ZFS Zvol <code>rpool/data/gateway-nic</code>. The current VM uses <code>rpool/data/vm-200-disk-0</code> instead (Proxmox naming convention).</p>
 <h2 id="config-file-management">Config file management<a class="headerlink" href="#config-file-management" title="Permanent link">&para;</a></h2>
 <p>Git repositories exist for these directories:</p>
-<div class="highlight"><pre><span></span><code>/etc/nginx
-/etc/systemd/network
-/etc/tinc
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>/etc/nginx
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>/etc/systemd/network
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>/etc/tinc
 </code></pre></div>
 <h2 id="networking">Networking<a class="headerlink" href="#networking" title="Permanent link">&para;</a></h2>
 <p>We use systemd-networkd to configure network on gateway-nic. This replaces both <code>ifupdown</code> (config file <code>/etc/network/interfaces</code>)</p>
-<div class="highlight"><span class="filename">$ systemctl edit systemd-networkd.service</span><pre><span></span><code><span class="k">[Service]</span>
-<span class="na">ExecStartPre</span><span class="o">=</span><span class="s">-/sbin/ip -4 rule flush</span>
-<span class="na">ExecStartPre</span><span class="o">=</span><span class="s">-/sbin/ip -6 rule flush</span>
-
-<span class="k">[Install]</span>
-<span class="na">Alias</span><span class="o">=</span><span class="s">networkd.service</span>
+<div class="highlight"><span class="filename">$ systemctl edit systemd-networkd.service</span><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="k">[Service]</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="na">ExecStartPre</span><span class="o">=</span><span class="s">-/sbin/ip -4 rule flush</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="na">ExecStartPre</span><span class="o">=</span><span class="s">-/sbin/ip -6 rule flush</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="k">[Install]</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="na">Alias</span><span class="o">=</span><span class="s">networkd.service</span>
 </code></pre></div>
 <p>The <code>ExecStartPre=</code> commands flush (clear) existing rules so that systemd-networkd can fully manage all rules. This is because <code>ManageForeignRoutingPolicyRules</code> is a new setting in systemd 249, while Debian Bullseye uses systemd 247, so we have to do this manually.</p>
 <p>We then load the regular "main" and "default" rules on the loopback interface (routing rules aren't bound to interfaces, but are added/removed when the configured interface is brought up/turned down).</p>
-<div class="highlight"><span class="filename">/etc/systemd/network/00-lo.network</span><pre><span></span><code><span class="k">[Match]</span>
-<span class="na">Name</span><span class="o">=</span><span class="s">lo</span>
-
-<span class="c1"># Route &quot;main&quot;</span>
-<span class="k">[RoutingPolicyRule]</span>
-<span class="na">Family</span><span class="o">=</span><span class="s">both</span>
-<span class="na">Table</span><span class="o">=</span><span class="s">254</span>
-<span class="na">Priority</span><span class="o">=</span><span class="s">2</span>
-<span class="na">SuppressPrefixLength</span><span class="o">=</span><span class="s">1</span>
-
-<span class="c1"># Route &quot;Special&quot;</span>
-<span class="k">[RoutingPolicyRule]</span>
-<span class="na">Family</span><span class="o">=</span><span class="s">both</span>
-<span class="na">Table</span><span class="o">=</span><span class="s">1000</span>
-<span class="na">Priority</span><span class="o">=</span><span class="s">5</span>
-<span class="na">SuppressPrefixLength</span><span class="o">=</span><span class="s">1</span>
-
-<span class="c1"># Route &quot;default&quot;</span>
-<span class="k">[RoutingPolicyRule]</span>
-<span class="na">Family</span><span class="o">=</span><span class="s">both</span>
-<span class="na">Table</span><span class="o">=</span><span class="s">253</span>
-<span class="na">Priority</span><span class="o">=</span><span class="s">32767</span>
+<div class="highlight"><span class="filename">/etc/systemd/network/00-lo.network</span><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="k">[Match]</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="na">Name</span><span class="o">=</span><span class="s">lo</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="c1"># Route &quot;main&quot;</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="k">[RoutingPolicyRule]</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="na">Family</span><span class="o">=</span><span class="s">both</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="na">Table</span><span class="o">=</span><span class="s">254</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="na">Priority</span><span class="o">=</span><span class="s">2</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="na">SuppressPrefixLength</span><span class="o">=</span><span class="s">1</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="c1"># Route &quot;Special&quot;</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="k">[RoutingPolicyRule]</span>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="na">Family</span><span class="o">=</span><span class="s">both</span>
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="na">Table</span><span class="o">=</span><span class="s">1000</span>
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="na">Priority</span><span class="o">=</span><span class="s">5</span>
+<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="na">SuppressPrefixLength</span><span class="o">=</span><span class="s">1</span>
+<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a>
+<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a><span class="c1"># Route &quot;default&quot;</span>
+<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a><span class="k">[RoutingPolicyRule]</span>
+<a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a><span class="na">Family</span><span class="o">=</span><span class="s">both</span>
+<a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a><span class="na">Table</span><span class="o">=</span><span class="s">253</span>
+<a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a><span class="na">Priority</span><span class="o">=</span><span class="s">32767</span>
 </code></pre></div>
 <h3 id="interfaces">Interfaces<a class="headerlink" href="#interfaces" title="Permanent link">&para;</a></h3>
 <p>Systemd-networkd has built-in capability to rename interfaces, so there's no need to use udev rules.</p>
 <p>For example, to assign a name for the cernet interface, we use:</p>
-<div class="highlight"><span class="filename">/etc/systemd/network/12-Cernet.link</span><pre><span></span><code><span class="k">[Match]</span>
-<span class="na">PermanentMACAddress</span><span class="o">=</span><span class="s">00:50:56:a2:02:8c</span>
-
-<span class="k">[Link]</span>
-<span class="na">Name</span><span class="o">=</span><span class="s">Cernet</span>
+<div class="highlight"><span class="filename">/etc/systemd/network/12-Cernet.link</span><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="k">[Match]</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="na">PermanentMACAddress</span><span class="o">=</span><span class="s">00:50:56:a2:02:8c</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="k">[Link]</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="na">Name</span><span class="o">=</span><span class="s">Cernet</span>
 </code></pre></div>
 <p>We then configure addresses and routing rules for this interface:</p>
 <details class="example">
 <summary>/etc/systemd/network/12-Cernet.network</summary>
-<div class="highlight"><pre><span></span><code><span class="k">[Match]</span>
-<span class="na">Name</span><span class="o">=</span><span class="s">Cernet</span>
-
-<span class="k">[Network]</span>
-<span class="na">Address</span><span class="o">=</span><span class="s">202.38.95.102/25</span>
-<span class="na">Address</span><span class="o">=</span><span class="s">2001:da8:d800:95::102/64</span>
-<span class="na">IPv6AcceptRA</span><span class="o">=</span><span class="s">no</span>
-
-<span class="k">[Route]</span>
-<span class="na">Gateway</span><span class="o">=</span><span class="s">202.38.95.126</span>
-<span class="na">Table</span><span class="o">=</span><span class="s">253</span>
-<span class="na">Metric</span><span class="o">=</span><span class="s">2</span>
-
-<span class="k">[Route]</span>
-<span class="na">Gateway</span><span class="o">=</span><span class="s">2001:da8:d800:95::1</span>
-<span class="na">Table</span><span class="o">=</span><span class="s">253</span>
-<span class="na">Metric</span><span class="o">=</span><span class="s">2</span>
-
-<span class="k">[Route]</span>
-<span class="na">Gateway</span><span class="o">=</span><span class="s">202.38.95.126</span>
-<span class="na">Table</span><span class="o">=</span><span class="s">1002</span>
-
-<span class="k">[Route]</span>
-<span class="na">Gateway</span><span class="o">=</span><span class="s">2001:da8:d800:95::1</span>
-<span class="na">Table</span><span class="o">=</span><span class="s">1002</span>
-
-<span class="k">[RoutingPolicyRule]</span>
-<span class="na">From</span><span class="o">=</span><span class="s">202.38.95.102</span>
-<span class="na">Table</span><span class="o">=</span><span class="s">1002</span>
-<span class="na">Priority</span><span class="o">=</span><span class="s">3</span>
-
-<span class="k">[RoutingPolicyRule]</span>
-<span class="na">From</span><span class="o">=</span><span class="s">2001:da8:d800:95::102</span>
-<span class="na">Table</span><span class="o">=</span><span class="s">1002</span>
-<span class="na">Priority</span><span class="o">=</span><span class="s">3</span>
-
-<span class="k">[RoutingPolicyRule]</span>
-<span class="na">Family</span><span class="o">=</span><span class="s">both</span>
-<span class="na">OutgoingInterface</span><span class="o">=</span><span class="s">Cernet</span>
-<span class="na">Table</span><span class="o">=</span><span class="s">1002</span>
-<span class="na">Priority</span><span class="o">=</span><span class="s">3</span>
-
-<span class="k">[RoutingPolicyRule]</span>
-<span class="na">Family</span><span class="o">=</span><span class="s">both</span>
-<span class="na">FirewallMark</span><span class="o">=</span><span class="s">0x2</span>
-<span class="na">Table</span><span class="o">=</span><span class="s">1002</span>
-<span class="na">Priority</span><span class="o">=</span><span class="s">4</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="k">[Match]</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="na">Name</span><span class="o">=</span><span class="s">Cernet</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="k">[Network]</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="na">Address</span><span class="o">=</span><span class="s">202.38.95.102/25</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="na">Address</span><span class="o">=</span><span class="s">2001:da8:d800:95::102/64</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="na">IPv6AcceptRA</span><span class="o">=</span><span class="s">no</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="k">[Route]</span>
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="na">Gateway</span><span class="o">=</span><span class="s">202.38.95.126</span>
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="na">Table</span><span class="o">=</span><span class="s">253</span>
+<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="na">Metric</span><span class="o">=</span><span class="s">2</span>
+<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a>
+<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a><span class="k">[Route]</span>
+<a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a><span class="na">Gateway</span><span class="o">=</span><span class="s">2001:da8:d800:95::1</span>
+<a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a><span class="na">Table</span><span class="o">=</span><span class="s">253</span>
+<a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a><span class="na">Metric</span><span class="o">=</span><span class="s">2</span>
+<a id="__codelineno-4-18" name="__codelineno-4-18" href="#__codelineno-4-18"></a>
+<a id="__codelineno-4-19" name="__codelineno-4-19" href="#__codelineno-4-19"></a><span class="k">[Route]</span>
+<a id="__codelineno-4-20" name="__codelineno-4-20" href="#__codelineno-4-20"></a><span class="na">Gateway</span><span class="o">=</span><span class="s">202.38.95.126</span>
+<a id="__codelineno-4-21" name="__codelineno-4-21" href="#__codelineno-4-21"></a><span class="na">Table</span><span class="o">=</span><span class="s">1002</span>
+<a id="__codelineno-4-22" name="__codelineno-4-22" href="#__codelineno-4-22"></a>
+<a id="__codelineno-4-23" name="__codelineno-4-23" href="#__codelineno-4-23"></a><span class="k">[Route]</span>
+<a id="__codelineno-4-24" name="__codelineno-4-24" href="#__codelineno-4-24"></a><span class="na">Gateway</span><span class="o">=</span><span class="s">2001:da8:d800:95::1</span>
+<a id="__codelineno-4-25" name="__codelineno-4-25" href="#__codelineno-4-25"></a><span class="na">Table</span><span class="o">=</span><span class="s">1002</span>
+<a id="__codelineno-4-26" name="__codelineno-4-26" href="#__codelineno-4-26"></a>
+<a id="__codelineno-4-27" name="__codelineno-4-27" href="#__codelineno-4-27"></a><span class="k">[RoutingPolicyRule]</span>
+<a id="__codelineno-4-28" name="__codelineno-4-28" href="#__codelineno-4-28"></a><span class="na">From</span><span class="o">=</span><span class="s">202.38.95.102</span>
+<a id="__codelineno-4-29" name="__codelineno-4-29" href="#__codelineno-4-29"></a><span class="na">Table</span><span class="o">=</span><span class="s">1002</span>
+<a id="__codelineno-4-30" name="__codelineno-4-30" href="#__codelineno-4-30"></a><span class="na">Priority</span><span class="o">=</span><span class="s">3</span>
+<a id="__codelineno-4-31" name="__codelineno-4-31" href="#__codelineno-4-31"></a>
+<a id="__codelineno-4-32" name="__codelineno-4-32" href="#__codelineno-4-32"></a><span class="k">[RoutingPolicyRule]</span>
+<a id="__codelineno-4-33" name="__codelineno-4-33" href="#__codelineno-4-33"></a><span class="na">From</span><span class="o">=</span><span class="s">2001:da8:d800:95::102</span>
+<a id="__codelineno-4-34" name="__codelineno-4-34" href="#__codelineno-4-34"></a><span class="na">Table</span><span class="o">=</span><span class="s">1002</span>
+<a id="__codelineno-4-35" name="__codelineno-4-35" href="#__codelineno-4-35"></a><span class="na">Priority</span><span class="o">=</span><span class="s">3</span>
+<a id="__codelineno-4-36" name="__codelineno-4-36" href="#__codelineno-4-36"></a>
+<a id="__codelineno-4-37" name="__codelineno-4-37" href="#__codelineno-4-37"></a><span class="k">[RoutingPolicyRule]</span>
+<a id="__codelineno-4-38" name="__codelineno-4-38" href="#__codelineno-4-38"></a><span class="na">Family</span><span class="o">=</span><span class="s">both</span>
+<a id="__codelineno-4-39" name="__codelineno-4-39" href="#__codelineno-4-39"></a><span class="na">OutgoingInterface</span><span class="o">=</span><span class="s">Cernet</span>
+<a id="__codelineno-4-40" name="__codelineno-4-40" href="#__codelineno-4-40"></a><span class="na">Table</span><span class="o">=</span><span class="s">1002</span>
+<a id="__codelineno-4-41" name="__codelineno-4-41" href="#__codelineno-4-41"></a><span class="na">Priority</span><span class="o">=</span><span class="s">3</span>
+<a id="__codelineno-4-42" name="__codelineno-4-42" href="#__codelineno-4-42"></a>
+<a id="__codelineno-4-43" name="__codelineno-4-43" href="#__codelineno-4-43"></a><span class="k">[RoutingPolicyRule]</span>
+<a id="__codelineno-4-44" name="__codelineno-4-44" href="#__codelineno-4-44"></a><span class="na">Family</span><span class="o">=</span><span class="s">both</span>
+<a id="__codelineno-4-45" name="__codelineno-4-45" href="#__codelineno-4-45"></a><span class="na">FirewallMark</span><span class="o">=</span><span class="s">0x2</span>
+<a id="__codelineno-4-46" name="__codelineno-4-46" href="#__codelineno-4-46"></a><span class="na">Table</span><span class="o">=</span><span class="s">1002</span>
+<a id="__codelineno-4-47" name="__codelineno-4-47" href="#__codelineno-4-47"></a><span class="na">Priority</span><span class="o">=</span><span class="s">4</span>
 </code></pre></div>
 </details>
 <p>This config file assigns one IPv4 and one IPv6 address to the interface, as well as one IPv4 route and one IPv6 route for both the default routing table and an interface-specific routing table. It then adds three routing rules in both IPv4 and IPv6 for replying on the same interface, for sockets bound to this interfaces, and for firewall mark routing.</p>
@@ -2602,111 +2602,111 @@
 <h3 id="routes">Routes<a class="headerlink" href="#routes" title="Permanent link">&para;</a></h3>
 <p>Outgoing connections are routed through different ISPs. We use ISP IP data from <a href="https://github.com/gaoyifan/china-operator-ip">gaoyifan/china-operator-ip</a>. Relevant files are located under <code>/usr/local/network_config</code>.</p>
 <p>The said repository (branch <code>ip-lists</code>) is cloned and we symlink select files to <code>iplist</code> directory for consumption. A custom script converts these IP data into additional systemd-networkd config files (under <code>/run/systemd</code>).</p>
-<div class="highlight"><span class="filename">$ ls -l /usr/local/network_config/iplist/</span><pre><span></span><code>lrwxrwxrwx cernet.txt -&gt; ../china-operator-ip/cernet.txt
-lrwxrwxrwx cernet6.txt -&gt; ../china-operator-ip/cernet6.txt
-lrwxrwxrwx china.txt -&gt; ../china-operator-ip/china.txt
-lrwxrwxrwx china6.txt -&gt; ../china-operator-ip/china6.txt
-lrwxrwxrwx cstnet.txt -&gt; ../china-operator-ip/cstnet.txt
-lrwxrwxrwx cstnet6.txt -&gt; ../china-operator-ip/cstnet6.txt
-lrwxrwxrwx mobile.txt -&gt; ../china-operator-ip/cmcc.txt
-lrwxrwxrwx telecom.txt -&gt; ../china-operator-ip/chinanet.txt
-lrwxrwxrwx unicom.txt -&gt; ../china-operator-ip/unicom.txt
--rw-r--r-- ustcnet.txt
--rw-r--r-- ustcnet6.txt
+<div class="highlight"><span class="filename">$ ls -l /usr/local/network_config/iplist/</span><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>lrwxrwxrwx cernet.txt -&gt; ../china-operator-ip/cernet.txt
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>lrwxrwxrwx cernet6.txt -&gt; ../china-operator-ip/cernet6.txt
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>lrwxrwxrwx china.txt -&gt; ../china-operator-ip/china.txt
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>lrwxrwxrwx china6.txt -&gt; ../china-operator-ip/china6.txt
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>lrwxrwxrwx cstnet.txt -&gt; ../china-operator-ip/cstnet.txt
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>lrwxrwxrwx cstnet6.txt -&gt; ../china-operator-ip/cstnet6.txt
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>lrwxrwxrwx mobile.txt -&gt; ../china-operator-ip/cmcc.txt
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>lrwxrwxrwx telecom.txt -&gt; ../china-operator-ip/chinanet.txt
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>lrwxrwxrwx unicom.txt -&gt; ../china-operator-ip/unicom.txt
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a>-rw-r--r-- ustcnet.txt
+<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a>-rw-r--r-- ustcnet6.txt
 </code></pre></div>
-<div class="highlight"><span class="filename">/usr/local/network_config/route-all.sh</span><pre><span></span><code><span class="ch">#!/bin/bash</span>
-
-<span class="o">[</span><span class="w"> </span>-n<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$BASH_VERSION</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">]</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">exit</span><span class="w"> </span><span class="m">1</span>
-
-<span class="nv">WD</span><span class="o">=</span><span class="s2">&quot;</span><span class="k">$(</span>dirname<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$0</span><span class="s2">&quot;</span><span class="k">)</span><span class="s2">&quot;</span>
-<span class="nv">ROOT_IP_LIST</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$WD</span><span class="s2">/iplist&quot;</span>
-<span class="nv">ROOT_CONF</span><span class="o">=</span>/etc/systemd/network
-<span class="nv">ROOT_RT</span><span class="o">=</span>/run/systemd/network
-
-gen_route<span class="o">()</span><span class="w"> </span><span class="o">{</span>
-<span class="w">  </span><span class="nb">local</span><span class="w"> </span><span class="nv">DEVFILE</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$1</span><span class="s2">&quot;</span>
-<span class="w">  </span><span class="nb">local</span><span class="w"> </span><span class="nv">DEV</span><span class="o">=</span><span class="s2">&quot;</span><span class="k">$(</span>awk<span class="w"> </span>-F<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;/^Name=/{print $2; exit}&#39;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$ROOT_CONF</span><span class="s2">/</span><span class="nv">$DEVFILE</span><span class="s2">.network&quot;</span><span class="k">)</span><span class="s2">&quot;</span>
-<span class="w">  </span><span class="nb">local</span><span class="w"> </span><span class="nv">GW</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$2</span><span class="s2">&quot;</span><span class="w"> </span><span class="nv">FAMILY</span><span class="o">=</span>ipv4<span class="w"> </span>V6
-<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="o">[[</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$GW</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">=</span>~<span class="w"> </span>:<span class="w"> </span><span class="o">]]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
-<span class="w">    </span><span class="nv">FAMILY</span><span class="o">=</span>ipv6
-<span class="w">    </span><span class="nv">V6</span><span class="o">=</span><span class="s2">&quot;-v6&quot;</span>
-<span class="w">  </span><span class="k">fi</span>
-<span class="w">  </span><span class="c1"># Convert table to number</span>
-<span class="w">  </span><span class="nb">local</span><span class="w"> </span><span class="nv">TABLENAME</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$3</span><span class="s2">&quot;</span>
-<span class="w">  </span><span class="nb">local</span><span class="w"> </span><span class="nv">TABLE</span><span class="o">=</span><span class="s2">&quot;</span><span class="k">$(</span>awk<span class="w"> </span><span class="s1">&#39;substr($0, 1, 1) != &quot;#&quot; &amp;&amp; $2 == &quot;&#39;</span><span class="s2">&quot;</span><span class="nv">$TABLENAME</span><span class="s2">&quot;</span><span class="s1">&#39;&quot; { print $1 }&#39;</span><span class="w"> </span>/etc/iproute2/rt_tables<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-1<span class="k">)</span><span class="s2">&quot;</span>
-<span class="w">  </span><span class="nb">local</span><span class="w"> </span><span class="nv">PRIORITY</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$4</span><span class="s2">&quot;</span>
-<span class="w">  </span><span class="nb">shift</span><span class="w"> </span><span class="m">4</span>
-
-<span class="w">  </span><span class="nv">F</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$ROOT_RT</span><span class="s2">/</span><span class="nv">$DEVFILE</span><span class="s2">.network.d&quot;</span>
-<span class="w">  </span>mkdir<span class="w"> </span>-p<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$F</span><span class="s2">&quot;</span>
-<span class="w">  </span><span class="nv">F</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$F</span><span class="s2">/route-</span><span class="si">${</span><span class="nv">TABLENAME</span><span class="p">,,</span><span class="si">}${</span><span class="nv">V6</span><span class="si">}</span><span class="s2">.conf&quot;</span>
-<span class="w">  </span><span class="nb">echo</span><span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;[RoutingPolicyRule]\nFamily=</span><span class="nv">$FAMILY</span><span class="s2">\nTable=</span><span class="nv">$TABLE</span><span class="s2">\nPriority=</span><span class="nv">$PRIORITY</span><span class="s2">\n&quot;</span><span class="w"> </span>&gt;<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$F</span><span class="s2">&quot;</span>
-
-<span class="w">  </span>awk<span class="w"> </span><span class="s1">&#39;{ print &quot;[Route]\nDestination=&quot; $1 &quot;\nGateway=&#39;</span><span class="s2">&quot;</span><span class="nv">$GW</span><span class="s2">&quot;</span><span class="s1">&#39;\nTable=&#39;</span><span class="s2">&quot;</span><span class="nv">$TABLE</span><span class="s2">&quot;</span><span class="s1">&#39;\n&quot; }&#39;</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="p">@/#/</span><span class="nv">$ROOT_IP_LIST</span><span class="p">/</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$F</span><span class="s2">&quot;</span>
-<span class="o">}</span>
-
-gen_route<span class="w"> </span><span class="m">12</span>-Cernet<span class="w"> </span><span class="m">202</span>.38.95.126<span class="w"> </span>ustcnet<span class="w"> </span><span class="m">5</span><span class="w"> </span>ustcnet.txt
-gen_route<span class="w"> </span><span class="m">12</span>-Cernet<span class="w"> </span><span class="m">2001</span>:da8:d800:95::1<span class="w"> </span>ustcnet<span class="w"> </span><span class="m">5</span><span class="w"> </span>ustcnet6.txt
-gen_route<span class="w"> </span><span class="m">12</span>-Cernet<span class="w"> </span><span class="m">202</span>.38.95.126<span class="w"> </span>cernet<span class="w"> </span><span class="m">6</span><span class="w"> </span>cernet.txt<span class="w"> </span>cstnet.txt
-gen_route<span class="w"> </span><span class="m">12</span>-Cernet<span class="w"> </span><span class="m">2001</span>:da8:d800:95::1<span class="w"> </span>cernet<span class="w"> </span><span class="m">6</span><span class="w"> </span>cernet6.txt<span class="w"> </span>cstnet6.txt
-gen_route<span class="w"> </span><span class="m">13</span>-Telecom<span class="w"> </span><span class="m">202</span>.141.160.126<span class="w"> </span>telecom<span class="w"> </span><span class="m">6</span><span class="w"> </span>telecom.txt<span class="w"> </span>unicom.txt
-gen_route<span class="w"> </span><span class="m">14</span>-Mobile<span class="w"> </span><span class="m">202</span>.141.176.126<span class="w"> </span>mobile<span class="w"> </span><span class="m">6</span><span class="w"> </span>mobile.txt
-gen_route<span class="w"> </span><span class="m">12</span>-Cernet<span class="w"> </span><span class="m">202</span>.38.95.126<span class="w"> </span>china<span class="w"> </span><span class="m">7</span><span class="w"> </span>china.txt
-gen_route<span class="w"> </span><span class="m">12</span>-Cernet<span class="w"> </span><span class="m">2001</span>:da8:d800:95::1<span class="w"> </span>china<span class="w"> </span><span class="m">7</span><span class="w"> </span>china6.txt
+<div class="highlight"><span class="filename">/usr/local/network_config/route-all.sh</span><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="ch">#!/bin/bash</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="o">[</span><span class="w"> </span>-n<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$BASH_VERSION</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">]</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">exit</span><span class="w"> </span><span class="m">1</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="nv">WD</span><span class="o">=</span><span class="s2">&quot;</span><span class="k">$(</span>dirname<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$0</span><span class="s2">&quot;</span><span class="k">)</span><span class="s2">&quot;</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="nv">ROOT_IP_LIST</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$WD</span><span class="s2">/iplist&quot;</span>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="nv">ROOT_CONF</span><span class="o">=</span>/etc/systemd/network
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="nv">ROOT_RT</span><span class="o">=</span>/run/systemd/network
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a>
+<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a>gen_route<span class="o">()</span><span class="w"> </span><span class="o">{</span>
+<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a><span class="w">  </span><span class="nb">local</span><span class="w"> </span><span class="nv">DEVFILE</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$1</span><span class="s2">&quot;</span>
+<a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a><span class="w">  </span><span class="nb">local</span><span class="w"> </span><span class="nv">DEV</span><span class="o">=</span><span class="s2">&quot;</span><span class="k">$(</span>awk<span class="w"> </span>-F<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;/^Name=/{print $2; exit}&#39;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$ROOT_CONF</span><span class="s2">/</span><span class="nv">$DEVFILE</span><span class="s2">.network&quot;</span><span class="k">)</span><span class="s2">&quot;</span>
+<a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a><span class="w">  </span><span class="nb">local</span><span class="w"> </span><span class="nv">GW</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$2</span><span class="s2">&quot;</span><span class="w"> </span><span class="nv">FAMILY</span><span class="o">=</span>ipv4<span class="w"> </span>V6
+<a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a><span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="o">[[</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$GW</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">=</span>~<span class="w"> </span>:<span class="w"> </span><span class="o">]]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<a id="__codelineno-6-15" name="__codelineno-6-15" href="#__codelineno-6-15"></a><span class="w">    </span><span class="nv">FAMILY</span><span class="o">=</span>ipv6
+<a id="__codelineno-6-16" name="__codelineno-6-16" href="#__codelineno-6-16"></a><span class="w">    </span><span class="nv">V6</span><span class="o">=</span><span class="s2">&quot;-v6&quot;</span>
+<a id="__codelineno-6-17" name="__codelineno-6-17" href="#__codelineno-6-17"></a><span class="w">  </span><span class="k">fi</span>
+<a id="__codelineno-6-18" name="__codelineno-6-18" href="#__codelineno-6-18"></a><span class="w">  </span><span class="c1"># Convert table to number</span>
+<a id="__codelineno-6-19" name="__codelineno-6-19" href="#__codelineno-6-19"></a><span class="w">  </span><span class="nb">local</span><span class="w"> </span><span class="nv">TABLENAME</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$3</span><span class="s2">&quot;</span>
+<a id="__codelineno-6-20" name="__codelineno-6-20" href="#__codelineno-6-20"></a><span class="w">  </span><span class="nb">local</span><span class="w"> </span><span class="nv">TABLE</span><span class="o">=</span><span class="s2">&quot;</span><span class="k">$(</span>awk<span class="w"> </span><span class="s1">&#39;substr($0, 1, 1) != &quot;#&quot; &amp;&amp; $2 == &quot;&#39;</span><span class="s2">&quot;</span><span class="nv">$TABLENAME</span><span class="s2">&quot;</span><span class="s1">&#39;&quot; { print $1 }&#39;</span><span class="w"> </span>/etc/iproute2/rt_tables<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-1<span class="k">)</span><span class="s2">&quot;</span>
+<a id="__codelineno-6-21" name="__codelineno-6-21" href="#__codelineno-6-21"></a><span class="w">  </span><span class="nb">local</span><span class="w"> </span><span class="nv">PRIORITY</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$4</span><span class="s2">&quot;</span>
+<a id="__codelineno-6-22" name="__codelineno-6-22" href="#__codelineno-6-22"></a><span class="w">  </span><span class="nb">shift</span><span class="w"> </span><span class="m">4</span>
+<a id="__codelineno-6-23" name="__codelineno-6-23" href="#__codelineno-6-23"></a>
+<a id="__codelineno-6-24" name="__codelineno-6-24" href="#__codelineno-6-24"></a><span class="w">  </span><span class="nv">F</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$ROOT_RT</span><span class="s2">/</span><span class="nv">$DEVFILE</span><span class="s2">.network.d&quot;</span>
+<a id="__codelineno-6-25" name="__codelineno-6-25" href="#__codelineno-6-25"></a><span class="w">  </span>mkdir<span class="w"> </span>-p<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$F</span><span class="s2">&quot;</span>
+<a id="__codelineno-6-26" name="__codelineno-6-26" href="#__codelineno-6-26"></a><span class="w">  </span><span class="nv">F</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$F</span><span class="s2">/route-</span><span class="si">${</span><span class="nv">TABLENAME</span><span class="p">,,</span><span class="si">}${</span><span class="nv">V6</span><span class="si">}</span><span class="s2">.conf&quot;</span>
+<a id="__codelineno-6-27" name="__codelineno-6-27" href="#__codelineno-6-27"></a><span class="w">  </span><span class="nb">echo</span><span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;[RoutingPolicyRule]\nFamily=</span><span class="nv">$FAMILY</span><span class="s2">\nTable=</span><span class="nv">$TABLE</span><span class="s2">\nPriority=</span><span class="nv">$PRIORITY</span><span class="s2">\n&quot;</span><span class="w"> </span>&gt;<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$F</span><span class="s2">&quot;</span>
+<a id="__codelineno-6-28" name="__codelineno-6-28" href="#__codelineno-6-28"></a>
+<a id="__codelineno-6-29" name="__codelineno-6-29" href="#__codelineno-6-29"></a><span class="w">  </span>awk<span class="w"> </span><span class="s1">&#39;{ print &quot;[Route]\nDestination=&quot; $1 &quot;\nGateway=&#39;</span><span class="s2">&quot;</span><span class="nv">$GW</span><span class="s2">&quot;</span><span class="s1">&#39;\nTable=&#39;</span><span class="s2">&quot;</span><span class="nv">$TABLE</span><span class="s2">&quot;</span><span class="s1">&#39;\n&quot; }&#39;</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="p">@/#/</span><span class="nv">$ROOT_IP_LIST</span><span class="p">/</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$F</span><span class="s2">&quot;</span>
+<a id="__codelineno-6-30" name="__codelineno-6-30" href="#__codelineno-6-30"></a><span class="o">}</span>
+<a id="__codelineno-6-31" name="__codelineno-6-31" href="#__codelineno-6-31"></a>
+<a id="__codelineno-6-32" name="__codelineno-6-32" href="#__codelineno-6-32"></a>gen_route<span class="w"> </span><span class="m">12</span>-Cernet<span class="w"> </span><span class="m">202</span>.38.95.126<span class="w"> </span>ustcnet<span class="w"> </span><span class="m">5</span><span class="w"> </span>ustcnet.txt
+<a id="__codelineno-6-33" name="__codelineno-6-33" href="#__codelineno-6-33"></a>gen_route<span class="w"> </span><span class="m">12</span>-Cernet<span class="w"> </span><span class="m">2001</span>:da8:d800:95::1<span class="w"> </span>ustcnet<span class="w"> </span><span class="m">5</span><span class="w"> </span>ustcnet6.txt
+<a id="__codelineno-6-34" name="__codelineno-6-34" href="#__codelineno-6-34"></a>gen_route<span class="w"> </span><span class="m">12</span>-Cernet<span class="w"> </span><span class="m">202</span>.38.95.126<span class="w"> </span>cernet<span class="w"> </span><span class="m">6</span><span class="w"> </span>cernet.txt<span class="w"> </span>cstnet.txt
+<a id="__codelineno-6-35" name="__codelineno-6-35" href="#__codelineno-6-35"></a>gen_route<span class="w"> </span><span class="m">12</span>-Cernet<span class="w"> </span><span class="m">2001</span>:da8:d800:95::1<span class="w"> </span>cernet<span class="w"> </span><span class="m">6</span><span class="w"> </span>cernet6.txt<span class="w"> </span>cstnet6.txt
+<a id="__codelineno-6-36" name="__codelineno-6-36" href="#__codelineno-6-36"></a>gen_route<span class="w"> </span><span class="m">13</span>-Telecom<span class="w"> </span><span class="m">202</span>.141.160.126<span class="w"> </span>telecom<span class="w"> </span><span class="m">6</span><span class="w"> </span>telecom.txt<span class="w"> </span>unicom.txt
+<a id="__codelineno-6-37" name="__codelineno-6-37" href="#__codelineno-6-37"></a>gen_route<span class="w"> </span><span class="m">14</span>-Mobile<span class="w"> </span><span class="m">202</span>.141.176.126<span class="w"> </span>mobile<span class="w"> </span><span class="m">6</span><span class="w"> </span>mobile.txt
+<a id="__codelineno-6-38" name="__codelineno-6-38" href="#__codelineno-6-38"></a>gen_route<span class="w"> </span><span class="m">12</span>-Cernet<span class="w"> </span><span class="m">202</span>.38.95.126<span class="w"> </span>china<span class="w"> </span><span class="m">7</span><span class="w"> </span>china.txt
+<a id="__codelineno-6-39" name="__codelineno-6-39" href="#__codelineno-6-39"></a>gen_route<span class="w"> </span><span class="m">12</span>-Cernet<span class="w"> </span><span class="m">2001</span>:da8:d800:95::1<span class="w"> </span>china<span class="w"> </span><span class="m">7</span><span class="w"> </span>china6.txt
 </code></pre></div>
 <p>We then use a systemd service to ensure additional files for systemd-networkd are generated before it starts.</p>
-<div class="highlight"><span class="filename">/etc/systemd/system/route-all.service</span><pre><span></span><code><span class="k">[Unit]</span>
-<span class="na">Description</span><span class="o">=</span><span class="s">Generate routes for systemd-networkd</span>
-<span class="na">Before</span><span class="o">=</span><span class="s">systemd-networkd.service</span>
-
-<span class="k">[Service]</span>
-<span class="na">Type</span><span class="o">=</span><span class="s">oneshot</span>
-<span class="na">ExecStart</span><span class="o">=</span><span class="s">/bin/bash /usr/local/network_config/route-all.sh</span>
-<span class="c1">#ExecStart=/usr/local/network_config/special.rb</span>
-<span class="na">RemainAfterExit</span><span class="o">=</span><span class="s">true</span>
-
-<span class="k">[Install]</span>
-<span class="na">WantedBy</span><span class="o">=</span><span class="s">network.target systemd-networkd.service</span>
+<div class="highlight"><span class="filename">/etc/systemd/system/route-all.service</span><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="k">[Unit]</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="na">Description</span><span class="o">=</span><span class="s">Generate routes for systemd-networkd</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="na">Before</span><span class="o">=</span><span class="s">systemd-networkd.service</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="k">[Service]</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="na">Type</span><span class="o">=</span><span class="s">oneshot</span>
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="na">ExecStart</span><span class="o">=</span><span class="s">/bin/bash /usr/local/network_config/route-all.sh</span>
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="c1">#ExecStart=/usr/local/network_config/special.rb</span>
+<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a><span class="na">RemainAfterExit</span><span class="o">=</span><span class="s">true</span>
+<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a>
+<a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a><span class="k">[Install]</span>
+<a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a><span class="na">WantedBy</span><span class="o">=</span><span class="s">network.target systemd-networkd.service</span>
 </code></pre></div>
 <p>Updating routes from upstream is easy:</p>
-<div class="highlight"><span class="filename">/usr/local/network_config/update.sh</span><pre><span></span><code><span class="ch">#!/bin/sh</span>
-
-<span class="nb">cd</span><span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span>dirname<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$0</span><span class="s2">&quot;</span><span class="k">)</span><span class="s2">&quot;</span>
-
-git<span class="w"> </span>-C<span class="w"> </span>china-operator-ip<span class="w"> </span>pull
-systemctl<span class="w"> </span>restart<span class="w"> </span>route-all.service
+<div class="highlight"><span class="filename">/usr/local/network_config/update.sh</span><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="ch">#!/bin/sh</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="nb">cd</span><span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span>dirname<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$0</span><span class="s2">&quot;</span><span class="k">)</span><span class="s2">&quot;</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>git<span class="w"> </span>-C<span class="w"> </span>china-operator-ip<span class="w"> </span>pull
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>systemctl<span class="w"> </span>restart<span class="w"> </span>route-all.service
 </code></pre></div>
 <p>The resulting routing policies look like this:</p>
-<div class="highlight"><span class="filename">$ ip rule</span><pre><span></span><code>0:      from all lookup local
-2:      from all lookup main suppress_prefixlength 1
-3:      from 172.16.0.2 lookup Warp
-3:      from all oif Warp lookup Warp
-3:      from 202.141.176.102 lookup Mobile
-3:      from all oif Mobile lookup Mobile
-3:      from 202.141.160.102 lookup Telecom
-3:      from all oif Telecom lookup Telecom
-3:      from 202.38.95.102 lookup Cernet
-3:      from all oif Cernet lookup Cernet
-4:      from all fwmark 0x5 lookup Warp
-4:      from all fwmark 0x4 lookup Mobile
-4:      from all fwmark 0x3 lookup Telecom
-4:      from all fwmark 0x2 lookup Cernet
-5:      from all lookup Special suppress_prefixlength 1
-5:      from all lookup Ustcnet
-6:      from all lookup mobile
-6:      from all lookup telecom
-6:      from all lookup cernet
-7:      from all lookup china
-32767:  from all lookup default
+<div class="highlight"><span class="filename">$ ip rule</span><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>0:      from all lookup local
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>2:      from all lookup main suppress_prefixlength 1
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>3:      from 172.16.0.2 lookup Warp
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>3:      from all oif Warp lookup Warp
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>3:      from 202.141.176.102 lookup Mobile
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>3:      from all oif Mobile lookup Mobile
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a>3:      from 202.141.160.102 lookup Telecom
+<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a>3:      from all oif Telecom lookup Telecom
+<a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a>3:      from 202.38.95.102 lookup Cernet
+<a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a>3:      from all oif Cernet lookup Cernet
+<a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a>4:      from all fwmark 0x5 lookup Warp
+<a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a>4:      from all fwmark 0x4 lookup Mobile
+<a id="__codelineno-9-13" name="__codelineno-9-13" href="#__codelineno-9-13"></a>4:      from all fwmark 0x3 lookup Telecom
+<a id="__codelineno-9-14" name="__codelineno-9-14" href="#__codelineno-9-14"></a>4:      from all fwmark 0x2 lookup Cernet
+<a id="__codelineno-9-15" name="__codelineno-9-15" href="#__codelineno-9-15"></a>5:      from all lookup Special suppress_prefixlength 1
+<a id="__codelineno-9-16" name="__codelineno-9-16" href="#__codelineno-9-16"></a>5:      from all lookup Ustcnet
+<a id="__codelineno-9-17" name="__codelineno-9-17" href="#__codelineno-9-17"></a>6:      from all lookup mobile
+<a id="__codelineno-9-18" name="__codelineno-9-18" href="#__codelineno-9-18"></a>6:      from all lookup telecom
+<a id="__codelineno-9-19" name="__codelineno-9-19" href="#__codelineno-9-19"></a>6:      from all lookup cernet
+<a id="__codelineno-9-20" name="__codelineno-9-20" href="#__codelineno-9-20"></a>7:      from all lookup china
+<a id="__codelineno-9-21" name="__codelineno-9-21" href="#__codelineno-9-21"></a>32767:  from all lookup default
 </code></pre></div>
 <h3 id="tinc-vpn">Tinc VPN<a class="headerlink" href="#tinc-vpn" title="Permanent link">&para;</a></h3>
 <p>Gateway-NIC connects to intranet with Tinc. There's no special Tinc configuration other than those described at the <a href="../../infrastructure/tinc/">Tinc VPN</a> page.</p>
 <p>Because Tinc now uses systemd services instead of System V <code>init.d</code> scripts, we need to <code>systemctl enable tinc@ustclug.service</code> to make it start on boot. Everything is managed through this templated systemd service.</p>
 <h3 id="systemd-networkd-wait-onlineservice">systemd-networkd-wait-online.service<a class="headerlink" href="#systemd-networkd-wait-onlineservice" title="Permanent link">&para;</a></h3>
 <p>We also override systemd-networkd's online detection for goodness' sake, so it doesn't block booting. Note that it may interfere with services depending on <code>network-online.target</code>, though we have yet to discover any issues.</p>
-<div class="highlight"><span class="filename">$ systemctl edit systemd-networkd-wait-online.service</span><pre><span></span><code><span class="k">[Service]</span>
-<span class="na">ExecStart</span><span class="o">=</span>
-<span class="na">ExecStart</span><span class="o">=</span><span class="s">/bin/sleep 1</span>
+<div class="highlight"><span class="filename">$ systemctl edit systemd-networkd-wait-online.service</span><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="k">[Service]</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="na">ExecStart</span><span class="o">=</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="na">ExecStart</span><span class="o">=</span><span class="s">/bin/sleep 1</span>
 </code></pre></div>
 <h3 id="iptables">iptables<a class="headerlink" href="#iptables" title="Permanent link">&para;</a></h3>
 <p>All iptables firewall rules are managed manually. We use <code>iptables-persistent</code> to automatically load firewall rules on boot.</p>
@@ -2715,25 +2715,25 @@ systemctl<span class="w"> </span>restart<span class="w"> </span>route-all.servic
 <p>We use fail2ban to stop SSH scanning and brute-force attempts.</p>
 <p>Because fail2ban relies on changing iptables to work, to improve its performance as well as minimize its tampering of iptables rules, we use ipsets for fail2ban.</p>
 <p>After stock installation of <code>fail2ban</code> package, remove <code>defaults-debian.conf</code> and add this file to secure SSH daemon:</p>
-<div class="highlight"><span class="filename">/etc/fail2ban/jail.d/sshd.conf</span><pre><span></span><code><span class="k">[sshd]</span>
-<span class="na">enabled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">true</span>
-<span class="na">mode</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="s">aggressive</span>
-<span class="na">filter</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="s">sshd[mode=%(mode)s]</span>
-<span class="na">logpath</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">/var/log/auth.log</span>
-<span class="na">backend</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">pyinotify</span>
-<span class="na">action</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="s">iptables-ipset-proto6[chain=&quot;fail2ban&quot;]</span>
+<div class="highlight"><span class="filename">/etc/fail2ban/jail.d/sshd.conf</span><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="k">[sshd]</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="na">enabled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">true</span>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="na">mode</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="s">aggressive</span>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="na">filter</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="s">sshd[mode=%(mode)s]</span>
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="na">logpath</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">/var/log/auth.log</span>
+<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="na">backend</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">pyinotify</span>
+<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a><span class="na">action</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="s">iptables-ipset-proto6[chain=&quot;fail2ban&quot;]</span>
 </code></pre></div>
 <p>We provide a pre-created empty chain named <code>fail2ban</code> for fail2ban to manipulate (see <a href="#iptables">iptables</a> above).</p>
 <p>To make sure fail2ban rules can be re-applied after reloading iptables manually, we override the systemd service so that fail2ban is restarted whenever the iptables service is restarted.</p>
-<div class="highlight"><span class="filename">$ systemctl edit fail2ban.service</span><pre><span></span><code><span class="k">[Unit]</span>
-<span class="na">After</span><span class="o">=</span><span class="s">netfilter-persistent.service</span>
-<span class="na">BindsTo</span><span class="o">=</span><span class="s">netfilter-persistent.service</span>
+<div class="highlight"><span class="filename">$ systemctl edit fail2ban.service</span><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="k">[Unit]</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="na">After</span><span class="o">=</span><span class="s">netfilter-persistent.service</span>
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="na">BindsTo</span><span class="o">=</span><span class="s">netfilter-persistent.service</span>
 </code></pre></div>
 <p>For some servers where we want to manually start fail2ban, we use <code>Requires=</code> + <code>PartOf=</code>. This will propagate "restart" event from iptables to fail2ban, but not "start".</p>
-<div class="highlight"><span class="filename">$ systemctl edit fail2ban.service</span><pre><span></span><code><span class="k">[Unit]</span>
-<span class="na">After</span><span class="o">=</span><span class="s">netfilter-persistent.service</span>
-<span class="na">Requires</span><span class="o">=</span><span class="s">netfilter-persistent.service</span>
-<span class="na">PartOf</span><span class="o">=</span><span class="s">netfilter-persistent.service</span>
+<div class="highlight"><span class="filename">$ systemctl edit fail2ban.service</span><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="k">[Unit]</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="na">After</span><span class="o">=</span><span class="s">netfilter-persistent.service</span>
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="na">Requires</span><span class="o">=</span><span class="s">netfilter-persistent.service</span>
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="na">PartOf</span><span class="o">=</span><span class="s">netfilter-persistent.service</span>
 </code></pre></div>
 
 

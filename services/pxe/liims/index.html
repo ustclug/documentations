@@ -2489,7 +2489,7 @@
 <p>It is strongly advised to clone liimstrap and read through it when reading this document.</p>
 <h2 id="add-machine">启动配置<a class="headerlink" href="#add-machine" title="Permanent link">&para;</a></h2>
 <p>配置文件在 <code>/home/pxe/tftp/grub/grub.cfg.d</code>，若要允许新机器启动 liims 镜像，创建一个符号链接到对应的配置文件。例如：</p>
-<div class="highlight"><pre><span></span><code>ln<span class="w"> </span>-s<span class="w"> </span>common_el<span class="w"> </span><span class="m">02</span>:23:45:67:89:ab
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>ln<span class="w"> </span>-s<span class="w"> </span>common_el<span class="w"> </span><span class="m">02</span>:23:45:67:89:ab
 </code></pre></div>
 <p>目前我们通过几个符号链接将配置文件“分组”，MAC 地址对应的符号链接应该链接到这些分组上。已有的分组如下：</p>
 <ul>
@@ -2503,12 +2503,12 @@
 <p>除此之外，还需要在查询机监控程序中添加该 MAC 地址，见下方<a href="#monitor">查询机监控</a>。</p>
 <h3 id="lib-api">为图书馆老师开放的接口<a class="headerlink" href="#lib-api" title="Permanent link">&para;</a></h3>
 <p>图书馆老师可以通过 SSH 登录机器直接创建所需的符号链接（但是还需要我们来改监控程序的 json）。相关配置如下：</p>
-<div class="highlight"><span class="filename">/etc/sudoers.d/sonnie</span><pre><span></span><code>sonnie ALL=(pxe) NOPASSWD: /home/pxe/tftp/grub/grub.cfg.d/add_host.py *
+<div class="highlight"><span class="filename">/etc/sudoers.d/sonnie</span><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>sonnie ALL=(pxe) NOPASSWD: /home/pxe/tftp/grub/grub.cfg.d/add_host.py *
 </code></pre></div>
-<div class="highlight"><span class="filename">/etc/ssh/sshd_config</span><pre><span></span><code>Match User sonnie
-    AllowUsers sonnie
-    PubkeyAuthentication yes
-    AuthorizedKeysFile .ssh/authorized_keys
+<div class="highlight"><span class="filename">/etc/ssh/sshd_config</span><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>Match User sonnie
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>    AllowUsers sonnie
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>    PubkeyAuthentication yes
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>    AuthorizedKeysFile .ssh/authorized_keys
 </code></pre></div>
 <div class="admonition abstract">
 <p class="admonition-title">/etc/nsswitch.conf</p>
@@ -2528,17 +2528,17 @@
 <p>构建后需要推送到服务器上的 <code>/nfsroot/liims</code> 下，并设置 /usr 的所有者为 liims。机器的默认 pxe 启动配置在 <code>/home/pxe/tftp/pxelinux.cfg/</code> 下</p>
 <h3 id="qemu">示例 qemu 调试方法<a class="headerlink" href="#qemu" title="Permanent link">&para;</a></h3>
 <p>创建并挂载临时镜像:</p>
-<div class="highlight"><pre><span></span><code>dd<span class="w"> </span><span class="k">if</span><span class="o">=</span>/dev/zero<span class="w"> </span><span class="nv">of</span><span class="o">=</span>liims.img<span class="w"> </span><span class="nv">bs</span><span class="o">=</span>4k<span class="w"> </span><span class="nv">count</span><span class="o">=</span><span class="m">1200000</span>
-mkfs.ext4<span class="w"> </span>liims.img
-mount<span class="w"> </span>-o<span class="w"> </span>loop<span class="w"> </span>liims.img<span class="w"> </span>/mnt
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>dd<span class="w"> </span><span class="k">if</span><span class="o">=</span>/dev/zero<span class="w"> </span><span class="nv">of</span><span class="o">=</span>liims.img<span class="w"> </span><span class="nv">bs</span><span class="o">=</span>4k<span class="w"> </span><span class="nv">count</span><span class="o">=</span><span class="m">1200000</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>mkfs.ext4<span class="w"> </span>liims.img
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>mount<span class="w"> </span>-o<span class="w"> </span>loop<span class="w"> </span>liims.img<span class="w"> </span>/mnt
 </code></pre></div>
 <p>假设当前路径为 liimstrap，修改 <code>initcpio/mkinitcpio.conf</code>，去掉 HOOKS 中的 <code>liims_root</code>，增加 <code>block</code>（仅调试时需要）。 使用 liimstrap 制作镜像 <code>./liimstrap /mnt</code>。完成后使用 qemu 打开调试:</p>
-<div class="highlight"><pre><span></span><code>qemu<span class="w"> </span>-kernel<span class="w"> </span>/mnt/boot/vmlinuz-lts<span class="se">\</span>
-<span class="w">     </span>-initrd<span class="w"> </span>/mnt/boot/initramfs-linux-lts.img<span class="se">\</span>
-<span class="w">     </span>-hda<span class="w"> </span>liims.img<span class="se">\</span>
-<span class="w">     </span>-netdev<span class="w"> </span>user,id<span class="o">=</span>mynet0,net<span class="o">=</span><span class="m">114</span>.214.188.0/24,dhcpstart<span class="o">=</span><span class="m">114</span>.214.188.9<span class="se">\</span>
-<span class="w">     </span>-device<span class="w"> </span>i82557a,netdev<span class="o">=</span>mynet0<span class="se">\</span>
-<span class="w">     </span>-append<span class="w"> </span><span class="s2">&quot;root=/dev/sda rootflags=rw&quot;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>qemu<span class="w"> </span>-kernel<span class="w"> </span>/mnt/boot/vmlinuz-lts<span class="se">\</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">     </span>-initrd<span class="w"> </span>/mnt/boot/initramfs-linux-lts.img<span class="se">\</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">     </span>-hda<span class="w"> </span>liims.img<span class="se">\</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">     </span>-netdev<span class="w"> </span>user,id<span class="o">=</span>mynet0,net<span class="o">=</span><span class="m">114</span>.214.188.0/24,dhcpstart<span class="o">=</span><span class="m">114</span>.214.188.9<span class="se">\</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">     </span>-device<span class="w"> </span>i82557a,netdev<span class="o">=</span>mynet0<span class="se">\</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">     </span>-append<span class="w"> </span><span class="s2">&quot;root=/dev/sda rootflags=rw&quot;</span>
 </code></pre></div>
 <p>注：其中 netdev 中的 ip 段可以自由选取，<code>device</code> 中的设备名通过 <code>qemu -device \?</code> 查看后选择任一网络设备即可</p>
 <h2 id="monitor">查询机监控<a class="headerlink" href="#monitor" title="Permanent link">&para;</a></h2>
@@ -2548,10 +2548,10 @@ mount<span class="w"> </span>-o<span class="w"> </span>loop<span class="w"> </sp
 <p class="admonition-title">添加新机器</p>
 <p><del>修改 <a href="https://github.com/ustclug/liimstrap/blob/master/monitor/clients.json">https://github.com/ustclug/liimstrap/blob/master/monitor/clients.json</a> 后，在 pxe 上 clone 并在当前目录 build。使用 docker-run-script 中对应脚本执行容器即可。</del></p>
 <p>修改 <code>/etc/liims-monitor/clients.json</code> 之后 <code>systemctl reload liims-monitor.service</code> 即可。</p>
-<div class="highlight"><span class="filename">/etc/liims-monitor/clients.json</span><pre><span></span><code><span class="p">{</span>
-<span class="w">    </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;东区三楼东01&quot;</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;mac&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;0223456789ab&quot;</span>
-<span class="p">}</span>
+<div class="highlight"><span class="filename">/etc/liims-monitor/clients.json</span><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="p">{</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">    </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;东区三楼东01&quot;</span><span class="p">,</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">    </span><span class="nt">&quot;mac&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;0223456789ab&quot;</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="p">}</span>
 </code></pre></div>
 </div>
 

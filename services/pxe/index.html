@@ -2392,9 +2392,9 @@
 <p>每天凌晨，pxe 用户的 crontab 任务会执行 <a href="https://github.com/ustclug/simple-pxe/blob/master/simple-pxe-in-docker">https://github.com/ustclug/simple-pxe/blob/master/simple-pxe-in-docker</a>（文件位于 pxe 用户的 home 中），实现 PXE 相关文件的更新。</p>
 <h2 id="faults">故障<a class="headerlink" href="#faults" title="Permanent link">&para;</a></h2>
 <p>pxe 服务器在升级到 Debian Bullseye (11) 后无法正常开机，经过 GRUB 进入内核后每 5 秒刷出以下信息：</p>
-<div class="highlight"><pre><span></span><code>DMAR: DRHD: handling fault status reg 2
-DMAR: [DMA Read] Request device [03:00.0] PASID ffffffff fault addr cb2f0000 [fault reason 06] PTE Read access is not set
-DMAR: DRHD: handling fault status reg 102
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>DMAR: DRHD: handling fault status reg 2
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>DMAR: [DMA Read] Request device [03:00.0] PASID ffffffff fault addr cb2f0000 [fault reason 06] PTE Read access is not set
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>DMAR: DRHD: handling fault status reg 102
 </code></pre></div>
 <p>由于此时刚升级至 Debian Bullseye，所以系统仍然保留了 Debian Buster 的 4.19 版内核。重启进该内核可正常启动并运行服务，但只要进 5.10 的内核就会出现以上错误。测试 Proxmox VE 提供的 pve-kernel-5.15 也是同样问题。</p>
 <p>搜索发现主机使用的 RAID 卡 PERC H310 不支持直通（IOMMU 虚拟化），配置 GRUB 加入 <code>intel_iommu=off</code> 后可以正常进入 5.10 的内核，作为解决方案。</p>
