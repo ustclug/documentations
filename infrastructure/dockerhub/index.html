@@ -12,28 +12,28 @@
         <meta name="author" content="USTC Linux User Group">
       
       
-        <link rel="canonical" href="https://docs.ustclug.org/workflow/ldap/add-new-user/">
+        <link rel="canonical" href="https://docs.ustclug.org/infrastructure/dockerhub/">
       
       
-        <link rel="prev" href="../../new-vm/">
+        <link rel="prev" href="../github/">
       
       
-        <link rel="next" href="../../../infrastructure/intranet/">
+        <link rel="next" href="../mail/">
       
       
-      <link rel="icon" href="../../../assets/images/favicon.png">
+      <link rel="icon" href="../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.4.6">
     
     
       
-        <title>Add New User in LDAP - LUG @ USTC</title>
+        <title>Docker Hub - LUG @ USTC</title>
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.35e1ed30.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.35e1ed30.min.css">
       
         
-        <link rel="stylesheet" href="../../../assets/stylesheets/palette.356b1318.min.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.356b1318.min.css">
       
       
 
@@ -54,7 +54,7 @@
     
       <link rel="stylesheet" href="https://101.ustclug.org/css/extra.css">
     
-    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -83,7 +83,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#ldap" class="md-skip">
+        <a href="#docker-hub" class="md-skip">
           Skip to content
         </a>
       
@@ -99,7 +99,7 @@
 
 <header class="md-header md-header--shadow" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="../../.." title="LUG @ USTC" class="md-header__button md-logo" aria-label="LUG @ USTC" data-md-component="logo">
+    <a href="../.." title="LUG @ USTC" class="md-header__button md-logo" aria-label="LUG @ USTC" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M220.8 123.3c1 .5 1.8 1.7 3 1.7 1.1 0 2.8-.4 2.9-1.5.2-1.4-1.9-2.3-3.2-2.9-1.7-.7-3.9-1-5.5-.1-.4.2-.8.7-.6 1.1.3 1.3 2.3 1.1 3.4 1.7zm-21.9 1.7c1.2 0 2-1.2 3-1.7 1.1-.6 3.1-.4 3.5-1.6.2-.4-.2-.9-.6-1.1-1.6-.9-3.8-.6-5.5.1-1.3.6-3.4 1.5-3.2 2.9.1 1 1.8 1.5 2.8 1.4zM420 403.8c-3.6-4-5.3-11.6-7.2-19.7-1.8-8.1-3.9-16.8-10.5-22.4-1.3-1.1-2.6-2.1-4-2.9-1.3-.8-2.7-1.5-4.1-2 9.2-27.3 5.6-54.5-3.7-79.1-11.4-30.1-31.3-56.4-46.5-74.4-17.1-21.5-33.7-41.9-33.4-72C311.1 85.4 315.7.1 234.8 0 132.4-.2 158 103.4 156.9 135.2c-1.7 23.4-6.4 41.8-22.5 64.7-18.9 22.5-45.5 58.8-58.1 96.7-6 17.9-8.8 36.1-6.2 53.3-6.5 5.8-11.4 14.7-16.6 20.2-4.2 4.3-10.3 5.9-17 8.3s-14 6-18.5 14.5c-2.1 3.9-2.8 8.1-2.8 12.4 0 3.9.6 7.9 1.2 11.8 1.2 8.1 2.5 15.7.8 20.8-5.2 14.4-5.9 24.4-2.2 31.7 3.8 7.3 11.4 10.5 20.1 12.3 17.3 3.6 40.8 2.7 59.3 12.5 19.8 10.4 39.9 14.1 55.9 10.4 11.6-2.6 21.1-9.6 25.9-20.2 12.5-.1 26.3-5.4 48.3-6.6 14.9-1.2 33.6 5.3 55.1 4.1.6 2.3 1.4 4.6 2.5 6.7v.1c8.3 16.7 23.8 24.3 40.3 23 16.6-1.3 34.1-11 48.3-27.9 13.6-16.4 36-23.2 50.9-32.2 7.4-4.5 13.4-10.1 13.9-18.3.4-8.2-4.4-17.3-15.5-29.7zM223.7 87.3c9.8-22.2 34.2-21.8 44-.4 6.5 14.2 3.6 30.9-4.3 40.4-1.6-.8-5.9-2.6-12.6-4.9 1.1-1.2 3.1-2.7 3.9-4.6 4.8-11.8-.2-27-9.1-27.3-7.3-.5-13.9 10.8-11.8 23-4.1-2-9.4-3.5-13-4.4-1-6.9-.3-14.6 2.9-21.8zM183 75.8c10.1 0 20.8 14.2 19.1 33.5-3.5 1-7.1 2.5-10.2 4.6 1.2-8.9-3.3-20.1-9.6-19.6-8.4.7-9.8 21.2-1.8 28.1 1 .8 1.9-.2-5.9 5.5-15.6-14.6-10.5-52.1 8.4-52.1zm-13.6 60.7c6.2-4.6 13.6-10 14.1-10.5 4.7-4.4 13.5-14.2 27.9-14.2 7.1 0 15.6 2.3 25.9 8.9 6.3 4.1 11.3 4.4 22.6 9.3 8.4 3.5 13.7 9.7 10.5 18.2-2.6 7.1-11 14.4-22.7 18.1-11.1 3.6-19.8 16-38.2 14.9-3.9-.2-7-1-9.6-2.1-8-3.5-12.2-10.4-20-15-8.6-4.8-13.2-10.4-14.7-15.3-1.4-4.9 0-9 4.2-12.3zm3.3 334c-2.7 35.1-43.9 34.4-75.3 18-29.9-15.8-68.6-6.5-76.5-21.9-2.4-4.7-2.4-12.7 2.6-26.4v-.2c2.4-7.6.6-16-.6-23.9-1.2-7.8-1.8-15 .9-20 3.5-6.7 8.5-9.1 14.8-11.3 10.3-3.7 11.8-3.4 19.6-9.9 5.5-5.7 9.5-12.9 14.3-18 5.1-5.5 10-8.1 17.7-6.9 8.1 1.2 15.1 6.8 21.9 16l19.6 35.6c9.5 19.9 43.1 48.4 41 68.9zm-1.4-25.9c-4.1-6.6-9.6-13.6-14.4-19.6 7.1 0 14.2-2.2 16.7-8.9 2.3-6.2 0-14.9-7.4-24.9-13.5-18.2-38.3-32.5-38.3-32.5-13.5-8.4-21.1-18.7-24.6-29.9s-3-23.3-.3-35.2c5.2-22.9 18.6-45.2 27.2-59.2 2.3-1.7.8 3.2-8.7 20.8-8.5 16.1-24.4 53.3-2.6 82.4.6-20.7 5.5-41.8 13.8-61.5 12-27.4 37.3-74.9 39.3-112.7 1.1.8 4.6 3.2 6.2 4.1 4.6 2.7 8.1 6.7 12.6 10.3 12.4 10 28.5 9.2 42.4 1.2 6.2-3.5 11.2-7.5 15.9-9 9.9-3.1 17.8-8.6 22.3-15 7.7 30.4 25.7 74.3 37.2 95.7 6.1 11.4 18.3 35.5 23.6 64.6 3.3-.1 7 .4 10.9 1.4 13.8-35.7-11.7-74.2-23.3-84.9-4.7-4.6-4.9-6.6-2.6-6.5 12.6 11.2 29.2 33.7 35.2 59 2.8 11.6 3.3 23.7.4 35.7 16.4 6.8 35.9 17.9 30.7 34.8-2.2-.1-3.2 0-4.2 0 3.2-10.1-3.9-17.6-22.8-26.1-19.6-8.6-36-8.6-38.3 12.5-12.1 4.2-18.3 14.7-21.4 27.3-2.8 11.2-3.6 24.7-4.4 39.9-.5 7.7-3.6 18-6.8 29-32.1 22.9-76.7 32.9-114.3 7.2zm257.4-11.5c-.9 16.8-41.2 19.9-63.2 46.5-13.2 15.7-29.4 24.4-43.6 25.5s-26.5-4.8-33.7-19.3c-4.7-11.1-2.4-23.1 1.1-36.3 3.7-14.2 9.2-28.8 9.9-40.6.8-15.2 1.7-28.5 4.2-38.7 2.6-10.3 6.6-17.2 13.7-21.1.3-.2.7-.3 1-.5.8 13.2 7.3 26.6 18.8 29.5 12.6 3.3 30.7-7.5 38.4-16.3 9-.3 15.7-.9 22.6 5.1 9.9 8.5 7.1 30.3 17.1 41.6 10.6 11.6 14 19.5 13.7 24.6zM173.3 148.7c2 1.9 4.7 4.5 8 7.1 6.6 5.2 15.8 10.6 27.3 10.6 11.6 0 22.5-5.9 31.8-10.8 4.9-2.6 10.9-7 14.8-10.4s5.9-6.3 3.1-6.6-2.6 2.6-6 5.1c-4.4 3.2-9.7 7.4-13.9 9.8-7.4 4.2-19.5 10.2-29.9 10.2s-18.7-4.8-24.9-9.7c-3.1-2.5-5.7-5-7.7-6.9-1.5-1.4-1.9-4.6-4.3-4.9-1.4-.1-1.8 3.7 1.7 6.5z"/></svg>
@@ -119,7 +119,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Add New User in LDAP
+              Docker Hub
             
           </span>
         </div>
@@ -229,7 +229,7 @@
 
 <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../../.." title="LUG @ USTC" class="md-nav__button md-logo" aria-label="LUG @ USTC" data-md-component="logo">
+    <a href="../.." title="LUG @ USTC" class="md-nav__button md-logo" aria-label="LUG @ USTC" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M220.8 123.3c1 .5 1.8 1.7 3 1.7 1.1 0 2.8-.4 2.9-1.5.2-1.4-1.9-2.3-3.2-2.9-1.7-.7-3.9-1-5.5-.1-.4.2-.8.7-.6 1.1.3 1.3 2.3 1.1 3.4 1.7zm-21.9 1.7c1.2 0 2-1.2 3-1.7 1.1-.6 3.1-.4 3.5-1.6.2-.4-.2-.9-.6-1.1-1.6-.9-3.8-.6-5.5.1-1.3.6-3.4 1.5-3.2 2.9.1 1 1.8 1.5 2.8 1.4zM420 403.8c-3.6-4-5.3-11.6-7.2-19.7-1.8-8.1-3.9-16.8-10.5-22.4-1.3-1.1-2.6-2.1-4-2.9-1.3-.8-2.7-1.5-4.1-2 9.2-27.3 5.6-54.5-3.7-79.1-11.4-30.1-31.3-56.4-46.5-74.4-17.1-21.5-33.7-41.9-33.4-72C311.1 85.4 315.7.1 234.8 0 132.4-.2 158 103.4 156.9 135.2c-1.7 23.4-6.4 41.8-22.5 64.7-18.9 22.5-45.5 58.8-58.1 96.7-6 17.9-8.8 36.1-6.2 53.3-6.5 5.8-11.4 14.7-16.6 20.2-4.2 4.3-10.3 5.9-17 8.3s-14 6-18.5 14.5c-2.1 3.9-2.8 8.1-2.8 12.4 0 3.9.6 7.9 1.2 11.8 1.2 8.1 2.5 15.7.8 20.8-5.2 14.4-5.9 24.4-2.2 31.7 3.8 7.3 11.4 10.5 20.1 12.3 17.3 3.6 40.8 2.7 59.3 12.5 19.8 10.4 39.9 14.1 55.9 10.4 11.6-2.6 21.1-9.6 25.9-20.2 12.5-.1 26.3-5.4 48.3-6.6 14.9-1.2 33.6 5.3 55.1 4.1.6 2.3 1.4 4.6 2.5 6.7v.1c8.3 16.7 23.8 24.3 40.3 23 16.6-1.3 34.1-11 48.3-27.9 13.6-16.4 36-23.2 50.9-32.2 7.4-4.5 13.4-10.1 13.9-18.3.4-8.2-4.4-17.3-15.5-29.7zM223.7 87.3c9.8-22.2 34.2-21.8 44-.4 6.5 14.2 3.6 30.9-4.3 40.4-1.6-.8-5.9-2.6-12.6-4.9 1.1-1.2 3.1-2.7 3.9-4.6 4.8-11.8-.2-27-9.1-27.3-7.3-.5-13.9 10.8-11.8 23-4.1-2-9.4-3.5-13-4.4-1-6.9-.3-14.6 2.9-21.8zM183 75.8c10.1 0 20.8 14.2 19.1 33.5-3.5 1-7.1 2.5-10.2 4.6 1.2-8.9-3.3-20.1-9.6-19.6-8.4.7-9.8 21.2-1.8 28.1 1 .8 1.9-.2-5.9 5.5-15.6-14.6-10.5-52.1 8.4-52.1zm-13.6 60.7c6.2-4.6 13.6-10 14.1-10.5 4.7-4.4 13.5-14.2 27.9-14.2 7.1 0 15.6 2.3 25.9 8.9 6.3 4.1 11.3 4.4 22.6 9.3 8.4 3.5 13.7 9.7 10.5 18.2-2.6 7.1-11 14.4-22.7 18.1-11.1 3.6-19.8 16-38.2 14.9-3.9-.2-7-1-9.6-2.1-8-3.5-12.2-10.4-20-15-8.6-4.8-13.2-10.4-14.7-15.3-1.4-4.9 0-9 4.2-12.3zm3.3 334c-2.7 35.1-43.9 34.4-75.3 18-29.9-15.8-68.6-6.5-76.5-21.9-2.4-4.7-2.4-12.7 2.6-26.4v-.2c2.4-7.6.6-16-.6-23.9-1.2-7.8-1.8-15 .9-20 3.5-6.7 8.5-9.1 14.8-11.3 10.3-3.7 11.8-3.4 19.6-9.9 5.5-5.7 9.5-12.9 14.3-18 5.1-5.5 10-8.1 17.7-6.9 8.1 1.2 15.1 6.8 21.9 16l19.6 35.6c9.5 19.9 43.1 48.4 41 68.9zm-1.4-25.9c-4.1-6.6-9.6-13.6-14.4-19.6 7.1 0 14.2-2.2 16.7-8.9 2.3-6.2 0-14.9-7.4-24.9-13.5-18.2-38.3-32.5-38.3-32.5-13.5-8.4-21.1-18.7-24.6-29.9s-3-23.3-.3-35.2c5.2-22.9 18.6-45.2 27.2-59.2 2.3-1.7.8 3.2-8.7 20.8-8.5 16.1-24.4 53.3-2.6 82.4.6-20.7 5.5-41.8 13.8-61.5 12-27.4 37.3-74.9 39.3-112.7 1.1.8 4.6 3.2 6.2 4.1 4.6 2.7 8.1 6.7 12.6 10.3 12.4 10 28.5 9.2 42.4 1.2 6.2-3.5 11.2-7.5 15.9-9 9.9-3.1 17.8-8.6 22.3-15 7.7 30.4 25.7 74.3 37.2 95.7 6.1 11.4 18.3 35.5 23.6 64.6 3.3-.1 7 .4 10.9 1.4 13.8-35.7-11.7-74.2-23.3-84.9-4.7-4.6-4.9-6.6-2.6-6.5 12.6 11.2 29.2 33.7 35.2 59 2.8 11.6 3.3 23.7.4 35.7 16.4 6.8 35.9 17.9 30.7 34.8-2.2-.1-3.2 0-4.2 0 3.2-10.1-3.9-17.6-22.8-26.1-19.6-8.6-36-8.6-38.3 12.5-12.1 4.2-18.3 14.7-21.4 27.3-2.8 11.2-3.6 24.7-4.4 39.9-.5 7.7-3.6 18-6.8 29-32.1 22.9-76.7 32.9-114.3 7.2zm257.4-11.5c-.9 16.8-41.2 19.9-63.2 46.5-13.2 15.7-29.4 24.4-43.6 25.5s-26.5-4.8-33.7-19.3c-4.7-11.1-2.4-23.1 1.1-36.3 3.7-14.2 9.2-28.8 9.9-40.6.8-15.2 1.7-28.5 4.2-38.7 2.6-10.3 6.6-17.2 13.7-21.1.3-.2.7-.3 1-.5.8 13.2 7.3 26.6 18.8 29.5 12.6 3.3 30.7-7.5 38.4-16.3 9-.3 15.7-.9 22.6 5.1 9.9 8.5 7.1 30.3 17.1 41.6 10.6 11.6 14 19.5 13.7 24.6zM173.3 148.7c2 1.9 4.7 4.5 8 7.1 6.6 5.2 15.8 10.6 27.3 10.6 11.6 0 22.5-5.9 31.8-10.8 4.9-2.6 10.9-7 14.8-10.4s5.9-6.3 3.1-6.6-2.6 2.6-6 5.1c-4.4 3.2-9.7 7.4-13.9 9.8-7.4 4.2-19.5 10.2-29.9 10.2s-18.7-4.8-24.9-9.7c-3.1-2.5-5.7-5-7.7-6.9-1.5-1.4-1.9-4.6-4.3-4.9-1.4-.1-1.8 3.7 1.7 6.5z"/></svg>
@@ -258,7 +258,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../.." class="md-nav__link">
+      <a href="../.." class="md-nav__link">
         
   
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8h5Z"/></svg>
@@ -277,229 +277,9 @@
       
   
   
-    
-  
   
     
     
-      
-        
-      
-        
-      
-        
-      
-        
-      
-    
-    
-    
-    
-      
-      
-    
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
-      
-        
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
-        
-          
-          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
-            
-  
-  <span class="md-ellipsis">
-    Workflow
-  </span>
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
-          <label class="md-nav__title" for="__nav_2">
-            <span class="md-nav__icon md-icon"></span>
-            Workflow
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../new-server/" class="md-nav__link">
-        
-  
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 13c.7 0 1.37.13 2 .35V9l-6-6H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h8.35c-.22-.63-.35-1.3-.35-2 0-3.31 2.69-6 6-6m-5-8.5 5.5 5.5H14V4.5m8.5 12.75L17.75 22 15 19l1.16-1.16 1.59 1.59 3.59-3.59 1.16 1.41Z"/></svg>
-  
-  <span class="md-ellipsis">
-    New Server Setup Checklist
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../mirrors/maintenance/" class="md-nav__link">
-        
-  
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 7c0-2.21 3.58-4 8-4s8 1.79 8 4-3.58 4-8 4-8-1.79-8-4m8.08 11H12c-4.42 0-8-1.79-8-4v3c0 2.21 3.58 4 8 4h.29a7.38 7.38 0 0 1-.29-2c0-.34.03-.67.08-1M20 12.08V9c0 2.21-3.58 4-8 4s-8-1.79-8-4v3c0 2.21 3.58 4 8 4h.69c1.13-2.37 3.53-4 6.31-4 .34 0 .67.03 1 .08m3.8 8.32c.1 0 .1.1 0 .2l-1 1.7c-.1.1-.2.1-.3.1l-1.2-.4c-.3.2-.5.3-.8.5l-.2 1.3c0 .1-.1.2-.2.2h-2c-.1 0-.2-.1-.3-.2l-.2-1.3c-.3-.1-.6-.3-.8-.5l-1.2.5c-.1 0-.2 0-.3-.1l-1-1.7c-.1-.1 0-.2.1-.3l1.1-.8v-1l-1.1-.8c-.1-.1-.1-.2-.1-.3l1-1.7c.1-.1.2-.1.3-.1l1.2.5c.3-.2.5-.3.8-.5l.2-1.3c0-.1.1-.2.3-.2h2c.1 0 .2.1.2.2l.2 1.3c.3.1.6.3.9.5l1.2-.5c.1 0 .3 0 .3.1l1 1.7c.1.1 0 .2-.1.3l-1.1.8v1l1.1.8M20.5 19c0-.8-.7-1.5-1.5-1.5s-1.5.7-1.5 1.5.7 1.5 1.5 1.5 1.5-.7 1.5-1.5Z"/></svg>
-  
-  <span class="md-ellipsis">
-    Mirrors maintenance
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../new-vm/" class="md-nav__link">
-        
-  
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 14h2v3h3v2h-3v3h-2v-3h-3v-2h3v-3m-6 2L2 9l9-7 9 7-9 7m0 2.54 1-.79V18c0 .71.12 1.39.35 2L11 21.07l-9-7 1.62-1.26L11 18.54Z"/></svg>
-  
-  <span class="md-ellipsis">
-    New VM in Proxmox VE
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-    
-  
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M15 14c-2.67 0-8 1.33-8 4v2h16v-2c0-2.67-5.33-4-8-4m-9-4V7H4v3H1v2h3v3h2v-3h3v-2m6 2a4 4 0 0 0 4-4 4 4 0 0 0-4-4 4 4 0 0 0-4 4 4 4 0 0 0 4 4Z"/></svg>
-  
-  <span class="md-ellipsis">
-    Add New User in LDAP
-  </span>
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
-        
-  
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M15 14c-2.67 0-8 1.33-8 4v2h16v-2c0-2.67-5.33-4-8-4m-9-4V7H4v3H1v2h3v3h2v-3h3v-2m6 2a4 4 0 0 0 4-4 4 4 0 0 0-4-4 4 4 0 0 0-4 4 4 4 0 0 0 4 4Z"/></svg>
-  
-  <span class="md-ellipsis">
-    Add New User in LDAP
-  </span>
-  
-
-      </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#ldap_1" class="md-nav__link">
-    新建 LDAP 用户
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#ldap_2" class="md-nav__link">
-    添加 LDAP 用户权限
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-    
-    
-      
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
-        
       
         
       
@@ -521,7 +301,171 @@
         
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Workflow
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Workflow
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../workflow/new-server/" class="md-nav__link">
+        
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 13c.7 0 1.37.13 2 .35V9l-6-6H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h8.35c-.22-.63-.35-1.3-.35-2 0-3.31 2.69-6 6-6m-5-8.5 5.5 5.5H14V4.5m8.5 12.75L17.75 22 15 19l1.16-1.16 1.59 1.59 3.59-3.59 1.16 1.41Z"/></svg>
+  
+  <span class="md-ellipsis">
+    New Server Setup Checklist
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../workflow/mirrors/maintenance/" class="md-nav__link">
+        
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 7c0-2.21 3.58-4 8-4s8 1.79 8 4-3.58 4-8 4-8-1.79-8-4m8.08 11H12c-4.42 0-8-1.79-8-4v3c0 2.21 3.58 4 8 4h.29a7.38 7.38 0 0 1-.29-2c0-.34.03-.67.08-1M20 12.08V9c0 2.21-3.58 4-8 4s-8-1.79-8-4v3c0 2.21 3.58 4 8 4h.69c1.13-2.37 3.53-4 6.31-4 .34 0 .67.03 1 .08m3.8 8.32c.1 0 .1.1 0 .2l-1 1.7c-.1.1-.2.1-.3.1l-1.2-.4c-.3.2-.5.3-.8.5l-.2 1.3c0 .1-.1.2-.2.2h-2c-.1 0-.2-.1-.3-.2l-.2-1.3c-.3-.1-.6-.3-.8-.5l-1.2.5c-.1 0-.2 0-.3-.1l-1-1.7c-.1-.1 0-.2.1-.3l1.1-.8v-1l-1.1-.8c-.1-.1-.1-.2-.1-.3l1-1.7c.1-.1.2-.1.3-.1l1.2.5c.3-.2.5-.3.8-.5l.2-1.3c0-.1.1-.2.3-.2h2c.1 0 .2.1.2.2l.2 1.3c.3.1.6.3.9.5l1.2-.5c.1 0 .3 0 .3.1l1 1.7c.1.1 0 .2-.1.3l-1.1.8v1l1.1.8M20.5 19c0-.8-.7-1.5-1.5-1.5s-1.5.7-1.5 1.5.7 1.5 1.5 1.5 1.5-.7 1.5-1.5Z"/></svg>
+  
+  <span class="md-ellipsis">
+    Mirrors maintenance
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../workflow/new-vm/" class="md-nav__link">
+        
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 14h2v3h3v2h-3v3h-2v-3h-3v-2h3v-3m-6 2L2 9l9-7 9 7-9 7m0 2.54 1-.79V18c0 .71.12 1.39.35 2L11 21.07l-9-7 1.62-1.26L11 18.54Z"/></svg>
+  
+  <span class="md-ellipsis">
+    New VM in Proxmox VE
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../workflow/ldap/add-new-user/" class="md-nav__link">
+        
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M15 14c-2.67 0-8 1.33-8 4v2h16v-2c0-2.67-5.33-4-8-4m-9-4V7H4v3H1v2h3v3h2v-3h3v-2m6 2a4 4 0 0 0 4-4 4 4 0 0 0-4-4 4 4 0 0 0-4 4 4 4 0 0 0 4 4Z"/></svg>
+  
+  <span class="md-ellipsis">
+    Add New User in LDAP
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
         
           
           <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
@@ -535,7 +479,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_3">
             <span class="md-nav__icon md-icon"></span>
             Infrastructure
@@ -574,7 +518,7 @@
           
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../../infrastructure/intranet/" class="md-nav__link ">
+            <a href="../intranet/" class="md-nav__link ">
               
   
   <span class="md-ellipsis">
@@ -606,7 +550,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../infrastructure/tinc/" class="md-nav__link">
+      <a href="../tinc/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -626,7 +570,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../infrastructure/intranet/lugivpn/" class="md-nav__link">
+      <a href="../intranet/lugivpn/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -646,7 +590,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../infrastructure/intranet/gateway/" class="md-nav__link">
+      <a href="../intranet/gateway/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -718,7 +662,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../infrastructure/proxmox/pve/" class="md-nav__link">
+      <a href="../proxmox/pve/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -738,7 +682,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../infrastructure/proxmox/pbs/" class="md-nav__link">
+      <a href="../proxmox/pbs/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -758,7 +702,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../infrastructure/proxmox/nfs/" class="md-nav__link">
+      <a href="../proxmox/nfs/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -786,7 +730,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../infrastructure/ldap/" class="md-nav__link">
+      <a href="../ldap/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -806,7 +750,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../infrastructure/sshca/" class="md-nav__link">
+      <a href="../sshca/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -826,7 +770,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../infrastructure/auth-dns/" class="md-nav__link">
+      <a href="../auth-dns/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -846,7 +790,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../infrastructure/ssl/" class="md-nav__link">
+      <a href="../ssl/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -866,7 +810,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../infrastructure/monitor/" class="md-nav__link">
+      <a href="../monitor/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -886,7 +830,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../infrastructure/office/" class="md-nav__link">
+      <a href="../office/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -906,7 +850,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../infrastructure/github/" class="md-nav__link">
+      <a href="../github/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -924,9 +868,29 @@
                 
   
   
+    
   
-    <li class="md-nav__item">
-      <a href="../../../infrastructure/dockerhub/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Docker Hub
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   <span class="md-ellipsis">
@@ -935,6 +899,33 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#dsos" class="md-nav__link">
+    Docker-Sponsored Open-Source program (DSOS) application
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -946,7 +937,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../infrastructure/mail/" class="md-nav__link">
+      <a href="../mail/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -966,7 +957,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../infrastructure/raid/" class="md-nav__link">
+      <a href="../raid/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1008,7 +999,7 @@
           
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../../infrastructure/discontinued/" class="md-nav__link ">
+            <a href="../discontinued/" class="md-nav__link ">
               
   
   <span class="md-ellipsis">
@@ -1084,7 +1075,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../infrastructure/discontinued/vsphere/esxi/" class="md-nav__link">
+      <a href="../discontinued/vsphere/esxi/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1104,7 +1095,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../infrastructure/discontinued/vsphere/vcenter/" class="md-nav__link">
+      <a href="../discontinued/vsphere/vcenter/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1124,7 +1115,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../infrastructure/discontinued/vsphere/vdp/" class="md-nav__link">
+      <a href="../discontinued/vsphere/vdp/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1288,7 +1279,7 @@
           
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../../services/mirrors/" class="md-nav__link ">
+            <a href="../../services/mirrors/" class="md-nav__link ">
               
   
   <span class="md-ellipsis">
@@ -1346,7 +1337,7 @@
           
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../../services/mirrors/4/" class="md-nav__link ">
+            <a href="../../services/mirrors/4/" class="md-nav__link ">
               
   
   <span class="md-ellipsis">
@@ -1378,7 +1369,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../services/mirrors/4/volumes/" class="md-nav__link">
+      <a href="../../services/mirrors/4/volumes/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1422,7 +1413,7 @@
           
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../../services/mirrors/4/networking/" class="md-nav__link ">
+            <a href="../../services/mirrors/4/networking/" class="md-nav__link ">
               
   
   <span class="md-ellipsis">
@@ -1454,7 +1445,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../services/mirrors/4/networking/route/" class="md-nav__link">
+      <a href="../../services/mirrors/4/networking/route/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1474,7 +1465,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../services/mirrors/4/networking/misc/" class="md-nav__link">
+      <a href="../../services/mirrors/4/networking/misc/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1502,7 +1493,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../services/mirrors/4/repos/" class="md-nav__link">
+      <a href="../../services/mirrors/4/repos/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1530,7 +1521,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../services/mirrors/3/" class="md-nav__link">
+      <a href="../../services/mirrors/3/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1572,7 +1563,7 @@
           
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../../services/mirrors/2/" class="md-nav__link ">
+            <a href="../../services/mirrors/2/" class="md-nav__link ">
               
   
   <span class="md-ellipsis">
@@ -1604,7 +1595,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../services/mirrors/2/networking/" class="md-nav__link">
+      <a href="../../services/mirrors/2/networking/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1632,7 +1623,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../services/mirrors/1/" class="md-nav__link">
+      <a href="../../services/mirrors/1/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1652,7 +1643,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../services/mirrors/hardware/" class="md-nav__link">
+      <a href="../../services/mirrors/hardware/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1672,7 +1663,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../services/mirrors/docker/" class="md-nav__link">
+      <a href="../../services/mirrors/docker/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1692,7 +1683,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../services/mirrors/ipmi/" class="md-nav__link">
+      <a href="../../services/mirrors/ipmi/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1712,7 +1703,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../services/mirrors/zfs/" class="md-nav__link">
+      <a href="../../services/mirrors/zfs/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1732,7 +1723,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../services/mirrors/genindex/" class="md-nav__link">
+      <a href="../../services/mirrors/genindex/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1812,7 +1803,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../services/mirrors/limiter/" class="md-nav__link">
+      <a href="../../services/mirrors/limiter/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1852,7 +1843,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../services/mirrors/mail-list/" class="md-nav__link">
+      <a href="../../services/mirrors/mail-list/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1880,7 +1871,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../services/gateway-el/" class="md-nav__link">
+      <a href="../../services/gateway-el/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1900,7 +1891,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../services/gateway-nic/" class="md-nav__link">
+      <a href="../../services/gateway-nic/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1920,7 +1911,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../services/gateway-jp/" class="md-nav__link">
+      <a href="../../services/gateway-jp/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1940,7 +1931,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../services/docker2/" class="md-nav__link">
+      <a href="../../services/docker2/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1960,7 +1951,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../services/neat-dns/" class="md-nav__link">
+      <a href="../../services/neat-dns/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1980,7 +1971,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../services/gitlab/" class="md-nav__link">
+      <a href="../../services/gitlab/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2000,7 +1991,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../services/vpn/" class="md-nav__link">
+      <a href="../../services/vpn/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2020,7 +2011,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../services/light/" class="md-nav__link">
+      <a href="../../services/light/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2062,7 +2053,7 @@
           
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../../services/pxe/" class="md-nav__link ">
+            <a href="../../services/pxe/" class="md-nav__link ">
               
   
   <span class="md-ellipsis">
@@ -2094,7 +2085,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../services/pxe/liims/" class="md-nav__link">
+      <a href="../../services/pxe/liims/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2122,7 +2113,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../services/ftp/" class="md-nav__link">
+      <a href="../../services/ftp/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2142,7 +2133,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../services/generate-204/" class="md-nav__link">
+      <a href="../../services/generate-204/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2162,7 +2153,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../services/discontinued/" class="md-nav__link">
+      <a href="../../services/discontinued/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2240,7 +2231,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../faq/dns/" class="md-nav__link">
+      <a href="../../faq/dns/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2260,7 +2251,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../faq/ldap/" class="md-nav__link">
+      <a href="../../faq/ldap/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2280,7 +2271,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../faq/nginx/" class="md-nav__link">
+      <a href="../../faq/nginx/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2300,7 +2291,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../faq/systemd-timer/" class="md-nav__link">
+      <a href="../../faq/systemd-timer/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2320,7 +2311,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../faq/docker/" class="md-nav__link">
+      <a href="../../faq/docker/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2368,15 +2359,8 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#ldap_1" class="md-nav__link">
-    新建 LDAP 用户
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#ldap_2" class="md-nav__link">
-    添加 LDAP 用户权限
+  <a href="#dsos" class="md-nav__link">
+    Docker-Sponsored Open-Source program (DSOS) application
   </a>
   
 </li>
@@ -2399,20 +2383,102 @@
   
 
 
-<h1 id="ldap">在 LDAP 中添加新用户<a class="headerlink" href="#ldap" title="Permanent link">&para;</a></h1>
-<h2 id="ldap_1">新建 LDAP 用户<a class="headerlink" href="#ldap_1" title="Permanent link">&para;</a></h2>
-<ol>
-<li>登陆<a href="http://ldap.lug.ustc.edu.cn/gosa">网页界面</a></li>
-<li>Users &gt; Actions &gt; Create &gt; User</li>
-<li>Generic: 输入 Last name，First name，Login（登录名）</li>
-<li>POSIX &gt; Generic：输入 Home directory。使用 Force UID/GID ，具体说明详见 <a href="../../../infrastructure/ldap/#ldap-users-and-groups">LDAP Users 和 Groups</a></li>
-</ol>
-<h2 id="ldap_2">添加 LDAP 用户权限<a class="headerlink" href="#ldap_2" title="Permanent link">&para;</a></h2>
-<p>POSIX &gt; Group membership &gt; Add：根据需要添加的权限选择对应的组，具体说明详见 <a href="../../../infrastructure/ldap/#ldap-users-and-groups">LDAP Users 和 Groups</a></p>
-<details class="info">
-<summary>LDAP 缓存</summary>
-<p>若发现用户无法登陆等情况，可能是缓存服务 NSCD 导致的，具体参考 <a href="../../../infrastructure/ldap/#nscd">LDAP Users 和 Groups</a>：</p>
-</details>
+<h1 id="docker-hub">Docker Hub<a class="headerlink" href="#docker-hub" title="Permanent link">&para;</a></h1>
+<h2 id="dsos">Docker-Sponsored Open-Source program (DSOS) application<a class="headerlink" href="#dsos" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Reference response</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>First Name</td>
+<td>Jiawei (<strong>Use your own name</strong>)</td>
+</tr>
+<tr>
+<td>Last Name</td>
+<td>Fu (<strong>Use your own name</strong>)</td>
+</tr>
+<tr>
+<td>Email Address</td>
+<td><em>redacted</em> (<strong>Use your own email address</strong>)</td>
+</tr>
+<tr>
+<td>Role</td>
+<td>Tech Lead (or anything that makes sense)</td>
+</tr>
+<tr>
+<td>Company or Organization Name</td>
+<td>Linux User Group of University of Science and Technology of China</td>
+</tr>
+<tr>
+<td>Country</td>
+<td>(Select <em>China</em>)</td>
+</tr>
+<tr>
+<td>What is the name of your project?</td>
+<td>Various: USTC Open Source Software Mirror, USTC Network Boot Service, etc.</td>
+</tr>
+<tr>
+<td>Please link the public repository of your OSS organization (github, gitlab, etc.)</td>
+<td><a href="https://github.com/ustclug">https://github.com/ustclug</a></td>
+</tr>
+<tr>
+<td>Please provide a link to your project website.</td>
+<td><a href="https://lug.ustc.edu.cn/">https://lug.ustc.edu.cn/</a></td>
+</tr>
+<tr>
+<td>Enter your user Docker ID (aka username).</td>
+<td>ibugone (<strong>Use your own Docker ID</strong>)</td>
+</tr>
+<tr>
+<td>Do you have an existing Organization?</td>
+<td>(Select <em>Yes</em>)</td>
+</tr>
+<tr>
+<td>Enter the <strong>existing</strong> Docker ID for your <strong>organization</strong> on Docker Hub.</td>
+<td>ustclug</td>
+</tr>
+<tr>
+<td>What is the goal of this project?</td>
+<td>Ease the use of many Linux distros and open-source software. as well as advocate the spirit of Free Software</td>
+</tr>
+<tr>
+<td>What types of user(s) benefit from this project?</td>
+<td>Linux users and developers in mainland China</td>
+</tr>
+<tr>
+<td>What is the code distribution license for your OSS project?</td>
+<td>(Select <em>MIT License</em>)</td>
+</tr>
+<tr>
+<td>To what industry does your project or organization belong?</td>
+<td>(Select <em>Academic/research</em>)</td>
+</tr>
+<tr>
+<td>To what industry does your project or organization belong?</td>
+<td>6 (Adjust as needed)</td>
+</tr>
+<tr>
+<td>Please list all sponsors for this project (patreon and other microdonations can be listed as one).</td>
+<td>USTC Network Information Center, USTC Library</td>
+</tr>
+<tr>
+<td>Does this project have a pathway to commercialization? ...</td>
+<td>(Select <em>No</em>)</td>
+</tr>
+<tr>
+<td>If approved, do you agree to the ...?</td>
+<td>(Tick the checkbox)</td>
+</tr>
+<tr>
+<td></td>
+<td>Press <em>Submit</em></td>
+</tr>
+</tbody>
+</table>
 
 
 
@@ -2487,10 +2553,10 @@
     </div>
     
     
-    <script id="__config" type="application/json">{"base": "../../..", "features": ["content.code.annotate", "content.code.copy", "navigation.indexes", "navigation.sections", "navigation.top"], "search": "../../../assets/javascripts/workers/search.f886a092.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "../..", "features": ["content.code.annotate", "content.code.copy", "navigation.indexes", "navigation.sections", "navigation.top"], "search": "../../assets/javascripts/workers/search.f886a092.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.aecac24b.min.js"></script>
+      <script src="../../assets/javascripts/bundle.aecac24b.min.js"></script>
       
     
   </body>
