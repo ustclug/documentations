@@ -25,3 +25,11 @@
 | Does this project have a pathway to commercialization? ...                                         | (Select) No                                                                                                  |
 | If approved, do you agree to the ...?                                                              | (Tick the checkbox)                                                                                          |
 |                                                                                                    | Press *Submit*                                                                                               |
+
+### Notes
+
+The first application on October 25, 2023 was declined with the following reason (emphasis mine):
+
+> During our review of your application for Various (USTC Open Source Soft<sup>\[sic\]</sup>, we determined that while your project meets most of the program requirements, **there is a lack of documentation in one or more of your repositories on Docker Hub**.
+
+Before resubmitting the application, I deleted a few obsolete repositories and filled in the "Repository overview" for the rest, asking ChatGPT to produce it when needed. Afterwards, the second submission was approved in just 3 hours.
