@@ -4,7 +4,7 @@
 
 从 Debian 10 升级到 Debian 11 时，`aufs-dkms` 不再包含在新内核中：
 
-> aufs-dkms 软件包将不作为 bullseye 的一部分出现。大多数 aufs-dkms 用户应当切换至 overlayfs，后者提供了相似的功能且具有内核的支持。然而，某些 Debian 安装实例可能使用了不兼容 overlayfs 的文件系统，如不带有 d_type 的 xfs。我们建议需要使用 aufs-dkms 的用户在升级至 bullseye 之前先进行迁移。 
+> aufs-dkms 软件包将不作为 bullseye 的一部分出现。大多数 aufs-dkms 用户应当切换至 overlayfs，后者提供了相似的功能且具有内核的支持。然而，某些 Debian 安装实例可能使用了不兼容 overlayfs 的文件系统，如不带有 d_type 的 xfs。我们建议需要使用 aufs-dkms 的用户在升级至 bullseye 之前先进行迁移。
 
 (<https://www.debian.org/releases/bullseye/amd64/release-notes/ch-information.zh-cn.html>)
 
@@ -26,7 +26,7 @@ Server:
 
 在升级系统后，编辑 `/etc/docker/daemon.json`，加上：
 
-```
+```json
 "storage-driver": "overlay2"
 ```
 
