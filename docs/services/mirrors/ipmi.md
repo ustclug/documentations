@@ -1,6 +1,10 @@
 # IPMI
 
-## JDK
+## Mirrors4
+
+这台机器的 IPMI 有 HTML5 KVM，可以直接网页使用，比较方便。
+
+## Mirrors2/3
 
 登录 IPMI 后，为了使用远程 Shell，需要运行一个 jnlp 文件。
 此文件下载时会被 Chrome 拦截，需要额外允许一下。
