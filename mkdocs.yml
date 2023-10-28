@@ -103,21 +103,21 @@ nav:
         - VDP: "infrastructure/discontinued/vsphere/vdp.md"
   - Services:
     - Mirrors:
-      - History: services/mirrors/index.md
+      - services/mirrors/index.md
       - Current (4):
-        - Overview: services/mirrors/4/index.md
+        - services/mirrors/4/index.md
         - Volumes: services/mirrors/4/volumes.md
         - Networking:
           - Interfaces: services/mirrors/4/networking/index.md
           - Routing: services/mirrors/4/networking/route.md
           - Misc: services/mirrors/4/networking/misc.md
         - Repositories: services/mirrors/4/repos.md
-      - Auxiliary (3): services/mirrors/3/index.md
+      - Auxiliary (3):
+        - services/mirrors/3/index.md
       - Auxiliary (2):
-        - Overview: services/mirrors/2/index.md
+        - services/mirrors/2/index.md
         - Networking: services/mirrors/2/networking.md
       - Obsolete (1): services/mirrors/1/index.md
-      - Hardware: "services/mirrors/hardware.md"
       - Docker: "services/mirrors/docker.md"
       - IPMI: "services/mirrors/ipmi.md"
       - ZFS: "services/mirrors/zfs.md"
