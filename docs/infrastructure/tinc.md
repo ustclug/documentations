@@ -93,7 +93,7 @@ Match LocalAddress 10.254.0.0
 Match LocalAddress 202.38.95.110,202.141.160.110,202.141.176.110,218.104.71.170
     AllowUsers root
     PubkeyAuthentication yes
-    AuthorizedKeysFile /dev/null  # 屏蔽公钥，仅允许证书登录
+    AuthorizedKeysFile none  # 屏蔽公钥，仅允许证书登录
 
 # For SSH Push trigger
 Match User mirror
