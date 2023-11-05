@@ -734,6 +734,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#vmbr" class="md-nav__link">
+    虚拟机网桥
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#pve-firewall" class="md-nav__link">
     防火墙
   </a>
@@ -837,13 +844,6 @@
         <li class="md-nav__item">
   <a href="#pve-6" class="md-nav__link">
     pve-6
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#pve-2-pve-4" class="md-nav__link">
-    pve-2, pve-4
   </a>
   
 </li>
@@ -2570,6 +2570,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#vmbr" class="md-nav__link">
+    虚拟机网桥
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#pve-firewall" class="md-nav__link">
     防火墙
   </a>
@@ -2677,13 +2684,6 @@
   
 </li>
       
-        <li class="md-nav__item">
-  <a href="#pve-2-pve-4" class="md-nav__link">
-    pve-2, pve-4
-  </a>
-  
-</li>
-      
     </ul>
   
 </nav>
@@ -2719,10 +2719,11 @@
 </ul>
 </li>
 <li>
-<p>pve-2, pve-4, pve-6 是几台较老的服务器，在改装前都运行 ESXi 6.0，因此主机名曾经分别是 esxi-2, esxi-4, esxi-6。</p>
+<p>pve-6 是一台较老的服务器，在改装前运行 ESXi 6.0，因此主机名曾经是 esxi-6。</p>
 <div class="admonition question">
-<p class="admonition-title">pve-1 和 pve-3 去哪了？</p>
+<p class="admonition-title">pve-1 到 pve-4 去哪了？</p>
 <p>esxi-1 和 esxi-3 已经坏掉很多年了，同批次 5 台机器已经坏掉了 3 台（另外一个是 vm-nfs，esxi-6 不属于该批次）。</p>
+<p>pve-2 和 pve-4 由 esxi-2 和 esxi-4 改装而来，由于过于古老（2007 年），即使没坏，我们也将它们下架处理掉了。</p>
 </div>
 </li>
 </ul>
@@ -2747,7 +2748,55 @@
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;20.205.243.166 github.com&quot;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>/etc/hosts
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>ip<span class="w"> </span>route<span class="w"> </span>replace<span class="w"> </span><span class="m">20</span>.205.243.166<span class="w"> </span>via<span class="w"> </span><span class="o">(</span>?<span class="o">)</span><span class="w"> </span>dev<span class="w"> </span><span class="o">(</span>?<span class="o">)</span>
 </code></pre></div>
-<p>其中 <code>via</code> 选择 gateway-el 或 gateway-nic 的内网地址，<code>dev</code> 选择桥接内网的 vmbr。</p>
+<p>其中 <code>via</code> 选择 gateway-el 或 gateway-nic 的内网地址，<code>dev</code> 选择桥接内网的 vmbr（见下）。</p>
+<h3 id="vmbr">虚拟机网桥<a class="headerlink" href="#vmbr" title="Permanent link">&para;</a></h3>
+<p>Proxmox VE 要求为虚拟机接入的网桥必须命名为 <code>vmbrN</code>，其中 N 是 0-4094 之间的整数。方便起见，我们在两个机房分别统一 vmbr 的编号：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">编号</th>
+<th style="text-align: left;">东图</th>
+<th style="text-align: left;">网络中心</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">vmbr0</td>
+<td style="text-align: left;">校园网（教育网）</td>
+<td style="text-align: left;">校园网（教育网）</td>
+</tr>
+<tr>
+<td style="text-align: center;">vmbr1</td>
+<td style="text-align: left;">内网</td>
+<td style="text-align: left;">内网</td>
+</tr>
+<tr>
+<td style="text-align: center;">vmbr2</td>
+<td style="text-align: left;">电信+移动</td>
+<td style="text-align: left;">电信</td>
+</tr>
+<tr>
+<td style="text-align: center;">vmbr3</td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">联通</td>
+</tr>
+<tr>
+<td style="text-align: center;">vmbr4</td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">移动</td>
+</tr>
+<tr>
+<td style="text-align: center;">vmbr5</td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">特殊用途</td>
+</tr>
+<tr>
+<td style="text-align: center;">vmbr10</td>
+<td style="text-align: left;">备用</td>
+<td style="text-align: left;">-</td>
+</tr>
+</tbody>
+</table>
 <h3 id="pve-firewall">防火墙<a class="headerlink" href="#pve-firewall" title="Permanent link">&para;</a></h3>
 <p>我们不使用 Proxmox 自带的防火墙功能，但 pve-firewall 仍然会尝试部署或恢复防火墙设置，因此需要禁用相关设置及服务：</p>
 <div class="highlight"><span class="filename">/etc/pve/nodes/$(hostname -s)/host.fw</span><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="k">[OPTIONS]</span>
@@ -2821,7 +2870,7 @@
 </code></pre></div>
 <h2 id="pve-5">pve-5<a class="headerlink" href="#pve-5" title="Permanent link">&para;</a></h2>
 <p>pve-5 位于网络中心，配置为 2× <del>Xeon E5-2603 v4 (Broadwell 6C6T, 1.70 GHz, no HT, no Turbo Boost)</del> Xeon E5-2667 v4 (Broadwell 8C16T, 3.20 GHz, Max 3.60 GHz)，256 GB 内存和一大堆 SSD（2× 三星 240 GB SATA + 10x Intel DC S4500 1.92 TB SATA）。我们将两块 240 GB 的盘组成一个 LVM VG，分配 16 GB 的 rootfs（LVM mirror）和 8 GB 的 swap，其余空间给一个 thinpool。十块 1.92 TB 的盘组成一个 RAIDZ2 的 zpool，用于存储虚拟机等数据。</p>
-<p>其连接的单根 10 Gbps 的光纤，桥接出 <code>vmbr0</code>（Cernet）, <code>vmbr2</code>（Telecom）, <code>vmbr3</code>（Unicom）, <code>vmbr4</code>（Mobile）四个不同 VLAN 的网桥，另有一个 <code>vmbr1</code>（Ustclug）的无头网桥用于从 <a href="../../../services/gateway-nic/">gateway-nic</a> 桥接 Tinc。</p>
+<p>其连接的单根 10 Gbps 的光纤，桥接出 <code>vmbr0</code> 至 <code>vmbr4</code> 等网桥（线路定义<a href="#vmbr">见上</a>）。其中无头网桥用于从 <a href="../../../services/gateway-nic/">gateway-nic</a> 桥接 Tinc。</p>
 <div class="admonition danger">
 <p class="admonition-title">硬盘控制器不要使用 VirtIO SCSI Single 或 LSI 开头的选项</p>
 <p>可能由于 ZFS 模块的 bug 或者内存条故障，使用这些模式在虚拟机重启时会导致整个 Proxmox VE 主机卡住而不得不重启。请使用 VirtIO SCSI（不带 Single）。同样原因创建虚拟机硬盘时也不要勾选 iothread。</p>
@@ -2904,10 +2953,6 @@
 <p class="admonition-title">HP Smart Array</p>
 <p>HP 的自带 RAID 卡管理软件可以在 <a href="http://downloads.linux.hpe.com/SDR/repo/mcp/Debian/pool/non-free/">http://downloads.linux.hpe.com/SDR/repo/mcp/Debian/pool/non-free/</a> 下载，安装 <code>ssacli</code> 软件包。相关使用方法可以参考 <a href="https://sleeplessbeastie.eu/2017/03/06/how-to-use-hp-command-line-array-configuration-utility/">https://sleeplessbeastie.eu/2017/03/06/how-to-use-hp-command-line-array-configuration-utility/</a>。</p>
 </div>
-<h2 id="pve-2-pve-4">pve-2, pve-4<a class="headerlink" href="#pve-2-pve-4" title="Permanent link">&para;</a></h2>
-<p>pve-2 和 pve-4 也位于东图，是两台未知品牌、未知型号的旧机器，配置为 2× Xeon E5420 (Very old 4C4T, 2.50 GHz), 16 GB 内存（DDR2 667 MHz）和一块 16 GB 的 SanDisk SSD。该型号机器<strong>没有 IPMI</strong>。</p>
-<p>由于配置低下，我们手动安装了 Proxmox VE，没有使用 LVM，分配了 1 GB 的 swap，剩下全部给 rootfs。</p>
-<p>机器的网卡有两个 1 Gbps 的接口，与 pve-6 相同，都接在同一个交换机上。</p>
 
 
 
