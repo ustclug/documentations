@@ -201,14 +201,25 @@ esxi-5 这端的配置则将对应的 iface 名称和 IP 地址等全部对换�
 
 ### iSCSI
 
-由于我们没有研究清楚 open-iscsi 的开机自动挂载机制，因此我们选择直接 override 对应的 service 来完成这个任务：
+设置 iSCSI 开机自动登录：
 
-```ini title="$ systemctl edit open-iscsi.service"
-[Service]
-ExecStart=
-ExecStart=/sbin/iscsiadm -d8 -m node -p 192.168.10.1:3260 --login
-ExecStart=/lib/open-iscsi/activate-storage.sh
+```shell
+iscsiadm -m node -T iqn.2002-10.com.infortrend:raid.sn8223150.001 -p 192.168.10.1:3260 -o update -n node.startup -v automatic
+iscsiadm -m node -T iqn.2002-10.com.infortrend:raid.sn8223150.001 -p 192.168.10.1:3260 -o update -n node.conn[0].startup -v automatic
 ```
+
+参考链接：<https://library.netapp.com/ecmdocs/ECMP1654943/html/GUID-8EC685B4-8CB6-40D8-A8D5-031A3899BCDC.html>
+
+??? warning "过时信息"
+
+    由于我们没有研究清楚 open-iscsi 的开机自动挂载机制，因此我们选择直接 override 对应的 service 来完成这个任务：
+
+    ```ini title="$ systemctl edit open-iscsi.service"
+    [Service]
+    ExecStart=
+    ExecStart=/sbin/iscsiadm -d8 -m node -T iqn.2002-10.com.infortrend:raid.sn8223150.001 -p 192.168.10.1:3260 --login
+    ExecStart=/lib/open-iscsi/activate-storage.sh
+    ```
 
 若 iSCSI 连接成功，应该可以在系统中看到一个新的硬盘，容量为 14.55 TiB，型号显示为 RS-3116I-S42-6。
 

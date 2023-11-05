@@ -1,3 +1,7 @@
+---
+icon: material/server-network
+---
+
 # Servers Intranet
 
 Servers Intranet connects all the servers together, including physical servers and virtual machines.
@@ -8,7 +12,7 @@ Servers Intranet connects all the servers together, including physical servers a
 
 以上架构图由 iBug 在 2023 年 11 月更新。
 
-??? warning "以下是一些过时的信息，也许还有点参考价值"
+??? warning "此处是一些过时的信息，也许还有点参考价值"
 
     The network contains three parts:
 
