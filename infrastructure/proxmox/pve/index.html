@@ -2856,24 +2856,32 @@
 </code></pre></div>
 </div>
 <h3 id="iscsi">iSCSI<a class="headerlink" href="#iscsi" title="Permanent link">&para;</a></h3>
-<p>由于我们没有研究清楚 open-iscsi 的开机自动挂载机制，因此我们选择直接 override 对应的 service 来完成这个任务：</p>
-<div class="highlight"><span class="filename">$ systemctl edit open-iscsi.service</span><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="k">[Service]</span>
-<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="na">ExecStart</span><span class="o">=</span>
-<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="na">ExecStart</span><span class="o">=</span><span class="s">/sbin/iscsiadm -d8 -m node -p 192.168.10.1:3260 --login</span>
-<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="na">ExecStart</span><span class="o">=</span><span class="s">/lib/open-iscsi/activate-storage.sh</span>
+<p>设置 iSCSI 开机自动登录：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>iscsiadm<span class="w"> </span>-m<span class="w"> </span>node<span class="w"> </span>-T<span class="w"> </span>iqn.2002-10.com.infortrend:raid.sn8223150.001<span class="w"> </span>-p<span class="w"> </span><span class="m">192</span>.168.10.1:3260<span class="w"> </span>-o<span class="w"> </span>update<span class="w"> </span>-n<span class="w"> </span>node.startup<span class="w"> </span>-v<span class="w"> </span>automatic
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>iscsiadm<span class="w"> </span>-m<span class="w"> </span>node<span class="w"> </span>-T<span class="w"> </span>iqn.2002-10.com.infortrend:raid.sn8223150.001<span class="w"> </span>-p<span class="w"> </span><span class="m">192</span>.168.10.1:3260<span class="w"> </span>-o<span class="w"> </span>update<span class="w"> </span>-n<span class="w"> </span>node.conn<span class="o">[</span><span class="m">0</span><span class="o">]</span>.startup<span class="w"> </span>-v<span class="w"> </span>automatic
 </code></pre></div>
+<p>参考链接：<a href="https://library.netapp.com/ecmdocs/ECMP1654943/html/GUID-8EC685B4-8CB6-40D8-A8D5-031A3899BCDC.html">https://library.netapp.com/ecmdocs/ECMP1654943/html/GUID-8EC685B4-8CB6-40D8-A8D5-031A3899BCDC.html</a></p>
+<details class="warning">
+<summary>过时信息</summary>
+<p>由于我们没有研究清楚 open-iscsi 的开机自动挂载机制，因此我们选择直接 override 对应的 service 来完成这个任务：</p>
+<div class="highlight"><span class="filename">$ systemctl edit open-iscsi.service</span><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="k">[Service]</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="na">ExecStart</span><span class="o">=</span>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="na">ExecStart</span><span class="o">=</span><span class="s">/sbin/iscsiadm -d8 -m node -T iqn.2002-10.com.infortrend:raid.sn8223150.001 -p 192.168.10.1:3260 --login</span>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="na">ExecStart</span><span class="o">=</span><span class="s">/lib/open-iscsi/activate-storage.sh</span>
+</code></pre></div>
+</details>
 <p>若 iSCSI 连接成功，应该可以在系统中看到一个新的硬盘，容量为 14.55 TiB，型号显示为 RS-3116I-S42-6。</p>
 <h3 id="rootfs-backup">rootfs 备份<a class="headerlink" href="#rootfs-backup" title="Permanent link">&para;</a></h3>
 <p>尽管 esxi-5 的 rootfs 也使用了 LVM mirror 在两块 SSD 上镜像，但是我们不太信任这块 RAID 卡，因此我们将 esxi-5 的 rootfs 每天备份到 vdp2 上。为了避免在 vdp2 掉线的时候乱“备份”，我们使用一个 systemd 服务，设置了 <a href="https://www.freedesktop.org/software/systemd/man/systemd.unit.html#RequiresMountsFor="><code>RequiresMountsFor</code> 依赖</a>：</p>
-<div class="highlight"><span class="filename">/etc/systemd/system/rootfs-backup.service</span><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="k">[Unit]</span>
-<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="na">Description</span><span class="o">=</span><span class="s">Backup rootfs to vdp2</span>
-<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="na">RequiresMountsFor</span><span class="o">=</span><span class="s">/mnt/vdp2</span>
-<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>
-<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="k">[Service]</span>
-<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="na">Type</span><span class="o">=</span><span class="s">oneshot</span>
-<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a><span class="na">ExecStart</span><span class="o">=</span><span class="s">/usr/bin/rsync -aHAXx --delete / /mnt/vdp2/rootfs/</span>
+<div class="highlight"><span class="filename">/etc/systemd/system/rootfs-backup.service</span><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="k">[Unit]</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="na">Description</span><span class="o">=</span><span class="s">Backup rootfs to vdp2</span>
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="na">RequiresMountsFor</span><span class="o">=</span><span class="s">/mnt/vdp2</span>
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a>
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="k">[Service]</span>
+<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a><span class="na">Type</span><span class="o">=</span><span class="s">oneshot</span>
+<a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a><span class="na">ExecStart</span><span class="o">=</span><span class="s">/usr/bin/rsync -aHAXx --delete / /mnt/vdp2/rootfs/</span>
 </code></pre></div>
-<div class="highlight"><span class="filename">crontab</span><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>21 4 * * * systemctl start rootfs-backup.service
+<div class="highlight"><span class="filename">crontab</span><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>21 4 * * * systemctl start rootfs-backup.service
 </code></pre></div>
 <h3 id="esxi-5-others">其他记录<a class="headerlink" href="#esxi-5-others" title="Permanent link">&para;</a></h3>
 <p>esxi-5 于 2021/8 发现自带阵列有两块坏盘，在更换后发现 storage "root"（存放 vcenter 虚拟机，组建 RAID 1 后大小 1.8 TB）无法正常 rebuild，并且 vcenter 虚拟机的 vmdk 文件有 4 个出现 I/O error。此后 vcenter 虚拟机已经迁移到 storage "data" (RAID10, 7.2 TB) 并正常工作。</p>
