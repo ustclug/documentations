@@ -5,7 +5,7 @@ site_author: "USTC Linux User Group"
 site_url: "https://docs.ustclug.org/"
 
 # Repository
-repo_name: "ustclug/documentations"
+#repo_name: Auto-inferred from URL
 repo_url: "https://github.com/ustclug/documentations"
 
 # Copyright
@@ -140,6 +140,7 @@ nav:
       - "services/pxe/index.md"
       - LIIMS: "services/pxe/liims.md"
     - FTP: "services/ftp.md"
+    - Documentations: services/documentations.md
     - Generate 204: "services/generate-204.md"
     - Discontinued Services: "services/discontinued.md"
   - Common Issues:
@@ -148,3 +149,4 @@ nav:
     - Nginx: faq/nginx.md
     - systemd-timer: faq/systemd-timer.md
     - Docker: faq/docker.md
+    - VM: faq/vm.md

@@ -29,7 +29,7 @@ GitLab 维护者需要订阅：
 
 由于更新可能会出现问题导致服务不可用，因此不建议通过 cron 等方式自动进行更新。
 
-**建议在更新完成 72 小时内删除快照，详见 [关于快照](/infrastructure/vsphere/esxi/#about-snapshot)。**
+**建议在更新完成 72 小时内删除快照，详见 [关于快照](../infrastructure/proxmox/pve.md#about-snapshot)。**
 
 ## postgresql 与 redis 的更新
 

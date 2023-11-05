@@ -27,7 +27,9 @@ LUG 目前服役的 Proxmox VE 主机有：
 
 ### root 账户
 
-为了便于通过 IPMI 等方式维护，我们约定**所有 Proxmox 主机的 root 账户密码保持为空**。若有操作需要使用 root 密码（如创建和加入集群时），请通过 SSH 或 IPMI 登录，临时设置一个 root 密码，并在修改完 PVE / PBS 的配置后将密码删除（`passwd -d`）。PVE / PBS 没有依赖于固定不变的 root 密码才能正常运行的组件，因此这样做对 PVE / PBS 来说是没问题的。
+!!! danger "已废弃的内容"
+
+    ~~为了便于通过 IPMI 等方式维护，我们约定**所有 Proxmox 主机的 root 账户密码保持为空**。若有操作需要使用 root 密码（如创建和加入集群时），请通过 SSH 或 IPMI 登录，临时设置一个 root 密码，并在修改完 PVE / PBS 的配置后将密码删除（`passwd -d`）。PVE / PBS 没有依赖于固定不变的 root 密码才能正常运行的组件，因此这样做对 PVE / PBS 来说是没问题的。~~
 
 ### 网络配置 {#networking}
 

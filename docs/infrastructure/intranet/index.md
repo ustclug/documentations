@@ -4,9 +4,9 @@ Servers Intranet connect all the servers together, including physics servers and
 
 ## Network Topology
 
-<iframe frameborder="0" style="width:100%;height:500px;" src="https://www.draw.io/?lightbox=1&highlight=0000ff&edit=_blank&layers=1&nav=1&title=LUG%20Network.html#Uhttps%3A%2F%2Fdrive.google.com%2Fa%2F0x01.me%2Fuc%3Fid%3D1WAROAPB8ThTkIjMyFnGvtGgbH-TV4FWh%26export%3Ddownload"></iframe>
+<iframe frameborder="0" style="width:100%;height:500px;" src="https://viewer.diagrams.net/?lightbox=1&highlight=0000ff&edit=_blank&layers=1&nav=1&title=LUG%20Network#Uhttps%3A%2F%2Fdocs.ustclug.org%2Finfrastructure%2Fintranet%2Fimg%2Fnetwork.html"></iframe>
 
-以上架构图由 Hypercube 在 2018 年 5 月更新。以下信息是过时的，不过有参考价值。
+以上架构图由 iBug 在 2023 年 11 月更新。以下信息是过时的，不过有参考价值。
 
 The network contains three parts:
 
