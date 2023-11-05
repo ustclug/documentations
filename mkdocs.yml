@@ -5,7 +5,7 @@ site_author: "USTC Linux User Group"
 site_url: "https://docs.ustclug.org/"
 
 # Repository
-#repo_name: Auto-inferred from URL
+repo_name: ustclug/documentations
 repo_url: "https://github.com/ustclug/documentations"
 
 # Copyright
