@@ -9,11 +9,13 @@ LUG 目前服役的 Proxmox VE 主机有：
 
         !!! info "PVE 和 PBS 的端口都是固定的，无法更改"
 
-- pve-2, pve-4, pve-6 是几台较老的服务器，在改装前都运行 ESXi 6.0，因此主机名曾经分别是 esxi-2, esxi-4, esxi-6。
+- pve-6 是一台较老的服务器，在改装前运行 ESXi 6.0，因此主机名曾经是 esxi-6。
 
-    !!! question "pve-1 和 pve-3 去哪了？"
+    !!! question "pve-1 到 pve-4 去哪了？"
 
         esxi-1 和 esxi-3 已经坏掉很多年了，同批次 5 台机器已经坏掉了 3 台（另外一个是 vm-nfs，esxi-6 不属于该批次）。
+
+        pve-2 和 pve-4 由 esxi-2 和 esxi-4 改装而来，由于过于古老（2007 年），即使没坏，我们也将它们下架处理掉了。
 
 这些 PVE 主机配置为一个集群，可以共享一些配置信息并互相迁移虚拟机。特别地，Proxmox VE Authentication Server（Realm 为 pve）的账号在 PVE 主机之间是共享的，并且添加的 PBS 存储后端也是共享的，即大家都可以往相同的 PBS 上备份虚拟机。
 
@@ -47,7 +49,21 @@ echo "20.205.243.166 github.com" >> /etc/hosts
 ip route replace 20.205.243.166 via (?) dev (?)
 ```
 
-其中 `via` 选择 gateway-el 或 gateway-nic 的内网地址，`dev` 选择桥接内网的 vmbr。
+其中 `via` 选择 gateway-el 或 gateway-nic 的内网地址，`dev` 选择桥接内网的 vmbr（见下）。
+
+### 虚拟机网桥 {#vmbr}
+
+Proxmox VE 要求为虚拟机接入的网桥必须命名为 `vmbrN`，其中 N 是 0-4094 之间的整数。方便起见，我们在两个机房分别统一 vmbr 的编号：
+
+| 编号 | 东图 | 网络中心 |
+| :--: | :--- | :------- |
+| vmbr0 | 校园网（教育网） | 校园网（教育网） |
+| vmbr1 | 内网 | 内网 |
+| vmbr2 | 电信+移动 | 电信 |
+| vmbr3 | - | 联通 |
+| vmbr4 | - | 移动 |
+| vmbr5 | - | 特殊用途 |
+| vmbr10 | 备用 | - |
 
 ### 防火墙 {#pve-firewall}
 
@@ -149,7 +165,7 @@ fi
 
 pve-5 位于网络中心，配置为 2× ~~Xeon E5-2603 v4 (Broadwell 6C6T, 1.70 GHz, no HT, no Turbo Boost)~~ Xeon E5-2667 v4 (Broadwell 8C16T, 3.20 GHz, Max 3.60 GHz)，256 GB 内存和一大堆 SSD（2× 三星 240 GB SATA + 10x Intel DC S4500 1.92 TB SATA）。我们将两块 240 GB 的盘组成一个 LVM VG，分配 16 GB 的 rootfs（LVM mirror）和 8 GB 的 swap，其余空间给一个 thinpool。十块 1.92 TB 的盘组成一个 RAIDZ2 的 zpool，用于存储虚拟机等数据。
 
-其连接的单根 10 Gbps 的光纤，桥接出 `vmbr0`（Cernet）, `vmbr2`（Telecom）, `vmbr3`（Unicom）, `vmbr4`（Mobile）四个不同 VLAN 的网桥，另有一个 `vmbr1`（Ustclug）的无头网桥用于从 [gateway-nic](../../services/gateway-nic.md) 桥接 Tinc。
+其连接的单根 10 Gbps 的光纤，桥接出 `vmbr0` 至 `vmbr4` 等网桥（线路定义[见上](#vmbr)）。其中无头网桥用于从 [gateway-nic](../../services/gateway-nic.md) 桥接 Tinc。
 
 !!! danger "硬盘控制器不要使用 VirtIO SCSI Single 或 LSI 开头的选项"
 
@@ -278,11 +294,3 @@ pve-6 位于东图，是一台 HP DL380G6，配置为 2× Xeon E5620 (Westmere 4
 !!! note "HP Smart Array"
 
     HP 的自带 RAID 卡管理软件可以在 <http://downloads.linux.hpe.com/SDR/repo/mcp/Debian/pool/non-free/> 下载，安装 `ssacli` 软件包。相关使用方法可以参考 <https://sleeplessbeastie.eu/2017/03/06/how-to-use-hp-command-line-array-configuration-utility/>。
-
-## pve-2, pve-4
-
-pve-2 和 pve-4 也位于东图，是两台未知品牌、未知型号的旧机器，配置为 2× Xeon E5420 (Very old 4C4T, 2.50 GHz), 16 GB 内存（DDR2 667 MHz）和一块 16 GB 的 SanDisk SSD。该型号机器**没有 IPMI**。
-
-由于配置低下，我们手动安装了 Proxmox VE，没有使用 LVM，分配了 1 GB 的 swap，剩下全部给 rootfs。
-
-机器的网卡有两个 1 Gbps 的接口，与 pve-6 相同，都接在同一个交换机上。
