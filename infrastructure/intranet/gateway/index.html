@@ -2454,7 +2454,7 @@
 <ul>
 <li><a href="../../../services/gateway-el/">Gateway EL</a></li>
 <li><a href="../../../services/gateway-nic/">Gateway NIC</a></li>
-<li>Gateway JP (missing)</li>
+<li><a href="../../../services/gateway-jp/">Gateway JP</a></li>
 </ul>
 <h2 id="tinc-workaround-1">Tinc "received packet on ustclug with own address as source address" workaround<a class="headerlink" href="#tinc-workaround-1" title="Permanent link">&para;</a></h2>
 <p>After migrating to PVE, we found that sometimes tinc works abnormally within gateway-el and gateway-nic, with following kernel log:</p>
@@ -2471,36 +2471,33 @@
 <a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>net_ratelimit: 2 callbacks suppressed
 </code></pre></div>
 <p>We still don't know the source of this issue. To workaround that, following self-check timer is deployed now:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="gp">$ </span>cat<span class="w"> </span>/opt/tinc-check.sh<span class="w"> </span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="gp">#</span>!/bin/bash
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="go">restart() {</span>
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="go">        systemctl stop tinc@ustclug.service</span>
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="go">        sleep 3  # avoid race condition</span>
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="go">        systemctl start tinc@ustclug.service</span>
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="go">        echo &quot;tinc restarted&quot;</span>
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="go">}</span>
-<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>
-<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="go">dmesg | tail -n 2 | grep &#39;received packet on ustclug with own address as source address&#39; &amp;&amp; restart ||  echo &quot;tinc OK now&quot;;</span>
-<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="gp">$ </span>cat<span class="w"> </span>/etc/systemd/system/tinc-check.service<span class="w"> </span>
-<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="go">[Unit]</span>
-<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="go">Description=Tinc Check and Auto-Restart</span>
-<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>
-<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>
-<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="go">[Service]</span>
-<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a><span class="go">Type=oneshot</span>
-<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a><span class="go">ExecStart=/opt/tinc-check.sh</span>
-<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a>
-<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a><span class="gp">$ </span>cat<span class="w"> </span>/etc/systemd/system/tinc-check.timer
-<a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a><span class="go">[Unit]</span>
-<a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a><span class="go">Description=Tinc Check and Auto-Restart Timer</span>
-<a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a>
-<a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a><span class="go">[Timer]</span>
-<a id="__codelineno-1-26" name="__codelineno-1-26" href="#__codelineno-1-26"></a><span class="go">OnCalendar=minutely</span>
-<a id="__codelineno-1-27" name="__codelineno-1-27" href="#__codelineno-1-27"></a><span class="go">Persistent=true</span>
-<a id="__codelineno-1-28" name="__codelineno-1-28" href="#__codelineno-1-28"></a>
-<a id="__codelineno-1-29" name="__codelineno-1-29" href="#__codelineno-1-29"></a><span class="go">[Install]</span>
-<a id="__codelineno-1-30" name="__codelineno-1-30" href="#__codelineno-1-30"></a><span class="go">WantedBy=timers.target</span>
+<div class="highlight"><span class="filename">/opt/tinc-check.sh</span><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="ch">#!/bin/bash</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>restart<span class="o">()</span><span class="w"> </span><span class="o">{</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">  </span>systemctl<span class="w"> </span>stop<span class="w"> </span>tinc@ustclug.service
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">  </span>sleep<span class="w"> </span><span class="m">3</span><span class="w">  </span><span class="c1"># avoid race condition</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">  </span>systemctl<span class="w"> </span>start<span class="w"> </span>tinc@ustclug.service
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;tinc restarted&quot;</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="o">}</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>dmesg<span class="w"> </span><span class="p">|</span><span class="w"> </span>tail<span class="w"> </span>-n<span class="w"> </span><span class="m">2</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s1">&#39;received packet on ustclug with own address as source address&#39;</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>restart<span class="w"> </span><span class="o">||</span><span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;tinc OK now&quot;</span><span class="p">;</span>
+</code></pre></div>
+<div class="highlight"><span class="filename">/etc/systemd/system/tinc-check.service</span><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="k">[Unit]</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="na">Description</span><span class="o">=</span><span class="s">Tinc Check and Auto-Restart</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="k">[Service]</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="na">Type</span><span class="o">=</span><span class="s">oneshot</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="na">ExecStart</span><span class="o">=</span><span class="s">/opt/tinc-check.sh</span>
+</code></pre></div>
+<div class="highlight"><span class="filename">/etc/systemd/system/tinc-check.timer</span><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="k">[Unit]</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="na">Description</span><span class="o">=</span><span class="s">Tinc Check and Auto-Restart Timer</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="k">[Timer]</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="na">OnCalendar</span><span class="o">=</span><span class="s">minutely</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="na">Persistent</span><span class="o">=</span><span class="s">true</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="k">[Install]</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="na">WantedBy</span><span class="o">=</span><span class="s">timers.target</span>
 </code></pre></div>
 
 
