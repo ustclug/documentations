@@ -12,13 +12,13 @@
         <meta name="author" content="USTC Linux User Group">
       
       
-        <link rel="canonical" href="https://docs.ustclug.org/services/mirrors/docker/">
+        <link rel="canonical" href="https://docs.ustclug.org/services/mirrors/http/">
       
       
-        <link rel="prev" href="../1/">
+        <link rel="prev" href="../genindex/">
       
       
-        <link rel="next" href="../ipmi/">
+        <link rel="next" href="../limiter/">
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
@@ -26,7 +26,7 @@
     
     
       
-        <title>Docker - LUG @ USTC</title>
+        <title>HTTP Service - LUG @ USTC</title>
       
     
     
@@ -83,7 +83,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#docker" class="md-skip">
+        <a href="#http-service" class="md-skip">
           Skip to content
         </a>
       
@@ -119,7 +119,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Docker
+              HTTP Service
             
           </span>
         </div>
@@ -1645,29 +1645,9 @@
                 
   
   
-    
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  <span class="md-ellipsis">
-    Docker
-  </span>
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../docker/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1676,46 +1656,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#networking" class="md-nav__link">
-    Networking
-  </a>
-  
-    <nav class="md-nav" aria-label="Networking">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#routing" class="md-nav__link">
-    Routing
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -1785,9 +1725,29 @@
                 
   
   
+    
   
-    <li class="md-nav__item">
-      <a href="../http/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    HTTP Service
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   <span class="md-ellipsis">
@@ -1796,6 +1756,33 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    请求限制策略
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -2445,22 +2432,9 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#networking" class="md-nav__link">
-    Networking
+  <a href="#_1" class="md-nav__link">
+    请求限制策略
   </a>
-  
-    <nav class="md-nav" aria-label="Networking">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#routing" class="md-nav__link">
-    Routing
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -2482,45 +2456,11 @@
   
 
 
-<h1 id="docker">Docker<a class="headerlink" href="#docker" title="Permanent link">&para;</a></h1>
-<h2 id="networking">Networking<a class="headerlink" href="#networking" title="Permanent link">&para;</a></h2>
-<p>Docker 默认创建一个名为 bridge 的网络，主机界面为 <code>docker0</code>，IP 地址段为 172.17.0.0/16。</p>
-<p>我们将 Docker Registry 的反代挂在另外一个子网下，需要先行创建。</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>docker<span class="w"> </span>network<span class="w"> </span>create<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">  </span>--opt<span class="w"> </span>com.docker.network.bridge.name<span class="o">=</span>docker1<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">  </span>--subnet<span class="o">=</span><span class="m">172</span>.18.0.0/16<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">  </span>--gateway<span class="o">=</span><span class="m">172</span>.18.0.1<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">  </span>docker-registry
-</code></pre></div>
-<h3 id="routing">Routing<a class="headerlink" href="#routing" title="Permanent link">&para;</a></h3>
-<p>一些同步程序不支持 bindIP 的配置，对于这些同步程序，我们通过创建多个 Docker network，然后在主机上根据 Docker network 进行策略路由，达到选择出口的效果。</p>
-<p>创建 Docker network 的命令如下：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>docker<span class="w"> </span>network<span class="w"> </span>create<span class="w"> </span>--driver<span class="o">=</span>bridge<span class="w"> </span>--subnet<span class="o">=</span><span class="m">172</span>.17.4.1/24<span class="w"> </span>-o<span class="w"> </span><span class="s2">&quot;com.docker.network.bridge.name=dockerC&quot;</span><span class="w"> </span>cernet
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>docker<span class="w"> </span>network<span class="w"> </span>create<span class="w"> </span>--driver<span class="o">=</span>bridge<span class="w"> </span>--subnet<span class="o">=</span><span class="m">172</span>.17.5.1/24<span class="w"> </span>-o<span class="w"> </span><span class="s2">&quot;com.docker.network.bridge.name=dockerT&quot;</span><span class="w"> </span>telecom
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>docker<span class="w"> </span>network<span class="w"> </span>create<span class="w"> </span>--driver<span class="o">=</span>bridge<span class="w"> </span>--subnet<span class="o">=</span><span class="m">172</span>.17.6.1/24<span class="w"> </span>-o<span class="w"> </span><span class="s2">&quot;com.docker.network.bridge.name=dockerM&quot;</span><span class="w"> </span>mobile
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>docker<span class="w"> </span>network<span class="w"> </span>create<span class="w"> </span>--driver<span class="o">=</span>bridge<span class="w"> </span>--subnet<span class="o">=</span><span class="m">172</span>.17.7.1/24<span class="w"> </span>-o<span class="w"> </span><span class="s2">&quot;com.docker.network.bridge.name=dockerU&quot;</span><span class="w"> </span>unicom
-</code></pre></div>
-<p>对应地，主机上也配置好了策略路由，例如：</p>
-<div class="highlight"><span class="filename">/etc/systemd/network/cernet.network</span><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># Docker Cernet</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="k">[RoutingPolicyRule]</span>
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="na">From</span><span class="o">=</span><span class="s">172.17.4.0/24</span>
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="na">Table</span><span class="o">=</span><span class="s">1011</span>
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="na">Priority</span><span class="o">=</span><span class="s">5</span>
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="k">[RoutingPolicyRule]</span>
-<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="na">From</span><span class="o">=</span><span class="s">172.17.8.0/24</span>
-<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="na">Table</span><span class="o">=</span><span class="s">1011</span>
-<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="na">Priority</span><span class="o">=</span><span class="s">5</span>
-</code></pre></div>
-<div class="highlight"><span class="filename">/etc/systemd/network/telecom.network</span><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># Docker Telecom</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="k">[RoutingPolicyRule]</span>
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="na">From</span><span class="o">=</span><span class="s">172.17.5.0/24</span>
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="na">Table</span><span class="o">=</span><span class="s">1012</span>
-<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="na">Priority</span><span class="o">=</span><span class="s">5</span>
-</code></pre></div>
-<p><code>mobile.network</code> 和 <code>unicom.network</code> 也类似。</p>
-<p>需要使用这种方式进行路由的同步镜像，可以在 YAML 中指定 <code>network</code>，例如：</p>
-<div class="highlight"><span class="filename">adoptium.yum.yaml</span><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nt">network</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">telecom</span>
-</code></pre></div>
+<h1 id="http-service">HTTP service<a class="headerlink" href="#http-service" title="Permanent link">&para;</a></h1>
+<p>Mirrors 使用 OpenResty（一个打包 Nginx 和一堆有用的 Lua 模块的软件包）提供 HTTP 服务。</p>
+<p>配置文件位于 LUG GitLab 上：<a href="https://git.lug.ustc.edu.cn/mirrors/nginx-config">https://git.lug.ustc.edu.cn/mirrors/nginx-config</a>，此仓库对应 mirrors 上的 <code>/etc/nginx</code> 目录。</p>
+<h2 id="_1">请求限制策略<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<p>见<a href="../limiter/">限制策略</a>。</p>
 
 
 
