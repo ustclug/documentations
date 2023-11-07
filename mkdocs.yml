@@ -102,6 +102,7 @@ nav:
         - vCenter: "infrastructure/discontinued/vsphere/vcenter.md"
         - VDP: "infrastructure/discontinued/vsphere/vdp.md"
   - Services:
+    - services/index.md
     - Mirrors:
       - services/mirrors/index.md
       - Current (4):
@@ -122,7 +123,7 @@ nav:
       - IPMI: "services/mirrors/ipmi.md"
       - ZFS: "services/mirrors/zfs.md"
       - Genindex: "services/mirrors/genindex.md"
-      - HTTP Service: "#"
+      - HTTP Service: services/mirrors/http.md
       - Rsync Service: "#"
       - Reverse Proxy: "#"
       - Limiter: "services/mirrors/limiter.md"

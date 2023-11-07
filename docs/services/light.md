@@ -2,7 +2,7 @@
 
 Service: [light.ustclug.org](https://light.ustclug.org)
 
-Git Repository: 
+Git Repository:
 
 * [Server Daemon](https://github.com/ustclug/light-server)
 * [Web UI](https://github.com/ustclug/lug-vpn-web/tree/light)

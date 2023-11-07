@@ -37,11 +37,11 @@ Blog：[add-telegram-web-service](https://servers.blog.ustc.edu.cn/2016/10/add-t
 
 USTC Life is a navigation page, which included useful sites in USTC.
 
+Service: [ustc.life](https://ustc.life)
+
 !!! note "2020-04-09 更新信息"
 
-    目前，USTC Life 服务托管在 GitHub Pages 上。以下内容仅为历史记录。
-
-service: [ustc.life](http://ustc.life)
+    目前，USTC Life 服务托管在 GitHub Pages 上，仓库也已转移至 [:octicons-mark-github-16: SmartHypercube/ustclife](https://github.com/SmartHypercube/ustclife)，由 Hypercube 负责维护。以下内容仅为历史记录。
 
 Git Repository: [github.com/ustclug/ustclife](https://github.com/ustclug/ustclife)
 

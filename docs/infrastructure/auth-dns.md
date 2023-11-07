@@ -6,6 +6,8 @@ Services (Servers):
 * ns-b.ustclug.org (ns-b.s.ustclug.org)
 * ns-c.ustclug.org (*something else*)
 
+All three servers are dedicated to DNS service and run no other services.
+
 ## Deploy
 
 * Bind configuration: :fontawesome-solid-lock:
