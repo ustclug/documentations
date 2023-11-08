@@ -2642,23 +2642,20 @@
 <li>已废弃：<a href="mirrors/1/">mirrors1</a></li>
 </ul>
 <p>镜像站日志会备份至 mirrorlog 虚拟机上。</p>
-<h2 id="auth-dns">权威 DNS<a class="headerlink" href="#auth-dns" title="Permanent link">&para;</a></h2>
-<p>见 <a href="../infrastructure/auth-dns/">auth-dns</a>。</p>
-<blockquote>
-<p>（以下内容由 GPT-4 生成）</p>
+<h2 id="auth-dns"><a href="../infrastructure/auth-dns/">权威 DNS</a><a class="headerlink" href="#auth-dns" title="Permanent link">&para;</a></h2>
+<div class="admonition abstract">
+<p class="admonition-title">以下内容由 GPT-4 生成</p>
 <p>User: 向新手运维介绍什么是权威 DNS</p>
 <p>Bot: 权威DNS（Authoritative DNS）服务是因特网域名系统（DNS）的一部分，它负责处理关于其负责管理的一组域名的查询。这些DNS服务器带有关于他们所负责域的所有必要数据，并从管理该域的人或组织中收到更新。</p>
 <p>比如，如果你在浏览器中输入一个网站地址，你的请求首先发送到递归DNS服务器，然后递归服务器查询权威DNS服务器来获取对应的IP地址。权威服务器就是“权威”资源，能够告诉递归服务器对应的IP地址是什么。这个过程被称为DNS解析。</p>
 <p>总的来说，权威DNS服务器就是存储、管理并响应特定域名信息的“权威”来源。</p>
-</blockquote>
+</div>
 <p>我们的权威 DNS 服务器提供了与 LUG 有关的域名的相关解析信息，同时也是一个（通过域名）可以概览 LUG 曾经与目前有的服务的地方。</p>
-<h2 id="lug-ftp">LUG FTP<a class="headerlink" href="#lug-ftp" title="Permanent link">&para;</a></h2>
+<h2 id="lug-ftp"><a href="ftp/">LUG FTP</a><a class="headerlink" href="#lug-ftp" title="Permanent link">&para;</a></h2>
 <p>主服务器：<code>vdp.s.ustclug.org</code>，SSH 端口 2222。对外提供 HTTP(S)（文件列表）与 FTP 服务。同时接入 LDAP，每个 LDAP 用户都可以使用 LUG FTP 存储自己的文件。</p>
 <p>与此同时，vdp 也承担了使用 NFS 向 PVE 服务器提供一部分存储的任务。</p>
-<p>见 <a href="ftp/">ftp</a>。</p>
-<h2 id="gitlab">LUG GitLab<a class="headerlink" href="#gitlab" title="Permanent link">&para;</a></h2>
+<h2 id="gitlab"><a href="gitlab/">LUG GitLab</a><a class="headerlink" href="#gitlab" title="Permanent link">&para;</a></h2>
 <p>主服务器：<code>gitlab.s.ustclug.org</code>，SSH 端口 2222。</p>
-<p>见 <a href="gitlab/">gitlab</a>。</p>
 <h2 id="revproxy">主页反代<a class="headerlink" href="#revproxy" title="Permanent link">&para;</a></h2>
 <p>是多个 HTTP 服务的入口。</p>
 <p>由于政策和合规性原因，我们对使用主页反代的域名采用了分线路解析的方案，其中绝大部分域名在校外都解析到 <a href="gatewa-jp.md">gateway-jp</a>，在校内解析到 <a href="gatewa-nic.md">gateway-nic</a>。这两台服务器均<a href="../infrastructure/intranet/">接入 tinc 内网</a>，采用同一套 Nginx 配置，为内网服务器提供 HTTP 反代。</p>
@@ -2692,38 +2689,35 @@
 <p>后端是 docker2 上的两个容器 <code>qtguide</code> 和 <code>opensuse-guide</code>。</p>
 <h3 id="_1">服务运行状态服务器黑板报<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h3>
 <p>TODO: servers 与 status 的合并工作。</p>
-<h2 id="lug-vpn">LUG VPN<a class="headerlink" href="#lug-vpn" title="Permanent link">&para;</a></h2>
+<h2 id="lug-vpn"><a href="vpn/">LUG VPN</a><a class="headerlink" href="#lug-vpn" title="Permanent link">&para;</a></h2>
 <p>主服务器：<code>vpnstv.s.ustclug.org</code>（虚拟机，NIC 机房）</p>
 <p>RADIUS 认证服务器：<code>radius.s.ustclug.org</code>，同时运行了 FreeRADIUS 和它的 MySQL 数据库。</p>
 <p>另有旧的 <code>vpn.s.ustclug.org</code> 运行在东图，暂不需要关注。</p>
 <h2 id="hackergame">Hackergame<a class="headerlink" href="#hackergame" title="Permanent link">&para;</a></h2>
 <p>相关内容见 hackergame 内部文档。</p>
-<h2 id="docker2">各类 Docker 服务<a class="headerlink" href="#docker2" title="Permanent link">&para;</a></h2>
+<h2 id="docker2"><a href="docker2/">各类 Docker 服务</a><a class="headerlink" href="#docker2" title="Permanent link">&para;</a></h2>
 <p>Docker2 是专职负责运行容器的机器。</p>
 <h3 id="adrain">Adrain<a class="headerlink" href="#adrain" title="Permanent link">&para;</a></h3>
 <p>ustcflyer（科大飞跃手册网站）的前身，目前保持运行。</p>
 <p>tky: ustcflyer 没有实现给 session 删对应评论的功能，所以 adrain 没有下线。</p>
-<h3 id="grafana">Grafana<a class="headerlink" href="#grafana" title="Permanent link">&para;</a></h3>
-<p>监控站点，见 <a href="../infrastructure/monitor/">monitor</a>。</p>
-<h2 id="ldap">LDAP<a class="headerlink" href="#ldap" title="Permanent link">&para;</a></h2>
-<p>见 <a href="../infrastructure/ldap/">ldap</a>。</p>
-<h2 id="mail">Mail<a class="headerlink" href="#mail" title="Permanent link">&para;</a></h2>
+<h3 id="grafana"><a href="../infrastructure/monitor/">Grafana</a><a class="headerlink" href="#grafana" title="Permanent link">&para;</a></h3>
+<p>LUG 的监控站点。</p>
+<h2 id="ldap"><a href="../infrastructure/ldap/">LDAP</a><a class="headerlink" href="#ldap" title="Permanent link">&para;</a></h2>
+<h2 id="mail"><a href="../infrastructure/mail/">Mail</a><a class="headerlink" href="#mail" title="Permanent link">&para;</a></h2>
 <p>为服务器、IPMI 等提供的内部邮件服务。</p>
 <p>[WIP]: 需要补充</p>
-<h2 id="pve">虚拟化：PVE 与 PBS<a class="headerlink" href="#pve" title="Permanent link">&para;</a></h2>
+<h2 id="pve"><a href="../infrastructure/proxmox/pve/">虚拟化：PVE 与 PBS</a><a class="headerlink" href="#pve" title="Permanent link">&para;</a></h2>
 <p>PVE: 提供虚拟化支持；PBS: PVE 的虚拟机备份。</p>
-<h2 id="pxe">PXE<a class="headerlink" href="#pxe" title="Permanent link">&para;</a></h2>
+<h2 id="pxe"><a href="pxe/">PXE</a><a class="headerlink" href="#pxe" title="Permanent link">&para;</a></h2>
 <p>网络启动服务，负责为全校机器提供插网口即可安装系统的功能，以及为图书馆查询机提供镜像。</p>
-<p>见 <a href="pxe/">pxe</a>。</p>
 <h2 id="others">其他<a class="headerlink" href="#others" title="Permanent link">&para;</a></h2>
 <p>此处所列出的“服务”没有使用我们自己的服务器资源，都托管在外部平台上，仅域名（即 DNS）由我们维护。</p>
-<h3 id="documentations">技术文档<a class="headerlink" href="#documentations" title="Permanent link">&para;</a></h3>
+<h3 id="documentations"><a href="documentations/">技术文档</a><a class="headerlink" href="#documentations" title="Permanent link">&para;</a></h3>
 <p>也就是本文档，运行在 Cloudflare Pages 上。</p>
 <h3 id="ghauth">GHAuth<a class="headerlink" href="#ghauth" title="Permanent link">&para;</a></h3>
 <p><a href="https://ghauth.ustclug.org">https://ghauth.ustclug.org</a></p>
 <p>用于双向验证 GitHub 账号与科大学号的服务（类似于 <a href="https://qq.ustc.life">https://qq.ustc.life</a>），目前处于闲置，运行在 iBug 的 AWS Lambda 上。</p>
-<h2 id="discontinued">已废弃服务<a class="headerlink" href="#discontinued" title="Permanent link">&para;</a></h2>
-<p>见 <a href="discontinued/">discontinued</a>。</p>
+<h2 id="discontinued"><a href="discontinued/">已废弃服务</a><a class="headerlink" href="#discontinued" title="Permanent link">&para;</a></h2>
 
 
 
