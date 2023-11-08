@@ -2478,13 +2478,6 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#ghauth" class="md-nav__link">
-    Ghauth
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#_1" class="md-nav__link">
     服务运行状态服务器黑板报
   </a>
@@ -2562,6 +2555,33 @@
   <a href="#pxe" class="md-nav__link">
     PXE
   </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#others" class="md-nav__link">
+    其他
+  </a>
+  
+    <nav class="md-nav" aria-label="其他">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#documentations" class="md-nav__link">
+    技术文档
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ghauth" class="md-nav__link">
+    GHAuth
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -2668,10 +2688,8 @@
 <p>域名：<code>*.proxy.ustclug.org</code></p>
 <p>作为镜像站服务的一部分，gateway-jp/nic 也分别为校外内提供反向代理列表的反向代理服务。</p>
 <h3 id="qt-guide-opensuse-guide">Qt Guide 和 openSUSE Guide<a class="headerlink" href="#qt-guide-opensuse-guide" title="Permanent link">&para;</a></h3>
-<p>由 <a href="https://github.com/winland0704">@winland0704</a> 负责编写内容，我们负责托管。放着不动就行。</p>
-<h3 id="ghauth">Ghauth<a class="headerlink" href="#ghauth" title="Permanent link">&para;</a></h3>
-<p>https://ghauth.ustclug.org</p>
-<p>用于双向验证 GitHub 账号与科大学号的服务（类似于 <a href="https://qq.ustc.life">https://qq.ustc.life</a>），目前处于闲置，运行在 iBug 的 AWS 上。</p>
+<p>由 <a href="https://github.com/winland0704">@winland0704</a> 负责编写内容，我们帮助托管，平时放着不动就行。</p>
+<p>后端是 docker2 上的两个容器 <code>qtguide</code> 和 <code>opensuse-guide</code>。</p>
 <h3 id="_1">服务运行状态服务器黑板报<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h3>
 <p>TODO: servers 与 status 的合并工作。</p>
 <h2 id="lug-vpn">LUG VPN<a class="headerlink" href="#lug-vpn" title="Permanent link">&para;</a></h2>
@@ -2697,6 +2715,13 @@
 <h2 id="pxe">PXE<a class="headerlink" href="#pxe" title="Permanent link">&para;</a></h2>
 <p>网络启动服务，负责为全校机器提供插网口即可安装系统的功能，以及为图书馆查询机提供镜像。</p>
 <p>见 <a href="pxe/">pxe</a>。</p>
+<h2 id="others">其他<a class="headerlink" href="#others" title="Permanent link">&para;</a></h2>
+<p>此处所列出的“服务”没有使用我们自己的服务器资源，都托管在外部平台上，仅域名（即 DNS）由我们维护。</p>
+<h3 id="documentations">技术文档<a class="headerlink" href="#documentations" title="Permanent link">&para;</a></h3>
+<p>也就是本文档，运行在 Cloudflare Pages 上。</p>
+<h3 id="ghauth">GHAuth<a class="headerlink" href="#ghauth" title="Permanent link">&para;</a></h3>
+<p><a href="https://ghauth.ustclug.org">https://ghauth.ustclug.org</a></p>
+<p>用于双向验证 GitHub 账号与科大学号的服务（类似于 <a href="https://qq.ustc.life">https://qq.ustc.life</a>），目前处于闲置，运行在 iBug 的 AWS Lambda 上。</p>
 <h2 id="discontinued">已废弃服务<a class="headerlink" href="#discontinued" title="Permanent link">&para;</a></h2>
 <p>见 <a href="discontinued/">discontinued</a>。</p>
 
