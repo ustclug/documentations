@@ -104,13 +104,9 @@ tky: planet 现在缺乏维护，希望能有人把它搞起来。
 
 ### Qt Guide 和 openSUSE Guide
 
-由 [@winland0704](https://github.com/winland0704) 负责编写内容，我们负责托管。放着不动就行。
+由 [@winland0704](https://github.com/winland0704) 负责编写内容，我们帮助托管，平时放着不动就行。
 
-### Ghauth
-
-https://ghauth.ustclug.org
-
-用于双向验证 GitHub 账号与科大学号的服务（类似于 <https://qq.ustc.life>），目前处于闲置，运行在 iBug 的 AWS 上。
+后端是 docker2 上的两个容器 `qtguide` 和 `opensuse-guide`。
 
 ### 服务运行状态服务器黑板报
 
@@ -161,6 +157,20 @@ PVE: 提供虚拟化支持；PBS: PVE 的虚拟机备份。
 网络启动服务，负责为全校机器提供插网口即可安装系统的功能，以及为图书馆查询机提供镜像。
 
 见 [pxe](./pxe/index.md)。
+
+## 其他 {#others}
+
+此处所列出的“服务”没有使用我们自己的服务器资源，都托管在外部平台上，仅域名（即 DNS）由我们维护。
+
+### 技术文档 {#documentations}
+
+也就是本文档，运行在 Cloudflare Pages 上。
+
+### GHAuth
+
+<https://ghauth.ustclug.org>
+
+用于双向验证 GitHub 账号与科大学号的服务（类似于 <https://qq.ustc.life>），目前处于闲置，运行在 iBug 的 AWS Lambda 上。
 
 ## 已废弃服务 {#discontinued}
 
