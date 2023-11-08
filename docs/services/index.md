@@ -29,35 +29,29 @@ icon: fontawesome/solid/certificate
 
 镜像站日志会备份至 mirrorlog 虚拟机上。
 
-## 权威 DNS {#auth-dns}
+## [权威 DNS](../infrastructure/auth-dns.md) {#auth-dns}
 
-见 [auth-dns](../infrastructure/auth-dns.md)。
+!!! abstract "以下内容由 GPT-4 生成"
 
->（以下内容由 GPT-4 生成）
->
-> User: 向新手运维介绍什么是权威 DNS
->
-> Bot: 权威DNS（Authoritative DNS）服务是因特网域名系统（DNS）的一部分，它负责处理关于其负责管理的一组域名的查询。这些DNS服务器带有关于他们所负责域的所有必要数据，并从管理该域的人或组织中收到更新。
->
-> 比如，如果你在浏览器中输入一个网站地址，你的请求首先发送到递归DNS服务器，然后递归服务器查询权威DNS服务器来获取对应的IP地址。权威服务器就是“权威”资源，能够告诉递归服务器对应的IP地址是什么。这个过程被称为DNS解析。
->
-> 总的来说，权威DNS服务器就是存储、管理并响应特定域名信息的“权威”来源。
+    User: 向新手运维介绍什么是权威 DNS
+
+    Bot: 权威DNS（Authoritative DNS）服务是因特网域名系统（DNS）的一部分，它负责处理关于其负责管理的一组域名的查询。这些DNS服务器带有关于他们所负责域的所有必要数据，并从管理该域的人或组织中收到更新。
+
+    比如，如果你在浏览器中输入一个网站地址，你的请求首先发送到递归DNS服务器，然后递归服务器查询权威DNS服务器来获取对应的IP地址。权威服务器就是“权威”资源，能够告诉递归服务器对应的IP地址是什么。这个过程被称为DNS解析。
+
+    总的来说，权威DNS服务器就是存储、管理并响应特定域名信息的“权威”来源。
 
 我们的权威 DNS 服务器提供了与 LUG 有关的域名的相关解析信息，同时也是一个（通过域名）可以概览 LUG 曾经与目前有的服务的地方。
 
-## LUG FTP
+## [LUG FTP](ftp.md)
 
 主服务器：`vdp.s.ustclug.org`，SSH 端口 2222。对外提供 HTTP(S)（文件列表）与 FTP 服务。同时接入 LDAP，每个 LDAP 用户都可以使用 LUG FTP 存储自己的文件。
 
 与此同时，vdp 也承担了使用 NFS 向 PVE 服务器提供一部分存储的任务。
 
-见 [ftp](ftp.md)。
-
-## LUG GitLab {#gitlab}
+## [LUG GitLab](gitlab.md) {#gitlab}
 
 主服务器：`gitlab.s.ustclug.org`，SSH 端口 2222。
-
-见 [gitlab](gitlab.md)。
 
 ## 主页反代 {#revproxy}
 
@@ -112,7 +106,7 @@ tky: planet 现在缺乏维护，希望能有人把它搞起来。
 
 TODO: servers 与 status 的合并工作。
 
-## LUG VPN
+## [LUG VPN](vpn.md)
 
 主服务器：`vpnstv.s.ustclug.org`（虚拟机，NIC 机房）
 
@@ -124,7 +118,7 @@ RADIUS 认证服务器：`radius.s.ustclug.org`，同时运行了 FreeRADIUS 和
 
 相关内容见 hackergame 内部文档。
 
-## 各类 Docker 服务 {#docker2}
+## [各类 Docker 服务](docker2.md) {#docker2}
 
 Docker2 是专职负责运行容器的机器。
 
@@ -134,35 +128,31 @@ ustcflyer（科大飞跃手册网站）的前身，目前保持运行。
 
 tky: ustcflyer 没有实现给 session 删对应评论的功能，所以 adrain 没有下线。
 
-### Grafana
+### [Grafana](../infrastructure/monitor.md)
 
-监控站点，见 [monitor](../infrastructure/monitor.md)。
+LUG 的监控站点。
 
-## LDAP
+## [LDAP](../infrastructure/ldap.md)
 
-见 [ldap](../infrastructure/ldap.md)。
-
-## Mail
+## [Mail](../infrastructure/mail.md)
 
 为服务器、IPMI 等提供的内部邮件服务。
 
 \[WIP\]: 需要补充
 
-## 虚拟化：PVE 与 PBS {#pve}
+## [虚拟化：PVE 与 PBS](../infrastructure/proxmox/pve.md) {#pve}
 
 PVE: 提供虚拟化支持；PBS: PVE 的虚拟机备份。
 
-## PXE
+## [PXE](pxe/index.md)
 
 网络启动服务，负责为全校机器提供插网口即可安装系统的功能，以及为图书馆查询机提供镜像。
-
-见 [pxe](./pxe/index.md)。
 
 ## 其他 {#others}
 
 此处所列出的“服务”没有使用我们自己的服务器资源，都托管在外部平台上，仅域名（即 DNS）由我们维护。
 
-### 技术文档 {#documentations}
+### [技术文档](documentations.md) {#documentations}
 
 也就是本文档，运行在 Cloudflare Pages 上。
 
@@ -172,6 +162,4 @@ PVE: 提供虚拟化支持；PBS: PVE 的虚拟机备份。
 
 用于双向验证 GitHub 账号与科大学号的服务（类似于 <https://qq.ustc.life>），目前处于闲置，运行在 iBug 的 AWS Lambda 上。
 
-## 已废弃服务 {#discontinued}
-
-见 [discontinued](discontinued.md)。
+## [已废弃服务](discontinued.md) {#discontinued}
