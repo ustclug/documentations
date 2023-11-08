@@ -20,7 +20,7 @@ icon: fontawesome/solid/certificate
 - 副：[mirrors3](mirrors/3/index.md)
     - mirrors3 存储较大的存档类仓库、极冷门且空间极大与有需要但是 mirrors4 放不下的仓库。
     - 截至目前（2023/11），有 centos-vault, openeuler, percona, ubuntu-old-releases
-    - https://mirrors.ustc.edu.cn/status/mirrors3.html
+    - <https://mirrors.ustc.edu.cn/status/mirrors3.html>
     - **注意：mirrors3 连接的 SAN 的管理口已经损坏，需要定期检查磁盘状态。**
 - 副：[mirrors2](mirrors/2/index.md)
     - mirrors2 存储的内容是 mirrors4 的子集，负责帮助 mirrors4 承担一部分 rsync 流量的压力。
@@ -36,7 +36,7 @@ icon: fontawesome/solid/certificate
 >（以下内容由 GPT-4 生成）
 >
 > User: 向新手运维介绍什么是权威 DNS
-> 
+>
 > Bot: 权威DNS（Authoritative DNS）服务是因特网域名系统（DNS）的一部分，它负责处理关于其负责管理的一组域名的查询。这些DNS服务器带有关于他们所负责域的所有必要数据，并从管理该域的人或组织中收到更新。
 >
 > 比如，如果你在浏览器中输入一个网站地址，你的请求首先发送到递归DNS服务器，然后递归服务器查询权威DNS服务器来获取对应的IP地址。权威服务器就是“权威”资源，能够告诉递归服务器对应的IP地址是什么。这个过程被称为DNS解析。
@@ -51,13 +51,13 @@ icon: fontawesome/solid/certificate
 
 与此同时，vdp 也承担了使用 NFS 向 PVE 服务器提供一部分存储的任务。
 
-见 [ftp](./ftp.md)。
+见 [ftp](ftp.md)。
 
 ## LUG GitLab {#gitlab}
 
 主服务器：`gitlab.s.ustclug.org`，SSH 端口 2222。
 
-见 [gitlab](./gitlab.md)。
+见 [gitlab](gitlab.md)。
 
 ## 主页反代 {#revproxy}
 
@@ -77,20 +77,24 @@ icon: fontawesome/solid/certificate
 
 ### LUG 主页 {#homepage}
 
+后端是 docker2 上的 `website` 容器。
+
 见 [:octicons-mark-github-16: ustclug/website](https://github.com/ustclug/website) 仓库的 README。
 
 tky: planet 现在缺乏维护，希望能有人把它搞起来。
 
 ### Linux 101
 
+后端是 docker2 上的 `linux101` 容器。
+
 见 [:octicons-mark-github-16: ustclug/Linux101-docs](https://github.com/ustclug/Linux101-docs) 仓库的 README。
 
 ### 申请系统 {#getvpn}
 
-一个使用 flask 编写的 web 应用。
+一个使用 Flask 编写的 web 应用，部署了两套，分别提供 LUG VPN 和 Light 的申请服务。其中：
 
-- LV -> docker2
-- Light -> swarm
+- LUG VPN 的申请系统运行在 docker2 上（`lugvpn-web`）；
+- Light 的申请系统运行在 swarm 上。
 
 ### 各路反向代理 {#proxy}
 
