@@ -97,6 +97,7 @@ nav:
     - RAID: infrastructure/raid.md
     - Discontinued Infrastructure:
       - infrastructure/discontinued/index.md
+      - G Suite: infrastructure/google.md
       - vSphere Cluster:
         - ESXi: "infrastructure/discontinued/vsphere/esxi.md"
         - vCenter: "infrastructure/discontinued/vsphere/vcenter.md"
