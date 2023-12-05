@@ -25,7 +25,7 @@ GitLab 16.0 起移除了对 CAS3 的支持，因此我们切换到了 OAuth2 来
 
 更新前请先提前于 [Proxmox VE](https://pve-6.vm.ustclug.org:8006/) 上对虚拟机打快照（打快照时服务会暂时停止）
 
-打完快照之后使用脚本进行更新（目前脚本位于 `/home/sirius/gitlab-scripts`），首先使用 `./gitlab.sh db` 进行数据库的准备工作。之后可以通过 `./gitlab.sh run <版本号>` 来进行 docker container 的替换。更换前脚本会自动拉取相应版本号的 docker 镜像，如果担心拉取时间过长可以在打快照前提前通过 `docker pull sameersbn/gitlab:<版本号>` 来拉取相应的镜像。
+打完快照之后使用脚本进行更新（目前脚本位于 `/home/sirius/gitlab-scripts`），首先使用 `./gitlab.sh db` 进行数据库的准备工作。之后可以通过 `./gitlab.sh run <版本号>` 来进行 docker container 的替换。更换前脚本会自动拉取相应版本号的 docker 镜像，如果担心拉取时间过长可以在打快照前提前通过 `docker pull ghcr.io/ustclug/docker-gitlab:<版本号>` 来拉取相应的镜像。
 
 一般情况下经以上操作后更新就正常结束，如果长时间无法启动，可以通过 `docker logs gitlab` 查看日志，如果发现更新后的启动出现问题，可以到 [sameersbn/docker-gitlab](https://github.com/sameersbn/docker-gitlab/) 的 issue 区等地查看相关 issue，以及通过对出错日志进行 Google 可能会发现是 gitlab 上游等出现的问题。如果有解决办法，可以按照相应解决办法解决，如果没有。可以通过找到有相应问题前的正常版本号，回滚快照，之后更到表现正常的版本。（最近的更新会在启动之后短暂出现 502 的情况，但很快就会恢复，遇到这种情况时不要惊慌）。
 
