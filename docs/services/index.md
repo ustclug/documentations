@@ -57,7 +57,7 @@ icon: fontawesome/solid/certificate
 
 是多个 HTTP 服务的入口。
 
-由于政策和合规性原因，我们对使用主页反代的域名采用了分线路解析的方案，其中绝大部分域名在校外都解析到 [gateway-jp](gatewa-jp.md)，在校内解析到 [gateway-nic](gatewa-nic.md)。这两台服务器均[接入 tinc 内网](../infrastructure/intranet/index.md)，采用同一套 Nginx 配置，为内网服务器提供 HTTP 反代。
+由于政策和合规性原因，我们对使用主页反代的域名采用了分线路解析的方案，其中绝大部分域名在校外都解析到 [gateway-jp](gateway-jp.md)，在校内解析到 [gateway-nic](gateway-nic.md)。这两台服务器均[接入 tinc 内网](../infrastructure/intranet/index.md)，采用同一套 Nginx 配置，为内网服务器提供 HTTP 反代。
 
 完整列表请在 auth-dns 仓库内寻找 CNAME 到 `gateway.cname.ustclug.org.` 的域名。
 
