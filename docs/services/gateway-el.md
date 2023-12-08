@@ -78,6 +78,12 @@ Why is `74565` set? Let's check `/etc/iproute2/rt_tables`!
 
 For wireguard, you can use `wg` to check status. If you find that the "received" is 0 in transferred, something is going wrong.
 
+## Nginx
+
+### ustclug.org issue
+
+See [Gateway-NIC](./gateway-nic.md#unregistered-domain-traffic)
+
 ## Issues & resolution {#issues}
 
 ### IPVS Conntrack

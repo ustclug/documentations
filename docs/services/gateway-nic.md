@@ -302,3 +302,33 @@ After=netfilter-persistent.service
 Requires=netfilter-persistent.service
 PartOf=netfilter-persistent.service
 ```
+
+## Nginx
+
+### ustclug.org issue {#unregistered-domain-traffic}
+
+To mitigate the issue of the complaints from ISPs and the regulation authorities caused by the gateways in USTCnet responding to the requests for `ustclug.org`, which is a unregistered domain in China MIIT, we make nginx listen on an alternative port 81/444 for HTTP and HTTPS respectively, to response to the requests for `lug.ustc.edu.cn` only, and rejecting the handshake for any other domain.
+
+``` title="/etc/nginx/sites-available/default"
+server {
+  listen 81 default_server;
+  listen [::]:81 default_server;
+  listen 444 ssl http2 default_server;
+  listen [::]:444 ssl http2 default_server;
+  server_name _;
+  ssl_reject_handshake on; 
+  return 444;
+}
+```
+
+To whitelist any domain, add `listen 81` and `listen 444 http2 ssl` to corresponding site's server block.
+
+We use iptables to redirect any traffic from outside USTCnet whose destination is TCP port 80/443 on local machine to TCP port 81/444 respectively.
+
+```iptables
+-A PREROUTING -m addrtype --dst-type LOCAL -j NGINX-REDIRECT
+-A NGINX-REDIRECT -i lo -j RETURN
+-A NGINX-REDIRECT -m set --match-set ustcnet src -j RETURN
+-A NGINX-REDIRECT -p tcp --dport 80 -j REDIRECT --to-port 81
+-A NGINX-REDIRECT -p tcp --dport 443 -j REDIRECT --to-port 444
+```
