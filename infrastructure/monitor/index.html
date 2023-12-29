@@ -2633,16 +2633,19 @@
 <a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>pprof-enabled<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span>
 </code></pre></div>
 <h2 id="install-telegraf">Install telegraf<a class="headerlink" href="#install-telegraf" title="Permanent link">&para;</a></h2>
-<p>安装方法见 <a href="https://docs.influxdata.com/telegraf/v1.21/introduction/installation/">https://docs.influxdata.com/telegraf/v1.21/introduction/installation/</a></p>
-<p>一个典型的安装命令是：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>wget<span class="w"> </span>https://dl.influxdata.com/telegraf/releases/telegraf_1.21.2-1_amd64.deb
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>sudo<span class="w"> </span>dpkg<span class="w"> </span>-i<span class="w"> </span>telegraf_1.21.2-1_amd64.deb
+<p>官方文档见 <a href="https://docs.influxdata.com/telegraf/v1/install/">https://docs.influxdata.com/telegraf/v1/install/</a></p>
+<p>典型的安装方式是从 APT 源安装：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>wget<span class="w"> </span>-O<span class="w"> </span>/etc/apt/trusted.gpg.d/influxdb.asc<span class="w"> </span>https://repos.influxdata.com/influxdata-archive_compat.key
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;deb https://mirrors.ustc.edu.cn/influxdata/debian bullseye stable&quot;</span><span class="w"> </span>&gt;<span class="w"> </span>/etc/apt/sources.list.d/influxdb.list
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>apt<span class="w"> </span>update
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>apt<span class="w"> </span>install<span class="w"> </span>--no-install-recommends<span class="w"> </span>telegraf
 </code></pre></div>
-<p>更加<strong>推荐</strong>的做法是加入软件源后安装</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>curl<span class="w"> </span>-sL<span class="w"> </span>https://repos.influxdata.com/influxdb.key<span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>gpg<span class="w"> </span>--dearmor<span class="w"> </span>-o<span class="w"> </span>/usr/share/keyrings/influxdb.gpg
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;deb [signed-by=/usr/share/keyrings/influxdb.gpg] https://mirrors.ustc.edu.cn/influxdata/debian buster stable&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span>/etc/apt/sources.list.d/influxdb.list
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>sudo<span class="w"> </span>apt-get<span class="w"> </span>update<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>telegraf
+<details class="note">
+<summary>手动安装方式（不推荐）</summary>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>wget<span class="w"> </span>https://dl.influxdata.com/telegraf/releases/telegraf_1.28.2-1_amd64.deb
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>sudo<span class="w"> </span>dpkg<span class="w"> </span>-i<span class="w"> </span>telegraf_1.28.2-1_amd64.deb
 </code></pre></div>
+</details>
 <h2 id="configure-telegraf">Configure telegraf<a class="headerlink" href="#configure-telegraf" title="Permanent link">&para;</a></h2>
 <p>配置文件在 <code>/etc/telegraf/</code> 目录下，用 root 权限修改：</p>
 <p>在 <code>/etc/telegraf/telegraf.d/</code> 下增加 <code>net.conf</code> 用来开启网络监控，内容如下：</p>
