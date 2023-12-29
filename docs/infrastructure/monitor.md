@@ -32,22 +32,23 @@ pprof-enabled = false
 
 ## Install telegraf
 
-安装方法见 <https://docs.influxdata.com/telegraf/v1.21/introduction/installation/>
+官方文档见 <https://docs.influxdata.com/telegraf/v1/install/>
 
-一个典型的安装命令是：
-
-```shell
-wget https://dl.influxdata.com/telegraf/releases/telegraf_1.21.2-1_amd64.deb
-sudo dpkg -i telegraf_1.21.2-1_amd64.deb
-```
-
-更加**推荐**的做法是加入软件源后安装
+典型的安装方式是从 APT 源安装：
 
 ```shell
-curl -sL https://repos.influxdata.com/influxdb.key | sudo gpg --dearmor -o /usr/share/keyrings/influxdb.gpg
-echo "deb [signed-by=/usr/share/keyrings/influxdb.gpg] https://mirrors.ustc.edu.cn/influxdata/debian buster stable" | sudo tee /etc/apt/sources.list.d/influxdb.list
-sudo apt-get update && sudo apt-get install telegraf
+wget -O /etc/apt/trusted.gpg.d/influxdb.asc https://repos.influxdata.com/influxdata-archive_compat.key
+echo "deb https://mirrors.ustc.edu.cn/influxdata/debian bullseye stable" > /etc/apt/sources.list.d/influxdb.list
+apt update
+apt install --no-install-recommends telegraf
 ```
+
+??? note "手动安装方式（不推荐）"
+
+    ```shell
+    wget https://dl.influxdata.com/telegraf/releases/telegraf_1.28.2-1_amd64.deb
+    sudo dpkg -i telegraf_1.28.2-1_amd64.deb
+    ```
 
 ## Configure telegraf
 
