@@ -124,6 +124,7 @@ nav:
       - IPMI: "services/mirrors/ipmi.md"
       - ZFS: "services/mirrors/zfs.md"
       - Genindex: "services/mirrors/genindex.md"
+      - Monitoring: services/mirrors/monitor.md
       - HTTP Service: services/mirrors/http.md
       - Rsync Service: "#"
       - Reverse Proxy: "#"
