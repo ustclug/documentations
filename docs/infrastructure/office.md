@@ -20,7 +20,7 @@
 
 总之，不知道怎么处理的邮件不要贸然回复。如果你认为某一封邮件需要我们处理但不知道怎么处理，请转告给其他相关同学。
 
-以下内容从 Hypercude 编写的内容中截取：
+以下内容从 Hypercube 编写的内容中截取：
 
 > 回复任何邮件时，请抄送 / CC（不是密送 / BCC）给原邮件的收件地址！（比如别人发到 `lug A ustc.edu.cn`，回复时也请 CC 到 `lug A ustc.edu.cn`）
 >
@@ -65,9 +65,9 @@ Outlook 无法直接通过网页端添加发件人名称、设置回复地址，
 
 在右上角中选择账户设置，在默认身份中
 
-- 修改 *Your Name* 为 `Zeyu Gao on behalf of USTC LUG`（请换成自己的名字）
-- 修改 *Reply-to Address* 为 `lug@ustc.edu.cn`
-- *Signature text* 为（最后一行换成自己的信息）
+- 修改 *Your Name* (*您的姓名*) 为 `Zeyu Gao on behalf of USTC LUG`（请换成自己的名字）
+- 修改 *Reply-to Address* (*回复地址*) 为 `lug@ustc.edu.cn`
+- 修改 *Signature text* (*签名文字*) 为（最后一行换成自己的信息）
 
     ```text
     Linux User Group
