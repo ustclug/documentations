@@ -22,7 +22,7 @@
 
 以下内容从 Hypercude 编写的内容中截取：
 
-> 回复任何邮件时，请抄送 / CC（不是密送 / BCC）给原邮件的收件地址！（比如别人发到 lug A ustc.edu.cn ，回复时也请 CC 到 lug A ustc.edu.cn）
+> 回复任何邮件时，请抄送 / CC（不是密送 / BCC）给原邮件的收件地址！（比如别人发到 `lug A ustc.edu.cn`，回复时也请 CC 到 `lug A ustc.edu.cn`）
 >
 > 请不要“只回复邮件”。如果在回复中说“我们会做某某事”，请注意除非你明确转交给了别人，这件事应当由你来完成。
 
@@ -65,9 +65,9 @@ Outlook 无法直接通过网页端添加发件人名称、设置回复地址，
 
 在右上角中选择账户设置，在默认身份中
 
-- 修改 “您的姓名“ 为 “Zeyu Gao on behalf of USTC LUG”（请换成自己的名字）
-- ”回复地址“ 修改为 `lug@ustc.edu.cn`
-- “签名文字” 为（最后一行换成自己的信息）
+- 修改 *Your Name* 为 `Zeyu Gao on behalf of USTC LUG`（请换成自己的名字）
+- 修改 *Reply-to Address* 为 `lug@ustc.edu.cn`
+- *Signature text* 为（最后一行换成自己的信息）
 
     ```text
     Linux User Group
@@ -80,6 +80,12 @@ Outlook 无法直接通过网页端添加发件人名称、设置回复地址，
 结果如图：
 
 ![Thunderbird Conf](img/thunderbird-account-settings.jpg)
+
+### 抄送设置 {#tb-cc}
+
+在账户设置中，选择身份管理，点击编辑，选择 *Copies and Folders*, 启用 *Cc these email addresses*, 并输入默认抄送地址 `lug A ustc.edu.cn`
+
+![Thunderbird cc](img/thunderbird-account-settings-cc.png)
 
 ### 文件夹 {#tb-folders}
 
@@ -127,7 +133,9 @@ Outlook 云端已经带有了垃圾邮件分类功能，不需要 Thunderbird �
 
 ![Thunderbird - 2](img/thunderbird-2.png)
 
-配置完成后，在编写邮件时，就可以选择新的标识了，并且发件人名称、回复地址和签名都会自动设置好（抄送还是要自己设置，别忘了！）
+并参考[抄送设置](#tb-cc) 配置默认抄送地址 (`hackergame A ustclug.org`)
+
+配置完成后，在编写邮件时，就可以选择新的标识了，并且发件人名称、回复地址和签名都会自动设置好。
 
 ??? info "使用 Thunderbird 配置学校邮箱需要的额外设置"
 
