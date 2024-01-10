@@ -954,6 +954,15 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#tb-cc" class="md-nav__link">
+    <span class="md-ellipsis">
+      抄送设置
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#tb-folders" class="md-nav__link">
     <span class="md-ellipsis">
       文件夹
@@ -2721,6 +2730,15 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#tb-cc" class="md-nav__link">
+    <span class="md-ellipsis">
+      抄送设置
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#tb-folders" class="md-nav__link">
     <span class="md-ellipsis">
       文件夹
@@ -2816,9 +2834,9 @@
 </div>
 <p>我们加入了很多邮件列表，其中经常有各种往来邮件（特别是 CentOS mirror announcement 这个列表，已退），它们大多数不需要我们理会。</p>
 <p>总之，不知道怎么处理的邮件不要贸然回复。如果你认为某一封邮件需要我们处理但不知道怎么处理，请转告给其他相关同学。</p>
-<p>以下内容从 Hypercude 编写的内容中截取：</p>
+<p>以下内容从 Hypercube 编写的内容中截取：</p>
 <blockquote>
-<p>回复任何邮件时，请抄送 / CC（不是密送 / BCC）给原邮件的收件地址！（比如别人发到 lug A ustc.edu.cn ，回复时也请 CC 到 lug A ustc.edu.cn）</p>
+<p>回复任何邮件时，请抄送 / CC（不是密送 / BCC）给原邮件的收件地址！（比如别人发到 <code>lug A ustc.edu.cn</code>，回复时也请 CC 到 <code>lug A ustc.edu.cn</code>）</p>
 <p>请不要“只回复邮件”。如果在回复中说“我们会做某某事”，请注意除非你明确转交给了别人，这件事应当由你来完成。</p>
 </blockquote>
 <h2 id="email-signature">邮件签名<a class="headerlink" href="#email-signature" title="Permanent link">&para;</a></h2>
@@ -2852,10 +2870,10 @@
 <h3 id="tb-signature">签名与发件身份<a class="headerlink" href="#tb-signature" title="Permanent link">&para;</a></h3>
 <p>在右上角中选择账户设置，在默认身份中</p>
 <ul>
-<li>修改 “您的姓名“ 为 “Zeyu Gao on behalf of USTC LUG”（请换成自己的名字）</li>
-<li>”回复地址“ 修改为 <code>lug@ustc.edu.cn</code></li>
+<li>修改 <em>Your Name</em> (<em>您的姓名</em>) 为 <code>Zeyu Gao on behalf of USTC LUG</code>（请换成自己的名字）</li>
+<li>修改 <em>Reply-to Address</em> (<em>回复地址</em>) 为 <code>lug@ustc.edu.cn</code></li>
 <li>
-<p>“签名文字” 为（最后一行换成自己的信息）</p>
+<p>修改 <em>Signature text</em> (<em>签名文字</em>) 为（最后一行换成自己的信息）</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>Linux User Group
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>University of Science and Technology of China
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>Homepage: https://lug.ustc.edu.cn/
@@ -2866,6 +2884,9 @@
 </ul>
 <p>结果如图：</p>
 <p><img alt="Thunderbird Conf" src="../img/thunderbird-account-settings.jpg" /></p>
+<h3 id="tb-cc">抄送设置<a class="headerlink" href="#tb-cc" title="Permanent link">&para;</a></h3>
+<p>在账户设置中，选择身份管理，点击编辑，选择 <em>Copies and Folders</em>, 启用 <em>Cc these email addresses</em>, 并输入默认抄送地址 <code>lug A ustc.edu.cn</code></p>
+<p><img alt="Thunderbird cc" src="../img/thunderbird-account-settings-cc.png" /></p>
 <h3 id="tb-folders">文件夹<a class="headerlink" href="#tb-folders" title="Permanent link">&para;</a></h3>
 <p>Thunderbird 维护了自己的文件夹，如果需要与云端的文件夹同步，可以进行如下操作</p>
 <p>在账户上右键，在弹出的菜单中点击 <em>Subscribe</em>。弹出的窗口中包含了云端的文件夹，由于 Thunderbird 会自行维护垃圾箱和已发邮件，因此可能会有两个垃圾箱，<em>Deleted Items</em> 和 <em>Trash</em>，可以在网页端删除不需要的文件夹，并在 Thunderbird 中选择需要的。</p>
@@ -2897,7 +2918,8 @@
 <p><img alt="Thunderbird - 1" src="../img/thunderbird-1.jpg" /></p>
 <p>需要添加新身份时，点击右下角「管理标识」，添加对应的标识。对于 hackergame，可以配置如下：</p>
 <p><img alt="Thunderbird - 2" src="../img/thunderbird-2.png" /></p>
-<p>配置完成后，在编写邮件时，就可以选择新的标识了，并且发件人名称、回复地址和签名都会自动设置好（抄送还是要自己设置，别忘了！）</p>
+<p>并参考<a href="#tb-cc">抄送设置</a> 配置默认抄送地址 (<code>hackergame A ustclug.org</code>)</p>
+<p>配置完成后，在编写邮件时，就可以选择新的标识了，并且发件人名称、回复地址和签名都会自动设置好。</p>
 <details class="info">
 <summary>使用 Thunderbird 配置学校邮箱需要的额外设置</summary>
 <p>james: "thunderbird某次升级后出了一个bug，连接时服务器返回支持utf8，tb发了一个命令enable utf8，服务器正常返回后，tb有bug认为一直在等服务器应答。"</p>
