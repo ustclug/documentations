@@ -1,3 +1,7 @@
+---
+icon: material/mirror-rectangle
+---
+
 # 开源镜像站
 
 ## 历史
