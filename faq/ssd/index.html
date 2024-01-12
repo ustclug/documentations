@@ -12,13 +12,11 @@
         <meta name="author" content="USTC Linux User Group">
       
       
-        <link rel="canonical" href="https://docs.ustclug.org/faq/dns/">
+        <link rel="canonical" href="https://docs.ustclug.org/faq/ssd/">
       
       
-        <link rel="prev" href="../../services/discontinued/">
+        <link rel="prev" href="../vm/">
       
-      
-        <link rel="next" href="../ldap/">
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
@@ -26,7 +24,7 @@
     
     
       
-        <title>DNS - LUG @ USTC</title>
+        <title>SSD Firmware - LUG @ USTC</title>
       
     
     
@@ -80,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#dns" class="md-skip">
+        <a href="#ssd" class="md-skip">
           Skip to content
         </a>
       
@@ -116,7 +114,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              DNS
+              SSD Firmware
             
           </span>
         </div>
@@ -2352,30 +2350,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  <span class="md-ellipsis">
-    DNS
-  </span>
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../dns/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2384,35 +2362,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#wrong-dns-result" class="md-nav__link">
-    <span class="md-ellipsis">
-      错误的解析结果
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -2527,10 +2476,30 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../ssd/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    SSD Firmware
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   <span class="md-ellipsis">
@@ -2539,6 +2508,59 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#intel" class="md-nav__link">
+    <span class="md-ellipsis">
+      Intel
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Intel">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      背景
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      升级方法
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -2578,11 +2600,35 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#wrong-dns-result" class="md-nav__link">
+  <a href="#intel" class="md-nav__link">
     <span class="md-ellipsis">
-      错误的解析结果
+      Intel
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="Intel">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      背景
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      升级方法
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -2604,26 +2650,32 @@
   
 
 
-<h1 id="dns">DNS 域名解析问题<a class="headerlink" href="#dns" title="Permanent link">&para;</a></h1>
-<h2 id="wrong-dns-result">错误的解析结果<a class="headerlink" href="#wrong-dns-result" title="Permanent link">&para;</a></h2>
-<p>我们的 DNS 是分校内外、分 ISP 解析的。有时候会遇到校内访问解析到校外，可能的原因是</p>
-<div class="admonition bug">
-<p class="admonition-title"><code>/etc/resolv.conf</code> 顺序不对</p>
-<p>iBug 在 2020 年 5 月 21 日修了 gw-el 和 mirrors2，这两个机器上原先排在最前面的 nameserver 就是 8.8.4.4 或者 1.1.1.1 之类的</p>
-<p>我们的权威服务器两个在校内一个在国内，因此校内机器应该优先从校内解析。把 202.38.64.1 / 2001:da8:d800::1（学校的 DNS）放最前面肯定没错</p>
-</div>
-<p>如果 IPv4 解析正确但是 IPv6 还是解析到校外的话，</p>
-<div class="admonition bug">
-<p class="admonition-title"><code>/etc/resolv.conf</code> 缺少 IPv6 条目</p>
-<p>taoky 在 2020 年 5 月 29 日发现的，mirrors2 上访问 servers.ustclug.org 返回 Cloudflare 的 522 错误页面（此时<a href="https://github.com/ustclug/discussions/issues/325">日本反代挂掉了</a>），经查尽管 IPv4 正确解析到了 gw-el 上，但是 IPv6 还是解析到了 Cloudflare 上，且 nslookup 和 dig 等工具输出看起来都是对的。</p>
-<p>排查发现 <code>/etc/resolv.conf</code> 里没有 IPv6 的服务器条目，在靠前的位置插入 <code>nameserver 2001:da8:d800::1</code> 后解决。</p>
-<p>手动清空本机的 DNS 缓存：<code>nscd -i hosts</code></p>
-</div>
-<p>有时候可能会在 DNS 更新后随机解析出新旧结果，可能的原因是</p>
-<div class="admonition bug">
-<p class="admonition-title">ns-a 没更新</p>
-<p>ns-a 机器比较老旧，网络可能不顺畅，手动把 ns-a 更新一下就行了（</p>
-</div>
+<h1 id="ssd">SSD 固件<a class="headerlink" href="#ssd" title="Permanent link">&para;</a></h1>
+<p>数据中心盘的 SSD 近年来有多起因为固件问题导致使用时间过长（几万小时）后盘坏掉的事件。
+这类事件一旦发生，后果极其严重，因为配置新服务器时，一般使用的盘型号是一样的，并且开机时间也是一样的，
+因此出现问题之后，所有盘都会在短时间内坏掉，RAID 根本无力回天。
+因此以下记录一些固件升级的方法。</p>
+<h2 id="intel">Intel<a class="headerlink" href="#intel" title="Permanent link">&para;</a></h2>
+<h3 id="_1">背景<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h3>
+<p>2024 年 1 月 12 日凌晨，在发现两块 Intel SSD S4510/S4610 出现 SMART 错误并且 ZFS 提示读取错误之后紧急进行了固件升级（否则还有 8 块盘也会很快因为类似问题损坏）。由于缺少相关资料，并且 Intel 下架了大量信息，因此花费了很多时间，至凌晨七点完成升级。</p>
+<p>相关涉问题固件版本为 XCV10100。XCV10110 及以上修复了问题。</p>
+<h3 id="_2">升级方法<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h3>
+<p>Intel 的存储业务已经被 SK Hynix 子公司 Solidigm 收购。其提供了相关工具进行升级。</p>
+<p><a href="https://www.solidigm.com/us/en/support-page/product-doc-cert/ka-00099.html">https://www.solidigm.com/us/en/support-page/product-doc-cert/ka-00099.html</a> 提供了 Solidigm 工具支持的产品列表。下载最新版本 Solidigm™ Storage Tool 之后（支持 Debian/Ubuntu），使用以下方法检查所有 SSD 的信息：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="go">sst show -ssd</span>
+</code></pre></div>
+<p>关注每个 SSD 的 <code>FirmwareUpdateAvailable</code> 一行是否有更新信息。</p>
+<p>使用以下命令升级：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="go">sst load -ssd &lt;SSD 的编号&gt;</span>
+</code></pre></div>
+<p>请注意，该工具不支持 RAID 卡的直通模式。对于 Dell 服务器来说，需要设置如下：</p>
+<ol>
+<li>启用 LSI 支持：<code>sst set -system EnableLSIAdapter=True</code></li>
+<li>重启进入 BIOS，将 RAID 卡从 HBA 模式切换为 RAID 模式（如果是的话）</li>
+<li>将需要升级的盘从 Non-RAID 模式切换为 RAID-Capable（注意不要点成清空所有数据！）</li>
+<li>重启进入 recovery 模式，使用 <code>sst</code> 进行升级。</li>
+<li>升级完成后重启，进入 BIOS 恢复之前的设置（同样注意不要点错！）</li>
+</ol>
 
 
 
