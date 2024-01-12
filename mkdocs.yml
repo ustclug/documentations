@@ -155,3 +155,4 @@ nav:
     - systemd-timer: faq/systemd-timer.md
     - Docker: faq/docker.md
     - VM: faq/vm.md
+    - SSD Firmware: faq/ssd.md
