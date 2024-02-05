@@ -147,6 +147,7 @@ nav:
     - FTP: "services/ftp.md"
     - Documentations: services/documentations.md
     - Generate 204: "services/generate-204.md"
+    - MirrorZ: services/mirrorz.md
     - Discontinued Services: "services/discontinued.md"
   - Common Issues:
     - DNS: faq/dns.md

@@ -1,3 +1,7 @@
+---
+icon: material/cancel
+---
+
 # Discontinued Services
 
 本页面记载曾经提供的服务，但是由于架构改变或服务迁移，这些服务不再以原来的形式提供，并可能在原处有残留的配置文件。
