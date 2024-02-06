@@ -2325,7 +2325,7 @@
         <li class="md-nav__item">
   <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
-      软件
+      网络
     </span>
   </a>
   
@@ -2334,7 +2334,7 @@
         <li class="md-nav__item">
   <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
-      数据目录
+      软件
     </span>
   </a>
   
@@ -2342,6 +2342,15 @@
       
         <li class="md-nav__item">
   <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      数据目录
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       其他
     </span>
@@ -2627,7 +2636,7 @@
         <li class="md-nav__item">
   <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
-      软件
+      网络
     </span>
   </a>
   
@@ -2636,7 +2645,7 @@
         <li class="md-nav__item">
   <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
-      数据目录
+      软件
     </span>
   </a>
   
@@ -2644,6 +2653,15 @@
       
         <li class="md-nav__item">
   <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      数据目录
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       其他
     </span>
@@ -2672,7 +2690,9 @@
 <h1 id="mirrorz-cernet-server">MirrorZ CERNET server<a class="headerlink" href="#mirrorz-cernet-server" title="Permanent link">&para;</a></h1>
 <p>MirrorZ 项目在 CERNET 北京节点有一个虚拟机，通过 *.mirrors.cernet.edu.cn 的域名提供 302 跳转和帮助页面等服务。</p>
 <p>由于 CentOS 7 在 2024 年 6 月结束支持，iBug 和 taoky 在 2024 年 2 月配置了一个运行 Debian 12 的新虚拟机。新虚拟机镜像基于 debian-cdimage 提供的 <code>debian-12-genericcloud-amd64.qcow2</code>。</p>
-<h2 id="_1">软件<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<h2 id="_1">网络<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<p>虚拟机的网络采用 systemd-networkd 配置，配置文件在 <code>/etc/systemd/network</code> 下，v4/v6 均使用静态 IP 配置。保险起见，相同的配置文件写了两份，<code>[Match]</code> 块分别使用 <code>MACAddress=...</code> 和 <code>Name=ens192</code> 来匹配网卡。</p>
+<h2 id="_2">软件<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
 <p>etckeeper（不知道怎么配置的，装好即用？）</p>
 <ul>
 <li>Nginx (使用 <a href="https://n.wtf">n.wtf</a> 的版本)</li>
@@ -2694,9 +2714,9 @@
 <div class="highlight"><span class="filename">/etc/apt/sources.list.d/sb-nginx.list</span><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>deb<span class="w"> </span><span class="o">[</span><span class="nv">arch</span><span class="o">=</span>amd64<span class="w"> </span>signed-by<span class="o">=</span>/etc/apt/keyrings/sb-nginx.asc<span class="o">]</span><span class="w"> </span>https://mirror.xtom.com.hk/sb/nginx/<span class="w"> </span>bookworm<span class="w"> </span>main
 </code></pre></div>
 </div>
-<h2 id="_2">数据目录<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<h2 id="_3">数据目录<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
 <p>MirrorZ 主项目和帮助页面等可以通过浏览器访问的页面都在 <code>/var/www</code> 下。</p>
-<h2 id="_3">其他<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
+<h2 id="_4">其他<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
 <p>systemd-timesyncd: <code>/etc/systemd/timesyncd.conf.d/ibug.conf</code></p>
 
 
