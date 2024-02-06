@@ -8,11 +8,27 @@ MirrorZ 项目在 CERNET 北京节点有一个虚拟机，通过 \*.mirrors.cern
 
 由于 CentOS 7 在 2024 年 6 月结束支持，iBug 和 taoky 在 2024 年 2 月配置了一个运行 Debian 12 的新虚拟机。新虚拟机镜像基于 debian-cdimage 提供的 `debian-12-genericcloud-amd64.qcow2`。
 
-## 网络
+## 系统配置 {#system}
 
-虚拟机的网络采用 systemd-networkd 配置，配置文件在 `/etc/systemd/network` 下，v4/v6 均使用静态 IP 配置。保险起见，相同的配置文件写了两份，`[Match]` 块分别使用 `MACAddress=...` 和 `Name=ens192` 来匹配网卡。
+### 网络 {#network}
 
-## 软件
+虚拟机的网络采用 systemd-networkd 配置，配置文件在 `/etc/systemd/network` 下，v4/v6 均使用静态 IP 配置。其中 `[Match]` 块使用 `MACAddress=...` 来匹配网卡。
+
+### SSH
+
+```shell title="/etc/ssh/sshd_config.d/ibug.conf"
+PasswordAuthentication no
+PermitRootLogin prohibit-password
+```
+
+### NTP
+
+```ini title="/etc/systemd/timesyncd.conf.d/ibug.conf"
+[Time]
+NTP=ntp.tuna.tsinghua.edu.cn
+```
+
+## 软件 {#software}
 
 etckeeper（不知道怎么配置的，装好即用？）
 
@@ -48,7 +64,3 @@ etckeeper（不知道怎么配置的，装好即用？）
 ## 数据目录
 
 MirrorZ 主项目和帮助页面等可以通过浏览器访问的页面都在 `/var/www` 下。
-
-## 其他
-
-systemd-timesyncd: `/etc/systemd/timesyncd.conf.d/ibug.conf`
