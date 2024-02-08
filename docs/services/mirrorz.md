@@ -61,6 +61,12 @@ etckeeper（不知道怎么配置的，装好即用？）
     deb [arch=amd64 signed-by=/etc/apt/keyrings/sb-nginx.asc] https://mirror.xtom.com.hk/sb/nginx/ bookworm main
     ```
 
+### Go
+
+从官方网站下载最新的 tar.gz 并解压到 `/usr/local/go`，然后将 `/usr/local/go/bin` 中的两个二进制文件软链接到 `/usr/local/bin`。
+
+更新 Go 的快捷脚本位于 `/root/go/update.sh`，内容见 [iBug/shGadgets](https://github.com/iBug/shGadgets/blob/master/go-update.sh)。
+
 ## 数据目录
 
 MirrorZ 主项目和帮助页面等可以通过浏览器访问的页面都在 `/var/www` 下。
