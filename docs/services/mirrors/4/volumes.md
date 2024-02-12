@@ -57,10 +57,10 @@ pvcreate /dev/sda3 /dev/sdb3
 vgcreate lug /dev/sda3 /dev/sdb3
 ```
 
-创建 rootfs，这里以 RAID1 的方式（`--type mirror` 或 `--type raid1`）创建这个分区，这样即使 sda / sdb 坏掉一整组之后还有 rootfs 可以用。
+创建 rootfs，这里以 RAID1 的方式（`--type mirror` 或 `--type raid1`）创建这个分区，这样即使 sda / sdb 坏掉一整组之后还有 rootfs 可以用。注意 `-m 1` 表示 1 份**额外**的镜像。
 
 ```shell
-lvcreate -n root -L 32G --type mirror -m 2 lug
+lvcreate -n root -L 32G --type mirror -m 1 lug
 mkfs.ext4 /dev/lug/root
 ```
 
@@ -171,7 +171,7 @@ lvconvert --type cache-pool --poolmetadata ssd/mcache_meta --cachemode writethro
 !!! danger "坑 4"
 
     修改 `migration_threshold` 等设置会导致目前版本的 GRUB 无法正确识别 LVM 元数据。
-    
+
     临时修复版本：<https://github.com/taoky/grub/releases/tag/2.02%2Bdfsg1-20%2Bdeb10u4taoky3_amd64>。目前已部署，且设置了 `apt hold`。
 
 所以接下来要合并 VG，然后才能为仓库卷加上缓存。
