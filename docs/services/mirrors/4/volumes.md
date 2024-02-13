@@ -57,10 +57,15 @@ pvcreate /dev/sda3 /dev/sdb3
 vgcreate lug /dev/sda3 /dev/sdb3
 ```
 
-创建 rootfs，这里以 RAID1 的方式（`--type mirror` 或 `--type raid1`）创建这个分区，这样即使 sda / sdb 坏掉一整组之后还有 rootfs 可以用。注意 `-m 1` 表示 1 份**额外**的镜像。
+创建 rootfs，这里以 RAID1 的方式（`--type raid1`）创建这个分区，这样即使 sda / sdb 坏掉一整组之后还有 rootfs 可以用。
+
+注意：
+
+- `-m 1` 表示 1 份**额外**的镜像。
+- `--type mirror` 和 `--type raid1` 是不同的（前者已经 deprecated）。不要创建 `--type mirror` 的分区。
 
 ```shell
-lvcreate -n root -L 32G --type mirror -m 1 lug
+lvcreate -n root -L 32G --type raid1 -m 1 lug
 mkfs.ext4 /dev/lug/root
 ```
 
