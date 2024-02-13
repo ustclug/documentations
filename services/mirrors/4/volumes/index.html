@@ -2762,8 +2762,13 @@
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>pvcreate<span class="w"> </span>/dev/sda3<span class="w"> </span>/dev/sdb3
 <a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>vgcreate<span class="w"> </span>lug<span class="w"> </span>/dev/sda3<span class="w"> </span>/dev/sdb3
 </code></pre></div>
-<p>创建 rootfs，这里以 RAID1 的方式（<code>--type mirror</code> 或 <code>--type raid1</code>）创建这个分区，这样即使 sda / sdb 坏掉一整组之后还有 rootfs 可以用。注意 <code>-m 1</code> 表示 1 份<strong>额外</strong>的镜像。</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>lvcreate<span class="w"> </span>-n<span class="w"> </span>root<span class="w"> </span>-L<span class="w"> </span>32G<span class="w"> </span>--type<span class="w"> </span>mirror<span class="w"> </span>-m<span class="w"> </span><span class="m">1</span><span class="w"> </span>lug
+<p>创建 rootfs，这里以 RAID1 的方式（<code>--type raid1</code>）创建这个分区，这样即使 sda / sdb 坏掉一整组之后还有 rootfs 可以用。</p>
+<p>注意：</p>
+<ul>
+<li><code>-m 1</code> 表示 1 份<strong>额外</strong>的镜像。</li>
+<li><code>--type mirror</code> 和 <code>--type raid1</code> 是不同的（前者已经 deprecated）。不要创建 <code>--type mirror</code> 的分区。</li>
+</ul>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>lvcreate<span class="w"> </span>-n<span class="w"> </span>root<span class="w"> </span>-L<span class="w"> </span>32G<span class="w"> </span>--type<span class="w"> </span>raid1<span class="w"> </span>-m<span class="w"> </span><span class="m">1</span><span class="w"> </span>lug
 <a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>mkfs.ext4<span class="w"> </span>/dev/lug/root
 </code></pre></div>
 <p>创建 home，这里反正不怕坏，用 RAID0（<code>--type striped</code> 或 <code>--type raid0</code>）。</p>
