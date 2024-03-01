@@ -70,3 +70,33 @@ etckeeper（不知道怎么配置的，装好即用？）
 ## 数据目录
 
 MirrorZ 主项目和帮助页面等可以通过浏览器访问的页面都在 `/var/www` 下。
+
+### 自动更新
+
+利用 GitHub 的 webhook 功能，部署了一份 [iBug/uniAPI](https://github.com/iBug/uniAPI)。相关文件如下：
+
+```text
+/usr/bin/uniAPI
+/etc/uniAPI.yml
+/etc/systemd/system/uniAPI.service
+```
+
+配置样例如下：
+
+```yaml
+services:
+  uniAPI:
+    type: server
+    services:
+      mirrorz-json-legacy:
+        type: github.webhook
+        path: /home/mirrorz/mirrorz-org/mirrorz-json-legacy
+        branch: master
+        secret: # empty
+```
+
+```nginx
+location ^~ /uniAPI {
+    proxy_pass http://127.0.1.1:1024;
+}
+```
