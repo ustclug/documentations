@@ -11,6 +11,9 @@ _acme-challenge.lug.ustc.edu.cn    ->  lug.ssl-digitalocean.ustclug.org
 _acme-challenge.ustclug.org        ->  lug.ssl-digitalocean.ustclug.org
 _acme-challenge.proxy.ustclug.org  ->  lug.ssl-digitalocean.ustclug.org
 
+_acme-challenge.vpn.lug.ustc.edu.cn  ->  lugvpn.ssl-digitalocean.ustclug.org
+_acme-challenge.vpn.ustclug.org      ->  lugvpn.ssl-digitalocean.ustclug.org
+
 _acme-challenge.mirrors.ustc.edu.cn  ->  mirrors.ssl-digitalocean.ustclug.org
 ```
 
