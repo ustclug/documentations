@@ -22,7 +22,7 @@
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.12">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.14">
     
     
       
@@ -30,7 +30,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.7e359304.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.10ba22f1.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
@@ -2138,6 +2138,15 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#ssl-certs" class="md-nav__link">
+    <span class="md-ellipsis">
+      SSL Certificates
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -2613,6 +2622,15 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#ssl-certs" class="md-nav__link">
+    <span class="md-ellipsis">
+      SSL Certificates
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -2642,6 +2660,33 @@
 <li>gateway-nic</li>
 </ul>
 </div>
+<h2 id="ssl-certs">SSL Certificates<a class="headerlink" href="#ssl-certs" title="Permanent link">&para;</a></h2>
+<p>The certificate for <code>*.vpn.lug.ustc.edu.cn</code> + <code>*.vpn.ustclug.org</code> is acquired with our <a href="../../infrastructure/ssl/">certificate infrastructure</a> and the vpn server runs <code>updater.sh</code> with cron.</p>
+<p>Two services running in Docker (strongswan and ocserv) use the certificate, so another cron job exists to copy the certificate files into the Docker volume (<code>vpn-certs</code>). The second updater script is listed below:</p>
+<div class="highlight"><span class="filename">/usr/local/docker_sh/vpn-cert-updater.sh</span><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="ch">#!/bin/sh</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="c1"># outside, call docker</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="k">if</span><span class="w"> </span><span class="nb">command</span><span class="w"> </span>-v<span class="w"> </span>docker<span class="w"> </span>&gt;/dev/null<span class="w"> </span><span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">  </span><span class="nb">exec</span><span class="w"> </span>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">    </span>--name<span class="o">=</span>vpn-cert-updater<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">    </span>--net<span class="o">=</span>none<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">    </span>-v<span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span>realpath<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$0</span><span class="s2">&quot;</span><span class="k">)</span><span class="s2">&quot;</span>:/update.sh:ro<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">    </span>-v<span class="w"> </span>vpn-certs:/vpn-certs<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">    </span>-v<span class="w"> </span>/etc/ssl/private:/ssl-certs:ro<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="w">    </span>alpine<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="w">    </span>/update.sh
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="w">  </span><span class="nb">exit</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="c1"># exec failed</span>
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="k">fi</span>
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="nb">set</span><span class="w"> </span>-eux
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="nv">SSL_CERTS</span><span class="o">=</span><span class="s2">&quot;/ssl-certs&quot;</span>
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="nv">VPN_CERTS</span><span class="o">=</span><span class="s2">&quot;/vpn-certs&quot;</span>
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>
+<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>cp<span class="w"> </span>-p<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">SSL_CERTS</span><span class="si">}</span><span class="s2">/lugvpn/fullchain.pem&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">VPN_CERTS</span><span class="si">}</span><span class="s2">/certs/vpn.ustclug.org.crt&quot;</span>
+<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>cp<span class="w"> </span>-p<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">SSL_CERTS</span><span class="si">}</span><span class="s2">/lugvpn/privkey.pem&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">VPN_CERTS</span><span class="si">}</span><span class="s2">/private/vpn.ustclug.org.key&quot;</span>
+<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Cert Update Complete&quot;</span>
+</code></pre></div>
 
 
 
@@ -2727,7 +2772,7 @@
     <script id="__config" type="application/json">{"base": "../..", "features": ["content.code.annotate", "content.code.copy", "navigation.indexes", "navigation.sections", "navigation.top"], "search": "../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.c8d2eff1.min.js"></script>
+      <script src="../../assets/javascripts/bundle.bd41221c.min.js"></script>
       
     
   </body>
