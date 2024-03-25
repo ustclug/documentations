@@ -52,3 +52,7 @@ The DigitalOcean account we use is owned by iBug and has nothing else running.
 !!! note "Plan B"
 
     Hurricane Electric provides [hosted DNS](https://dns.he.net/) zones **for free**, which is also [supported by `acme.sh`](https://github.com/acmesh-official/acme.sh/wiki/dnsapi). This makes HE DNS a feasible alternative should our current dependency (DigitalOcean) fails.
+
+## Exceptions
+
+PXE manages its own certificates with `acme.sh` and validates via HTTP-01 challenge. The certificates are stored in `/etc/acme.sh/pxe.ustc.edu.cn/`.
