@@ -118,7 +118,7 @@ mkfs.ext4 /dev/ssd/docker
 lvcreate -L 16G -n mcache_meta ssd
 lvcreate -l 100%FREE -n mcache ssd
 lvreduce -l -2048 ssd/mcache
-lvconvert --type cache-pool --poolmetadata ssd/mcache_meta --cachemode writethrough -c 1M --config allocation/cache_pool_max_chunks=2000000 ssd/mcache
+lvconvert --type cache-pool --poolmetadata ssd/mcache_meta --cachemode writethrough -c 64K --config allocation/cache_pool_max_chunks=30000000 ssd/mcache
 ```
 
 <del>这里的缓存模式采用 passthrough，即写入动作绕过缓存直接写回原设备（当然啦，写入都是由从上游同步产生的），另外两种 writeback 和 writethrough 都会写入缓存，不是我们想要的。</del> passthrough 模式中，读写都会绕过 cache，唯一的作用是 write hit 会使得 cache 对应的块失效。
@@ -178,6 +178,10 @@ lvconvert --type cache-pool --poolmetadata ssd/mcache_meta --cachemode writethro
     修改 `migration_threshold` 等设置会导致目前版本的 GRUB 无法正确识别 LVM 元数据。
 
     临时修复版本：<https://github.com/taoky/grub/releases/tag/2.02%2Bdfsg1-20%2Bdeb10u4taoky3_amd64>。目前已部署，且设置了 `apt hold`。
+
+!!! danger "坑 5"
+
+    设置 chunksize 到 1M 会有严重的写入放大问题，因此这里修改为了 64K。
 
 所以接下来要合并 VG，然后才能为仓库卷加上缓存。
 
@@ -244,7 +248,7 @@ $ sudo lvs -o name,cache_policy,cache_settings,chunk_size,cache_used_blocks,cach
 # lvcreate -L 16G -n mcache_meta lug /dev/sdc1  # SSD 设备路径重启后可能会变化
 # lvcreate -l 100%FREE -n mcache lug /dev/sdc1
 # lvreduce -l -2048 lug/mcache
-# lvconvert --type cache-pool --poolmetadata lug/mcache_meta --cachemode writethrough -c 1M --config allocation/cache_pool_max_chunks=2000000 lug/mcache
+# lvconvert --type cache-pool --poolmetadata lug/mcache_meta --cachemode writethrough -c 64K --config allocation/cache_pool_max_chunks=30000000 lug/mcache
 # lvconvert --type cache --cachepool lug/mcache lug/repo
 ```
 
