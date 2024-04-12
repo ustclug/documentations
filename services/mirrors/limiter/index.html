@@ -2040,6 +2040,15 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#403" class="md-nav__link">
+    <span class="md-ellipsis">
+      403 页面
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -2814,6 +2823,15 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#403" class="md-nav__link">
+    <span class="md-ellipsis">
+      403 页面
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -3108,6 +3126,17 @@ ipset 将某个 IP 匹配到一个集合中，iptables 再针对某一集合进�
 <a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>
 <a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>add<span class="w"> </span>ustcnet<span class="w"> </span><span class="m">202</span>.38.64.0/19
 <a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="c1"># more ustcnet entries...</span>
+</code></pre></div>
+<h3 id="403" page="page">403 页面<a class="headerlink" href="#403" title="Permanent link">&para;</a></h3>
+<p>目前 mirrors4 将来源 IP 属于 <code>blacklist</code> 或 <code>blacklist6</code> 集合且目标端口为 80 或 443 的连接重定向至 403 端口。403 页面位于 <code>/var/www/html/403.html</code>。</p>
+<p>相关 nginx 配置位于 <a href="https://git.lug.ustc.edu.cn/mirrors/nginx-config/-/blob/master/sites-available/mirrors.ustc.edu.cn-403">/etc/nginx/sites-available/mirrors.ustc.edu.cn-403</a>。</p>
+<p>我们使用 <code>ip{,6}tables</code> 将对 80 或 443 端口的访问重定向至 403 端口，在 <code>nat</code> 表的 <code>PREROUTING</code> 链添加规则：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>-A PREROUTING -m set --match-set blacklist src -p tcp -m multiport --dports 80,443 -j REDIRECT --to-port 403
+</code></pre></div>
+<p>并在 <code>filter</code> 表 <code>BLACKLIST</code> 链放行已建立连接，对 403 端口限速：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>-A BLACKLIST -m conntrack --ctstate ESTABLISHED -j RETURN
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>-A BLACKLIST -p tcp --dport 403 -m hashlimit --hashlimit-upto 60/min --hashlimit-burst 5 --hashlimit-mode srcip --hashlimit-srcmask 64 --hashlimit-name nginx-403 --hashlimit-htable-expire 60000 -j RETURN
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>-A BLACKLIST -j DROP
 </code></pre></div>
 
 
