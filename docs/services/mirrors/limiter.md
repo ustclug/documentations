@@ -215,3 +215,23 @@ create blacklist6 hash:net family inet6 hashsize 1024 maxelem 65536
 add ustcnet 202.38.64.0/19
 # more ustcnet entries...
 ```
+
+### 403 页面 {#403 page}
+
+目前 mirrors4 将来源 IP 属于 `blacklist` 或 `blacklist6` 集合且目标端口为 80 或 443 的连接重定向至 403 端口。403 页面位于 `/var/www/html/403.html`。
+
+相关 nginx 配置位于 [/etc/nginx/sites-available/mirrors.ustc.edu.cn-403](https://git.lug.ustc.edu.cn/mirrors/nginx-config/-/blob/master/sites-available/mirrors.ustc.edu.cn-403)。
+
+我们使用 `ip{,6}tables` 将对 80 或 443 端口的访问重定向至 403 端口，在 `nat` 表的 `PREROUTING` 链添加规则：
+
+```
+-A PREROUTING -m set --match-set blacklist src -p tcp -m multiport --dports 80,443 -j REDIRECT --to-port 403
+```
+
+并在 `filter` 表 `BLACKLIST` 链放行已建立连接，对 403 端口限速：
+
+```
+-A BLACKLIST -m conntrack --ctstate ESTABLISHED -j RETURN
+-A BLACKLIST -p tcp --dport 403 -m hashlimit --hashlimit-upto 60/min --hashlimit-burst 5 --hashlimit-mode srcip --hashlimit-srcmask 64 --hashlimit-name nginx-403 --hashlimit-htable-expire 60000 -j RETURN
+-A BLACKLIST -j DROP
+```
