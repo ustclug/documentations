@@ -125,11 +125,8 @@ nav:
       - Docker: "services/mirrors/docker.md"
       - IPMI: "services/mirrors/ipmi.md"
       - ZFS: "services/mirrors/zfs.md"
-      - Genindex: "services/mirrors/genindex.md"
+      - Services: services/mirrors/services.md
       - Monitoring: services/mirrors/monitor.md
-      - HTTP Service: services/mirrors/http.md
-      - Rsync Service: "#"
-      - Reverse Proxy: "#"
       - Limiter: "services/mirrors/limiter.md"
       - Repo sync: "#"
       - Mail list: "services/mirrors/mail-list.md"
