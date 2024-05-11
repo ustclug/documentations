@@ -22,7 +22,7 @@
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.18">
+      <meta name="generator" content="mkdocs-1.6.0, mkdocs-material-9.5.21">
     
     
       
@@ -2904,14 +2904,13 @@
 <p>在 GitLab 有 Security Release 且 docker-gitlab 发布新版本之后需要安排时间更新。尤其 Critical Security Release 需要尽快找时间更新。</p>
 <h2 id="_1">更新<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <p>（建议阅读 <a href="https://docs.gitlab.com/ee/update/index.html">https://docs.gitlab.com/ee/update/index.html</a>）</p>
-<p>GitLab 16.0 起移除了对 CAS3 的支持，因此我们切换到了 OAuth2 来对接中国科学技术大学统一身份认证。为了实现自定义 OAuth2 登录参数，我们 fork 了 <a href="https://github.com/sameersbn/docker-gitlab">sameersbn/docker-gitlab</a>，仓库位于 <a href="https://github.com/ustclug/docker-gitlab">ustclug/docker-gitlab</a>。更新时，需要首先按照 <a href="https://github.com/ustclug/docker-gitlab">ustclug/docker-gitlab</a> 的 <code>README.md</code> 所述的步骤更新镜像，一般只需更改所述的两个位置的版本号，推送到仓库后，GitHub Actions 将自动完成镜像的构建，并上传到 ghcr.io 。需要注意的是，若上游更新包含对 <code>assets/runtime</code> 目录的变更，则需先将上游更新合并到我们的仓库，否则可能出现构建或运行时错误。</p>
+<p>GitLab 16.0 起移除了对 CAS3 的支持，因此我们切换到了 OAuth2 来对接中国科学技术大学统一身份认证。为了实现自定义 OAuth2 登录参数，我们 fork 了 <a href="https://github.com/sameersbn/docker-gitlab">sameersbn/docker-gitlab</a>，仓库位于 <a href="https://github.com/ustclug/docker-gitlab">ustclug/docker-gitlab</a>。更新时，需要首先按照 <a href="https://github.com/ustclug/docker-gitlab">ustclug/docker-gitlab</a> 的 <code>README.md</code> 所述的步骤更新镜像，一般只需更改所述的两个位置的版本号，推送到仓库后，GitHub Actions 将自动完成镜像的构建，并上传到 ghcr.io。需要注意的是，若上游更新包含对 <code>assets/runtime</code> 目录的变更，则需先将上游更新合并到我们的仓库，否则可能出现构建或运行时错误。</p>
 <p>由于已经 docker 化，因此我们的更新是通过拉取 <a href="https://github.com/ustclug/docker-gitlab">ustclug/docker-gitlab</a> 的 docker image，进行数据库准备以及启动镜像实例来进行更新，Zack Zeng 学长已经写好了一套脚本系统：<a href="https://git.lug.ustc.edu.cn/ustclug/gitlab-scripts">gitlab-scripts</a>，因此更新时只要跑脚本就可以了。</p>
 <p>由于更新需要停止服务，因此请于更新前至少几小时发布更新公告（包括具体时间等），并检查 Admin -&gt; Monitoring -&gt; Background Migrations 中所有 migration 是否都已经成功完成。</p>
 <p>更新前请先提前于 <a href="https://pve-6.vm.ustclug.org:8006/">Proxmox VE</a> 上对虚拟机打快照（打快照时服务会暂时停止）</p>
 <p>打完快照之后使用脚本进行更新（目前脚本位于 <code>/home/sirius/gitlab-scripts</code>），首先使用 <code>./gitlab.sh db</code> 进行数据库的准备工作。之后可以通过 <code>./gitlab.sh run &lt;版本号&gt;</code> 来进行 docker container 的替换。更换前脚本会自动拉取相应版本号的 docker 镜像，如果担心拉取时间过长可以在打快照前提前通过 <code>docker pull ghcr.io/ustclug/docker-gitlab:&lt;版本号&gt;</code> 来拉取相应的镜像。</p>
 <p>一般情况下经以上操作后更新就正常结束，如果长时间无法启动，可以通过 <code>docker logs gitlab</code> 查看日志，如果发现更新后的启动出现问题，可以到 <a href="https://github.com/sameersbn/docker-gitlab/">sameersbn/docker-gitlab</a> 的 issue 区等地查看相关 issue，以及通过对出错日志进行 Google 可能会发现是 gitlab 上游等出现的问题。如果有解决办法，可以按照相应解决办法解决，如果没有。可以通过找到有相应问题前的正常版本号，回滚快照，之后更到表现正常的版本。（最近的更新会在启动之后短暂出现 502 的情况，但很快就会恢复，遇到这种情况时不要惊慌）。</p>
 <p>由于更新可能会出现问题导致服务不可用，因此不建议通过 cron 等方式自动进行更新。</p>
-<p><strong>建议在更新完成 72 小时内删除快照，详见 <a href="../../infrastructure/proxmox/pve/#about-snapshot">关于快照</a>。</strong></p>
 <h2 id="postgresql-redis">postgresql 与 redis 的更新<a class="headerlink" href="#postgresql-redis" title="Permanent link">&para;</a></h2>
 <p>由于 gitlab 更新后可能对 postgresql 与 redis 的版本有要求，因此有可能需要定期更新 redis 与 postgresql。</p>
 <p>更新前请先停止 gitlab 的 container。</p>
@@ -3071,7 +3070,7 @@
     <script id="__config" type="application/json">{"base": "../..", "features": ["content.code.annotate", "content.code.copy", "navigation.indexes", "navigation.sections", "navigation.top"], "search": "../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.3220b9d7.min.js"></script>
+      <script src="../../assets/javascripts/bundle.a7c05c9e.min.js"></script>
       
     
   </body>
