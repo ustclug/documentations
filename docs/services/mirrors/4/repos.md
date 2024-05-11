@@ -97,6 +97,14 @@ done
 
 照着 `/home/mirror/repos` 下的现有文件自己研究一下吧，这个不难。需要注意的就一点，文件名结尾必须是 `.yaml`（而不能是 `.yml`），这是 Yuki 代码里写的。
 
+!!! tip "决定 `bindIP` 或 `network` 的值"
+
+    镜像站有多个来自不同运营商的 IP 可用于同步任务。由于网络环境的不确定性，有时会出现某个 IP 同步速度极慢的情况。
+
+    @taoky 的 [admirror-speedtest](https://github.com/taoky/admirror-speedtest/) 可以帮助决定最快速的 IP。
+
+    另外，`bindIP` 不适用于所有的同步镜像（一部分程序不支持修改 `bind()` 的参数），此时可以使用基于 Docker Network 的 `network` 配置。
+
 写好新仓库的配置文件之后运行 `yuki reload`，然后 `yuki sync <repo>` 就可以开始初次同步了。
 
 ### 为 Git 类型仓库添加软链接至 `/srv/git`
