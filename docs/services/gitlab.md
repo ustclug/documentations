@@ -17,7 +17,7 @@ GitLab 维护者需要订阅：
 
 （建议阅读 <https://docs.gitlab.com/ee/update/index.html>）
 
-GitLab 16.0 起移除了对 CAS3 的支持，因此我们切换到了 OAuth2 来对接中国科学技术大学统一身份认证。为了实现自定义 OAuth2 登录参数，我们 fork 了 [sameersbn/docker-gitlab](https://github.com/sameersbn/docker-gitlab)，仓库位于 [ustclug/docker-gitlab](https://github.com/ustclug/docker-gitlab)。更新时，需要首先按照 [ustclug/docker-gitlab](https://github.com/ustclug/docker-gitlab) 的 `README.md` 所述的步骤更新镜像，一般只需更改所述的两个位置的版本号，推送到仓库后，GitHub Actions 将自动完成镜像的构建，并上传到 ghcr.io 。需要注意的是，若上游更新包含对 `assets/runtime` 目录的变更，则需先将上游更新合并到我们的仓库，否则可能出现构建或运行时错误。
+GitLab 16.0 起移除了对 CAS3 的支持，因此我们切换到了 OAuth2 来对接中国科学技术大学统一身份认证。为了实现自定义 OAuth2 登录参数，我们 fork 了 [sameersbn/docker-gitlab](https://github.com/sameersbn/docker-gitlab)，仓库位于 [ustclug/docker-gitlab](https://github.com/ustclug/docker-gitlab)。更新时，需要首先按照 [ustclug/docker-gitlab](https://github.com/ustclug/docker-gitlab) 的 `README.md` 所述的步骤更新镜像，一般只需更改所述的两个位置的版本号，推送到仓库后，GitHub Actions 将自动完成镜像的构建，并上传到 ghcr.io。需要注意的是，若上游更新包含对 `assets/runtime` 目录的变更，则需先将上游更新合并到我们的仓库，否则可能出现构建或运行时错误。
 
 由于已经 docker 化，因此我们的更新是通过拉取 [ustclug/docker-gitlab](https://github.com/ustclug/docker-gitlab) 的 docker image，进行数据库准备以及启动镜像实例来进行更新，Zack Zeng 学长已经写好了一套脚本系统：[gitlab-scripts](https://git.lug.ustc.edu.cn/ustclug/gitlab-scripts)，因此更新时只要跑脚本就可以了。
 
@@ -30,8 +30,6 @@ GitLab 16.0 起移除了对 CAS3 的支持，因此我们切换到了 OAuth2 来
 一般情况下经以上操作后更新就正常结束，如果长时间无法启动，可以通过 `docker logs gitlab` 查看日志，如果发现更新后的启动出现问题，可以到 [sameersbn/docker-gitlab](https://github.com/sameersbn/docker-gitlab/) 的 issue 区等地查看相关 issue，以及通过对出错日志进行 Google 可能会发现是 gitlab 上游等出现的问题。如果有解决办法，可以按照相应解决办法解决，如果没有。可以通过找到有相应问题前的正常版本号，回滚快照，之后更到表现正常的版本。（最近的更新会在启动之后短暂出现 502 的情况，但很快就会恢复，遇到这种情况时不要惊慌）。
 
 由于更新可能会出现问题导致服务不可用，因此不建议通过 cron 等方式自动进行更新。
-
-**建议在更新完成 72 小时内删除快照，详见 [关于快照](../infrastructure/proxmox/pve.md#about-snapshot)。**
 
 ## postgresql 与 redis 的更新
 
