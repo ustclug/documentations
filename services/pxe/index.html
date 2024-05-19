@@ -2504,6 +2504,48 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="使用/调试">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#syslinux" class="md-nav__link">
+    <span class="md-ellipsis">
+      SYSLINUX 更新
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#uefi" class="md-nav__link">
+    <span class="md-ellipsis">
+      使用 UEFI 直接启动
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#grub2" class="md-nav__link">
+    <span class="md-ellipsis">
+      制作 GRUB2 镜像
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ipxe-iso" class="md-nav__link">
+    <span class="md-ellipsis">
+      构建 iPXE ISO
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -2552,32 +2594,113 @@
 <p><a href="https://lug.ustc.edu.cn/planet/2018/10/PXE-intro/">https://lug.ustc.edu.cn/planet/2018/10/PXE-intro/</a></p>
 <div class="admonition info">
 <p class="admonition-title">关于 FAQ</p>
-<p><a href="https://lug.ustc.edu.cn/wiki/server/pxe/faq/">https://lug.ustc.edu.cn/wiki/server/pxe/faq/</a> 太老了，如果有时间的话建议写个新的。</p>
+<p><a href="https://lug.ustc.edu.cn/wiki/server/pxe/faq/">https://lug.ustc.edu.cn/wiki/server/pxe/faq/</a> 实在是年头太久远了，无法更新。新的内容记录在本文档中。</p>
 </div>
 <p>一般的启动流程是：</p>
 <ol>
-<li>iPXE 加载 GRUB 相关文件。</li>
-<li>GRUB 加载 Linux 内核与 initramfs。</li>
+<li>iPXE，或者主板上获取的 DHCP 启动信息的固件下载并加载 GRUB 相关文件。</li>
+<li>如果 MAC 地址不为指定值，那么加载菜单并显示；然后加载 Linux 内核与 initramfs 等事项由 GRUB 负责。</li>
 <li>Initramfs 从启动参数挂载 NFS 为 rootfs，进行下一步的启动。</li>
 </ol>
 <h2 id="_1">使用/调试<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <p>PXE 在校园网中直接可用，因为学校的 DHCP 服务器经过了配置。</p>
-<p>如果需要在虚拟机中调试，下载 IPXE 的 ISO（<a href="http://boot.ipxe.org/ipxe.iso">http://boot.ipxe.org/ipxe.iso</a>），挂载在虚拟机中测试。</p>
-<div class="admonition todo">
+<p>如果需要在虚拟机中调试，可以：</p>
+<ul>
+<li>下载 IPXE 的 ISO（<a href="http://boot.ipxe.org/ipxe.iso">http://boot.ipxe.org/ipxe.iso</a>），挂载在虚拟机中测试。</li>
+<li>或者直接使用打包后的 ISO：<a href="https://ftp.lug.ustc.edu.cn/PXE/image/ustc.ipxe.iso">https://ftp.lug.ustc.edu.cn/PXE/image/ustc.ipxe.iso</a></li>
+</ul>
+<div class="admonition note">
 <p class="admonition-title">推荐使用的虚拟机方案</p>
-<p>PXE 能够成功运行与否和虚拟机环境（特别是虚拟网卡型号）高度相关。需要找到一个稳定的配置方案（比如用 qemu？）</p>
+<p>PXE 能够成功运行与否有可能和虚拟机环境（特别是虚拟网卡型号）高度相关。推荐使用 QEMU。</p>
 </div>
-<p>其中主要使用的是新 PXE 方案（pxelinux.0，simple-pxe）。</p>
-<p><del>老 PXE 方案（lpxelinux.0）目前仅用于图书馆查询机。</del></p>
+<p>其中主要使用的是基于 GRUB2 和 simple-pxe 的新 PXE 方案。主板固件使用 TFTP 协议获取 GRUB2 程序（core.0 或者 core.efi）之后，GRUB2 会通过 HTTP 协议获取剩下所有的文件。</p>
+<div class="admonition note">
+<p class="admonition-title">TFTP</p>
+<p>和 FTP active 模式一样，TFTP 是一个有点麻烦的协议，如果你的虚拟机无法不经过 NAT 连接 PXE 服务器，那么就需要调整网络配置，会很麻烦，再加上对校外访问需求的考量，因此目前的考虑是尽量使用 HTTP。</p>
+</div>
+<p>基于 SYSLINUX 的老 PXE 方案（lpxelinux.0 -&gt; bin/lpxelinux.0）目前仍可启动，但是不使用。</p>
+<h3 id="syslinux">SYSLINUX 更新<a class="headerlink" href="#syslinux" title="Permanent link">&para;</a></h3>
+<p>虽然不维护了，但是以下内容仍作记录：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>wget<span class="w"> </span>https://mirrors.ustc.edu.cn/fedora/releases/40/Everything/x86_64/os/Packages/s/syslinux-tftpboot-6.04-0.26.fc40.noarch.rpm
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="c1"># decompress</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>rpm2cpio<span class="w"> </span>syslinux-tftpboot-6.04-0.26.fc40.noarch.rpm<span class="w"> </span><span class="p">|</span><span class="w"> </span>cpio<span class="w"> </span>-idmv
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="nb">cd</span><span class="w"> </span>tftpboot
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>ln<span class="w"> </span>-s<span class="w"> </span>lpxelinux.0<span class="w"> </span>pxelinux.0
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>ln<span class="w"> </span>-s<span class="w"> </span>lpxelinux.0<span class="w"> </span>undionly.kpxe
+</code></pre></div>
+<p>得到的 tftpboot 目录替代原先的 tftp/bin 目录。启动 VM 的时候可以 Wireshark 看看它下载了哪些文件。同时还有个 <code>pxeknife</code>，目前只在 SYSLINUX 的 PXE 方案中可用。</p>
+<div class="admonition todo">
+<p class="admonition-title">pypxe</p>
+<p>pypxe 似乎只在 SYSLINUX 方案中使用。</p>
+</div>
+<h3 id="uefi">使用 UEFI 直接启动<a class="headerlink" href="#uefi" title="Permanent link">&para;</a></h3>
+<p>QEMU 一般使用的 UEFI 固件 OVMF 支持直接从 HTTP 启动。在写作时，Arch Linux 打包的 OVMF 没编译此特性，其他的发行版也有可能不支持，因此需要：</p>
+<ol>
+<li>从 <a href="https://www.kraxel.org/repos/jenkins/edk2/">https://www.kraxel.org/repos/jenkins/edk2/</a> 下载 x64 版本的 rpm 并解压</li>
+<li>
+<p>然后使用以下命令启动 QEMU：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>qemu-system-x86_64<span class="w"> </span>-L<span class="w"> </span>.<span class="w"> </span>--bios<span class="w"> </span>../ovmf-x64/OVMF-pure-efi.fd
+</code></pre></div>
+<p>启动后马上按下 ESC，进入配置界面，然后阅读 <a href="https://github.com/tianocore/tianocore.github.io/wiki/HTTP-Boot">https://github.com/tianocore/tianocore.github.io/wiki/HTTP-Boot</a> 做进一步配置。</p>
+</li>
+</ol>
+<h3 id="grub2">制作 GRUB2 镜像<a class="headerlink" href="#grub2" title="Permanent link">&para;</a></h3>
+<p>旧版本的 GRUB2 可能有 bug（例如 <a href="https://github.com/ustclug/discussions/issues/456">https://github.com/ustclug/discussions/issues/456</a>），因此有时候需要升级。</p>
+<p>更新策略考虑使用 Debian stable 的 grub2。启动容器并且将外面的目录 bind mount：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>docker<span class="w"> </span>run<span class="w"> </span>-it<span class="w"> </span>--rm<span class="w"> </span>-v<span class="w"> </span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/tftp:/srv/tftp<span class="w"> </span>ustclug/debian:12
+</code></pre></div>
+<p>然后在容器中执行：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>apt<span class="w"> </span>update<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>grub-common<span class="w"> </span>grub-pc<span class="w"> </span>grub-efi-amd64-signed
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>grub-mknetdir
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>grub-mkimage<span class="w"> </span>-d<span class="w"> </span>/usr/lib/grub/i386-pc<span class="w"> </span>-O<span class="w"> </span>i386-pc-pxe<span class="w"> </span>-o<span class="w"> </span>/srv/tftp/boot/grub/i386-pc/core.0<span class="w"> </span>-p<span class="w"> </span><span class="s1">&#39;(http,202.38.93.94)/boot/tftp/grub/&#39;</span><span class="w"> </span>pxe<span class="w"> </span>http
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>grub-mkimage<span class="w"> </span>-d<span class="w"> </span>/usr/lib/grub/x86_64-efi<span class="w"> </span>-O<span class="w"> </span>x86_64-efi<span class="w"> </span>-o<span class="w"> </span>/srv/tftp/boot/grub/x86_64-efi/core.efi<span class="w"> </span>-p<span class="w"> </span><span class="s1">&#39;(http,202.38.93.94)/boot/tftp/grub/&#39;</span><span class="w"> </span>efinet<span class="w"> </span>http
+</code></pre></div>
+<p>最后两个 <code>grub-mkimage</code> 是因为 <code>grub-mknetdir</code> 生成的镜像使用 tftp 协议，在调试时可能会有问题。我们希望 GRUB2 能够全程使用 HTTP 做剩下的工作。</p>
+<p>更换文件的时候<strong>别把配置覆盖了</strong>。</p>
+<h3 id="ipxe-iso">构建 iPXE ISO<a class="headerlink" href="#ipxe-iso" title="Permanent link">&para;</a></h3>
+<p>参考 <a href="https://ipxe.org/embed">https://ipxe.org/embed</a>。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>#!ipxe
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a># Generated by GPT-4
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>dhcp
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>set 210:string http://202.38.93.94/boot/tftp/
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a># UEFI boot?
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>iseq ${platform} efi &amp;&amp; goto uefi || goto bios
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a>:uefi
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a>echo &quot;UEFI boot detected&quot;
+<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a>chain ${210:string}bootx64.efi
+<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a>exit
+<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a>
+<a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a>:bios
+<a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a>echo &quot;BIOS boot detected&quot;
+<a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a>chain ${210:string}pxelinux.0
+<a id="__codelineno-4-18" name="__codelineno-4-18" href="#__codelineno-4-18"></a>exit
+</code></pre></div>
+<p>clone ipxe/ipxe 仓库，进入 src 目录，然后执行：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c1"># https://github.com/ipxe/ipxe/pull/50</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>make<span class="w"> </span>bin-x86_64-efi/ipxe.efi<span class="w"> </span>bin/ipxe.lkrn
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>./util/genfsimg<span class="w"> </span>-o<span class="w"> </span>ustc.ipxe.iso<span class="w"> </span>-s<span class="w"> </span>../../ustc.ipxe<span class="w"> </span>bin-x86_64-efi/ipxe.efi<span class="w"> </span>bin/ipxe.lkrn
+</code></pre></div>
 <h2 id="_2">架构<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
-<p>新 PXE 方案的 HTTP 服务器为 Apache（Nginx 可能是以前弃用的配置）。URL 中的 boot2 对应 /nfsroot/pxe</p>
-<p>如果出现问题需要调试，建议抓包（可以使用 Wireshark）看是否正常。</p>
+<p>新 PXE 方案的 HTTP 服务器为 Apache + Nginx。URL 中的 boot2 对应 /nfsroot/pxe。</p>
+<div class="admonition todo">
+<p class="admonition-title">处理 web 服务器</p>
+<p>目前 PXE 机器的 web 服务器有点诡异，Apache2 监听 80，Nginx 监听 443，后续需要调整处理。</p>
+</div>
+<div class="admonition todo">
+<p class="admonition-title">文件跳转配置</p>
+<p>Apache2 中配置了一些 alias 跳转，同样的，TFTP 也有类似的配置（<code>/etc/xinetd.d/tftp</code> 的 <code>server_args</code> 里面有 <code>-m /home/pxe/tftp/REMAP</code>）。</p>
+<p>需要检查一致性。</p>
+</div>
+<p>如果出现问题需要调试，建议抓包（可以使用 Wireshark 查看 TFTP 或 HTTP 协议）看是否正常。</p>
 <p>每天凌晨，pxe 用户的 crontab 任务会执行 <a href="https://github.com/ustclug/simple-pxe/blob/master/simple-pxe-in-docker">https://github.com/ustclug/simple-pxe/blob/master/simple-pxe-in-docker</a>（文件位于 pxe 用户的 home 中），实现 PXE 相关文件的更新。</p>
 <h2 id="faults">故障<a class="headerlink" href="#faults" title="Permanent link">&para;</a></h2>
 <p>pxe 服务器在升级到 Debian Bullseye (11) 后无法正常开机，经过 GRUB 进入内核后每 5 秒刷出以下信息：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>DMAR: DRHD: handling fault status reg 2
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>DMAR: [DMA Read] Request device [03:00.0] PASID ffffffff fault addr cb2f0000 [fault reason 06] PTE Read access is not set
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>DMAR: DRHD: handling fault status reg 102
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>DMAR: DRHD: handling fault status reg 2
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>DMAR: [DMA Read] Request device [03:00.0] PASID ffffffff fault addr cb2f0000 [fault reason 06] PTE Read access is not set
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>DMAR: DRHD: handling fault status reg 102
 </code></pre></div>
 <p>由于此时刚升级至 Debian Bullseye，所以系统仍然保留了 Debian Buster 的 4.19 版内核。重启进该内核可正常启动并运行服务，但只要进 5.10 的内核就会出现以上错误。测试 Proxmox VE 提供的 pve-kernel-5.15 也是同样问题。</p>
 <p>搜索发现主机使用的 RAID 卡 PERC H310 不支持直通（IOMMU 虚拟化），配置 GRUB 加入 <code>intel_iommu=off</code> 后可以正常进入 5.10 的内核，作为解决方案。</p>
