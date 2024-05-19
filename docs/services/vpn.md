@@ -9,6 +9,23 @@
     - gateway-el
     - gateway-nic
 
+### TFTP helper
+
+目前仅对 IPv4 启用。
+
+```shell
+*raw
+:PREROUTING ACCEPT [0:0]
+:OUTPUT ACCEPT [0:0]
+-A PREROUTING -p udp --dport 69 -j CT --helper tftp
+COMMIT
+```
+
+```shell title="/etc/modules"
+nf_conntrack_tftp
+nf_nat_tftp
+```
+
 ## SSL Certificates {#ssl-certs}
 
 The certificate for `*.vpn.lug.ustc.edu.cn` + `*.vpn.ustclug.org` is acquired with our [certificate infrastructure](../infrastructure/ssl.md) and the vpn server runs `updater.sh` with cron.
