@@ -23,3 +23,9 @@ make
 得到的 `memtest.bin` 是 BIOS 版的，`memtest.efi` 是 UEFI 版的。
 
 启动菜单：<https://github.com/ustclug/simple-pxe/blob/master/menu.d/tool.sh>。
+
+## GParted
+
+<https://github.com/ustclug/simple-pxe/blob/master/menu.d/gparted.sh>。
+
+启动参数不能加 `ip=`：<https://gitlab.gnome.org/GNOME/gparted/-/issues/141>。
