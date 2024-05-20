@@ -140,6 +140,7 @@ nav:
     - Light: "services/light.md"
     - PXE:
       - "services/pxe/index.md"
+      - Images: "services/pxe/images.md"
       - LIIMS: "services/pxe/liims.md"
     - FTP: "services/ftp.md"
     - Documentations: services/documentations.md
