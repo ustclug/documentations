@@ -15,7 +15,7 @@ GitLab 维护者需要订阅：
 
 ## 更新
 
-（建议阅读 <https://docs.gitlab.com/ee/update/index.html>）
+（建议阅读 <https://docs.gitlab.com/ee/update/index.html>，以及 GitLab 官方的升级路径分析工具：<https://gitlab-com.gitlab.io/support/toolbox/upgrade-path/>）
 
 GitLab 16.0 起移除了对 CAS3 的支持，因此我们切换到了 OAuth2 来对接中国科学技术大学统一身份认证。为了实现自定义 OAuth2 登录参数，我们 fork 了 [sameersbn/docker-gitlab](https://github.com/sameersbn/docker-gitlab)，仓库位于 [ustclug/docker-gitlab](https://github.com/ustclug/docker-gitlab)。更新时，需要首先按照 [ustclug/docker-gitlab](https://github.com/ustclug/docker-gitlab) 的 `README.md` 所述的步骤更新镜像，一般只需更改所述的两个位置的版本号，推送到仓库后，GitHub Actions 将自动完成镜像的构建，并上传到 ghcr.io。需要注意的是，若上游更新包含对 `assets/runtime` 目录的变更，则需先将上游更新合并到我们的仓库，否则可能出现构建或运行时错误。
 
