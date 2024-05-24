@@ -2926,7 +2926,7 @@
 </ol>
 <p>在 GitLab 有 Security Release 且 docker-gitlab 发布新版本之后需要安排时间更新。尤其 Critical Security Release 需要尽快找时间更新。</p>
 <h2 id="_1">更新<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
-<p>（建议阅读 <a href="https://docs.gitlab.com/ee/update/index.html">https://docs.gitlab.com/ee/update/index.html</a>）</p>
+<p>（建议阅读 <a href="https://docs.gitlab.com/ee/update/index.html">https://docs.gitlab.com/ee/update/index.html</a>，以及 GitLab 官方的升级路径分析工具：<a href="https://gitlab-com.gitlab.io/support/toolbox/upgrade-path/">https://gitlab-com.gitlab.io/support/toolbox/upgrade-path/</a>）</p>
 <p>GitLab 16.0 起移除了对 CAS3 的支持，因此我们切换到了 OAuth2 来对接中国科学技术大学统一身份认证。为了实现自定义 OAuth2 登录参数，我们 fork 了 <a href="https://github.com/sameersbn/docker-gitlab">sameersbn/docker-gitlab</a>，仓库位于 <a href="https://github.com/ustclug/docker-gitlab">ustclug/docker-gitlab</a>。更新时，需要首先按照 <a href="https://github.com/ustclug/docker-gitlab">ustclug/docker-gitlab</a> 的 <code>README.md</code> 所述的步骤更新镜像，一般只需更改所述的两个位置的版本号，推送到仓库后，GitHub Actions 将自动完成镜像的构建，并上传到 ghcr.io。需要注意的是，若上游更新包含对 <code>assets/runtime</code> 目录的变更，则需先将上游更新合并到我们的仓库，否则可能出现构建或运行时错误。</p>
 <p>由于已经 docker 化，因此我们的更新是通过拉取 <a href="https://github.com/ustclug/docker-gitlab">ustclug/docker-gitlab</a> 的 docker image，进行数据库准备以及启动镜像实例来进行更新，Zack Zeng 学长已经写好了一套脚本系统：<a href="https://git.lug.ustc.edu.cn/ustclug/gitlab-scripts">gitlab-scripts</a>，因此更新时只要跑脚本就可以了。</p>
 <p>由于更新需要停止服务，因此请于更新前至少几小时发布更新公告（包括具体时间等），并检查 Admin -&gt; Monitoring -&gt; Background Migrations 中所有 migration 是否都已经成功完成。</p>
