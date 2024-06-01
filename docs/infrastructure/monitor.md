@@ -170,3 +170,5 @@ capture = true
 ```
 
 然后找个机器重启一下，触发 Reboot alert，去 Telegram 群里看消息和图片都正确冒出来了，就说明迁移成功了。
+
+!!! bug "Test alert 不会触发截图，即使设置了 Link dashboard and panel 也没用"
