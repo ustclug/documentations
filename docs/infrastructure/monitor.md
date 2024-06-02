@@ -67,6 +67,7 @@ apt install --no-install-recommends telegraf
     cat .git/id_ed25519.pub
     # Upload the output to https://github.com/ustclug/telegraf-config/settings/keys
     git config core.sshCommand 'ssh -i .git/id_ed25519'
+    git remote add origin git@github.com:ustclug/telegraf-config.git
     git pull origin master
     git branch --set-upstream-to=origin/master master
     ```
