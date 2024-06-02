@@ -69,7 +69,7 @@ apt install --no-install-recommends telegraf
     git config core.sshCommand 'ssh -i .git/id_ed25519'
     git pull origin master
     git branch --set-upstream-to=origin/master master
-    ``
+    ```
 
 - 回到 `/etc/telegraf/telegraf.d`，从 `../repo/*.conf` 中按需 symlink 文件过来
 
