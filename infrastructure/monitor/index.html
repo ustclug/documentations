@@ -904,39 +904,6 @@
   
 </li>
       
-        <li class="md-nav__item">
-  <a href="#web" class="md-nav__link">
-    <span class="md-ellipsis">
-      Web
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
-    <span class="md-ellipsis">
-      更新记录
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="更新记录">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#unified-alerting" class="md-nav__link">
-    <span class="md-ellipsis">
-      迁移到 Unified Alerting
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
     </ul>
   
 </nav>
@@ -2636,39 +2603,6 @@
   
 </li>
       
-        <li class="md-nav__item">
-  <a href="#web" class="md-nav__link">
-    <span class="md-ellipsis">
-      Web
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
-    <span class="md-ellipsis">
-      更新记录
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="更新记录">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#unified-alerting" class="md-nav__link">
-    <span class="md-ellipsis">
-      迁移到 Unified Alerting
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
     </ul>
   
 </nav>
@@ -2724,23 +2658,35 @@
 </code></pre></div>
 </details>
 <h2 id="configure-telegraf">Configure telegraf<a class="headerlink" href="#configure-telegraf" title="Permanent link">&para;</a></h2>
-<p>配置文件在 <code>/etc/telegraf/</code> 目录下，用 root 权限修改：</p>
-<p>在 <code>/etc/telegraf/telegraf.d/</code> 下增加 <code>net.conf</code> 用来开启网络监控，内容如下：</p>
-<div class="highlight"><span class="filename">/etc/telegraf/telegraf.d/net.conf</span><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="o">[[</span>inputs.net<span class="o">]]</span>
-</code></pre></div>
-<p>在 <code>/etc/telegraf/telegraf.conf</code> 中的<code>[[outputs.influxdb]]</code> 中<strong>增加</strong> influxdb 的地址：</p>
-<div class="highlight"><span class="filename">/etc/telegraf/telegraf.conf</span><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="o">[[</span>outputs.influxdb<span class="o">]]</span>
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">  </span><span class="nv">urls</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">[</span><span class="s2">&quot;http://influxdb.ustclug.org:8086&quot;</span><span class="o">]</span>
-<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">  </span><span class="nv">username</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">INFLUX_USERNAME</span><span class="si">}</span><span class="s2">&quot;</span>
-<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">  </span><span class="nv">password</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">INFLUXDB_PASSWORD</span><span class="si">}</span><span class="s2">&quot;</span>
-</code></pre></div>
-<p>其中 <code>INFLUX_USERNAME</code> 和 <code>INFLUXDB_PASSWORD</code> 应使用对 <code>telegraf</code> 数据库写权限的账号，否则无法写入数据。</p>
+<p>配置文件在 <a href="https://github.com/ustclug/telegraf-config">ustclug/telegraf-config</a> 仓库中管理，使用方法如下：</p>
+<ul>
+<li>清空 <code>/etc/telegraf/telegraf.conf</code>（例如 <code>truncate -s 0</code> 或者 <code>:&gt;</code>）</li>
+<li>
+<p>把仓库 clone 到 <code>/etc/telegraf/repo</code>，例如：</p>
+<p>```shell
+mkdir /etc/telegraf/repo
+cd /etc/telegraf/repo
+git init
+git branch -M master</p>
+<p>ssh-keygen -f .git/id_ed25519 -t ed25519 -N ''
+cat .git/id_ed25519.pub</p>
+<h1 id="upload-the-output-to-httpsgithubcomustclugtelegraf-configsettingskeys">Upload the output to https://github.com/ustclug/telegraf-config/settings/keys<a class="headerlink" href="#upload-the-output-to-httpsgithubcomustclugtelegraf-configsettingskeys" title="Permanent link">&para;</a></h1>
+<p>git config core.sshCommand 'ssh -i .git/id_ed25519'
+git pull origin master
+git branch --set-upstream-to=origin/master master
+``</p>
+</li>
+<li>
+<p>回到 <code>/etc/telegraf/telegraf.d</code>，从 <code>../repo/*.conf</code> 中按需 symlink 文件过来</p>
+</li>
+</ul>
 <p>配置完成之后，重启 telegraf 服务，并确保服务运行正常。</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>restart<span class="w"> </span>telegraf
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>status<span class="w"> </span>telegraf
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>restart<span class="w"> </span>telegraf
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>status<span class="w"> </span>telegraf
 </code></pre></div>
 <div class="admonition tip">
-<p class="admonition-title">建议在被监控机器上配置 NTP（可以使用 <code>systemd-timesyncd</code>，设置 NTP 服务器为 time.ustc.edu.cn），以避免时间不同步可能带来的问题。</p>
+<p class="admonition-title">Tip</p>
+<p>建议在被监控机器上配置 NTP（可以使用 <code>systemd-timesyncd</code>，设置 NTP 服务器为 time.ustc.edu.cn），以避免时间不同步可能带来的问题。</p>
 </div>
 <h2 id="web">Web<a class="headerlink" href="#web" title="Permanent link">&para;</a></h2>
 <p>Web 端监控位于 <a href="https://monitor.ustclug.org">https://monitor.ustclug.org</a>，账号系统使用 LDAP，可以在这里设置预警提示等。</p>
@@ -2756,27 +2702,27 @@
 <p>在 Alerting (legacy) 菜单下有个 Upgrade rules 界面，点进去就可以使用迁移向导。首先迁移我们唯一的一个 Notification Channel，变成一个 Contact Point。由于 <strong><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M135.2 17.7C140.6 6.8 151.7 0 163.8 0h120.4c12.1 0 23.2 6.8 28.6 17.7L320 32h96c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 96 0 81.7 0 64s14.3-32 32-32h96l7.2-14.3zM32 128h384v320c0 35.3-28.7 64-64 64H96c-35.3 0-64-28.7-64-64V128zm96 64c-8.8 0-16 7.2-16 16v224c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16v224c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16v224c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16z"/></svg></span> 垃圾</strong>的新 alerting 方案没有提供默认的消息模板，因此我们需要自己写一个（文档也晦涩难懂）。</p>
 <details class="abstract">
 <summary>Notification template <code>telegram.message</code></summary>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="cp">{{</span> <span class="nv">define</span> <span class="s2">&quot;alert_list&quot;</span> -<span class="cp">}}</span>
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="cp">{{</span> <span class="nv">range</span> <span class="err">.</span> <span class="cp">}}</span>[<span class="cp">{{</span> <span class="nv">.Labels.alertname</span> <span class="cp">}}</span>] <span class="cp">{{</span> <span class="nv">.Annotations.description</span> <span class="cp">}}</span>
-<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="cp">{{</span> <span class="k">if</span> <span class="k">or</span> <span class="o">(</span><span class="nv">gt</span> <span class="o">(</span><span class="nv">len</span> <span class="nv">.GeneratorURL</span><span class="o">)</span> <span class="m">0</span><span class="o">)</span> <span class="o">(</span><span class="nv">gt</span> <span class="o">(</span><span class="nv">len</span> <span class="nv">.SilenceURL</span><span class="o">)</span> <span class="m">0</span><span class="o">)</span> <span class="o">(</span><span class="nv">gt</span> <span class="o">(</span><span class="nv">len</span> <span class="nv">.DashboardURL</span><span class="o">)</span> <span class="m">0</span><span class="o">)</span> <span class="o">(</span><span class="nv">gt</span> <span class="o">(</span><span class="nv">len</span> <span class="nv">.PanelURL</span><span class="o">)</span> <span class="m">0</span><span class="o">)</span> <span class="cp">}}</span>|<span class="cp">{{</span><span class="o">-</span> <span class="nv">end</span> <span class="cp">}}</span>
-<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="cp">{{</span><span class="o">-</span> <span class="k">if</span> <span class="nv">gt</span> <span class="o">(</span><span class="nv">len</span> <span class="nv">.GeneratorURL</span><span class="o">)</span> <span class="m">0</span> <span class="cp">}}</span> <span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">.GeneratorURL</span> <span class="cp">}}</span><span class="s">&quot;</span><span class="p">&gt;</span>Source<span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span> | <span class="cp">{{</span><span class="o">-</span> <span class="nv">end</span> <span class="cp">}}</span>
-<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="cp">{{</span><span class="o">-</span> <span class="k">if</span> <span class="nv">gt</span> <span class="o">(</span><span class="nv">len</span> <span class="nv">.SilenceURL</span><span class="o">)</span> <span class="m">0</span> <span class="cp">}}</span> <span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">.SilenceURL</span> <span class="cp">}}</span><span class="s">&quot;</span><span class="p">&gt;</span>Silence<span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span> | <span class="cp">{{</span><span class="o">-</span> <span class="nv">end</span> <span class="cp">}}</span>
-<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="cp">{{</span><span class="o">-</span> <span class="k">if</span> <span class="nv">gt</span> <span class="o">(</span><span class="nv">len</span> <span class="nv">.DashboardURL</span><span class="o">)</span> <span class="m">0</span> <span class="cp">}}</span> <span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">.DashboardURL</span> <span class="cp">}}</span><span class="s">&quot;</span><span class="p">&gt;</span>Dashboard<span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span> | <span class="cp">{{</span><span class="o">-</span> <span class="nv">end</span> <span class="cp">}}</span>
-<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="cp">{{</span><span class="o">-</span> <span class="k">if</span> <span class="nv">gt</span> <span class="o">(</span><span class="nv">len</span> <span class="nv">.PanelURL</span><span class="o">)</span> <span class="m">0</span> <span class="cp">}}</span> <span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">.PanelURL</span> <span class="cp">}}</span><span class="s">&quot;</span><span class="p">&gt;</span>Panel<span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span> | <span class="cp">{{</span><span class="o">-</span> <span class="nv">end</span> <span class="cp">}}</span>
-<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="cp">{{</span> <span class="nv">end</span> <span class="cp">}}</span>
-<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a><span class="cp">{{</span> <span class="nv">end</span> <span class="cp">}}</span>
-<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a>
-<a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a><span class="cp">{{</span><span class="o">-</span> <span class="nv">define</span> <span class="s2">&quot;telegram.message&quot;</span> <span class="cp">}}</span>
-<a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a><span class="cp">{{</span><span class="o">-</span> <span class="k">if</span> <span class="nv">gt</span> <span class="o">(</span><span class="nv">len</span> <span class="nv">.Alerts.Firing</span><span class="o">)</span> <span class="m">0</span> <span class="cp">}}</span><span class="p">&lt;</span><span class="nt">strong</span><span class="p">&gt;</span>Firing<span class="p">&lt;/</span><span class="nt">strong</span><span class="p">&gt;</span>
-<a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a><span class="cp">{{</span> <span class="nv">template</span> <span class="s2">&quot;alert_list&quot;</span> <span class="nv">.Alerts.Firing</span> <span class="cp">}}</span>
-<a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a><span class="cp">{{</span> <span class="k">if</span> <span class="nv">gt</span> <span class="o">(</span><span class="nv">len</span> <span class="nv">.Alerts.Resolved</span><span class="o">)</span> <span class="m">0</span> <span class="cp">}}</span>
-<a id="__codelineno-7-15" name="__codelineno-7-15" href="#__codelineno-7-15"></a><span class="cp">{{</span> <span class="nv">end</span> <span class="cp">}}</span>
-<a id="__codelineno-7-16" name="__codelineno-7-16" href="#__codelineno-7-16"></a><span class="cp">{{</span><span class="o">-</span> <span class="nv">end</span> <span class="cp">}}</span>
-<a id="__codelineno-7-17" name="__codelineno-7-17" href="#__codelineno-7-17"></a>
-<a id="__codelineno-7-18" name="__codelineno-7-18" href="#__codelineno-7-18"></a><span class="cp">{{</span><span class="o">-</span> <span class="k">if</span> <span class="nv">gt</span> <span class="o">(</span><span class="nv">len</span> <span class="nv">.Alerts.Resolved</span><span class="o">)</span> <span class="m">0</span> <span class="cp">}}</span><span class="p">&lt;</span><span class="nt">strong</span><span class="p">&gt;</span>Resolved<span class="p">&lt;/</span><span class="nt">strong</span><span class="p">&gt;</span>
-<a id="__codelineno-7-19" name="__codelineno-7-19" href="#__codelineno-7-19"></a><span class="cp">{{</span> <span class="nv">template</span> <span class="s2">&quot;alert_list&quot;</span> <span class="nv">.Alerts.Resolved</span> <span class="cp">}}</span>
-<a id="__codelineno-7-20" name="__codelineno-7-20" href="#__codelineno-7-20"></a><span class="cp">{{</span> <span class="nv">end</span> <span class="cp">}}</span>
-<a id="__codelineno-7-21" name="__codelineno-7-21" href="#__codelineno-7-21"></a><span class="cp">{{</span><span class="o">-</span> <span class="nv">end</span> <span class="cp">}}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="cp">{{</span> <span class="nv">define</span> <span class="s2">&quot;alert_list&quot;</span> -<span class="cp">}}</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="cp">{{</span> <span class="nv">range</span> <span class="err">.</span> <span class="cp">}}</span>[<span class="cp">{{</span> <span class="nv">.Labels.alertname</span> <span class="cp">}}</span>] <span class="cp">{{</span> <span class="nv">.Annotations.description</span> <span class="cp">}}</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="cp">{{</span> <span class="k">if</span> <span class="k">or</span> <span class="o">(</span><span class="nv">gt</span> <span class="o">(</span><span class="nv">len</span> <span class="nv">.GeneratorURL</span><span class="o">)</span> <span class="m">0</span><span class="o">)</span> <span class="o">(</span><span class="nv">gt</span> <span class="o">(</span><span class="nv">len</span> <span class="nv">.SilenceURL</span><span class="o">)</span> <span class="m">0</span><span class="o">)</span> <span class="o">(</span><span class="nv">gt</span> <span class="o">(</span><span class="nv">len</span> <span class="nv">.DashboardURL</span><span class="o">)</span> <span class="m">0</span><span class="o">)</span> <span class="o">(</span><span class="nv">gt</span> <span class="o">(</span><span class="nv">len</span> <span class="nv">.PanelURL</span><span class="o">)</span> <span class="m">0</span><span class="o">)</span> <span class="cp">}}</span>|<span class="cp">{{</span><span class="o">-</span> <span class="nv">end</span> <span class="cp">}}</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="cp">{{</span><span class="o">-</span> <span class="k">if</span> <span class="nv">gt</span> <span class="o">(</span><span class="nv">len</span> <span class="nv">.GeneratorURL</span><span class="o">)</span> <span class="m">0</span> <span class="cp">}}</span> <span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">.GeneratorURL</span> <span class="cp">}}</span><span class="s">&quot;</span><span class="p">&gt;</span>Source<span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span> | <span class="cp">{{</span><span class="o">-</span> <span class="nv">end</span> <span class="cp">}}</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="cp">{{</span><span class="o">-</span> <span class="k">if</span> <span class="nv">gt</span> <span class="o">(</span><span class="nv">len</span> <span class="nv">.SilenceURL</span><span class="o">)</span> <span class="m">0</span> <span class="cp">}}</span> <span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">.SilenceURL</span> <span class="cp">}}</span><span class="s">&quot;</span><span class="p">&gt;</span>Silence<span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span> | <span class="cp">{{</span><span class="o">-</span> <span class="nv">end</span> <span class="cp">}}</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="cp">{{</span><span class="o">-</span> <span class="k">if</span> <span class="nv">gt</span> <span class="o">(</span><span class="nv">len</span> <span class="nv">.DashboardURL</span><span class="o">)</span> <span class="m">0</span> <span class="cp">}}</span> <span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">.DashboardURL</span> <span class="cp">}}</span><span class="s">&quot;</span><span class="p">&gt;</span>Dashboard<span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span> | <span class="cp">{{</span><span class="o">-</span> <span class="nv">end</span> <span class="cp">}}</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="cp">{{</span><span class="o">-</span> <span class="k">if</span> <span class="nv">gt</span> <span class="o">(</span><span class="nv">len</span> <span class="nv">.PanelURL</span><span class="o">)</span> <span class="m">0</span> <span class="cp">}}</span> <span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">.PanelURL</span> <span class="cp">}}</span><span class="s">&quot;</span><span class="p">&gt;</span>Panel<span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span> | <span class="cp">{{</span><span class="o">-</span> <span class="nv">end</span> <span class="cp">}}</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="cp">{{</span> <span class="nv">end</span> <span class="cp">}}</span>
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="cp">{{</span> <span class="nv">end</span> <span class="cp">}}</span>
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a>
+<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="cp">{{</span><span class="o">-</span> <span class="nv">define</span> <span class="s2">&quot;telegram.message&quot;</span> <span class="cp">}}</span>
+<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a><span class="cp">{{</span><span class="o">-</span> <span class="k">if</span> <span class="nv">gt</span> <span class="o">(</span><span class="nv">len</span> <span class="nv">.Alerts.Firing</span><span class="o">)</span> <span class="m">0</span> <span class="cp">}}</span><span class="p">&lt;</span><span class="nt">strong</span><span class="p">&gt;</span>Firing<span class="p">&lt;/</span><span class="nt">strong</span><span class="p">&gt;</span>
+<a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a><span class="cp">{{</span> <span class="nv">template</span> <span class="s2">&quot;alert_list&quot;</span> <span class="nv">.Alerts.Firing</span> <span class="cp">}}</span>
+<a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a><span class="cp">{{</span> <span class="k">if</span> <span class="nv">gt</span> <span class="o">(</span><span class="nv">len</span> <span class="nv">.Alerts.Resolved</span><span class="o">)</span> <span class="m">0</span> <span class="cp">}}</span>
+<a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a><span class="cp">{{</span> <span class="nv">end</span> <span class="cp">}}</span>
+<a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a><span class="cp">{{</span><span class="o">-</span> <span class="nv">end</span> <span class="cp">}}</span>
+<a id="__codelineno-5-17" name="__codelineno-5-17" href="#__codelineno-5-17"></a>
+<a id="__codelineno-5-18" name="__codelineno-5-18" href="#__codelineno-5-18"></a><span class="cp">{{</span><span class="o">-</span> <span class="k">if</span> <span class="nv">gt</span> <span class="o">(</span><span class="nv">len</span> <span class="nv">.Alerts.Resolved</span><span class="o">)</span> <span class="m">0</span> <span class="cp">}}</span><span class="p">&lt;</span><span class="nt">strong</span><span class="p">&gt;</span>Resolved<span class="p">&lt;/</span><span class="nt">strong</span><span class="p">&gt;</span>
+<a id="__codelineno-5-19" name="__codelineno-5-19" href="#__codelineno-5-19"></a><span class="cp">{{</span> <span class="nv">template</span> <span class="s2">&quot;alert_list&quot;</span> <span class="nv">.Alerts.Resolved</span> <span class="cp">}}</span>
+<a id="__codelineno-5-20" name="__codelineno-5-20" href="#__codelineno-5-20"></a><span class="cp">{{</span> <span class="nv">end</span> <span class="cp">}}</span>
+<a id="__codelineno-5-21" name="__codelineno-5-21" href="#__codelineno-5-21"></a><span class="cp">{{</span><span class="o">-</span> <span class="nv">end</span> <span class="cp">}}</span>
 </code></pre></div>
 </details>
 <p>然后回到 Contact point 编辑，展开 Optional Telegram settings，在 Message 中填入 <code>{{ template "telegram. Message" . }}</code> 来引用我们刚刚写的模板，并将 Parse mode 设为 HTML。</p>
@@ -2797,24 +2743,24 @@
 <details class="abstract">
 <summary>Description 模板</summary>
 <p>在 Go template 中可用的帮助函数参见 <a href="https://grafana.com/docs/grafana/latest/alerting/alerting-rules/templating-labels-annotations/">https://grafana.com/docs/grafana/latest/alerting/alerting-rules/templating-labels-annotations/</a>。</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="cp">{{</span> <span class="nv">index</span> <span class="err">$</span><span class="nv">labels</span> <span class="s2">&quot;host&quot;</span> <span class="cp">}}</span><span class="x">: </span><span class="cp">{{</span> <span class="nv">humanize</span> <span class="o">(</span><span class="nv">index</span> <span class="err">$</span><span class="nv">values</span> <span class="s2">&quot;B&quot;</span><span class="o">)</span><span class="nv">.Value</span> <span class="cp">}}</span>
-<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>
-<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="cp">{{</span> <span class="nv">index</span> <span class="err">$</span><span class="nv">labels</span> <span class="s2">&quot;host&quot;</span> <span class="cp">}}</span><span class="x">: </span><span class="cp">{{</span> <span class="nv">humanizePercentage</span> <span class="o">(</span><span class="nv">index</span> <span class="err">$</span><span class="nv">values</span> <span class="s2">&quot;D&quot;</span><span class="o">)</span><span class="nv">.Value</span> <span class="cp">}}</span>
-<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>
-<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="cp">{{</span> <span class="nv">index</span> <span class="err">$</span><span class="nv">labels</span> <span class="s2">&quot;host&quot;</span> <span class="cp">}}</span><span class="x">: </span><span class="cp">{{</span> <span class="nv">humanizeDuration</span> <span class="o">(</span><span class="nv">index</span> <span class="err">$</span><span class="nv">values</span> <span class="s2">&quot;B&quot;</span><span class="o">)</span><span class="nv">.Value</span> <span class="cp">}}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="cp">{{</span> <span class="nv">index</span> <span class="err">$</span><span class="nv">labels</span> <span class="s2">&quot;host&quot;</span> <span class="cp">}}</span><span class="x">: </span><span class="cp">{{</span> <span class="nv">humanize</span> <span class="o">(</span><span class="nv">index</span> <span class="err">$</span><span class="nv">values</span> <span class="s2">&quot;B&quot;</span><span class="o">)</span><span class="nv">.Value</span> <span class="cp">}}</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="cp">{{</span> <span class="nv">index</span> <span class="err">$</span><span class="nv">labels</span> <span class="s2">&quot;host&quot;</span> <span class="cp">}}</span><span class="x">: </span><span class="cp">{{</span> <span class="nv">humanizePercentage</span> <span class="o">(</span><span class="nv">index</span> <span class="err">$</span><span class="nv">values</span> <span class="s2">&quot;D&quot;</span><span class="o">)</span><span class="nv">.Value</span> <span class="cp">}}</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="cp">{{</span> <span class="nv">index</span> <span class="err">$</span><span class="nv">labels</span> <span class="s2">&quot;host&quot;</span> <span class="cp">}}</span><span class="x">: </span><span class="cp">{{</span> <span class="nv">humanizeDuration</span> <span class="o">(</span><span class="nv">index</span> <span class="err">$</span><span class="nv">values</span> <span class="s2">&quot;B&quot;</span><span class="o">)</span><span class="nv">.Value</span> <span class="cp">}}</span>
 </code></pre></div>
 <p>其中 <code>index $labels</code> 后面的参数可以是前面 InfluxDB query 中 GROUP BY 的 tag，可以灵活使用。</p>
 </details>
 <p>手工处理完全部 18 个 alert rules 之后（累死我了），就可以开始测试了。</p>
 <p>先启用新的 unified alerting：</p>
-<div class="highlight"><span class="filename">/srv/docker/grafana/conf/grafana.ini</span><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="k">[alerting]</span>
-<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="na">enabled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">false</span>
-<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>
-<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="k">[unified_alerting]</span>
-<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="na">enabled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">true</span>
-<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>
-<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="k">[unified_alerting.screenshots]</span>
-<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a><span class="na">capture</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">true</span>
+<div class="highlight"><span class="filename">/srv/docker/grafana/conf/grafana.ini</span><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="k">[alerting]</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="na">enabled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">false</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="k">[unified_alerting]</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="na">enabled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">true</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="k">[unified_alerting.screenshots]</span>
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="na">capture</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">true</span>
 </code></pre></div>
 <p>然后找个机器重启一下，触发 Reboot alert，去 Telegram 群里看消息和图片都正确冒出来了，就说明迁移成功了。</p>
 <div class="admonition bug">
