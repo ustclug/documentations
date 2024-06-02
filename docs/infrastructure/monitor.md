@@ -52,24 +52,26 @@ apt install --no-install-recommends telegraf
 
 ## Configure telegraf
 
-配置文件在 `/etc/telegraf/` 目录下，用 root 权限修改：
+配置文件在 [ustclug/telegraf-config](https://github.com/ustclug/telegraf-config) 仓库中管理，使用方法如下：
 
-在 `/etc/telegraf/telegraf.d/` 下增加 `net.conf` 用来开启网络监控，内容如下：
+- 清空 `/etc/telegraf/telegraf.conf`（例如 `truncate -s 0` 或者 `:>`）
+- 把仓库 clone 到 `/etc/telegraf/repo`，例如：
 
-```shell title="/etc/telegraf/telegraf.d/net.conf"
-[[inputs.net]]
-```
+    ```shell
+    mkdir /etc/telegraf/repo
+    cd /etc/telegraf/repo
+    git init
+    git branch -M master
 
-在 `/etc/telegraf/telegraf.conf` 中的`[[outputs.influxdb]]` 中**增加** influxdb 的地址：
+    ssh-keygen -f .git/id_ed25519 -t ed25519 -N ''
+    cat .git/id_ed25519.pub
+    # Upload the output to https://github.com/ustclug/telegraf-config/settings/keys
+    git config core.sshCommand 'ssh -i .git/id_ed25519'
+    git pull origin master
+    git branch --set-upstream-to=origin/master master
+    ``
 
-```shell title="/etc/telegraf/telegraf.conf"
-[[outputs.influxdb]]
-  urls = ["http://influxdb.ustclug.org:8086"]
-  username = "${INFLUX_USERNAME}"
-  password = "${INFLUXDB_PASSWORD}"
-```
-
-其中 `INFLUX_USERNAME` 和 `INFLUXDB_PASSWORD` 应使用对 `telegraf` 数据库写权限的账号，否则无法写入数据。
+- 回到 `/etc/telegraf/telegraf.d`，从 `../repo/*.conf` 中按需 symlink 文件过来
 
 配置完成之后，重启 telegraf 服务，并确保服务运行正常。
 
@@ -78,7 +80,9 @@ sudo systemctl restart telegraf
 sudo systemctl status telegraf
 ```
 
-!!! tip "建议在被监控机器上配置 NTP（可以使用 `systemd-timesyncd`，设置 NTP 服务器为 time.ustc.edu.cn），以避免时间不同步可能带来的问题。"
+!!! tip
+
+    建议在被监控机器上配置 NTP（可以使用 `systemd-timesyncd`，设置 NTP 服务器为 time.ustc.edu.cn），以避免时间不同步可能带来的问题。
 
 ## Web
 
