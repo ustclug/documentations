@@ -22,7 +22,7 @@
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.0, mkdocs-material-9.5.25">
+      <meta name="generator" content="mkdocs-1.6.0, mkdocs-material-9.5.26">
     
     
       
@@ -179,7 +179,7 @@
       
     </form>
     <div class="md-search__output">
-      <div class="md-search__scrollwrap" data-md-scrollfix>
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
         <div class="md-search-result" data-md-component="search-result">
           <div class="md-search-result__meta">
             Initializing search
@@ -2997,6 +2997,15 @@
 </tr>
 </tbody>
 </table>
+<details class="note">
+<summary>How lua-resty-limit-traffic works</summary>
+<p>限制器逻辑使用 <a href="https://github.com/openresty/lua-resty-limit-traffic">https://github.com/openresty/lua-resty-limit-traffic</a> 实现，其中上表代号分别对应其 <code>req</code>, <code>count</code>, <code>conn</code> 三种实现，<code>traffic</code> 则 aggregate 了 <code>count</code> 之外的限制器，返回最大的延迟。</p>
+<p><code>req</code> 的核心公式是：<code>excess = max(excess - rate * elapsed / 1000 + 1000, 0)</code>，其中时间单位是毫秒（<code>rate</code> 和 <code>burst</code> 参数计算时都需要乘以 1000）。<code>excess</code> 会先和 <code>burst</code> 比较（如果超出，则 reject），如果没有超出，则 delay <code>excess / rate</code> 秒。</p>
+<p>当 elapsed = 1000/rate 时，恰好不会增加 <code>excess</code> 的值，此时 1 秒内恰好可以容纳 rate 个请求；当 elapsed = 1000/(rate+burst) 时，<code>excess</code> 增量为 1000(1-r/(r+b))，此时 1 秒内恰好有 (rate+burst) 个请求不会被 reject。</p>
+<p>理想情况下的例子：如果 rate = 40r/s = 40 * 1000 r/ms，则 elapsed 需要至少为 1/40 秒（25 毫秒），才能和后面的 <code>+ 1000</code> 抵消，否则 <code>excess</code> 会一直增加。如果 burst = 100r/s = 100 * 1000 r/ms，那么假设有用户每 1/140 秒（7.1 毫秒）访问一次，那么 <code>excess</code> 每次会增加 714.28，如果有 140 个这样的请求，那么 <code>excess</code> 的值则恰好是 <code>burst</code> 的值。</p>
+<p><code>count</code> 的逻辑简单很多，使用 lua-nginx-module 带的 https://github.com/openresty/lua-nginx-module?tab=readme-ov-file#ngxshareddictincr 为每次自增设置 TTL 即可。</p>
+<p><code>conn</code> 使用字典计数器统计当前连接数，如果超过了 <code>max + burst</code>，则 reject。否则如果超过了 <code>max</code> 则延迟 <code>unit_delay * floor((conn - 1) / max)</code> 秒。<code>unit_delay</code> 起始为用户给定的值，在之后会按照 <code>unit_delay = (req_latency + unit_delay) / 2</code> 定时调整。</p>
+</details>
 <p>到达阈值后会发生什么？</p>
 <ul>
 <li>当请求速率超过阈值，但未超过突发量时，限制器会计算出一个满足阈值条件的最小等待时间。连接会被丢入等待池，到达等待时间后再被处理。</li>
@@ -3185,7 +3194,7 @@ ipset 将某个 IP 匹配到一个集合中，iptables 再针对某一集合进�
     <script id="__config" type="application/json">{"base": "../../..", "features": ["content.code.annotate", "content.code.copy", "navigation.indexes", "navigation.sections", "navigation.top"], "search": "../../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.081f42fc.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.ad660dcc.min.js"></script>
       
     
   </body>
