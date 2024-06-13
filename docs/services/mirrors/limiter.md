@@ -85,6 +85,20 @@
 |    文件请求速率限制器 `File-Req`     |  次/秒   |   5   |   25   |       /        |             返回 429 错误              |
 |   文件请求连接数限制器 `File-Conn`   |    条    |  100  |   0    |       /        |             返回 429 错误              |
 
+??? note "How lua-resty-limit-traffic works"
+
+    限制器逻辑使用 <https://github.com/openresty/lua-resty-limit-traffic> 实现，其中上表代号分别对应其 `req`, `count`, `conn` 三种实现，`traffic` 则 aggregate 了 `count` 之外的限制器，返回最大的延迟。
+
+    `req` 的核心公式是：`excess = max(excess - rate * elapsed / 1000 + 1000, 0)`，其中时间单位是毫秒（`rate` 和 `burst` 参数计算时都需要乘以 1000）。`excess` 会先和 `burst` 比较（如果超出，则 reject），如果没有超出，则 delay `excess / rate` 秒。
+
+    当 elapsed = 1000/rate 时，恰好不会增加 `excess` 的值，此时 1 秒内恰好可以容纳 rate 个请求；当 elapsed = 1000/(rate+burst) 时，`excess` 增量为 1000(1-r/(r+b))，此时 1 秒内恰好有 (rate+burst) 个请求不会被 reject。
+    
+    理想情况下的例子：如果 rate = 40r/s = 40 * 1000 r/ms，则 elapsed 需要至少为 1/40 秒（25 毫秒），才能和后面的 `+ 1000` 抵消，否则 `excess` 会一直增加。如果 burst = 100r/s = 100 * 1000 r/ms，那么假设有用户每 1/140 秒（7.1 毫秒）访问一次，那么 `excess` 每次会增加 714.28，如果有 140 个这样的请求，那么 `excess` 的值则恰好是 `burst` 的值。
+
+    `count` 的逻辑简单很多，使用 lua-nginx-module 带的 https://github.com/openresty/lua-nginx-module?tab=readme-ov-file#ngxshareddictincr 为每次自增设置 TTL 即可。
+
+    `conn` 使用字典计数器统计当前连接数，如果超过了 `max + burst`，则 reject。否则如果超过了 `max` 则延迟 `unit_delay * floor((conn - 1) / max)` 秒。`unit_delay` 起始为用户给定的值，在之后会按照 `unit_delay = (req_latency + unit_delay) / 2` 定时调整。
+
 到达阈值后会发生什么？
 
 - 当请求速率超过阈值，但未超过突发量时，限制器会计算出一个满足阈值条件的最小等待时间。连接会被丢入等待池，到达等待时间后再被处理。
