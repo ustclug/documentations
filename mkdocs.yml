@@ -120,7 +120,6 @@ nav:
         - services/mirrors/3/index.md
       - Auxiliary (2):
         - services/mirrors/2/index.md
-        - Networking: services/mirrors/2/networking.md
       - Obsolete (1): services/mirrors/1/index.md
       - Docker: "services/mirrors/docker.md"
       - IPMI: "services/mirrors/ipmi.md"

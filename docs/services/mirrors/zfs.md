@@ -2,60 +2,72 @@
 
 ## Configuration
 
-*/etc/modprobe.d/zfs.conf*
+### ZFS kernel module
 
-```
-options zfs zfs_arc_max=137438953472
-options zfs l2arc_write_max=52428800
-options zfs zfs_arc_meta_min=17179869184
+For OpenZFS 2.2:
+
+```shell title="/etc/modprobe.d/zfs.conf"
+options zfs zfs_arc_max=161061273600
+options zfs zfs_arc_min=161061273600
+options zfs l2arc_write_max=67108864
 options zfs l2arc_noprefetch=0
 ```
 
-refer to `man zfs-module-parameters`.
+Refer to [`zfs(4)`](https://openzfs.github.io/openzfs-docs/man/master/4/zfs.4.html).
+
+### Dataset properties
+
+On mirrors2:
+
+```shell
+zfs create -o compress=zstd-8 -o recordsize=1M -o atime=off pool0/backup
+
+zfs create pool0/backup/rootfs # inherit everything
+zfs create -o acltype=posix pool0/backup/oldlog
+
+zfs create \
+  -o mountpoint=/srv/repo \
+  -o recordsize=1M \
+  -o xattr=off \
+  -o atime=off \
+  -o setuid=off \
+  -o exec=off \
+  -o devices=off \
+  -o sync=disabled \
+  -o secondarycache=metadata \
+  -o redundant_metadata=some \
+  pool0/repo
+```
+
+Refer to [`zfsprops(7)`](https://openzfs.github.io/openzfs-docs/man/master/7/zfsprops.7.html).
 
 ## Common Operations
 
-### Get zpool status
-
-```shell
+```shell title="Get zpool status"
 zpool status
 ```
 
-### Get IO status
-
-```shell
+```shell title="Get IO status"
 zpool iostat -v 1
 ```
 
-### Replace Disk
-
-```shell
+```shell title="Replace Disk"
 zpool replace pool0 old-disk new-disk
 ```
 
-### New ZFS file system
+```shell title="New ZFS file system"
+zfs create [-o option=value ...] <filesystem>
 
-```sh
-zfs create [-o mountpoint=$mountpoint] $filesystem
+# Example
+zfs create pool0/repo/debian
 ```
 
-Example:
+If `mountpoint` is not specified, then it's inherited from the parent with a subpath appended. E.g. when `pool0/example` is mounted on `/mnt/haha` then `pool0/example/test` will by default mount on `/mnt/haha/test`.
 
-```shell
-zfs create -o mountpoint=/srv/repo/debian pool0/repo/debian
-```
+```shell title="Destory ZFS file system"
+zfs destroy <filesystem>
 
-If mountpoint is not specified, then it's inherited from the parent with a subpath appended, e.g. when `pool0/example` is mounted on `/mnt/haha` then `pool0/example/test` will by default mount on `/mnt/haha/test`.
-
-### Destory ZFS file system
-
-```shell
-zfs destroy $filesystem
-```
-
-Example:
-
-```shell
+# Example
 zfs destroy pool0/repo/debian
 ```
 
