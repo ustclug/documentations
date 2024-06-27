@@ -87,6 +87,12 @@ Outlook 无法直接通过网页端添加发件人名称、设置回复地址，
 
 ![Thunderbird cc](img/thunderbird-account-settings-cc.png)
 
+### HTML与纯文本
+
+邮件可以以 HTML 方式编写，也可以只是纯文本内容。为了降低对方阅读出现麻烦的可能性，建议使用纯文本消息。使用纯文本消息的方法是：打开 *Thunderbird 设置* ，打开 *Account Settings* ，打开对应邮件地址下的 *Composition & Addressing* 页面，在 *Composition* 节下找到 *Compose messages in HTML format* ，将其复选框去除勾选即可。
+
+![Thunderbird cc](img/thunderbird-plain-text-mail.png)
+
 ### 文件夹 {#tb-folders}
 
 Thunderbird 维护了自己的文件夹，如果需要与云端的文件夹同步，可以进行如下操作
