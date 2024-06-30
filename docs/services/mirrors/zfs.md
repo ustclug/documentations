@@ -31,6 +31,10 @@ options zfs l2arc_noprefetch=0
 
 Refer to [`zfs(4)`](https://openzfs.github.io/openzfs-docs/man/master/4/zfs.4.html).
 
+!!! note
+
+    `zfs_dmu_offset_next_sync` is 1 by default since OpenZFS v2.1.5, so it's omitted in the configuration.
+
 ### Dataset properties
 
 On mirrors2:
@@ -56,6 +60,44 @@ zfs create \
 ```
 
 Refer to [`zfsprops(7)`](https://openzfs.github.io/openzfs-docs/man/master/7/zfsprops.7.html).
+
+#### Considerations
+
+`mountpoint`
+
+:   Self-explanatory.
+
+`recordsize=1M`
+
+:   This is the "block size" for ZFS, i.e. how large files are split into blocks. Each block (record) is stored contiguously on disk and is read/written as a whole.
+
+    Since the typical read pattern on mirror sites is whole-file sequential read, it makes sense to set `recordsize` to the maximum value permitted[^recordsize]. Larger `recordsize` allows the compression algorithm to exploit more opportunities, while also reducing I/O count for large files.
+
+    Note that files under a single `recordsize` will *not* be padded up and will be stored as a single block, so no space is wasted.
+
+  [^recordsize]: Actually, there's the `zfs_max_recordsize` module parameter which can be increased to up to 16 MiB. There's a reason this is set to 1 MiB by default, so we're not going to blindly aim for the maximum.
+
+`xattr=off`
+
+:   Apparently mirror data do not need extended attributes.
+
+`atime=off`, `setuid=off`, `exec=off`, `devices=off`
+
+:   These simply maps to the `noatime`, `nosuid`, `noexec`, and `nodev` mount options respectively. It's safe to assume we don't need these features for mirror data.
+
+`sync=disabled`
+
+:   Disable any "synchronous write" semantics. This means files will not respond to `open(O_SYNC)` and `sync(2)` calls. Pending writes will only be committed to disk after `zfs_txg_timeout` seconds (default 5) or when the write buffer is full.
+
+    While normally this is a bad idea as it goes against data integrity (namely, the "D" in ACID), for mirror data that can be easily regenerated, this improves write performance and reduces fragmentation (also note that `zfs_dmu_offset_next_sync` is enabled by default).
+
+`secondarycache=metadata`
+
+:   As mirrors2 only serves Rsync requests, caching file content provides little benefit. Instead, we cache metadata only to reduce the number of disk seeks.
+
+`redundant_metadata=some`
+
+:   (Just read `zfsprops(7)` and you'll be able to reason about this.)
 
 ## Common Operations
 
