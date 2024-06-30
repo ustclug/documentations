@@ -1800,6 +1800,21 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Dataset properties">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#considerations" class="md-nav__link">
+    <span class="md-ellipsis">
+      Considerations
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
         
       </ul>
@@ -2606,6 +2621,21 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Dataset properties">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#considerations" class="md-nav__link">
+    <span class="md-ellipsis">
+      Considerations
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
         
       </ul>
@@ -2681,6 +2711,10 @@
 <a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>options<span class="w"> </span>zfs<span class="w"> </span><span class="nv">l2arc_noprefetch</span><span class="o">=</span><span class="m">0</span>
 </code></pre></div>
 <p>Refer to <a href="https://openzfs.github.io/openzfs-docs/man/master/4/zfs.4.html"><code>zfs(4)</code></a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code>zfs_dmu_offset_next_sync</code> is 1 by default since OpenZFS v2.1.5, so it's omitted in the configuration.</p>
+</div>
 <h3 id="dataset-properties">Dataset properties<a class="headerlink" href="#dataset-properties" title="Permanent link">&para;</a></h3>
 <p>On mirrors2:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>zfs<span class="w"> </span>create<span class="w"> </span>-o<span class="w"> </span><span class="nv">compress</span><span class="o">=</span>zstd-8<span class="w"> </span>-o<span class="w"> </span><span class="nv">recordsize</span><span class="o">=</span>1M<span class="w"> </span>-o<span class="w"> </span><span class="nv">atime</span><span class="o">=</span>off<span class="w"> </span>pool0/backup
@@ -2702,6 +2736,40 @@
 <a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="w">  </span>pool0/repo
 </code></pre></div>
 <p>Refer to <a href="https://openzfs.github.io/openzfs-docs/man/master/7/zfsprops.7.html"><code>zfsprops(7)</code></a>.</p>
+<h4 id="considerations">Considerations<a class="headerlink" href="#considerations" title="Permanent link">&para;</a></h4>
+<dl>
+<dt><code>mountpoint</code></dt>
+<dd>
+<p>Self-explanatory.</p>
+</dd>
+<dt><code>recordsize=1M</code></dt>
+<dd>
+<p>This is the "block size" for ZFS, i.e. how large files are split into blocks. Each block (record) is stored contiguously on disk and is read/written as a whole.</p>
+<p>Since the typical read pattern on mirror sites is whole-file sequential read, it makes sense to set <code>recordsize</code> to the maximum value permitted<sup id="fnref:recordsize"><a class="footnote-ref" href="#fn:recordsize">1</a></sup>. Larger <code>recordsize</code> allows the compression algorithm to exploit more opportunities, while also reducing I/O count for large files.</p>
+<p>Note that files under a single <code>recordsize</code> will <em>not</em> be padded up and will be stored as a single block, so no space is wasted.</p>
+</dd>
+<dt><code>xattr=off</code></dt>
+<dd>
+<p>Apparently mirror data do not need extended attributes.</p>
+</dd>
+<dt><code>atime=off</code>, <code>setuid=off</code>, <code>exec=off</code>, <code>devices=off</code></dt>
+<dd>
+<p>These simply maps to the <code>noatime</code>, <code>nosuid</code>, <code>noexec</code>, and <code>nodev</code> mount options respectively. It's safe to assume we don't need these features for mirror data.</p>
+</dd>
+<dt><code>sync=disabled</code></dt>
+<dd>
+<p>Disable any "synchronous write" semantics. This means files will not respond to <code>open(O_SYNC)</code> and <code>sync(2)</code> calls. Pending writes will only be committed to disk after <code>zfs_txg_timeout</code> seconds (default 5) or when the write buffer is full.</p>
+<p>While normally this is a bad idea as it goes against data integrity (namely, the "D" in ACID), for mirror data that can be easily regenerated, this improves write performance and reduces fragmentation (also note that <code>zfs_dmu_offset_next_sync</code> is enabled by default).</p>
+</dd>
+<dt><code>secondarycache=metadata</code></dt>
+<dd>
+<p>As mirrors2 only serves Rsync requests, caching file content provides little benefit. Instead, we cache metadata only to reduce the number of disk seeks.</p>
+</dd>
+<dt><code>redundant_metadata=some</code></dt>
+<dd>
+<p>(Just read <code>zfsprops(7)</code> and you'll be able to reason about this.)</p>
+</dd>
+</dl>
 <h2 id="common-operations">Common Operations<a class="headerlink" href="#common-operations" title="Permanent link">&para;</a></h2>
 <div class="highlight"><span class="filename">Get zpool status</span><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>zpool<span class="w"> </span>status
 </code></pre></div>
@@ -2724,6 +2792,14 @@
 <p><del>Do <strong>NOT</strong> install <code>zfs-dkms</code> and related packages from Debian backports repositories. They'll easily break when upgrading.</del></p>
 <p><del>As of Debian Buster the ZFS packages from the mainstream repository is stable and new enough for our use.</del></p>
 <p>仍然建议安装 Backports 版本的 ZFS。「Stable 越往后（对 ZFS 相关软件包的）维护越弱」，从而导致 stable 的 ZFS 反而质量不如 backports 版本的。</p>
+<div class="footnote">
+<hr />
+<ol>
+<li id="fn:recordsize">
+<p>Actually, there's the <code>zfs_max_recordsize</code> module parameter which can be increased to up to 16 MiB. There's a reason this is set to 1 MiB by default, so we're not going to blindly aim for the maximum.&#160;<a class="footnote-backref" href="#fnref:recordsize" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+</ol>
+</div>
 
 
 
