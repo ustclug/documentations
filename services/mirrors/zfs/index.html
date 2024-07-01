@@ -2748,6 +2748,11 @@
 <p>Since the typical read pattern on mirror sites is whole-file sequential read, it makes sense to set <code>recordsize</code> to the maximum value permitted<sup id="fnref:recordsize"><a class="footnote-ref" href="#fn:recordsize">1</a></sup>. Larger <code>recordsize</code> allows the compression algorithm to exploit more opportunities, while also reducing I/O count for large files.</p>
 <p>Note that files under a single <code>recordsize</code> will <em>not</em> be padded up and will be stored as a single block, so no space is wasted.</p>
 </dd>
+<dt><code>compression=zstd</code> (inherited from <code>pool0</code>)</dt>
+<dd>
+<p>Enable compression so anything will be tried to compress. The default algorithm (i.e. <code>compression=on</code>) is LZ4, which is very fast but not as effective. Zstd is a modern multi-threaded algorithm that is also very fast but compresses better. The default compression level is 3 (i.e. <code>zstd</code> = <code>zstd-3</code>).</p>
+<p>Since OpenZFS 2.2, there's an "early-abort" mechanism for Zstd level 3 or up: Every block is first tried with LZ4, then Zstd-1, and if and only if both algorithms suggest that the data block would compress well, the actual algorithm will be applied and the compressed result will be written to disk. This early-abort mechanism ensures minimal CPU wasted for incompressible data.</p>
+</dd>
 <dt><code>xattr=off</code></dt>
 <dd>
 <p>Apparently mirror data do not need extended attributes.</p>
