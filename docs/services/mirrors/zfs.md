@@ -77,6 +77,12 @@ Refer to [`zfsprops(7)`](https://openzfs.github.io/openzfs-docs/man/master/7/zfs
 
   [^recordsize]: Actually, there's the `zfs_max_recordsize` module parameter which can be increased to up to 16 MiB. There's a reason this is set to 1 MiB by default, so we're not going to blindly aim for the maximum.
 
+`compression=zstd` (inherited from `pool0`)
+
+:   Enable compression so anything will be tried to compress. The default algorithm (i.e. `compression=on`) is LZ4, which is very fast but not as effective. Zstd is a modern multi-threaded algorithm that is also very fast but compresses better. The default compression level is 3 (i.e. `zstd` = `zstd-3`).
+
+    Since OpenZFS 2.2, there's an "early-abort" mechanism for Zstd level 3 or up: Every block is first tried with LZ4, then Zstd-1, and if and only if both algorithms suggest that the data block would compress well, the actual algorithm will be applied and the compressed result will be written to disk. This early-abort mechanism ensures minimal CPU wasted for incompressible data.
+
 `xattr=off`
 
 :   Apparently mirror data do not need extended attributes.
