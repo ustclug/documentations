@@ -1,6 +1,6 @@
 # NFS
 
-NFS 服务器（"vdp"）是东图三个 PVE 机器的虚拟机存储，型号为 DELL PowerEdge R510。磁盘阵列由于在 2021 年 3 月初损坏，目前容量缩减到 8T（4 块 4T 蓝盘 RAID10）。除虚拟机外，NFS 也存储 LUG 成员的个人数据及 LUG FTP。NFS 服务恢复后，为了保证数据冗余性，使用[科大 Office 365 A1 账号](http://staff.ustc.edu.cn/~wf0229/office365/)和 Rclone 每天增量备份 LUG FTP 和 LUG 成员的公开数据。
+NFS 服务器（"vdp"）是东图三个 PVE 机器的虚拟机存储，型号为 DELL PowerEdge R510。磁盘阵列由于在 2021 年 3 月初损坏，目前容量缩减到 8T（4 块 4T 蓝盘 RAID10）。除虚拟机外，NFS 也存储 LUG 成员的个人数据及 LUG FTP。NFS 服务恢复后，为了保证数据冗余性，使用~~[科大 Office 365 A1 账号](http://staff.ustc.edu.cn/~wf0229/office365/)~~学校对象存储和 Rclone 每天增量备份 LUG FTP 和 LUG 成员的公开数据。
 
 vdp 的内网连接依赖于 gateway-el。
 
@@ -9,6 +9,12 @@ vdp 的内网连接依赖于 gateway-el。
     在 2021 年九月份东图的 ESXi 与 NFS 连接会出现不稳定的问题，原因目前不明。在连接方式从 NFS 4.1 更换到 NFS 3 之后，连接的不稳定不会导致虚拟机被关闭。
 
     2021/09/29 更新：这两天再次出现了严重的连接问题。调试后发现 192.168.93.0/24 的网关 192.168.93.254 (Cisco 设备) 丢包严重，而 NFS 的出口 IP 错误被设置到了与图书馆交换机相连接的 eno1，导致请求需要绕路。将此 IP 移动至 eno2，修改 sysctl 设置 ARP 过滤并重启后，目前暂时解决了问题。
+
+!!! warning "Debian Bookworm 内核问题"
+
+    6.1.x 开始的内核的 NFSv4 服务器实现可能存在潜在的问题，导致在某些情况下死锁，见 <https://lore.kernel.org/all/50d62fc9-206b-4dbc-9a9b-335450656fd0@aixigo.com/T/>。从 Buster 升级到 Bookworm 之后被坑了一次。
+
+    由于这个问题目前尚未解决，在升级 Bookworm 之后 vdp 仍使用 Bullseye 的内核（5.10.x）。
 
 ## PVE 磁盘路径与挂载参数
 
