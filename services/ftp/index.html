@@ -2188,6 +2188,21 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Notes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#debian-bookworm-kernel-issue" class="md-nav__link">
+    <span class="md-ellipsis">
+      Debian Bookworm kernel issue
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
     </ul>
@@ -2537,6 +2552,21 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Notes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#debian-bookworm-kernel-issue" class="md-nav__link">
+    <span class="md-ellipsis">
+      Debian Bookworm kernel issue
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
     </ul>
@@ -2558,12 +2588,12 @@
 
 
 <h1 id="lug-ftp">LUG FTP<a class="headerlink" href="#lug-ftp" title="Permanent link">&para;</a></h1>
-<p>Services: <a href="ftp://ftp.ustclug.org">FTP/FTPS</a>, <a href="sftp://ftp.ustclug.org">SFTP</a>, <a href="http://ftp.ustclug.org">HTTP</a>, <a href="https://ftp.ustclug.org">HTTPS</a>, <a href="afp://ftp.ustclug.org">AFP</a></p>
+<p>Services: <a href="ftp://ftp.lug.ustc.edu.cn">FTP/FTPS</a>, <a href="sftp://ftp.lug.ustc.edu.cn">SFTP</a>, <a href="http://ftp.lug.ustc.edu.cn">HTTP</a>, <a href="https://ftp.lug.ustc.edu.cn">HTTPS</a>, <a href="afp://ftp.lug.ustc.edu.cn">AFP</a></p>
 <p>Git repository: <a href="https://github.com/ustclug/lugftp">ustclug/lugftp</a></p>
 <p>Docker Hub: <a href="https://hub.docker.com/r/ustclug/ftp/">ustclug/ftp</a></p>
 <p>Server: vdp.s.ustclug.org (management ssh port 2222)</p>
 <p>Theme: <a href="https://larsjung.de/h5ai/">h5ai</a></p>
-<p>Deploy: <a href="https://git.lug.ustc.edu.cn/ustclug/docker-run-script/blob/master/ftp/ftp.sh">ftp.sh</a></p>
+<p>Deploy: <a href="https://github.com/ustclug/docker-run-script/blob/master/ftp/ftp.sh">ftp.sh</a></p>
 <h2 id="notes">Notes<a class="headerlink" href="#notes" title="Permanent link">&para;</a></h2>
 <ol>
 <li>SSL cert is required when running LUG FTP.</li>
@@ -2577,6 +2607,13 @@
 <li>Do not use Google DNS in host, as China Mobile network may drop UDP packets to 8.8.8.8. A misconfigured DNS may lead to LDAP in container broken.</li>
 <li>Port 22 is delegated to the LUG FTP container for SFTP, and SSH access to the host has been reassigned to port 2222.</li>
 </ol>
+<h3 id="debian-bookworm-kernel-issue">Debian Bookworm kernel issue<a class="headerlink" href="#debian-bookworm-kernel-issue" title="Permanent link">&para;</a></h3>
+<p>After upgrading vdp.s to Bookworm, we found NFS frequently deadlocking. We traced this down to an issue with Linux 6.1. Linux 5.10 from Bullseye works fine, so we have pinned the kernel to 5.10 for the time being.</p>
+<div class="highlight"><span class="filename">/etc/apt/preferences.d/linux-image-amd64</span><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nt">Package</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">linux-image-amd64</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nt">Pin</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">release n=bullseye-security</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="nt">Pin-Priority</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">900</span>
+</code></pre></div>
+<p>Then we manually installed the package from bullseye-security and removed the 6.1 kernel.</p>
 
 
 
