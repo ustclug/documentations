@@ -16,6 +16,14 @@ vdp 的内网连接依赖于 gateway-el。
 
     由于这个问题目前尚未解决，在升级 Bookworm 之后 vdp 仍使用 Bullseye 的内核（5.10.x）。
 
+    ```yaml title="/etc/apt/preferences.d/linux-image-amd64"
+    Package: linux-image-amd64
+    Pin: release n=bullseye-security
+    Pin-Priority: 900
+    ```
+
+    我们创建了如上文件（以便能够继续从 bullseye-security 获得内核的安全更新），然后手动删掉了所有 6.1 的内核包。
+
 ## PVE 磁盘路径与挂载参数
 
 在 storage.cfg 设置中，NFS 挂载到 `/mnt/nfs-el`，设置的参数为 `soft,noexec,nosuid,nodev`。设置为 `hard` 会导致 NFS 下线时重试无限次，大概率导致系统卡死，其他几个参数主要是为了安全。
