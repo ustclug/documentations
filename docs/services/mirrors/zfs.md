@@ -14,6 +14,9 @@ options zfs zfs_arc_min=161061273600
 # Allow up to 80% of ARC to be used for dnodes 
 options zfs zfs_arc_dnode_limit_percent=80
 
+# Allow every block to be written to ZIL
+options zfs zfs_immediate_write_sz=16777216
+
 # See man page section "ZFS I/O Scheduler"
 options zfs zfs_vdev_async_read_max_active=8
 options zfs zfs_vdev_async_read_min_active=2
