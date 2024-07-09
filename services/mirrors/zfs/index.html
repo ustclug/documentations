@@ -2696,19 +2696,22 @@
 <a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="c1"># Allow up to 80% of ARC to be used for dnodes </span>
 <a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>options<span class="w"> </span>zfs<span class="w"> </span><span class="nv">zfs_arc_dnode_limit_percent</span><span class="o">=</span><span class="m">80</span>
 <a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="c1"># See man page section &quot;ZFS I/O Scheduler&quot;</span>
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>options<span class="w"> </span>zfs<span class="w"> </span><span class="nv">zfs_vdev_async_read_max_active</span><span class="o">=</span><span class="m">8</span>
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>options<span class="w"> </span>zfs<span class="w"> </span><span class="nv">zfs_vdev_async_read_min_active</span><span class="o">=</span><span class="m">2</span>
-<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>options<span class="w"> </span>zfs<span class="w"> </span><span class="nv">zfs_vdev_scrub_max_active</span><span class="o">=</span><span class="m">5</span>
-<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>options<span class="w"> </span>zfs<span class="w"> </span><span class="nv">zfs_vdev_max_active</span><span class="o">=</span><span class="m">20000</span>
-<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>
-<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="c1"># Never throttle the ARC</span>
-<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>options<span class="w"> </span>zfs<span class="w"> </span><span class="nv">zfs_arc_lotsfree_percent</span><span class="o">=</span><span class="m">0</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="c1"># Allow every block to be written to ZIL</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>options<span class="w"> </span>zfs<span class="w"> </span><span class="nv">zfs_immediate_write_sz</span><span class="o">=</span><span class="m">16777216</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="c1"># See man page section &quot;ZFS I/O Scheduler&quot;</span>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>options<span class="w"> </span>zfs<span class="w"> </span><span class="nv">zfs_vdev_async_read_max_active</span><span class="o">=</span><span class="m">8</span>
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>options<span class="w"> </span>zfs<span class="w"> </span><span class="nv">zfs_vdev_async_read_min_active</span><span class="o">=</span><span class="m">2</span>
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>options<span class="w"> </span>zfs<span class="w"> </span><span class="nv">zfs_vdev_scrub_max_active</span><span class="o">=</span><span class="m">5</span>
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>options<span class="w"> </span>zfs<span class="w"> </span><span class="nv">zfs_vdev_max_active</span><span class="o">=</span><span class="m">20000</span>
 <a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>
-<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="c1"># Tune L2ARC</span>
-<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>options<span class="w"> </span>zfs<span class="w"> </span><span class="nv">l2arc_headroom</span><span class="o">=</span><span class="m">8</span>
-<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>options<span class="w"> </span>zfs<span class="w"> </span><span class="nv">l2arc_write_max</span><span class="o">=</span><span class="m">67108864</span>
-<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>options<span class="w"> </span>zfs<span class="w"> </span><span class="nv">l2arc_noprefetch</span><span class="o">=</span><span class="m">0</span>
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="c1"># Never throttle the ARC</span>
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>options<span class="w"> </span>zfs<span class="w"> </span><span class="nv">zfs_arc_lotsfree_percent</span><span class="o">=</span><span class="m">0</span>
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="c1"># Tune L2ARC</span>
+<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>options<span class="w"> </span>zfs<span class="w"> </span><span class="nv">l2arc_headroom</span><span class="o">=</span><span class="m">8</span>
+<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>options<span class="w"> </span>zfs<span class="w"> </span><span class="nv">l2arc_write_max</span><span class="o">=</span><span class="m">67108864</span>
+<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>options<span class="w"> </span>zfs<span class="w"> </span><span class="nv">l2arc_noprefetch</span><span class="o">=</span><span class="m">0</span>
 </code></pre></div>
 <p>Refer to <a href="https://openzfs.github.io/openzfs-docs/man/master/4/zfs.4.html"><code>zfs(4)</code></a>.</p>
 <div class="admonition note">
