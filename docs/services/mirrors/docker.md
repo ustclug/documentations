@@ -21,10 +21,14 @@ docker network create \
 创建 Docker network 的命令如下：
 
 ```shell
-docker network create --driver=bridge --subnet=172.17.4.1/24 -o "com.docker.network.bridge.name=dockerC" cernet
-docker network create --driver=bridge --subnet=172.17.5.1/24 -o "com.docker.network.bridge.name=dockerT" telecom
-docker network create --driver=bridge --subnet=172.17.6.1/24 -o "com.docker.network.bridge.name=dockerM" mobile
-docker network create --driver=bridge --subnet=172.17.7.1/24 -o "com.docker.network.bridge.name=dockerU" unicom
+docker network create --driver=bridge --subnet=172.17.4.0/24 --gateway=172.17.4.1 -o "com.docker.network.bridge.name=dockerC" cernet
+docker network create --driver=bridge --subnet=172.17.5.0/24 --gateway=172.17.5.1 -o "com.docker.network.bridge.name=dockerT" telecom
+docker network create --driver=bridge --subnet=172.17.6.0/24 --gateway=172.17.6.1 -o "com.docker.network.bridge.name=dockerM" mobile
+docker network create --driver=bridge --subnet=172.17.7.0/24 --gateway=172.17.7.1 -o "com.docker.network.bridge.name=dockerU" unicom
+
+docker network create --driver=bridge --subnet=172.17.8.0/24 --gateway=172.17.8.1 \
+  --ipv6 --subnet=fd00:6::/64 --gateway=fd00:6::1 \
+  -o "com.docker.network.bridge.name=dockerC6" cernet6
 ```
 
 对应地，主机上也配置好了策略路由，例如：
