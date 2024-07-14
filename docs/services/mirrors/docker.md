@@ -44,11 +44,11 @@ docker network create --driver=bridge --subnet=172.17.8.0/24 --gateway=172.17.8.
 [RoutingPolicyRule]
 From=172.17.4.0/24
 Table=1011
-Priority=5
+Priority=6
 [RoutingPolicyRule]
 From=172.17.8.0/24
 Table=1011
-Priority=5
+Priority=6
 ```
 
 ```ini title="/etc/systemd/network/telecom.network"
@@ -56,7 +56,7 @@ Priority=5
 [RoutingPolicyRule]
 From=172.17.5.0/24
 Table=1012
-Priority=5
+Priority=6
 ```
 
 `mobile.network` 和 `unicom.network` 也类似。
