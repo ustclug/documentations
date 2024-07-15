@@ -2,16 +2,72 @@
 
 ## Configuration
 
+### Pool setup (mirrors2)
+
+```shell
+zpool create pool0 \
+  -O canmount=off \
+  -O xattr=sa \
+  -O relatime=on \
+  -O compress=zstd \
+  raidz2 \
+  ata-HGST_HUS726060ALE610_K1GKVAAD \
+  ata-HGST_HUS726060ALE610_K1GHTLND \
+  ata-HGST_HUS726060ALE610_K1GHTVWD \
+  ata-HGST_HUS726060ALE610_K1GKNJUD \
+  ata-HGST_HUS726060ALE610_K1GK5KND \
+  ata-HGST_HUS726060ALE610_K1GK9GXD \
+  raidz2 \
+  ata-HGST_HUS726060ALE610_NCH13D2V \
+  ata-HGST_HUS726T6TALE6L4_V9KWJ1PL \
+  ata-HGST_HUS726T6TALE6L4_V9HU810L \
+  ata-HGST_HUS726060ALE610_NCH141WV \
+  ata-HGST_HUS726060ALE610_K1GKPDSD \
+  ata-HGST_HUS726T6TALE6L4_V9KTTT5L \
+  cache nvme0n1
+```
+
+!!! note
+
+    The `-O` option applies to the root dataset.
+
+??? example "Create ZFS (2016)"
+
+    ```shell
+    zpool create -f pool0 \
+      raidz3 \
+      ata-HGST_HUS726060ALE610_K1GHTLND \
+      ata-HGST_HUS726060ALE610_K1GHTVWD \
+      ata-HGST_HUS726060ALE610_K1GK5KND \
+      ata-HGST_HUS726060ALE610_K1GK9GXD \
+      ata-HGST_HUS726060ALE610_K1GKNJUD \
+      ata-HGST_HUS726060ALE610_K1GKNP5D \
+      ata-HGST_HUS726060ALE610_K1GKNR6D \
+      ata-HGST_HUS726060ALE610_K1GKPDSD \
+      ata-HGST_HUS726060ALE610_K1GKVAAD \
+      ata-HGST_HUS726060ALE610_NCH04T5V \
+      ata-HGST_HUS726060ALE610_NCH13D2V \
+      spare \
+      ata-HGST_HUS726060ALE610_NCH141WV \
+      log mirror \
+      ata-INTEL_SSDSC2BB240G6_PHWA64410400240AGN-part1 \
+      ata-INTEL_SSDSC2BB240G6_PHWA6441041N240AGN-part1 \
+      cache \
+      ata-INTEL_SSDSC2BB240G6_PHWA64410400240AGN-part2 \
+      ata-INTEL_SSDSC2BB240G6_PHWA6441041N240AGN-part2
+    ```
+
 ### ZFS kernel module
 
 For OpenZFS 2.2:
 
 ```shell title="/etc/modprobe.d/zfs.conf"
-# Set ARC size to 150 GiB
-options zfs zfs_arc_max=161061273600
-options zfs zfs_arc_min=161061273600
+# Set ARC size to 160-200 GiB
+options zfs zfs_arc_max=214748364800
+options zfs zfs_arc_min=171798691840
+options zfs zfs_arc_sys_free=17179869184
 
-# Allow up to 80% of ARC to be used for dnodes 
+# Allow up to 80% of ARC to be used for dnodes
 options zfs zfs_arc_dnode_limit_percent=80
 
 # Allow every block to be written to ZIL
