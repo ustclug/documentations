@@ -1785,6 +1785,15 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#pool-setup-mirrors2" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pool setup (mirrors2)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#zfs-kernel-module" class="md-nav__link">
     <span class="md-ellipsis">
       ZFS kernel module
@@ -2606,6 +2615,15 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#pool-setup-mirrors2" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pool setup (mirrors2)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#zfs-kernel-module" class="md-nav__link">
     <span class="md-ellipsis">
       ZFS kernel module
@@ -2687,31 +2705,83 @@
 
 <h1 id="zfs">ZFS<a class="headerlink" href="#zfs" title="Permanent link">&para;</a></h1>
 <h2 id="configuration">Configuration<a class="headerlink" href="#configuration" title="Permanent link">&para;</a></h2>
+<h3 id="pool-setup-mirrors2">Pool setup (mirrors2)<a class="headerlink" href="#pool-setup-mirrors2" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>zpool<span class="w"> </span>create<span class="w"> </span>pool0<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">  </span>-O<span class="w"> </span><span class="nv">canmount</span><span class="o">=</span>off<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">  </span>-O<span class="w"> </span><span class="nv">xattr</span><span class="o">=</span>sa<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">  </span>-O<span class="w"> </span><span class="nv">relatime</span><span class="o">=</span>on<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">  </span>-O<span class="w"> </span><span class="nv">compress</span><span class="o">=</span>zstd<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">  </span>raidz2<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">  </span>ata-HGST_HUS726060ALE610_K1GKVAAD<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">  </span>ata-HGST_HUS726060ALE610_K1GHTLND<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">  </span>ata-HGST_HUS726060ALE610_K1GHTVWD<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">  </span>ata-HGST_HUS726060ALE610_K1GKNJUD<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="w">  </span>ata-HGST_HUS726060ALE610_K1GK5KND<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="w">  </span>ata-HGST_HUS726060ALE610_K1GK9GXD<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="w">  </span>raidz2<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="w">  </span>ata-HGST_HUS726060ALE610_NCH13D2V<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="w">  </span>ata-HGST_HUS726T6TALE6L4_V9KWJ1PL<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="w">  </span>ata-HGST_HUS726T6TALE6L4_V9HU810L<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="w">  </span>ata-HGST_HUS726060ALE610_NCH141WV<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="w">  </span>ata-HGST_HUS726060ALE610_K1GKPDSD<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="w">  </span>ata-HGST_HUS726T6TALE6L4_V9KTTT5L<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="w">  </span>cache<span class="w"> </span>nvme0n1
+</code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <code>-O</code> option applies to the root dataset.</p>
+</div>
+<details class="example">
+<summary>Create ZFS (2016)</summary>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>zpool<span class="w"> </span>create<span class="w"> </span>-f<span class="w"> </span>pool0<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span>raidz3<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span>ata-HGST_HUS726060ALE610_K1GHTLND<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">  </span>ata-HGST_HUS726060ALE610_K1GHTVWD<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">  </span>ata-HGST_HUS726060ALE610_K1GK5KND<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">  </span>ata-HGST_HUS726060ALE610_K1GK9GXD<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">  </span>ata-HGST_HUS726060ALE610_K1GKNJUD<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">  </span>ata-HGST_HUS726060ALE610_K1GKNP5D<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">  </span>ata-HGST_HUS726060ALE610_K1GKNR6D<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">  </span>ata-HGST_HUS726060ALE610_K1GKPDSD<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="w">  </span>ata-HGST_HUS726060ALE610_K1GKVAAD<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="w">  </span>ata-HGST_HUS726060ALE610_NCH04T5V<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="w">  </span>ata-HGST_HUS726060ALE610_NCH13D2V<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="w">  </span>spare<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="w">  </span>ata-HGST_HUS726060ALE610_NCH141WV<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="w">  </span>log<span class="w"> </span>mirror<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="w">  </span>ata-INTEL_SSDSC2BB240G6_PHWA64410400240AGN-part1<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a><span class="w">  </span>ata-INTEL_SSDSC2BB240G6_PHWA6441041N240AGN-part1<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a><span class="w">  </span>cache<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a><span class="w">  </span>ata-INTEL_SSDSC2BB240G6_PHWA64410400240AGN-part2<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a><span class="w">  </span>ata-INTEL_SSDSC2BB240G6_PHWA6441041N240AGN-part2
+</code></pre></div>
+</details>
 <h3 id="zfs-kernel-module">ZFS kernel module<a class="headerlink" href="#zfs-kernel-module" title="Permanent link">&para;</a></h3>
 <p>For OpenZFS 2.2:</p>
-<div class="highlight"><span class="filename">/etc/modprobe.d/zfs.conf</span><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># Set ARC size to 150 GiB</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>options<span class="w"> </span>zfs<span class="w"> </span><span class="nv">zfs_arc_max</span><span class="o">=</span><span class="m">161061273600</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>options<span class="w"> </span>zfs<span class="w"> </span><span class="nv">zfs_arc_min</span><span class="o">=</span><span class="m">161061273600</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="c1"># Allow up to 80% of ARC to be used for dnodes </span>
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>options<span class="w"> </span>zfs<span class="w"> </span><span class="nv">zfs_arc_dnode_limit_percent</span><span class="o">=</span><span class="m">80</span>
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="c1"># Allow every block to be written to ZIL</span>
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>options<span class="w"> </span>zfs<span class="w"> </span><span class="nv">zfs_immediate_write_sz</span><span class="o">=</span><span class="m">16777216</span>
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>
-<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="c1"># See man page section &quot;ZFS I/O Scheduler&quot;</span>
-<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>options<span class="w"> </span>zfs<span class="w"> </span><span class="nv">zfs_vdev_async_read_max_active</span><span class="o">=</span><span class="m">8</span>
-<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>options<span class="w"> </span>zfs<span class="w"> </span><span class="nv">zfs_vdev_async_read_min_active</span><span class="o">=</span><span class="m">2</span>
-<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>options<span class="w"> </span>zfs<span class="w"> </span><span class="nv">zfs_vdev_scrub_max_active</span><span class="o">=</span><span class="m">5</span>
-<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>options<span class="w"> </span>zfs<span class="w"> </span><span class="nv">zfs_vdev_max_active</span><span class="o">=</span><span class="m">20000</span>
-<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>
-<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="c1"># Never throttle the ARC</span>
-<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>options<span class="w"> </span>zfs<span class="w"> </span><span class="nv">zfs_arc_lotsfree_percent</span><span class="o">=</span><span class="m">0</span>
-<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>
-<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="c1"># Tune L2ARC</span>
-<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>options<span class="w"> </span>zfs<span class="w"> </span><span class="nv">l2arc_headroom</span><span class="o">=</span><span class="m">8</span>
-<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>options<span class="w"> </span>zfs<span class="w"> </span><span class="nv">l2arc_write_max</span><span class="o">=</span><span class="m">67108864</span>
-<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>options<span class="w"> </span>zfs<span class="w"> </span><span class="nv">l2arc_noprefetch</span><span class="o">=</span><span class="m">0</span>
+<div class="highlight"><span class="filename">/etc/modprobe.d/zfs.conf</span><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># Set ARC size to 160-200 GiB</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>options<span class="w"> </span>zfs<span class="w"> </span><span class="nv">zfs_arc_max</span><span class="o">=</span><span class="m">214748364800</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>options<span class="w"> </span>zfs<span class="w"> </span><span class="nv">zfs_arc_min</span><span class="o">=</span><span class="m">171798691840</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>options<span class="w"> </span>zfs<span class="w"> </span><span class="nv">zfs_arc_sys_free</span><span class="o">=</span><span class="m">17179869184</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="c1"># Allow up to 80% of ARC to be used for dnodes</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>options<span class="w"> </span>zfs<span class="w"> </span><span class="nv">zfs_arc_dnode_limit_percent</span><span class="o">=</span><span class="m">80</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="c1"># Allow every block to be written to ZIL</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>options<span class="w"> </span>zfs<span class="w"> </span><span class="nv">zfs_immediate_write_sz</span><span class="o">=</span><span class="m">16777216</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="c1"># See man page section &quot;ZFS I/O Scheduler&quot;</span>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>options<span class="w"> </span>zfs<span class="w"> </span><span class="nv">zfs_vdev_async_read_max_active</span><span class="o">=</span><span class="m">8</span>
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>options<span class="w"> </span>zfs<span class="w"> </span><span class="nv">zfs_vdev_async_read_min_active</span><span class="o">=</span><span class="m">2</span>
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a>options<span class="w"> </span>zfs<span class="w"> </span><span class="nv">zfs_vdev_scrub_max_active</span><span class="o">=</span><span class="m">5</span>
+<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a>options<span class="w"> </span>zfs<span class="w"> </span><span class="nv">zfs_vdev_max_active</span><span class="o">=</span><span class="m">20000</span>
+<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a>
+<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a><span class="c1"># Never throttle the ARC</span>
+<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a>options<span class="w"> </span>zfs<span class="w"> </span><span class="nv">zfs_arc_lotsfree_percent</span><span class="o">=</span><span class="m">0</span>
+<a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a>
+<a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a><span class="c1"># Tune L2ARC</span>
+<a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a>options<span class="w"> </span>zfs<span class="w"> </span><span class="nv">l2arc_headroom</span><span class="o">=</span><span class="m">8</span>
+<a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a>options<span class="w"> </span>zfs<span class="w"> </span><span class="nv">l2arc_write_max</span><span class="o">=</span><span class="m">67108864</span>
+<a id="__codelineno-2-24" name="__codelineno-2-24" href="#__codelineno-2-24"></a>options<span class="w"> </span>zfs<span class="w"> </span><span class="nv">l2arc_noprefetch</span><span class="o">=</span><span class="m">0</span>
 </code></pre></div>
 <p>Refer to <a href="https://openzfs.github.io/openzfs-docs/man/master/4/zfs.4.html"><code>zfs(4)</code></a>.</p>
 <div class="admonition note">
@@ -2720,23 +2790,23 @@
 </div>
 <h3 id="dataset-properties">Dataset properties<a class="headerlink" href="#dataset-properties" title="Permanent link">&para;</a></h3>
 <p>On mirrors2:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>zfs<span class="w"> </span>create<span class="w"> </span>-o<span class="w"> </span><span class="nv">compress</span><span class="o">=</span>zstd-8<span class="w"> </span>-o<span class="w"> </span><span class="nv">recordsize</span><span class="o">=</span>1M<span class="w"> </span>-o<span class="w"> </span><span class="nv">atime</span><span class="o">=</span>off<span class="w"> </span>pool0/backup
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>zfs<span class="w"> </span>create<span class="w"> </span>pool0/backup/rootfs<span class="w"> </span><span class="c1"># inherit everything</span>
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>zfs<span class="w"> </span>create<span class="w"> </span>-o<span class="w"> </span><span class="nv">acltype</span><span class="o">=</span>posix<span class="w"> </span>pool0/backup/oldlog
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>zfs<span class="w"> </span>create<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">  </span>-o<span class="w"> </span><span class="nv">mountpoint</span><span class="o">=</span>/srv/repo<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">  </span>-o<span class="w"> </span><span class="nv">recordsize</span><span class="o">=</span>1M<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">  </span>-o<span class="w"> </span><span class="nv">xattr</span><span class="o">=</span>off<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">  </span>-o<span class="w"> </span><span class="nv">atime</span><span class="o">=</span>off<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="w">  </span>-o<span class="w"> </span><span class="nv">setuid</span><span class="o">=</span>off<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="w">  </span>-o<span class="w"> </span><span class="nv">exec</span><span class="o">=</span>off<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="w">  </span>-o<span class="w"> </span><span class="nv">devices</span><span class="o">=</span>off<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="w">  </span>-o<span class="w"> </span><span class="nv">sync</span><span class="o">=</span>disabled<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="w">  </span>-o<span class="w"> </span><span class="nv">secondarycache</span><span class="o">=</span>metadata<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="w">  </span>-o<span class="w"> </span><span class="nv">redundant_metadata</span><span class="o">=</span>some<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="w">  </span>pool0/repo
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>zfs<span class="w"> </span>create<span class="w"> </span>-o<span class="w"> </span><span class="nv">compress</span><span class="o">=</span>zstd-8<span class="w"> </span>-o<span class="w"> </span><span class="nv">recordsize</span><span class="o">=</span>1M<span class="w"> </span>-o<span class="w"> </span><span class="nv">atime</span><span class="o">=</span>off<span class="w"> </span>pool0/backup
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>zfs<span class="w"> </span>create<span class="w"> </span>pool0/backup/rootfs<span class="w"> </span><span class="c1"># inherit everything</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>zfs<span class="w"> </span>create<span class="w"> </span>-o<span class="w"> </span><span class="nv">acltype</span><span class="o">=</span>posix<span class="w"> </span>pool0/backup/oldlog
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>zfs<span class="w"> </span>create<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">  </span>-o<span class="w"> </span><span class="nv">mountpoint</span><span class="o">=</span>/srv/repo<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">  </span>-o<span class="w"> </span><span class="nv">recordsize</span><span class="o">=</span>1M<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="w">  </span>-o<span class="w"> </span><span class="nv">xattr</span><span class="o">=</span>off<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="w">  </span>-o<span class="w"> </span><span class="nv">atime</span><span class="o">=</span>off<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="w">  </span>-o<span class="w"> </span><span class="nv">setuid</span><span class="o">=</span>off<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="w">  </span>-o<span class="w"> </span><span class="nv">exec</span><span class="o">=</span>off<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="w">  </span>-o<span class="w"> </span><span class="nv">devices</span><span class="o">=</span>off<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="w">  </span>-o<span class="w"> </span><span class="nv">sync</span><span class="o">=</span>disabled<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a><span class="w">  </span>-o<span class="w"> </span><span class="nv">secondarycache</span><span class="o">=</span>metadata<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a><span class="w">  </span>-o<span class="w"> </span><span class="nv">redundant_metadata</span><span class="o">=</span>some<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a><span class="w">  </span>pool0/repo
 </code></pre></div>
 <p>Refer to <a href="https://openzfs.github.io/openzfs-docs/man/master/7/zfsprops.7.html"><code>zfsprops(7)</code></a>.</p>
 <h4 id="considerations">Considerations<a class="headerlink" href="#considerations" title="Permanent link">&para;</a></h4>
@@ -2779,22 +2849,22 @@
 </dd>
 </dl>
 <h2 id="common-operations">Common Operations<a class="headerlink" href="#common-operations" title="Permanent link">&para;</a></h2>
-<div class="highlight"><span class="filename">Get zpool status</span><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>zpool<span class="w"> </span>status
+<div class="highlight"><span class="filename">Get zpool status</span><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>zpool<span class="w"> </span>status
 </code></pre></div>
-<div class="highlight"><span class="filename">Get IO status</span><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>zpool<span class="w"> </span>iostat<span class="w"> </span>-v<span class="w"> </span><span class="m">1</span>
+<div class="highlight"><span class="filename">Get IO status</span><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>zpool<span class="w"> </span>iostat<span class="w"> </span>-v<span class="w"> </span><span class="m">1</span>
 </code></pre></div>
-<div class="highlight"><span class="filename">Replace Disk</span><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>zpool<span class="w"> </span>replace<span class="w"> </span>pool0<span class="w"> </span>old-disk<span class="w"> </span>new-disk
+<div class="highlight"><span class="filename">Replace Disk</span><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>zpool<span class="w"> </span>replace<span class="w"> </span>pool0<span class="w"> </span>old-disk<span class="w"> </span>new-disk
 </code></pre></div>
-<div class="highlight"><span class="filename">New ZFS file system</span><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>zfs<span class="w"> </span>create<span class="w"> </span><span class="o">[</span>-o<span class="w"> </span><span class="nv">option</span><span class="o">=</span>value<span class="w"> </span>...<span class="o">]</span><span class="w"> </span>&lt;filesystem&gt;
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>
-<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="c1"># Example</span>
-<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>zfs<span class="w"> </span>create<span class="w"> </span>pool0/repo/debian
+<div class="highlight"><span class="filename">New ZFS file system</span><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>zfs<span class="w"> </span>create<span class="w"> </span><span class="o">[</span>-o<span class="w"> </span><span class="nv">option</span><span class="o">=</span>value<span class="w"> </span>...<span class="o">]</span><span class="w"> </span>&lt;filesystem&gt;
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="c1"># Example</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>zfs<span class="w"> </span>create<span class="w"> </span>pool0/repo/debian
 </code></pre></div>
 <p>If <code>mountpoint</code> is not specified, then it's inherited from the parent with a subpath appended. E.g. when <code>pool0/example</code> is mounted on <code>/mnt/haha</code> then <code>pool0/example/test</code> will by default mount on <code>/mnt/haha/test</code>.</p>
-<div class="highlight"><span class="filename">Destory ZFS file system</span><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>zfs<span class="w"> </span>destroy<span class="w"> </span>&lt;filesystem&gt;
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>
-<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="c1"># Example</span>
-<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>zfs<span class="w"> </span>destroy<span class="w"> </span>pool0/repo/debian
+<div class="highlight"><span class="filename">Destory ZFS file system</span><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>zfs<span class="w"> </span>destroy<span class="w"> </span>&lt;filesystem&gt;
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="c1"># Example</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>zfs<span class="w"> </span>destroy<span class="w"> </span>pool0/repo/debian
 </code></pre></div>
 <h3 id="traps">Traps<a class="headerlink" href="#traps" title="Permanent link">&para;</a></h3>
 <p><del>Do <strong>NOT</strong> install <code>zfs-dkms</code> and related packages from Debian backports repositories. They'll easily break when upgrading.</del></p>
