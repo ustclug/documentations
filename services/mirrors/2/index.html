@@ -2542,6 +2542,9 @@
 </table>
 <p>曙光 I620-G20 <a href="https://ftp.lug.ustc.edu.cn/ebook/sugon-I620-G20.iso">导航光盘</a></p>
 <h2 id="networking">Networking<a class="headerlink" href="#networking" title="Permanent link">&para;</a></h2>
+<p>mirrors2 上的网络配置自 2024-07-19 维护后也切换到了 systemd-networkd 方案，文档可以参考 <a href="../4/networking/">mirrors4</a>。</p>
+<details class="info">
+<summary>Old info</summary>
 <p>mirrors2 上的网络使用默认的 ifupdown 配置。</p>
 <p>在 <code>/etc/network/interfaces.d</code> 中存放着接口配置，使用 <code>ifup</code>/<code>ifdown</code> 来启用/停用某一接口。</p>
 <div class="admonition question">
@@ -2549,6 +2552,7 @@
 <p>在某次 mirrors2 离线故障中，<del>误操作的 <code>systemctl restart networking</code> 返回了失败的结果，从而导致了 mirrors2 从某一网络接口断开（猜测）</del>（实际原因见下），重启所有接口修复了问题：<code>ifdown -a &amp;&amp; ifup -a</code></p>
 <p>实际原因是 bridge interface 连接的那个 interface 在 ifupdown 的 config 里的配置方式是 <code>static</code> 的，在启用 bridge interface 时会自动更改配置导致 offline。改成 <code>manual</code> 禁止它的自动行为之后就没事了。</p>
 </div>
+</details>
 
 
 
