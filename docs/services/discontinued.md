@@ -56,3 +56,7 @@ server: docker2.s.ustclug.org
 deploy: /srv/webhook/ustclife.sh
 
 webhook from DockerHub: /srv/webhook/hooks.json
+
+## Wordpress-based servers.ustclug.org & planet.ustclug.org
+
+为了减小攻击面与维护成本，servers.ustclug.org 迁移到了基于 Jekyll 的方案；planet.ustclug.org 在早前已经整合到了 LUG 主站中。
