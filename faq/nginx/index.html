@@ -2422,6 +2422,54 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#openresty" class="md-nav__link">
+    <span class="md-ellipsis">
+      Openresty
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Openresty">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#lua" class="md-nav__link">
+    <span class="md-ellipsis">
+      Lua 相关
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Lua 相关">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#rewritereturn-access_by" class="md-nav__link">
+    <span class="md-ellipsis">
+      rewrite/return 与 access_by
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ngxctx" class="md-nav__link">
+    <span class="md-ellipsis">
+      ngx.ctx
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -2575,6 +2623,54 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#openresty" class="md-nav__link">
+    <span class="md-ellipsis">
+      Openresty
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Openresty">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#lua" class="md-nav__link">
+    <span class="md-ellipsis">
+      Lua 相关
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Lua 相关">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#rewritereturn-access_by" class="md-nav__link">
+    <span class="md-ellipsis">
+      rewrite/return 与 access_by
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ngxctx" class="md-nav__link">
+    <span class="md-ellipsis">
+      ngx.ctx
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -2624,6 +2720,98 @@
 <p class="admonition-title">fstab 与 systemd</p>
 <p>调整 fstab 之后，需要执行 <code>systemctl daemon-reload</code>，否则 systemd 可能会在第二日凌晨挂载已被注释的磁盘项。</p>
 </div>
+<h2 id="openresty">Openresty<a class="headerlink" href="#openresty" title="Permanent link">&para;</a></h2>
+<h3 id="lua">Lua 相关<a class="headerlink" href="#lua" title="Permanent link">&para;</a></h3>
+<p><img alt="Order of Lua Nginx Module Directives" src="https://cloud.githubusercontent.com/assets/2137369/15272097/77d1c09e-1a37-11e6-97ef-d9767035fc3e.png" /></p>
+<p>这里关注三个相关的步骤：<code>access_by</code>, <code>log_by</code> 和 <code>header_filter_by</code>，以及 <code>ngx.ctx</code> 和 <code>ngx.var</code> 的注意事项。</p>
+<p>测试用 server 块：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">server</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">    </span><span class="kn">listen</span><span class="w"> </span><span class="mi">80</span><span class="w"> </span><span class="s">default_server</span><span class="p">;</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span><span class="kn">listen</span><span class="w"> </span><span class="s">[::]:80</span><span class="w"> </span><span class="s">default_server</span><span class="p">;</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">    </span><span class="kn">root</span><span class="w"> </span><span class="s">/var/www/html</span><span class="p">;</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">    </span><span class="kn">index</span><span class="w"> </span><span class="s">index.html</span><span class="w"> </span><span class="s">index.htm</span><span class="w"> </span><span class="s">index.nginx-debian.html</span><span class="p">;</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">    </span><span class="kn">server_name</span><span class="w"> </span><span class="s">_</span><span class="p">;</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="w">    </span><span class="kn">set</span><span class="w"> </span><span class="nv">$testvar</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p">;</span>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="w">    </span><span class="kn">access_by_lua_file</span><span class="w"> </span><span class="s">/etc/nginx/lua/access.lua</span><span class="p">;</span>
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="w">    </span><span class="kn">header_filter_by_lua_file</span><span class="w"> </span><span class="s">/etc/nginx/lua/header_filter.lua</span><span class="p">;</span>
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="w">    </span><span class="kn">log_by_lua_file</span><span class="w"> </span><span class="s">/etc/nginx/lua/log.lua</span><span class="p">;</span>
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="w">    </span><span class="kn">location</span><span class="w"> </span><span class="s">/</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="w">        </span><span class="kn">try_files</span><span class="w"> </span><span class="nv">$uri</span><span class="w"> </span><span class="nv">$uri/</span><span class="w"> </span><span class="p">=</span><span class="mi">404</span><span class="p">;</span>
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="w">    </span><span class="kn">location</span><span class="w"> </span><span class="s">/lua-test0</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a><span class="w">        </span><span class="kn">return</span><span class="w"> </span><span class="mi">302</span><span class="w"> </span><span class="s">/lua-test1</span><span class="p">;</span>
+<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>
+<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a><span class="w">    </span><span class="kn">location</span><span class="w"> </span><span class="s">/lua-test1</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a><span class="w">        </span><span class="kn">return</span><span class="w"> </span><span class="mi">200</span><span class="p">;</span>
+<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>
+<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a><span class="w">    </span><span class="kn">location</span><span class="w"> </span><span class="s">/lua-test2</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a><span class="w">        </span><span class="kn">try_files</span><span class="w"> </span><span class="nv">$uri</span><span class="w"> </span><span class="nv">$uri/</span><span class="w"> </span><span class="s">@internal1</span><span class="p">;</span>
+<a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>
+<a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a><span class="w">    </span><span class="kn">location</span><span class="w"> </span><span class="s">@internal1</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a><span class="w">        </span><span class="kn">return</span><span class="w"> </span><span class="mi">418</span><span class="p">;</span>
+<a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a><span class="p">}</span>
+</code></pre></div>
+<p>三个 lua:</p>
+<div class="highlight"><span class="filename">/etc/nginx/lua/access.lua</span><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kd">local</span> <span class="n">ctx</span> <span class="o">=</span> <span class="n">ngx</span><span class="p">.</span><span class="n">ctx</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="n">ctx</span><span class="p">.</span><span class="n">testvar</span> <span class="o">=</span> <span class="s2">&quot;testvar&quot;</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="n">ngx</span><span class="p">.</span><span class="n">var</span><span class="p">.</span><span class="n">testvar</span> <span class="o">=</span> <span class="s2">&quot;testvar&quot;</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="n">ngx</span><span class="p">.</span><span class="n">log</span><span class="p">(</span><span class="n">ngx</span><span class="p">.</span><span class="n">ERR</span><span class="p">,</span> <span class="s2">&quot;ctx &quot;</span><span class="p">,</span> <span class="n">ctx</span><span class="p">.</span><span class="n">testvar</span><span class="p">)</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="n">ngx</span><span class="p">.</span><span class="n">log</span><span class="p">(</span><span class="n">ngx</span><span class="p">.</span><span class="n">ERR</span><span class="p">,</span> <span class="s2">&quot;var &quot;</span><span class="p">,</span> <span class="n">ngx</span><span class="p">.</span><span class="n">var</span><span class="p">.</span><span class="n">testvar</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><span class="filename">/etc/nginx/lua/header_filter.lua</span><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kd">local</span> <span class="n">ctx</span> <span class="o">=</span> <span class="n">ngx</span><span class="p">.</span><span class="n">ctx</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="n">ngx</span><span class="p">.</span><span class="n">log</span><span class="p">(</span><span class="n">ngx</span><span class="p">.</span><span class="n">ERR</span><span class="p">,</span> <span class="s2">&quot;ctx &quot;</span><span class="p">,</span> <span class="n">ctx</span><span class="p">.</span><span class="n">testvar</span><span class="p">)</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="n">ngx</span><span class="p">.</span><span class="n">log</span><span class="p">(</span><span class="n">ngx</span><span class="p">.</span><span class="n">ERR</span><span class="p">,</span> <span class="s2">&quot;var &quot;</span><span class="p">,</span> <span class="n">ngx</span><span class="p">.</span><span class="n">var</span><span class="p">.</span><span class="n">testvar</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><span class="filename">/etc/nginx/lua/log.lua</span><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kd">local</span> <span class="n">ctx</span> <span class="o">=</span> <span class="n">ngx</span><span class="p">.</span><span class="n">ctx</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="n">ngx</span><span class="p">.</span><span class="n">log</span><span class="p">(</span><span class="n">ngx</span><span class="p">.</span><span class="n">ERR</span><span class="p">,</span> <span class="s2">&quot;ctx &quot;</span><span class="p">,</span> <span class="n">ctx</span><span class="p">.</span><span class="n">testvar</span><span class="p">)</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="n">ngx</span><span class="p">.</span><span class="n">log</span><span class="p">(</span><span class="n">ngx</span><span class="p">.</span><span class="n">ERR</span><span class="p">,</span> <span class="s2">&quot;var &quot;</span><span class="p">,</span> <span class="n">ngx</span><span class="p">.</span><span class="n">var</span><span class="p">.</span><span class="n">testvar</span><span class="p">)</span>
+</code></pre></div>
+<h4 id="rewritereturn-access_by">rewrite/return 与 access_by<a class="headerlink" href="#rewritereturn-access_by" title="Permanent link">&para;</a></h4>
+<p>访问 localhost/lua-test0 或者 localhost/lua-test1，没有 access.lua 的输出：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>2024/07/22 02:50:16 [error] 9465#9465: *12 [lua] header_filter.lua:3: ctx nil, client: 127.0.0.1, server: _, request: &quot;GET /lua-test0 HTTP/1.1&quot;, host: &quot;localhost&quot;
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>2024/07/22 02:50:16 [error] 9465#9465: *12 [lua] header_filter.lua:4: var nil, client: 127.0.0.1, server: _, request: &quot;GET /lua-test0 HTTP/1.1&quot;, host: &quot;localhost&quot;
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>2024/07/22 02:50:16 [error] 9465#9465: *12 [lua] log.lua:3: ctx nil while logging request, client: 127.0.0.1, server: _, request: &quot;GET /lua-test0 HTTP/1.1&quot;, host: &quot;localhost&quot;
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>2024/07/22 02:50:16 [error] 9465#9465: *12 [lua] log.lua:4: var nil while logging request, client: 127.0.0.1, server: _, request: &quot;GET /lua-test0 HTTP/1.1&quot;, host: &quot;localhost&quot;
+</code></pre></div>
+<p>如果访问 localhost/somefile，是有输出的：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>2024/07/22 03:03:42 [error] 9628#9628: *19 [lua] access.lua:4: ctx testvar, client: 127.0.0.1, server: _, request: &quot;GET /somefile HTTP/1.1&quot;, host: &quot;localhost&quot;
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>2024/07/22 03:03:42 [error] 9628#9628: *19 [lua] access.lua:5: var testvar, client: 127.0.0.1, server: _, request: &quot;GET /somefile HTTP/1.1&quot;, host: &quot;localhost&quot;
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>2024/07/22 03:03:42 [error] 9628#9628: *19 [lua] header_filter.lua:3: ctx testvar, client: 127.0.0.1, server: _, request: &quot;GET /somefile HTTP/1.1&quot;, host: &quot;localhost&quot;
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>2024/07/22 03:03:42 [error] 9628#9628: *19 [lua] header_filter.lua:4: var testvar, client: 127.0.0.1, server: _, request: &quot;GET /somefile HTTP/1.1&quot;, host: &quot;localhost&quot;
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>2024/07/22 03:03:42 [error] 9628#9628: *19 [lua] log.lua:3: ctx testvar while logging request, client: 127.0.0.1, server: _, request: &quot;GET /somefile HTTP/1.1&quot;, host: &quot;localhost&quot;
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>2024/07/22 03:03:42 [error] 9628#9628: *19 [lua] log.lua:4: var testvar while logging request, client: 127.0.0.1, server: _, request: &quot;GET /somefile HTTP/1.1&quot;, host: &quot;localhost&quot;
+</code></pre></div>
+<p><strong>这是因为 <code>return</code> 语句发生在 <code>rewrite</code> 阶段，因此跳过了 <code>access</code> 阶段，<code>access_by_lua_block</code> 就没有被执行</strong>。因此 Content phase 中的程序不能假设 access_by 肯定被执行了。</p>
+<h4 id="ngxctx"><code>ngx.ctx</code><a class="headerlink" href="#ngxctx" title="Permanent link">&para;</a></h4>
+<p><a href="https://github.com/openresty/lua-nginx-module?tab=readme-ov-file#ngxctx">https://github.com/openresty/lua-nginx-module?tab=readme-ov-file#ngxctx</a></p>
+<p>支持任意 lua 数据结构的，与单独 request 绑定的状态变量。同时也不需要像 <code>ngx.var</code> 一样提前 <code>set</code>。</p>
+<div class="admonition warning">
+<p class="admonition-title">小心内部跳转</p>
+<blockquote>
+<p>Internal redirects (triggered by nginx configuration directives like <code>error_page</code>, <code>try_files</code>, <code>index</code> and etc) will destroy the original request <code>ngx.ctx</code> data (if any) and the new request will have an empty ngx.ctx table.</p>
+</blockquote>
+</div>
+<p>访问 localhost/lua-test2（假设前面的 <code>try_files</code> 失败）：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>2024/07/22 03:10:15 [error] 9630#9630: *22 [lua] access.lua:4: ctx testvar, client: 127.0.0.1, server: _, request: &quot;GET /lua-test2 HTTP/1.1&quot;, host: &quot;localhost&quot;
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>2024/07/22 03:10:15 [error] 9630#9630: *22 [lua] access.lua:5: var testvar, client: 127.0.0.1, server: _, request: &quot;GET /lua-test2 HTTP/1.1&quot;, host: &quot;localhost&quot;
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>2024/07/22 03:10:15 [error] 9630#9630: *22 [lua] header_filter.lua:3: ctx nil, client: 127.0.0.1, server: _, request: &quot;GET /lua-test2 HTTP/1.1&quot;, host: &quot;localhost&quot;
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>2024/07/22 03:10:15 [error] 9630#9630: *22 [lua] header_filter.lua:4: var testvar, client: 127.0.0.1, server: _, request: &quot;GET /lua-test2 HTTP/1.1&quot;, host: &quot;localhost&quot;
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>2024/07/22 03:10:15 [error] 9630#9630: *22 [lua] log.lua:3: ctx nil while logging request, client: 127.0.0.1, server: _, request: &quot;GET /lua-test2 HTTP/1.1&quot;, host: &quot;localhost&quot;
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>2024/07/22 03:10:15 [error] 9630#9630: *22 [lua] log.lua:4: var testvar while logging request, client: 127.0.0.1, server: _, request: &quot;GET /lua-test2 HTTP/1.1&quot;, host: &quot;localhost&quot;
+</code></pre></div>
+<p>这个问题对一些需要在 access 中做一些事情，将状态存储在 <code>ngx.ctx</code> 中，然后在 header_filter 或者 log 中取消对应效果的逻辑（例如 <a href="https://github.com/openresty/lua-resty-limit-traffic/blob/master/lib/resty/limit/conn.md">resty.limit.conn</a> 在访问的文件<em>当前</em>不存在的情况下）来说是致命的。</p>
 
 
 
