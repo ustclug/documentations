@@ -148,7 +148,7 @@ ngx.log(ngx.ERR, "var ", ngx.var.testvar)
 
 访问 localhost/lua-test2（假设前面的 `try_files` 失败）：
 
-```
+```log
 2024/07/22 03:10:15 [error] 9630#9630: *22 [lua] access.lua:4: ctx testvar, client: 127.0.0.1, server: _, request: "GET /lua-test2 HTTP/1.1", host: "localhost"
 2024/07/22 03:10:15 [error] 9630#9630: *22 [lua] access.lua:5: var testvar, client: 127.0.0.1, server: _, request: "GET /lua-test2 HTTP/1.1", host: "localhost"
 2024/07/22 03:10:15 [error] 9630#9630: *22 [lua] header_filter.lua:3: ctx nil, client: 127.0.0.1, server: _, request: "GET /lua-test2 HTTP/1.1", host: "localhost"
@@ -158,3 +158,17 @@ ngx.log(ngx.ERR, "var ", ngx.var.testvar)
 ```
 
 这个问题对一些需要在 access 中做一些事情，将状态存储在 `ngx.ctx` 中，然后在 header_filter 或者 log 中取消对应效果的逻辑（例如 [resty.limit.conn](https://github.com/openresty/lua-resty-limit-traffic/blob/master/lib/resty/limit/conn.md) 在访问的文件*当前*不存在的情况下）来说是致命的。
+
+#### `ngx.var`
+
+<https://github.com/openresty/lua-nginx-module?tab=readme-ov-file#ngxvarvariable>
+
+使用有一些麻烦：
+
+- 性能相比于 `ngx.ctx` 来说低一些，官方文档不建议将 `ngx.var` 使用到关键路径上。
+- 需要提前定义变量。
+- 只能赋值数字或者字符串，赋值 table 可能不会直接报错，但是实际上不工作。
+
+但是相比于 `ngx.ctx`，最大的优势就是即使经过了 internal redirection，`ngx.var` 的内容也会保留。
+
+由于 `ngx.var` 其本身**不**适合存储复杂的结构，第三方模块 ([lua-resty-ctxdump](https://github.com/tokers/lua-resty-ctxdump/)) 处理这个问题的做法是：将实际内容保存在模块内部的 memo 表中，而需要存储在 ngx.var 里面的只是 memo 表的 key（数字）。
