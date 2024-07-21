@@ -2425,11 +2425,11 @@
         <li class="md-nav__item">
   <a href="#openresty" class="md-nav__link">
     <span class="md-ellipsis">
-      Openresty
+      OpenResty
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Openresty">
+    <nav class="md-nav" aria-label="OpenResty">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -2464,6 +2464,24 @@
   <a href="#ngxvar" class="md-nav__link">
     <span class="md-ellipsis">
       ngx.var
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      模块管理
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      代码复用与模块编写
     </span>
   </a>
   
@@ -2635,11 +2653,11 @@
         <li class="md-nav__item">
   <a href="#openresty" class="md-nav__link">
     <span class="md-ellipsis">
-      Openresty
+      OpenResty
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Openresty">
+    <nav class="md-nav" aria-label="OpenResty">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -2674,6 +2692,24 @@
   <a href="#ngxvar" class="md-nav__link">
     <span class="md-ellipsis">
       ngx.var
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      模块管理
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      代码复用与模块编写
     </span>
   </a>
   
@@ -2738,7 +2774,7 @@
 <p class="admonition-title">fstab 与 systemd</p>
 <p>调整 fstab 之后，需要执行 <code>systemctl daemon-reload</code>，否则 systemd 可能会在第二日凌晨挂载已被注释的磁盘项。</p>
 </div>
-<h2 id="openresty">Openresty<a class="headerlink" href="#openresty" title="Permanent link">&para;</a></h2>
+<h2 id="openresty">OpenResty<a class="headerlink" href="#openresty" title="Permanent link">&para;</a></h2>
 <h3 id="lua">Lua 相关<a class="headerlink" href="#lua" title="Permanent link">&para;</a></h3>
 <p><img alt="Order of Lua Nginx Module Directives" src="https://cloud.githubusercontent.com/assets/2137369/15272097/77d1c09e-1a37-11e6-97ef-d9767035fc3e.png" /></p>
 <p>这里关注三个相关的步骤：<code>access_by</code>, <code>log_by</code> 和 <code>header_filter_by</code>，以及 <code>ngx.ctx</code> 和 <code>ngx.var</code> 的注意事项。</p>
@@ -2839,7 +2875,54 @@
 <li>只能赋值数字或者字符串，赋值 table 可能不会直接报错，但是实际上不工作。</li>
 </ul>
 <p>但是相比于 <code>ngx.ctx</code>，最大的优势就是即使经过了 internal redirection，<code>ngx.var</code> 的内容也会保留。</p>
-<p>由于 <code>ngx.var</code> 其本身<strong>不</strong>适合存储复杂的结构，第三方模块 (<a href="https://github.com/tokers/lua-resty-ctxdump/">lua-resty-ctxdump</a>) 处理这个问题的做法是：将实际内容保存在模块内部的 memo 表中，而需要存储在 ngx.var 里面的只是 memo 表的 key（数字）。</p>
+<p>由于 <code>ngx.var</code> 其本身<strong>不</strong>适合存储复杂的结构，第三方模块 (<a href="https://github.com/tokers/lua-resty-ctxdump/">lua-resty-ctxdump</a>, 2-clause BSD license) 处理这个问题的做法是：将实际内容保存在模块内部的 memo 表中，而需要存储在 ngx.var 里面的只是 memo 表的 key（数字）。</p>
+<h4 id="_2">模块管理<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h4>
+<p>OpenResty 官方推荐使用 opm (<code>openresty-opm</code>) 管理模块。手动维护模块的话需要自行处理配置，对应的是 <a href="https://github.com/openresty/lua-nginx-module?tab=readme-ov-file#lua_package_path"><code>lua_package_path</code></a>（<code>http</code> 块内，分号分割路径，最后 <code>;;</code> 代表内置的原始路径）。</p>
+<p>例如：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="k">lua_package_path</span><span class="w"> </span><span class="s">&quot;/etc/nginx/lua/module/?.lua</span><span class="p">;</span>;<span class="k">&quot;</span><span class="p">;</span>
+</code></pre></div>
+<p>以 <a href="https://github.com/tokers/lua-resty-ctxdump/blob/master/lib/resty/ctxdump.lua">https://github.com/tokers/lua-resty-ctxdump/blob/master/lib/resty/ctxdump.lua</a> 为例，下载到 <code>/etc/nginx/lua/module/</code> 下之后，就可以在其他 lua 文件内使用了：</p>
+<div class="highlight"><span class="filename">/etc/nginx/lua/access.lua</span><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="kd">local</span> <span class="n">ctxdump</span> <span class="o">=</span> <span class="nb">require</span> <span class="s2">&quot;ctxdump&quot;</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="kd">local</span> <span class="n">ctx</span> <span class="o">=</span> <span class="n">ngx</span><span class="p">.</span><span class="n">ctx</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="n">ctx</span><span class="p">.</span><span class="n">testvar</span> <span class="o">=</span> <span class="p">{</span><span class="n">foo</span> <span class="o">=</span> <span class="s2">&quot;bar&quot;</span><span class="p">,</span> <span class="n">num</span> <span class="o">=</span> <span class="mi">42</span><span class="p">}</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="c1">-- 需要 set $ctx_ref &quot;&quot;;</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="n">ngx</span><span class="p">.</span><span class="n">var</span><span class="p">.</span><span class="n">ctx_ref</span> <span class="o">=</span> <span class="n">ctxdump</span><span class="p">.</span><span class="n">stash_ngx_ctx</span><span class="p">()</span>
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="n">ngx</span><span class="p">.</span><span class="n">log</span><span class="p">(</span><span class="n">ngx</span><span class="p">.</span><span class="n">ERR</span><span class="p">,</span> <span class="s2">&quot;ctx foo &quot;</span><span class="p">,</span> <span class="n">ctx</span><span class="p">.</span><span class="n">testvar</span><span class="p">.</span><span class="n">foo</span><span class="p">)</span>
+<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="n">ngx</span><span class="p">.</span><span class="n">log</span><span class="p">(</span><span class="n">ngx</span><span class="p">.</span><span class="n">ERR</span><span class="p">,</span> <span class="s2">&quot;ctx num &quot;</span><span class="p">,</span> <span class="n">ctx</span><span class="p">.</span><span class="n">testvar</span><span class="p">.</span><span class="n">num</span><span class="p">)</span>
+<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a><span class="n">ngx</span><span class="p">.</span><span class="n">log</span><span class="p">(</span><span class="n">ngx</span><span class="p">.</span><span class="n">ERR</span><span class="p">,</span> <span class="s2">&quot;var ctx_ref &quot;</span><span class="p">,</span> <span class="n">ngx</span><span class="p">.</span><span class="n">var</span><span class="p">.</span><span class="n">ctx_ref</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><span class="filename">/etc/nginx/lua/log.lua</span><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="kd">local</span> <span class="n">ctxdump</span> <span class="o">=</span> <span class="nb">require</span> <span class="s2">&quot;ctxdump&quot;</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="n">ngx</span><span class="p">.</span><span class="n">log</span><span class="p">(</span><span class="n">ngx</span><span class="p">.</span><span class="n">ERR</span><span class="p">,</span> <span class="s2">&quot;var ctx_ref &quot;</span><span class="p">,</span> <span class="n">ngx</span><span class="p">.</span><span class="n">var</span><span class="p">.</span><span class="n">ctx_ref</span><span class="p">)</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="n">ngx</span><span class="p">.</span><span class="n">ctx</span> <span class="o">=</span> <span class="n">ctxdump</span><span class="p">.</span><span class="n">apply_ngx_ctx</span><span class="p">(</span><span class="n">ngx</span><span class="p">.</span><span class="n">var</span><span class="p">.</span><span class="n">ctx_ref</span><span class="p">)</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="kd">local</span> <span class="n">ctx</span> <span class="o">=</span> <span class="n">ngx</span><span class="p">.</span><span class="n">ctx</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="n">ngx</span><span class="p">.</span><span class="n">log</span><span class="p">(</span><span class="n">ngx</span><span class="p">.</span><span class="n">ERR</span><span class="p">,</span> <span class="s2">&quot;ctx foo &quot;</span><span class="p">,</span> <span class="n">ctx</span><span class="p">.</span><span class="n">testvar</span><span class="p">.</span><span class="n">foo</span><span class="p">)</span>
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="n">ngx</span><span class="p">.</span><span class="n">log</span><span class="p">(</span><span class="n">ngx</span><span class="p">.</span><span class="n">ERR</span><span class="p">,</span> <span class="s2">&quot;ctx num &quot;</span><span class="p">,</span> <span class="n">ctx</span><span class="p">.</span><span class="n">testvar</span><span class="p">.</span><span class="n">num</span><span class="p">)</span>
+</code></pre></div>
+<p>如果没有找到文件，报错信息中会包含所有尝试过的路径。</p>
+<h4 id="_3">代码复用与模块编写<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h4>
+<p>最简单的代码复用的方法是使用 <code>loadfile()</code> 函数，这样几乎不需要修改代码内容。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="kd">local</span> <span class="n">f</span> <span class="o">=</span> <span class="nb">loadfile</span><span class="p">(</span><span class="s2">&quot;/etc/nginx/lua/somefile.lua&quot;</span><span class="p">)</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="kr">if</span> <span class="n">f</span> <span class="kr">then</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>    <span class="n">f</span><span class="p">()</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="kr">else</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>    <span class="n">ngx</span><span class="p">.</span><span class="n">log</span><span class="p">(</span><span class="n">ngx</span><span class="p">.</span><span class="n">ERR</span><span class="p">,</span> <span class="s2">&quot;failed to load somefile.lua&quot;</span><span class="p">)</span>
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="kr">end</span>
+</code></pre></div>
+<p>但是这么做是没有 JIT 缓存的，意味着每个请求都需要整个加载一遍对应的原始 lua 代码。一个基本的模块类似于下面这样：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="kd">local</span> <span class="n">_M</span> <span class="o">=</span> <span class="p">{}</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="kd">local</span> <span class="kr">function</span> <span class="nf">some_internal_func</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>    <span class="kr">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">a</span>
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="kr">end</span>
+<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a>
+<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a><span class="kr">function</span> <span class="nc">_M</span><span class="p">.</span><span class="nf">f1</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+<a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a>    <span class="kd">local</span> <span class="n">aa</span> <span class="o">=</span> <span class="n">some_internal_func</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a>    <span class="kd">local</span> <span class="n">bb</span> <span class="o">=</span> <span class="n">some_internal_func</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+<a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a>    <span class="kr">return</span> <span class="n">aa</span> <span class="o">+</span> <span class="n">bb</span>
+<a id="__codelineno-11-11" name="__codelineno-11-11" href="#__codelineno-11-11"></a><span class="kr">end</span>
+<a id="__codelineno-11-12" name="__codelineno-11-12" href="#__codelineno-11-12"></a>
+<a id="__codelineno-11-13" name="__codelineno-11-13" href="#__codelineno-11-13"></a><span class="kr">return</span> <span class="n">_M</span>
+</code></pre></div>
 
 
 
