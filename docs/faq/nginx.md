@@ -39,3 +39,122 @@
 !!! warning "fstab 与 systemd"
 
     调整 fstab 之后，需要执行 `systemctl daemon-reload`，否则 systemd 可能会在第二日凌晨挂载已被注释的磁盘项。
+
+## Openresty
+
+### Lua 相关
+
+![Order of Lua Nginx Module Directives](https://cloud.githubusercontent.com/assets/2137369/15272097/77d1c09e-1a37-11e6-97ef-d9767035fc3e.png)
+
+这里关注三个相关的步骤：`access_by`, `log_by` 和 `header_filter_by`，以及 `ngx.ctx` 和 `ngx.var` 的注意事项。
+
+测试用 server 块：
+
+```nginx
+server {
+	listen 80 default_server;
+	listen [::]:80 default_server;
+
+	root /var/www/html;
+
+	index index.html index.htm index.nginx-debian.html;
+
+	server_name _;
+
+	set $testvar "";
+	access_by_lua_file /etc/nginx/lua/access.lua;
+	header_filter_by_lua_file /etc/nginx/lua/header_filter.lua;
+	log_by_lua_file /etc/nginx/lua/log.lua;
+
+	location / {
+		try_files $uri $uri/ =404;
+	}
+
+	location /lua-test0 {
+		return 302 /lua-test1;
+	}
+
+	location /lua-test1 {
+        return 200;
+	}
+
+	location /lua-test2 {
+		try_files $uri $uri/ @internal1;
+	}
+
+	location @internal1 {
+		return 418;
+	}
+}
+```
+
+三个 lua:
+
+```lua title="/etc/nginx/lua/access.lua"
+local ctx = ngx.ctx
+ctx.testvar = "testvar"
+ngx.var.testvar = "testvar"
+ngx.log(ngx.ERR, "ctx ", ctx.testvar)
+ngx.log(ngx.ERR, "var ", ngx.var.testvar)
+```
+
+```lua title="/etc/nginx/lua/header_filter.lua"
+local ctx = ngx.ctx
+
+ngx.log(ngx.ERR, "ctx ", ctx.testvar)
+ngx.log(ngx.ERR, "var ", ngx.var.testvar)
+```
+
+```lua title="/etc/nginx/lua/log.lua"
+local ctx = ngx.ctx
+
+ngx.log(ngx.ERR, "ctx ", ctx.testvar)
+ngx.log(ngx.ERR, "var ", ngx.var.testvar)
+```
+
+#### rewrite/return 与 access_by
+
+访问 localhost/lua-test0 或者 localhost/lua-test1，没有 access.lua 的输出：
+
+```log
+2024/07/22 02:50:16 [error] 9465#9465: *12 [lua] header_filter.lua:3: ctx nil, client: 127.0.0.1, server: _, request: "GET /lua-test0 HTTP/1.1", host: "localhost"
+2024/07/22 02:50:16 [error] 9465#9465: *12 [lua] header_filter.lua:4: var nil, client: 127.0.0.1, server: _, request: "GET /lua-test0 HTTP/1.1", host: "localhost"
+2024/07/22 02:50:16 [error] 9465#9465: *12 [lua] log.lua:3: ctx nil while logging request, client: 127.0.0.1, server: _, request: "GET /lua-test0 HTTP/1.1", host: "localhost"
+2024/07/22 02:50:16 [error] 9465#9465: *12 [lua] log.lua:4: var nil while logging request, client: 127.0.0.1, server: _, request: "GET /lua-test0 HTTP/1.1", host: "localhost"
+```
+
+如果访问 localhost/somefile，是有输出的：
+
+```log
+2024/07/22 03:03:42 [error] 9628#9628: *19 [lua] access.lua:4: ctx testvar, client: 127.0.0.1, server: _, request: "GET /somefile HTTP/1.1", host: "localhost"
+2024/07/22 03:03:42 [error] 9628#9628: *19 [lua] access.lua:5: var testvar, client: 127.0.0.1, server: _, request: "GET /somefile HTTP/1.1", host: "localhost"
+2024/07/22 03:03:42 [error] 9628#9628: *19 [lua] header_filter.lua:3: ctx testvar, client: 127.0.0.1, server: _, request: "GET /somefile HTTP/1.1", host: "localhost"
+2024/07/22 03:03:42 [error] 9628#9628: *19 [lua] header_filter.lua:4: var testvar, client: 127.0.0.1, server: _, request: "GET /somefile HTTP/1.1", host: "localhost"
+2024/07/22 03:03:42 [error] 9628#9628: *19 [lua] log.lua:3: ctx testvar while logging request, client: 127.0.0.1, server: _, request: "GET /somefile HTTP/1.1", host: "localhost"
+2024/07/22 03:03:42 [error] 9628#9628: *19 [lua] log.lua:4: var testvar while logging request, client: 127.0.0.1, server: _, request: "GET /somefile HTTP/1.1", host: "localhost"
+```
+
+**这是因为 `return` 语句发生在 `rewrite` 阶段，因此跳过了 `access` 阶段，`access_by_lua_block` 就没有被执行**。因此 Content phase 中的程序不能假设 access_by 肯定被执行了。
+
+#### `ngx.ctx`
+
+<https://github.com/openresty/lua-nginx-module?tab=readme-ov-file#ngxctx>
+
+支持任意 lua 数据结构的，与单独 request 绑定的状态变量。同时也不需要像 `ngx.var` 一样提前 `set`。
+
+!!! warning "小心内部跳转"
+
+    > Internal redirects (triggered by nginx configuration directives like `error_page`, `try_files`, `index` and etc) will destroy the original request `ngx.ctx` data (if any) and the new request will have an empty ngx.ctx table.
+
+访问 localhost/lua-test2（假设前面的 `try_files` 失败）：
+
+```
+2024/07/22 03:10:15 [error] 9630#9630: *22 [lua] access.lua:4: ctx testvar, client: 127.0.0.1, server: _, request: "GET /lua-test2 HTTP/1.1", host: "localhost"
+2024/07/22 03:10:15 [error] 9630#9630: *22 [lua] access.lua:5: var testvar, client: 127.0.0.1, server: _, request: "GET /lua-test2 HTTP/1.1", host: "localhost"
+2024/07/22 03:10:15 [error] 9630#9630: *22 [lua] header_filter.lua:3: ctx nil, client: 127.0.0.1, server: _, request: "GET /lua-test2 HTTP/1.1", host: "localhost"
+2024/07/22 03:10:15 [error] 9630#9630: *22 [lua] header_filter.lua:4: var testvar, client: 127.0.0.1, server: _, request: "GET /lua-test2 HTTP/1.1", host: "localhost"
+2024/07/22 03:10:15 [error] 9630#9630: *22 [lua] log.lua:3: ctx nil while logging request, client: 127.0.0.1, server: _, request: "GET /lua-test2 HTTP/1.1", host: "localhost"
+2024/07/22 03:10:15 [error] 9630#9630: *22 [lua] log.lua:4: var testvar while logging request, client: 127.0.0.1, server: _, request: "GET /lua-test2 HTTP/1.1", host: "localhost"
+```
+
+这个问题对一些需要在 access 中做一些事情，将状态存储在 `ngx.ctx` 中，然后在 header_filter 或者 log 中取消对应效果的逻辑（例如 [resty.limit.conn](https://github.com/openresty/lua-resty-limit-traffic/blob/master/lib/resty/limit/conn.md) 在访问的文件*当前*不存在的情况下）来说是致命的。
