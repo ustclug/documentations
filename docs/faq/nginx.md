@@ -40,7 +40,7 @@
 
     调整 fstab 之后，需要执行 `systemctl daemon-reload`，否则 systemd 可能会在第二日凌晨挂载已被注释的磁盘项。
 
-## Openresty
+## OpenResty
 
 ### Lua 相关
 
@@ -171,4 +171,69 @@ ngx.log(ngx.ERR, "var ", ngx.var.testvar)
 
 但是相比于 `ngx.ctx`，最大的优势就是即使经过了 internal redirection，`ngx.var` 的内容也会保留。
 
-由于 `ngx.var` 其本身**不**适合存储复杂的结构，第三方模块 ([lua-resty-ctxdump](https://github.com/tokers/lua-resty-ctxdump/)) 处理这个问题的做法是：将实际内容保存在模块内部的 memo 表中，而需要存储在 ngx.var 里面的只是 memo 表的 key（数字）。
+由于 `ngx.var` 其本身**不**适合存储复杂的结构，第三方模块 ([lua-resty-ctxdump](https://github.com/tokers/lua-resty-ctxdump/), 2-clause BSD license) 处理这个问题的做法是：将实际内容保存在模块内部的 memo 表中，而需要存储在 ngx.var 里面的只是 memo 表的 key（数字）。
+
+#### 模块管理
+
+OpenResty 官方推荐使用 opm (`openresty-opm`) 管理模块。手动维护模块的话需要自行处理配置，对应的是 [`lua_package_path`](https://github.com/openresty/lua-nginx-module?tab=readme-ov-file#lua_package_path)（`http` 块内，分号分割路径，最后 `;;` 代表内置的原始路径）。
+
+例如：
+
+```nginx
+lua_package_path "/etc/nginx/lua/module/?.lua;;";
+```
+
+以 <https://github.com/tokers/lua-resty-ctxdump/blob/master/lib/resty/ctxdump.lua> 为例，下载到 `/etc/nginx/lua/module/` 下之后，就可以在其他 lua 文件内使用了：
+
+```lua title="/etc/nginx/lua/access.lua"
+local ctxdump = require "ctxdump"
+local ctx = ngx.ctx
+ctx.testvar = {foo = "bar", num = 42}
+-- 需要 set $ctx_ref "";
+ngx.var.ctx_ref = ctxdump.stash_ngx_ctx()
+ngx.log(ngx.ERR, "ctx foo ", ctx.testvar.foo)
+ngx.log(ngx.ERR, "ctx num ", ctx.testvar.num)
+ngx.log(ngx.ERR, "var ctx_ref ", ngx.var.ctx_ref)
+```
+
+```lua title="/etc/nginx/lua/log.lua"
+local ctxdump = require "ctxdump"
+ngx.log(ngx.ERR, "var ctx_ref ", ngx.var.ctx_ref)
+ngx.ctx = ctxdump.apply_ngx_ctx(ngx.var.ctx_ref)
+local ctx = ngx.ctx
+ngx.log(ngx.ERR, "ctx foo ", ctx.testvar.foo)
+ngx.log(ngx.ERR, "ctx num ", ctx.testvar.num)
+```
+
+如果没有找到文件，报错信息中会包含所有尝试过的路径。
+
+#### 代码复用与模块编写
+
+最简单的代码复用的方法是使用 `loadfile()` 函数，这样几乎不需要修改代码内容。
+
+```lua
+local f = loadfile("/etc/nginx/lua/somefile.lua")
+if f then
+    f()
+else
+    ngx.log(ngx.ERR, "failed to load somefile.lua")
+end
+```
+
+但是这么做是没有 JIT 缓存的，意味着每个请求都需要整个加载一遍对应的原始 lua 代码。一个基本的模块类似于下面这样：
+
+```lua
+local _M = {}
+
+local function some_internal_func(a)
+    return a + a
+end
+
+function _M.f1(a, b)
+    local aa = some_internal_func(a)
+    local bb = some_internal_func(b)
+    return aa + bb
+end
+
+return _M
+```
