@@ -131,7 +131,7 @@ Grafana 11 起将完全删除旧的报警系统，全面使用新的（难用的
     {{- end }}
     ```
 
-然后回到 Contact point 编辑，展开 Optional Telegram settings，在 Message 中填入 `{{ template "telegram. Message" . }}` 来引用我们刚刚写的模板，并将 Parse mode 设为 HTML。
+然后回到 Contact point 编辑，展开 Optional Telegram settings，在 Message 中填入 `{{ template "telegram.message" . }}` 来引用我们刚刚写的模板，并将 Parse mode 设为 HTML。
 
 接下来回到迁移 Alerting 的地方，逐个迁移 Alerting：
 
