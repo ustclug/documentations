@@ -2736,7 +2736,7 @@
 <h2 id="_2">更新记录<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
 <h3 id="unified-alerting">迁移到 Unified Alerting<a class="headerlink" href="#unified-alerting" title="Permanent link">&para;</a></h3>
 <p>Grafana 11 起将完全删除旧的报警系统，全面使用新的（难用的）Unified Alerting。</p>
-<p>外卖原先运行的是 Grafana 9.3.8，根据更新记录，发现 v10.4 提供了一个迁移工具，可以将原先的报警迁移到新的 Unified Alerting 系统，因此先将 Grafana 更新到 10.4.3，准备迁移。</p>
+<p>我们原先运行的是 Grafana 9.3.8，根据更新记录，发现 v10.4 提供了一个迁移工具，可以将原先的报警迁移到新的 Unified Alerting 系统，因此先将 Grafana 更新到 10.4.3，准备迁移。</p>
 <p><img alt="1" src="https://ftp.lug.ustc.edu.cn/misc/grafana-alert-upgrade/upgrade-list.png" /></p>
 <p>在 Alerting (legacy) 菜单下有个 Upgrade rules 界面，点进去就可以使用迁移向导。首先迁移我们唯一的一个 Notification Channel，变成一个 Contact Point。由于 <strong><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M135.2 17.7C140.6 6.8 151.7 0 163.8 0h120.4c12.1 0 23.2 6.8 28.6 17.7L320 32h96c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 96 0 81.7 0 64s14.3-32 32-32h96l7.2-14.3zM32 128h384v320c0 35.3-28.7 64-64 64H96c-35.3 0-64-28.7-64-64V128zm96 64c-8.8 0-16 7.2-16 16v224c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16v224c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16v224c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16z"/></svg></span> 垃圾</strong>的新 alerting 方案没有提供默认的消息模板，因此我们需要自己写一个（文档也晦涩难懂）。</p>
 <details class="abstract">
