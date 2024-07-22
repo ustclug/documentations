@@ -2764,7 +2764,7 @@
 <a id="__codelineno-6-21" name="__codelineno-6-21" href="#__codelineno-6-21"></a><span class="cp">{{</span><span class="o">-</span> <span class="nv">end</span> <span class="cp">}}</span>
 </code></pre></div>
 </details>
-<p>然后回到 Contact point 编辑，展开 Optional Telegram settings，在 Message 中填入 <code>{{ template "telegram. Message" . }}</code> 来引用我们刚刚写的模板，并将 Parse mode 设为 HTML。</p>
+<p>然后回到 Contact point 编辑，展开 Optional Telegram settings，在 Message 中填入 <code>{{ template "telegram.message" . }}</code> 来引用我们刚刚写的模板，并将 Parse mode 设为 HTML。</p>
 <p>接下来回到迁移 Alerting 的地方，逐个迁移 Alerting：</p>
 <ul>
 <li>点击右边的加号，然后点击 New alert rule 下面对应的新 rule，进入编辑界面（<a href="https://ftp.lug.ustc.edu.cn/misc/grafana-alert-upgrade/auto-upgrade-result.png">如图</a>）。</li>
