@@ -99,7 +99,7 @@ Web 端监控位于 <https://monitor.ustclug.org>，账号系统使用 LDAP，�
 
 Grafana 11 起将完全删除旧的报警系统，全面使用新的（难用的）Unified Alerting。
 
-外卖原先运行的是 Grafana 9.3.8，根据更新记录，发现 v10.4 提供了一个迁移工具，可以将原先的报警迁移到新的 Unified Alerting 系统，因此先将 Grafana 更新到 10.4.3，准备迁移。
+我们原先运行的是 Grafana 9.3.8，根据更新记录，发现 v10.4 提供了一个迁移工具，可以将原先的报警迁移到新的 Unified Alerting 系统，因此先将 Grafana 更新到 10.4.3，准备迁移。
 
 ![1](https://ftp.lug.ustc.edu.cn/misc/grafana-alert-upgrade/upgrade-list.png)
 
