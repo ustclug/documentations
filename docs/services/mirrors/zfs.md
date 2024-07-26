@@ -1,6 +1,46 @@
 # ZFS
 
-## Configuration
+## Common Operations
+
+```shell title="Get zpool status"
+zpool status
+```
+
+```shell title="Get IO status"
+zpool iostat -v 1
+```
+
+```shell title="Replace Disk"
+zpool replace pool0 old-disk new-disk
+```
+
+```shell title="New ZFS file system"
+zfs create [-o option=value ...] <filesystem>
+
+# Example
+zfs create pool0/repo/debian
+```
+
+If `mountpoint` is not specified, then it's inherited from the parent with a subpath appended. E.g. when `pool0/example` is mounted on `/mnt/haha` then `pool0/example/test` will by default mount on `/mnt/haha/test`.
+
+```shell title="Destory ZFS file system"
+zfs destroy <filesystem>
+
+# Example
+zfs destroy pool0/repo/debian
+```
+
+### Create new repository {#new-repo}
+
+```shell
+zfs create pool0/repo/example
+```
+
+Contrary to XFS, no other steps are needed.
+
+## Setup
+
+!!! note "This section is recorded for reference only."
 
 ### Pool setup (mirrors2)
 
@@ -163,36 +203,6 @@ Refer to [`zfsprops(7)`](https://openzfs.github.io/openzfs-docs/man/master/7/zfs
 `redundant_metadata=some`
 
 :   (Just read `zfsprops(7)` and you'll be able to reason about this.)
-
-## Common Operations
-
-```shell title="Get zpool status"
-zpool status
-```
-
-```shell title="Get IO status"
-zpool iostat -v 1
-```
-
-```shell title="Replace Disk"
-zpool replace pool0 old-disk new-disk
-```
-
-```shell title="New ZFS file system"
-zfs create [-o option=value ...] <filesystem>
-
-# Example
-zfs create pool0/repo/debian
-```
-
-If `mountpoint` is not specified, then it's inherited from the parent with a subpath appended. E.g. when `pool0/example` is mounted on `/mnt/haha` then `pool0/example/test` will by default mount on `/mnt/haha/test`.
-
-```shell title="Destory ZFS file system"
-zfs destroy <filesystem>
-
-# Example
-zfs destroy pool0/repo/debian
-```
 
 ### Traps
 

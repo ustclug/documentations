@@ -115,7 +115,6 @@ nav:
           - Interfaces: services/mirrors/4/networking/index.md
           - Routing: services/mirrors/4/networking/route.md
           - Misc: services/mirrors/4/networking/misc.md
-        - Repositories: services/mirrors/4/repos.md
       - Auxiliary (3):
         - services/mirrors/3/index.md
       - Auxiliary (2):
@@ -123,7 +122,9 @@ nav:
       - Obsolete (1): services/mirrors/1/index.md
       - Docker: "services/mirrors/docker.md"
       - IPMI: "services/mirrors/ipmi.md"
-      - ZFS: "services/mirrors/zfs.md"
+      - Repositories: services/mirrors/repos.md
+      - ZFS: services/mirrors/zfs.md
+      - ZFS: services/mirrors/xfs.md
       - Services: services/mirrors/services.md
       - Monitoring: services/mirrors/monitor.md
       - Limiter: "services/mirrors/limiter.md"
