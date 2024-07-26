@@ -6,15 +6,38 @@ icon: material/note-check
 
 ## NTP Date
 
-Install either `chrony` or `systemd-timesyncd`. Usually chrony comes pre-installed so it's easily forgot.
+Install either `chrony` or `systemd-timesyncd` (recommended). Usually chrony comes pre-installed so it's easily forgot.
 
-Replace the default NTP pool with USTC's NTP server `time.ustc.edu.cn`, like this:
+=== "Chrony"
 
-```shell title="/etc/chrony/chrony.conf" linenums="7"
-# Use Debian vendor zone.
-#pool 2.debian.pool.ntp.org iburst
-server time.ustc.edu.cn iburst
-```
+    Replace the default NTP pool with USTC's NTP server `time.ustc.edu.cn`, like this:
+
+    ```shell title="/etc/chrony/chrony.conf" linenums="7"
+    # Use Debian vendor zone.
+    #pool 2.debian.pool.ntp.org iburst
+    server time.ustc.edu.cn iburst
+    ```
+
+    Then restart the service:
+
+    ```shell
+    systemctl restart chrony
+    ```
+
+=== "systemd-timesyncd"
+
+    For Debian 11 and up, we use an override file to configure the NTP server:
+
+    ```shell title="/etc/systemd/timesyncd.conf.d/ustc.conf"
+    [Time]
+    NTP=time.ustc.edu.cn
+    ```
+
+    Then restart the service:
+
+    ```shell
+    systemctl restart systemd-timesyncd
+    ```
 
 ## Time zone
 
