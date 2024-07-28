@@ -102,10 +102,13 @@ zpool create pool0 \
 For OpenZFS 2.2:
 
 ```shell title="/etc/modprobe.d/zfs.conf"
-# Set ARC size to 160-200 GiB
+# Set ARC size to 160-200 GiB, keep 16 GiB free for OS
 options zfs zfs_arc_max=214748364800
 options zfs zfs_arc_min=171798691840
 options zfs zfs_arc_sys_free=17179869184
+
+# Favor metadata to data by 20x (OpenZFS 2.2+)
+options zfs zfs_arc_meta_balance=2000
 
 # Allow up to 80% of ARC to be used for dnodes
 options zfs zfs_arc_dnode_limit_percent=80
