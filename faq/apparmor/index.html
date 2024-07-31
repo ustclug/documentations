@@ -2492,6 +2492,21 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Proxmox kernel + Debian userspace">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pve" class="md-nav__link">
+    <span class="md-ellipsis">
+      PVE 的解决方案
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
     </ul>
@@ -2543,6 +2558,21 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Proxmox kernel + Debian userspace">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pve" class="md-nav__link">
+    <span class="md-ellipsis">
+      PVE 的解决方案
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
     </ul>
@@ -2572,6 +2602,11 @@
 </code></pre></div>
 <p>Proxmox 的 lxc 支持包会覆盖 <code>/usr/share/apparmor-features/features</code> 为 Ubuntu 的版本，但是如果只安装 Proxmox/Ubuntu kernel，对应的 features 文件就不包含 Unix socket 支持，这会直接导致 Docker 等程序内部无法创建 unix socket 等。</p>
 <p>一个 workaround 是注释掉 <code>/etc/apparmor/parser.conf</code> 的对应行。</p>
+<h3 id="pve">PVE 的解决方案<a class="headerlink" href="#pve" title="Permanent link">&para;</a></h3>
+<p>后续调查发现 <code>lxc-pve</code> 打包了自己的 <code>/usr/share/apparmor-features/features</code> 并覆盖了 Debian 的版本，因此我们模仿 <code>lxc-pve</code> 的做法把 Debian 的版本覆盖掉，然后下载 Proxmox 的版本：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>dpkg-divert<span class="w"> </span>--package<span class="w"> </span>lxc-pve<span class="w"> </span>--rename<span class="w"> </span>--divert<span class="w"> </span>/usr/share/apparmor-features/features.stock<span class="w"> </span>--add<span class="w"> </span>/usr/share/apparmor-features/features
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>wget<span class="w"> </span>-O<span class="w"> </span>/usr/share/apparmor-features/features<span class="w"> </span>https://github.com/proxmox/lxc/raw/master/debian/features
+</code></pre></div>
 
 
 
