@@ -154,3 +154,4 @@ nav:
     - Docker: faq/docker.md
     - VM: faq/vm.md
     - SSD Firmware: faq/ssd.md
+    - Apparmor: faq/apparmor.md
