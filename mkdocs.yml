@@ -123,7 +123,7 @@ nav:
       - IPMI: "services/mirrors/ipmi.md"
       - Repositories: services/mirrors/repos.md
       - ZFS: services/mirrors/zfs.md
-      - ZFS: services/mirrors/xfs.md
+      - XFS: services/mirrors/xfs.md
       - Services: services/mirrors/services.md
       - Monitoring: services/mirrors/monitor.md
       - Limiter: "services/mirrors/limiter.md"
