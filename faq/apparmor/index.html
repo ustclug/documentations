@@ -20,7 +20,7 @@
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.0, mkdocs-material-9.5.30">
+      <meta name="generator" content="mkdocs-1.6.0, mkdocs-material-9.5.31">
     
     
       
@@ -2593,7 +2593,7 @@
   
 
 
-<h1 id="apparmor">Apparmor<a class="headerlink" href="#apparmor" title="Permanent link">&para;</a></h1>
+<h1 id="apparmor">AppArmor<a class="headerlink" href="#apparmor" title="Permanent link">&para;</a></h1>
 <h2 id="proxmox-kernel-debian-userspace">Proxmox kernel + Debian userspace<a class="headerlink" href="#proxmox-kernel-debian-userspace" title="Permanent link">&para;</a></h2>
 <p>Proxmox 使用 Ubuntu kernel，但是 Ubuntu kernel 的 apparmor 相比于 Debian kernel 添加了一些 feature，诸如 Unix socket 管理。Debian 的 apparmor 包的 <code>/etc/apparmor/parser.conf</code> 默认配置限制了功能集合：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>## Pin feature set (avoid regressions when policy is lagging behind
