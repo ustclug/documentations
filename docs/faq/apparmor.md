@@ -1,4 +1,4 @@
-# Apparmor
+# AppArmor
 
 ## Proxmox kernel + Debian userspace
 
