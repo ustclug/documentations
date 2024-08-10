@@ -137,3 +137,52 @@ Slapd 是 openldap 的服务端 daemon。正常情况下不需要碰，但是如
     ```
 
     注意在使用上述 hash 方式的时候进入 gosa 用户页面时可能会报错 Cannot find a suitable password method for the current hash
+
+### 配置 lastbind overlay
+
+lastbind 用于在用户登录时登记时间戳，以方便确认哪些用户长时间没有登录，便于清理。由于我们使用 OLC (cn=config) 配置，网络资料不多，特此记录。
+
+1. 加载模块
+
+    ```ldif
+    dn: cn=module{0},cn=config
+    changetype: modify
+    add: olcModuleLoad
+    olcModuleLoad: lastbind.la
+    ```
+
+    保存到 `load_lastbind.ldif`，然后：
+
+    ```console
+    $ sudo ldapmodify -Y EXTERNAL -H ldapi:/// -f load_lastbind.ldif
+    SASL/EXTERNAL authentication started
+    SASL username: gidNumber=0+uidNumber=0,cn=peercred,cn=external,cn=auth
+    SASL SSF: 0
+    modifying entry "cn=module{0},cn=config"
+    ```
+
+2. 添加 lastbind overlay
+
+    ```ldif
+    dn: olcOverlay=lastbind,olcDatabase={1}mdb,cn=config
+    objectClass: olcLastBindConfig
+    objectClass: olcOverlayConfig
+    olcOverlay: lastbind
+    olcLastBindPrecision: 60
+    ```
+
+    保存到 `add_lastbind.ldif`，然后：
+
+    ```console
+    $ sudo ldapadd -Y EXTERNAL -H ldapi:/// -f add_lastbind.ldif
+    SASL/EXTERNAL authentication started
+    SASL username: gidNumber=0+uidNumber=0,cn=peercred,cn=external,cn=auth
+    SASL SSF: 0
+    adding new entry "olcOverlay=lastbind,olcDatabase={1}mdb,cn=config"
+    ```
+
+可以使用 `ldapsearch` 获取用户的 `authTimestamp`。从未登录过的用户无记录：
+
+```shell
+sudo ldapsearch -x -LLL -H ldapi:/// -b "dc=lug,dc=ustc,dc=edu,dc=cn" "(authTimestamp=*)" dn authTimestamp
+```
