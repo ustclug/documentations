@@ -2389,6 +2389,15 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#lastbind-overlay" class="md-nav__link">
+    <span class="md-ellipsis">
+      配置 lastbind overlay
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -2590,6 +2599,15 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#lastbind-overlay" class="md-nav__link">
+    <span class="md-ellipsis">
+      配置 lastbind overlay
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -2731,6 +2749,44 @@
 <p>注意在使用上述 hash 方式的时候进入 gosa 用户页面时可能会报错 Cannot find a suitable password method for the current hash</p>
 </li>
 </ol>
+<h3 id="lastbind-overlay">配置 lastbind overlay<a class="headerlink" href="#lastbind-overlay" title="Permanent link">&para;</a></h3>
+<p>lastbind 用于在用户登录时登记时间戳，以方便确认哪些用户长时间没有登录，便于清理。由于我们使用 OLC (cn=config) 配置，网络资料不多，特此记录。</p>
+<ol>
+<li>
+<p>加载模块</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="k">dn</span><span class="p">:</span><span class="w"> </span><span class="na">cn</span><span class="o">=</span><span class="s">module{0}</span><span class="p">,</span><span class="na">cn</span><span class="o">=</span><span class="s">config</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="k">changetype</span><span class="p">:</span><span class="w"> </span><span class="k">modify</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="k">add</span><span class="p">:</span><span class="w"> </span><span class="na">olcModuleLoad</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="na">olcModuleLoad</span><span class="p">:</span><span class="w"> </span><span class="s">lastbind.la</span>
+</code></pre></div>
+<p>保存到 <code>load_lastbind.ldif</code>，然后：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="gp">$ </span>sudo<span class="w"> </span>ldapmodify<span class="w"> </span>-Y<span class="w"> </span>EXTERNAL<span class="w"> </span>-H<span class="w"> </span>ldapi:///<span class="w"> </span>-f<span class="w"> </span>load_lastbind.ldif
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="go">SASL/EXTERNAL authentication started</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="go">SASL username: gidNumber=0+uidNumber=0,cn=peercred,cn=external,cn=auth</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="go">SASL SSF: 0</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="go">modifying entry &quot;cn=module{0},cn=config&quot;</span>
+</code></pre></div>
+</li>
+<li>
+<p>添加 lastbind overlay</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="k">dn</span><span class="p">:</span><span class="w"> </span><span class="na">olcOverlay</span><span class="o">=</span><span class="s">lastbind</span><span class="p">,</span><span class="na">olcDatabase</span><span class="o">=</span><span class="s">{1}mdb</span><span class="p">,</span><span class="na">cn</span><span class="o">=</span><span class="s">config</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="na">objectClass</span><span class="p">:</span><span class="w"> </span><span class="s">olcLastBindConfig</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="na">objectClass</span><span class="p">:</span><span class="w"> </span><span class="s">olcOverlayConfig</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="na">olcOverlay</span><span class="p">:</span><span class="w"> </span><span class="s">lastbind</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="na">olcLastBindPrecision</span><span class="p">:</span><span class="w"> </span><span class="s">60</span>
+</code></pre></div>
+<p>保存到 <code>add_lastbind.ldif</code>，然后：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="gp">$ </span>sudo<span class="w"> </span>ldapadd<span class="w"> </span>-Y<span class="w"> </span>EXTERNAL<span class="w"> </span>-H<span class="w"> </span>ldapi:///<span class="w"> </span>-f<span class="w"> </span>add_lastbind.ldif
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="go">SASL/EXTERNAL authentication started</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="go">SASL username: gidNumber=0+uidNumber=0,cn=peercred,cn=external,cn=auth</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="go">SASL SSF: 0</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="go">adding new entry &quot;olcOverlay=lastbind,olcDatabase={1}mdb,cn=config&quot;</span>
+</code></pre></div>
+</li>
+</ol>
+<p>可以使用 <code>ldapsearch</code> 获取用户的 <code>authTimestamp</code>。从未登录过的用户无记录：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>sudo<span class="w"> </span>ldapsearch<span class="w"> </span>-x<span class="w"> </span>-LLL<span class="w"> </span>-H<span class="w"> </span>ldapi:///<span class="w"> </span>-b<span class="w"> </span><span class="s2">&quot;dc=lug,dc=ustc,dc=edu,dc=cn&quot;</span><span class="w"> </span><span class="s2">&quot;(authTimestamp=*)&quot;</span><span class="w"> </span>dn<span class="w"> </span>authTimestamp
+</code></pre></div>
 
 
 
