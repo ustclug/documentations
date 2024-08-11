@@ -41,23 +41,23 @@ etckeeper（不知道怎么配置的，装好即用？）
 
 !!! abstract "APT 源配置"
 
-    ```shell title="/etc/apt/sources.list.d/docker.list"
+    ```sourceslist title="/etc/apt/sources.list.d/docker.list"
     deb [arch=amd64 signed-by=/etc/apt/keyrings/docker.asc] https://mirrors.ustc.edu.cn/docker-ce/linux/debian bookworm stable
     ```
 
-    ```shell title="/etc/apt/sources.list.d/grafana.list"
+    ```sourceslist title="/etc/apt/sources.list.d/grafana.list"
     deb [signed-by=/etc/apt/keyrings/grafana.gpg] https://mirrors.tuna.tsinghua.edu.cn/grafana/apt stable main
     ```
 
-    ```shell title="/etc/apt/sources.list.d/influxdata.list"
+    ```sourceslist title="/etc/apt/sources.list.d/influxdata.list"
     deb [signed-by=/etc/apt/keyrings/influxdata.asc] https://mirrors.ustc.edu.cn/influxdata/debian stable main
     ```
 
-    ```shell title="/etc/apt/sources.list.d/nodesource.list"
+    ```sourceslist title="/etc/apt/sources.list.d/nodesource.list"
     deb [arch=amd64 signed-by=/etc/apt/keyrings/nodesource.asc] https://deb.nodesource.com/node_18.x nodistro main
     ```
 
-    ```shell title="/etc/apt/sources.list.d/sb-nginx.list"
+    ```sourceslist title="/etc/apt/sources.list.d/sb-nginx.list"
     deb [arch=amd64 signed-by=/etc/apt/keyrings/sb-nginx.asc] https://mirror.xtom.com.hk/sb/nginx/ bookworm main
     ```
 
