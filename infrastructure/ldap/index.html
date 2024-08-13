@@ -3006,11 +3006,11 @@
 </code></pre></div>
 <h4 id="etcnsswitchconf">/etc/nsswitch.conf<a class="headerlink" href="#etcnsswitchconf" title="Permanent link">&para;</a></h4>
 <p>安装软件包时，安装脚本已经处理过该文件。检查一下内容，大致为：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>passwd:         compat ldap
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>group:          compat ldap
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>shadow:         compat ldap
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>......
-<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>sudoers:        files ldap
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nt">passwd</span><span class="p">:</span><span class="w">         </span><span class="l l-Scalar l-Scalar-Plain">compat ldap</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="nt">group</span><span class="p">:</span><span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">compat ldap</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="nt">shadow</span><span class="p">:</span><span class="w">         </span><span class="l l-Scalar l-Scalar-Plain">compat ldap</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="l l-Scalar l-Scalar-Plain">......</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="nt">sudoers</span><span class="p">:</span><span class="w">        </span><span class="l l-Scalar l-Scalar-Plain">files ldap</span>
 </code></pre></div>
 <p>注意每一项后面的 <code>ldap</code>，如果没有要手动加上。不太清楚具体含义，反正给每一项都加上 <code>ldap</code> 是没有问题的。</p>
 <div class="admonition info">
@@ -3027,7 +3027,7 @@
 <li>请另开一个 root 终端以防万一。</li>
 </ol>
 <p>对于 Debian 7+，只需设置一处。为了登录时自动创建家目录，在 <code>/etc/pam.d/common-session</code> 中添加下面这句：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>session required    pam_mkhomedir.so skel=/etc/skel umask=0022
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>session<span class="w"> </span>required<span class="w">    </span>pam_mkhomedir.so<span class="w"> </span><span class="nv">skel</span><span class="o">=</span>/etc/skel<span class="w"> </span><span class="nv">umask</span><span class="o">=</span><span class="m">0022</span>
 </code></pre></div>
 <p>对于 Debian 5，请查阅本文档的 Git 记录。</p>
 <h3 id="centos">CentOS 配置方法<a class="headerlink" href="#centos" title="Permanent link">&para;</a></h3>
