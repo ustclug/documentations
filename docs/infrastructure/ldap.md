@@ -46,7 +46,7 @@ Groups 中以 ssh 开头的组控制对应机器的 ssh 权限，sudo 开头同�
 
 其它我没提到的项我也没搞明白怎么用。。。
 
-gosa 的配置文件在 `/etc/gosa/gosa.conf`，它是在第一次运行 gosa 时候自动生成的，但在之后就只能通过手动编辑来修改。由于配置文件几乎没有文档，官方的 FAQ 有好多是错的，所以我基本没动:-D。
+gosa 的配置文件在 `/etc/gosa/gosa.conf`，它是在第一次运行 gosa 时候自动生成的，但在之后就只能通过手动编辑来修改。由于配置文件几乎没有文档，官方的 FAQ 有好多是错的，所以我基本没动 `:-D`。
 
 ### 维护备注
 
@@ -55,6 +55,12 @@ gosa 的配置文件在 `/etc/gosa/gosa.conf`，它是在第一次运行 gosa �
 ## LDAP 客户端配置
 
 ### Debian 配置方法
+
+!!! warning
+
+    Debian 13 Trixie 是最后一个支持 `sudo-ldap` 的版本，Debian 14 将完全移除 `sudo-ldap`，需要尽快迁移至 `sssd`。
+
+    Ref: <https://packages.debian.org/trixie/sudo-ldap>
 
 #### 软件包安装
 
@@ -68,8 +74,8 @@ Debian 7 以上系统安装 `libnss-ldapd`、`libpam-ldapd`、`sudo-ldap`
 
 - LDAP 服务器地址是 `ldaps://ldap.lug.ustc.edu.cn`
 - Base DN 为 `dc=lug,dc=ustc,dc=edu,dc=cn`
-  - 协议为版本 3
-  - 配置 libnss-ldapd 时有个选 Name services to configure 的，全部选上
+    - 协议为版本 3
+    - 配置 libnss-ldapd 时有个选 Name services to configure 的，全部选上
 
 #### /etc/ldap/ldap.conf
 
@@ -108,7 +114,7 @@ tls_cacertfile /etc/ldap/slapd-ca-cert.pem
 
 安装软件包时，安装脚本已经处理过该文件。检查一下内容，大致为：
 
-```
+```yaml
 passwd:         compat ldap
 group:          compat ldap
 shadow:         compat ldap
@@ -137,7 +143,7 @@ sudoers:        files ldap
 
 对于 Debian 7+，只需设置一处。为了登录时自动创建家目录，在 `/etc/pam.d/common-session` 中添加下面这句：
 
-```
+```shell
 session required    pam_mkhomedir.so skel=/etc/skel umask=0022
 ```
 
@@ -247,7 +253,7 @@ ldappasswd -x -D '<executor dn>' -W -S '<target user dn>'
 
 需要额外注意的是，在 CLI 中添加/删除用户或更改用户密码时需要以 LDAP admin 执行，否则会有报错：
 
-```
+```text
 Insufficient access (50) additional info: no write access to parent
 ```
 
