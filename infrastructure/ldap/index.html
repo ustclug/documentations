@@ -2957,11 +2957,16 @@
 <h3 id="sudo-rules">Sudo rules<a class="headerlink" href="#sudo-rules" title="Permanent link">&para;</a></h3>
 <p>这里配置 sudo 权限。这里的语法和 sudoers 一样（请无视 System trust）。特别要说的一点是通过在 System 中加入主机名可以针对每个主机配置权限，这里要填的是主机名而不是域名，具体范例请看里面的 lugsu wikimanager 等项。</p>
 <p>其它我没提到的项我也没搞明白怎么用。。。</p>
-<p>gosa 的配置文件在 <code>/etc/gosa/gosa.conf</code>，它是在第一次运行 gosa 时候自动生成的，但在之后就只能通过手动编辑来修改。由于配置文件几乎没有文档，官方的 FAQ 有好多是错的，所以我基本没动:-D。</p>
+<p>gosa 的配置文件在 <code>/etc/gosa/gosa.conf</code>，它是在第一次运行 gosa 时候自动生成的，但在之后就只能通过手动编辑来修改。由于配置文件几乎没有文档，官方的 FAQ 有好多是错的，所以我基本没动 <code>:-D</code>。</p>
 <h3 id="_2">维护备注<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h3>
 <p>如果发现更新 GOsa 之后，<code>/gosa</code> 没有正常工作（比如说直接显示了 PHP 的源代码），可以尝试删除 <code>/var/spool/gosa/</code> 中的所有文件，详见 <a href="https://github.com/gosa-project/gosa-core/issues/10">Gosa broken in Debian stretch</a>。</p>
 <h2 id="ldap_1">LDAP 客户端配置<a class="headerlink" href="#ldap_1" title="Permanent link">&para;</a></h2>
 <h3 id="debian">Debian 配置方法<a class="headerlink" href="#debian" title="Permanent link">&para;</a></h3>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Debian 13 Trixie 是最后一个支持 <code>sudo-ldap</code> 的版本，Debian 14 将完全移除 <code>sudo-ldap</code>，需要尽快迁移至 <code>sssd</code>。</p>
+<p>Ref: <a href="https://packages.debian.org/trixie/sudo-ldap">https://packages.debian.org/trixie/sudo-ldap</a></p>
+</div>
 <h4 id="_3">软件包安装<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h4>
 <p>Debian 7 以上系统安装 <code>libnss-ldapd</code>、<code>libpam-ldapd</code>、<code>sudo-ldap</code></p>
 <div class="admonition note">
@@ -2971,9 +2976,11 @@
 <p>在安装过程中会被问一些问题（不同版本的 Debian 的问题可能不同）：</p>
 <ul>
 <li>LDAP 服务器地址是 <code>ldaps://ldap.lug.ustc.edu.cn</code></li>
-<li>Base DN 为 <code>dc=lug,dc=ustc,dc=edu,dc=cn</code></li>
+<li>Base DN 为 <code>dc=lug,dc=ustc,dc=edu,dc=cn</code><ul>
 <li>协议为版本 3</li>
 <li>配置 libnss-ldapd 时有个选 Name services to configure 的，全部选上</li>
+</ul>
+</li>
 </ul>
 <h4 id="etcldapldapconf">/etc/ldap/ldap.conf<a class="headerlink" href="#etcldapldapconf" title="Permanent link">&para;</a></h4>
 <p>编辑内容如下：</p>
