@@ -161,6 +161,46 @@ if command -v openssl 2>/dev/null; then
 fi
 ```
 
+### VirtIO FS {#virtiofs}
+
+对于 mirrorlog 等重存储型的虚拟机，我们尝试把大量的数据文件放在 host 上，避免 ZFS（Zvol）和 ext4 的两层开销（以及在 ZFS 上也可以使用更大的 recordsize 获得更好的 I/O 体验和更低的 RAID-Z overhead），然后使用 virtiofs 供虚拟机访问。
+
+Virtiofs 的配置过程主要参考了 <https://forum.proxmox.com/threads/virtiofsd-in-pve-8-0-x.130531/>：
+
+首先配置虚拟机：
+
+```yaml title="/etc/pve/qemu-server/230.conf"
+args: -chardev socket,id=virtfs0,path=/run/virtiofsd-230.sock -device vhost-user-fs-pci,queue-size=1024,chardev=virtfs0,tag=mirrorlog -object memory-backend-file,id=mem,size=8192M,mem-path=/dev/shm,share=on -numa node,memdev=mem
+```
+
+其中 `path=` 指向 virtiofsd 的 socket 文件，`tag=` 可以任意指定，用于区分多个 virtiofsd 实例（对应虚拟机内的 mount source），`size=` 是共享内存大小。
+
+然后安装 virtiofsd，直接 `apt install virtiofsd` 即可（PVE 打包了 Rust 重写的新版 virtiofsd）。
+
+接下来需要配置 virtiofsd 在虚拟机开机前启动。注意一个 virtiofsd 只能供一个虚拟机访问一个主机上的目录，因此需要使用 PVE 的 hook script 来启动 virtiofsd。这个 hook script 放在 `/var/lib/vz` 目录下，接收两个命令行参数（VMID 和启动阶段）：
+
+```shell title="/var/lib/vz/snippets/mirrorlog.sh"
+--8<-- "pve/mirrorlog.sh"
+```
+
+相比于 Proxmox 论坛里的教程贴，这里最重要的修改是给 `systemd-run` 加上了 `--collect` 参数，这样 virtiofsd 退出时无论是否 failed，systemd 都会清理掉这个临时的 service unit。
+
+然后通过命令行配置使用：
+
+```shell
+qm set 230 --hookscript local:snippets/mirrorlog.sh
+```
+
+然后将虚拟机关机，通过 `qm start` 或者 web 界面启动，即可在虚拟机内挂载 virtiofsd 提供的目录。
+
+```shell
+# Manual
+mount -t virtiofs mirrorlog /mnt/mirrorlog
+
+# via /etc/fstab
+mirrorlog /mnt/mirrorlog virtiofs defaults 0 0
+```
+
 ## pve-5
 
 pve-5 位于网络中心，配置为 2× ~~Xeon E5-2603 v4 (Broadwell 6C6T, 1.70 GHz, no HT, no Turbo Boost)~~ Xeon E5-2667 v4 (Broadwell 8C16T, 3.20 GHz, Max 3.60 GHz)，256 GB 内存和一大堆 SSD（2× 三星 240 GB SATA + 10x Intel DC S4500 1.92 TB SATA）。我们将两块 240 GB 的盘组成一个 LVM VG，分配 16 GB 的 rootfs（LVM mirror）和 8 GB 的 swap，其余空间给一个 thinpool。十块 1.92 TB 的盘组成一个 RAIDZ2 的 zpool，用于存储虚拟机等数据。
@@ -171,7 +211,7 @@ pve-5 位于网络中心，配置为 2× ~~Xeon E5-2603 v4 (Broadwell 6C6T, 1.70
 
     可能由于 ZFS 模块的 bug 或者内存条故障，使用这些模式在虚拟机重启时会导致整个 Proxmox VE 主机卡住而不得不重启。请使用 VirtIO SCSI（不带 Single）。同样原因创建虚拟机硬盘时也不要勾选 iothread。
 
-主机使用 ZFS（Zvol）作为虚拟机的虚拟硬盘，在虚拟机中启用 `fstrim.timer`（systemd 的 fstrim 定时任务，由 `util-linux` 提供）可以定期腾出不用的空间，帮助 ZFS 更好地规划空间。启用 fstrim 的虚拟硬盘需要在 PVE 上启用 `discard` 选项，否则 fstrim 不起作用。该特性是由于 ZFS 是 CoW 的，与 ZFS 底层使用 SSD 没有太大关联。
+主机使用 ZFS（Zvol）作为虚拟机的虚拟硬盘，在虚拟机中启用 `fstrim.timer`（systemd 的 fstrim 定时任务，由 `util-linux` 提供）可以定期腾出不用的空间，帮助 ZFS 更好地规划空间。启用 fstrim 的虚拟硬盘需要在 PVE 上启用 `discard` 选项，否则 fstrim 不起作用。该特性是由于 ZFS 是 CoW 的，与 ZFS 底层使用 SSD 没有关联。
 
 ## esxi-5
 
