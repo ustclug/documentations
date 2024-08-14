@@ -103,7 +103,7 @@ git -c user.name=你的名字 -c user.email=你的邮箱 commit -m "..."
 修改了 `/etc/rsync-proxy/config.toml`，删除 mirrors2 中的 `".private"` 项，在 mirrors4 中新增 `"sb"` 项。
 
 因为 rsync-proxy 最终还需要连接到后端的 rsyncd，因此 mirrors4 的 rsyncd 配置也需要修改。
-在 `/etc/rsyncd` 下执行 `python common_generator.py --write` 写入配置，使用 `git diff` 检查无误后 `git commit`。
+在 `/etc/rsyncd` 下执行 `python3 generate_common.py --write` 写入配置，使用 `git diff` 检查无误后 `git commit`。
 rsyncd 配置中包含不公开 rsync 的内容（如 git 目录）不会导致问题，因为所有用户接触到的都是 rsync-proxy。
 
 确认后重载 rsync-proxy:
@@ -116,14 +116,8 @@ Rsyncd 不需要重载：每个有效连接会启动新进程，而新进程会�
 
 ### 删除 mirrors2 上的仓库与相关项
 
-执行 `yukictl rm sb`，然后删除 Yuki 同步配置（`~mirror/repos-etc/sb.yaml`），同样也需要 git commit。
+执行 `yukictl repo rm sb`，然后删除 Yuki 同步配置（`~mirror/repos-etc/sb.yaml`），同样也需要 git commit。
 
 之后删除存储的内容：执行 `/sbin/zfs list` 确认要下手删除的存储池，然后 `sudo zfs destroy pool0/repo/对应的名字` 删除。
 
 同样，`/srv/rsync-attrs/.private` 的内容也需要删除。
-
-### 关于 git push
-
-目前配置的 git push 比较麻烦：需要用户在 USTCLUG GitLab 上为自己创建一个 Access Token，然后每次 git push 时输入密码。
-
-我们有计划改进这一点：为每个仓库创建一个 ssh key，修改 git config，然后为在 USTCLUG GitLab 上为对应仓库新增 deploy key，这样就不需要密码了。
