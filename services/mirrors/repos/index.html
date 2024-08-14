@@ -1823,15 +1823,6 @@
   
 </li>
         
-          <li class="md-nav__item">
-  <a href="#git-push" class="md-nav__link">
-    <span class="md-ellipsis">
-      关于 git push
-    </span>
-  </a>
-  
-</li>
-        
       </ul>
     </nav>
   
@@ -2757,15 +2748,6 @@
   
 </li>
         
-          <li class="md-nav__item">
-  <a href="#git-push" class="md-nav__link">
-    <span class="md-ellipsis">
-      关于 git push
-    </span>
-  </a>
-  
-</li>
-        
       </ul>
     </nav>
   
@@ -2853,19 +2835,16 @@
 <p><a href="https://github.com/ustclug/rsync-proxy">rsync-proxy</a> 为近年来我们自行编写的 rsync 反向代理服务。
 修改了 <code>/etc/rsync-proxy/config.toml</code>，删除 mirrors2 中的 <code>".private"</code> 项，在 mirrors4 中新增 <code>"sb"</code> 项。</p>
 <p>因为 rsync-proxy 最终还需要连接到后端的 rsyncd，因此 mirrors4 的 rsyncd 配置也需要修改。
-在 <code>/etc/rsyncd</code> 下执行 <code>python common_generator.py --write</code> 写入配置，使用 <code>git diff</code> 检查无误后 <code>git commit</code>。
+在 <code>/etc/rsyncd</code> 下执行 <code>python3 generate_common.py --write</code> 写入配置，使用 <code>git diff</code> 检查无误后 <code>git commit</code>。
 rsyncd 配置中包含不公开 rsync 的内容（如 git 目录）不会导致问题，因为所有用户接触到的都是 rsync-proxy。</p>
 <p>确认后重载 rsync-proxy:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="go">systemctl reload rsync-proxy</span>
 </code></pre></div>
 <p>Rsyncd 不需要重载：每个有效连接会启动新进程，而新进程会重新读取配置。</p>
 <h3 id="mirrors2">删除 mirrors2 上的仓库与相关项<a class="headerlink" href="#mirrors2" title="Permanent link">&para;</a></h3>
-<p>执行 <code>yukictl rm sb</code>，然后删除 Yuki 同步配置（<code>~mirror/repos-etc/sb.yaml</code>），同样也需要 git commit。</p>
+<p>执行 <code>yukictl repo rm sb</code>，然后删除 Yuki 同步配置（<code>~mirror/repos-etc/sb.yaml</code>），同样也需要 git commit。</p>
 <p>之后删除存储的内容：执行 <code>/sbin/zfs list</code> 确认要下手删除的存储池，然后 <code>sudo zfs destroy pool0/repo/对应的名字</code> 删除。</p>
 <p>同样，<code>/srv/rsync-attrs/.private</code> 的内容也需要删除。</p>
-<h3 id="git-push">关于 git push<a class="headerlink" href="#git-push" title="Permanent link">&para;</a></h3>
-<p>目前配置的 git push 比较麻烦：需要用户在 USTCLUG GitLab 上为自己创建一个 Access Token，然后每次 git push 时输入密码。</p>
-<p>我们有计划改进这一点：为每个仓库创建一个 ssh key，修改 git config，然后为在 USTCLUG GitLab 上为对应仓库新增 deploy key，这样就不需要密码了。</p>
 
 
 

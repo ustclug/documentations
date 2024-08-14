@@ -1808,6 +1808,15 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#repo-stats" class="md-nav__link">
+    <span class="md-ellipsis">
+      每日流量统计
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -2619,6 +2628,15 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#repo-stats" class="md-nav__link">
+    <span class="md-ellipsis">
+      每日流量统计
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -2679,6 +2697,16 @@
 <p>配置文件位于 LUG GitLab 上：<a href="https://git.lug.ustc.edu.cn/mirrors/nginx-config">https://git.lug.ustc.edu.cn/mirrors/nginx-config</a>，此仓库对应 mirrors 上的 <code>/etc/nginx</code> 目录。</p>
 <h3 id="_3">请求限制策略<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h3>
 <p>见<a href="../limiter/">限制策略</a>。</p>
+<h3 id="repo-stats">每日流量统计<a class="headerlink" href="#repo-stats" title="Permanent link">&para;</a></h3>
+<p>访问路径：<a href="https://mirrors.ustc.edu.cn/status/stats.json">https://mirrors.ustc.edu.cn/status/stats.json</a></p>
+<p>脚本位于 <a href="https://git.lug.ustc.edu.cn/mirrors/sync/-/blob/scripts/repo_stats.py">https://git.lug.ustc.edu.cn/mirrors/sync/-/blob/scripts/repo_stats.py</a></p>
+<p>每天在 logrotate 滚完 nginx 日志后，通过分析刚滚出来的日志文件，统计每个仓库的访问量与输出流量（因此仅包含 HTTP 流量统计），然后输出到 json 文件，并且额外输出一份 json 到 <code>/var/log/nginx/stats</code> 作为归档存储，方便以后分析。</p>
+<p>需要注意的是这个脚本是由 logrotate 在 nginx 的 postrotate script 里运行的，而不是由 cron 或者 systemd timer，因此调用入口在这里：</p>
+<div class="highlight"><span class="filename">/etc/logrotate.d/nginx</span><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>postrotate
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">    </span><span class="c1"># [...]</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span>sudo<span class="w"> </span>-iu<span class="w"> </span>mirror<span class="w"> </span>~mirror/scripts/repo_stats.py
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>endscript
+</code></pre></div>
 <h2 id="rsync">Rsync 服务<a class="headerlink" href="#rsync" title="Permanent link">&para;</a></h2>
 <p>未完待续。</p>
 <h2 id="_4">反向代理服务<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
