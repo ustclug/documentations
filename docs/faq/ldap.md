@@ -23,6 +23,14 @@
     这是因为 GOsa 无法读取到用户密码的 Hash，而 LDAP 却允许用户没有密码。
     只需为新的用户设置密码或删除新的用户即可。
 
+!!! bug "新版 GOsa 无法创建/修改用户"
+
+    表现为报错 `Uncaught ReflectionException: Property LDAP::$count does not exist`。
+
+    参见 [Debian bug #1077759](https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1077759)
+
+    临时解决方法：修改 `/usr/share/gosa/plugins/personal/generic/class_user.inc`，将 1357 行 `$ldap->cat($ldap->count)` 修改为 `$ldap->cat($this->new_dn)`，且注释掉下一个 `if` 语句（`if ($ldap->count != 0` 开头）。
+
 ## Slapd
 
 Slapd 是 OpenLDAP 的服务端 daemon。正常情况下不需要碰，但是如果要碰的时候，你会发现它的配置极其复杂麻烦。
