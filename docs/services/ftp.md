@@ -2,7 +2,7 @@
 
 Services: [FTP/FTPS](ftp://ftp.lug.ustc.edu.cn), [SFTP](sftp://ftp.lug.ustc.edu.cn), [HTTP](http://ftp.lug.ustc.edu.cn), [HTTPS](https://ftp.lug.ustc.edu.cn)
 
-- Provides some storage for LDAP users (works like home.ustc.edu.cn).
+- Provides some storage for LDAP users (works like home.ustc.edu.cn: `https://ftp.lug.ustc.edu.cn/~username/`).
 
 Git repository: [ustclug/lugftp](https://github.com/ustclug/lugftp)
 
