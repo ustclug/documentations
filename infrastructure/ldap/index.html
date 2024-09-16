@@ -892,15 +892,6 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#etcsudo-ldapconf" class="md-nav__link">
-    <span class="md-ellipsis">
-      /etc/sudo-ldap.conf
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#etcnslcdconf" class="md-nav__link">
     <span class="md-ellipsis">
       /etc/nslcd.conf
@@ -927,17 +918,17 @@
   
 </li>
         
-      </ul>
-    </nav>
+          <li class="md-nav__item">
+  <a href="#sssd" class="md-nav__link">
+    <span class="md-ellipsis">
+      SSSD 配置
+    </span>
+  </a>
   
 </li>
         
-          <li class="md-nav__item">
-  <a href="#centos" class="md-nav__link">
-    <span class="md-ellipsis">
-      CentOS 配置方法
-    </span>
-  </a>
+      </ul>
+    </nav>
   
 </li>
         
@@ -2817,15 +2808,6 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#etcsudo-ldapconf" class="md-nav__link">
-    <span class="md-ellipsis">
-      /etc/sudo-ldap.conf
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#etcnslcdconf" class="md-nav__link">
     <span class="md-ellipsis">
       /etc/nslcd.conf
@@ -2852,17 +2834,17 @@
   
 </li>
         
-      </ul>
-    </nav>
+          <li class="md-nav__item">
+  <a href="#sssd" class="md-nav__link">
+    <span class="md-ellipsis">
+      SSSD 配置
+    </span>
+  </a>
   
 </li>
         
-          <li class="md-nav__item">
-  <a href="#centos" class="md-nav__link">
-    <span class="md-ellipsis">
-      CentOS 配置方法
-    </span>
-  </a>
+      </ul>
+    </nav>
   
 </li>
         
@@ -2965,13 +2947,18 @@
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>Debian 13 Trixie 是最后一个支持 <code>sudo-ldap</code> 的版本，Debian 14 将完全移除 <code>sudo-ldap</code>，需要尽快迁移至 <code>sssd</code>。</p>
+<p>我们大部分现有的服务器仍在使用 <code>sudo-ldap</code>，在下次大版本升级前需要逐步迁移。以下提供使用 <code>sssd</code> 的配置方法。</p>
 <p>Ref: <a href="https://packages.debian.org/trixie/sudo-ldap">https://packages.debian.org/trixie/sudo-ldap</a></p>
 </div>
 <h4 id="_3">软件包安装<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h4>
-<p>Debian 7 以上系统安装 <code>libnss-ldapd</code>、<code>libpam-ldapd</code>、<code>sudo-ldap</code></p>
+<p>Debian 7 以上系统安装 <code>libnss-ldapd</code>、<code>libpam-ldapd</code>、<code>sssd-ldap</code>、<code>libsss-sudo</code></p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>更新这些软件包时，注意保留一个 root 终端，更新后可能需要重启 daemon 进程</p>
+<p>更新这些软件包时，注意保留一个 root 终端，更新后可能需要重启 daemon 进程。</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>如果已经安装了 <code>sudo-ldap</code>，请在全部配置完成<strong>之后</strong>运行 <code>apt install sudo</code>，迁移回原 <code>sudo</code>。</p>
 </div>
 <p>在安装过程中会被问一些问题（不同版本的 Debian 的问题可能不同）：</p>
 <ul>
@@ -2992,8 +2979,6 @@
 <a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>SUDOERS_BASE ou=sudoers,dc=lug,dc=ustc,dc=edu,dc=cn
 </code></pre></div>
 <p>为了安全性考虑，要以 ldaps 的方式连接 ldap 服务器，同时应配置好证书 (<code>/etc/ldap/slapd-ca-cert.pem</code>, 从其它服务器复制一个)</p>
-<h4 id="etcsudo-ldapconf">/etc/sudo-ldap.conf<a class="headerlink" href="#etcsudo-ldapconf" title="Permanent link">&para;</a></h4>
-<p>这个文件应该直接软链接到 <code>/etc/ldap/ldap.conf</code>，通常 dpkg 已经为你创建好了。</p>
 <h4 id="etcnslcdconf">/etc/nslcd.conf<a class="headerlink" href="#etcnslcdconf" title="Permanent link">&para;</a></h4>
 <p>注意检查一下此配置文件是否与 <code>/etc/ldap/ldap.conf</code> 下的内容相一致，如</p>
 <div class="highlight"><span class="filename">/etc/nslcd.conf</span><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>uid nslcd
@@ -3030,72 +3015,55 @@
 <div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>session<span class="w"> </span>required<span class="w">    </span>pam_mkhomedir.so<span class="w"> </span><span class="nv">skel</span><span class="o">=</span>/etc/skel<span class="w"> </span><span class="nv">umask</span><span class="o">=</span><span class="m">0022</span>
 </code></pre></div>
 <p>对于 Debian 5，请查阅本文档的 Git 记录。</p>
-<h3 id="centos">CentOS 配置方法<a class="headerlink" href="#centos" title="Permanent link">&para;</a></h3>
-<p>通过 yum 安装 openldap openldap-clients nss_ldap nss-pam-ldap</p>
-<p>以 root 身份执行</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>authconfig<span class="w"> </span>--enablecache<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">       </span>--enableldap<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">       </span>--enableldapauth<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="w">       </span>--ldapserver<span class="o">=</span><span class="s2">&quot;ldaps://ldap.lug.ustc.edu.cn/&quot;</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="w">       </span>--ldapbasedn<span class="o">=</span><span class="s2">&quot;dc=lug,dc=ustc,dc=edu,dc=cn&quot;</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="w">       </span>--enableshadow<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="w">       </span>--enablemkhomedir<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="w">       </span>--enablelocauthorize<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="w">       </span>--update
-</code></pre></div>
-<p>注意，由于 authconfig 的 bug，上一条命令的执行环境必须是 <code>LC_ALL=en_US.UTF-8</code></p>
-<p>Sudo 的配置是通过 sssd 实现的，参考 <a href="https://access.redhat.com/site/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Deployment_Guide/sssd-ldap-sudo.html">https://access.redhat.com/site/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Deployment_Guide/sssd-ldap-sudo.html</a></p>
-<p>安装 sssd libsss_sudo
-将 <code>/usr/share/doc/sssd-common/sssd-example.conf</code> 复制到 <code>/etc/sssd/sssd.conf</code> 并修改权限为 600。</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>[taoky@gateway-nic ~]$ sudo diff /usr/share/doc/sssd-common/sssd-example.conf /etc/sssd/sssd.conf
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="gu">3c3</span>
-<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="gd">&lt; services = nss, pam</span>
-<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="gs">---</span>
-<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="gi">&gt; services = nss, pam, sudo</span>
-<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="gu">8c8</span>
-<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="gd">&lt; ; domains = LDAP</span>
-<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="gs">---</span>
-<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a><span class="gi">&gt; domains = LDAP</span>
-<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a>13a14,15
-<a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a><span class="gi">&gt; [sudo]</span>
-<a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a>&gt;
-<a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a>15,17c17,19
-<a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a><span class="gd">&lt; ; [domain/LDAP]</span>
-<a id="__codelineno-7-15" name="__codelineno-7-15" href="#__codelineno-7-15"></a><span class="gd">&lt; ; id_provider = ldap</span>
-<a id="__codelineno-7-16" name="__codelineno-7-16" href="#__codelineno-7-16"></a><span class="gd">&lt; ; auth_provider = ldap</span>
-<a id="__codelineno-7-17" name="__codelineno-7-17" href="#__codelineno-7-17"></a><span class="gs">---</span>
-<a id="__codelineno-7-18" name="__codelineno-7-18" href="#__codelineno-7-18"></a><span class="gi">&gt; [domain/LDAP]</span>
-<a id="__codelineno-7-19" name="__codelineno-7-19" href="#__codelineno-7-19"></a><span class="gi">&gt; id_provider = ldap</span>
-<a id="__codelineno-7-20" name="__codelineno-7-20" href="#__codelineno-7-20"></a><span class="gi">&gt; auth_provider = ldap</span>
-<a id="__codelineno-7-21" name="__codelineno-7-21" href="#__codelineno-7-21"></a>22,24c24,27
-<a id="__codelineno-7-22" name="__codelineno-7-22" href="#__codelineno-7-22"></a><span class="gd">&lt; ; ldap_schema = rfc2307</span>
-<a id="__codelineno-7-23" name="__codelineno-7-23" href="#__codelineno-7-23"></a><span class="gd">&lt; ; ldap_uri = ldap://ldap.mydomain.org</span>
-<a id="__codelineno-7-24" name="__codelineno-7-24" href="#__codelineno-7-24"></a><span class="gd">&lt; ; ldap_search_base = dc=mydomain,dc=org</span>
-<a id="__codelineno-7-25" name="__codelineno-7-25" href="#__codelineno-7-25"></a><span class="gs">---</span>
-<a id="__codelineno-7-26" name="__codelineno-7-26" href="#__codelineno-7-26"></a><span class="gi">&gt; ldap_schema = rfc2307</span>
-<a id="__codelineno-7-27" name="__codelineno-7-27" href="#__codelineno-7-27"></a><span class="gi">&gt; ldap_uri = ldaps://ldap.lug.ustc.edu.cn</span>
-<a id="__codelineno-7-28" name="__codelineno-7-28" href="#__codelineno-7-28"></a><span class="gi">&gt; ldap_search_base = dc=lug,dc=ustc,dc=edu,dc=cn</span>
-<a id="__codelineno-7-29" name="__codelineno-7-29" href="#__codelineno-7-29"></a><span class="gi">&gt; ldap_sudo_search_base = ou=sudoers,dc=lug,dc=ustc,dc=edu,dc=cn</span>
-<a id="__codelineno-7-30" name="__codelineno-7-30" href="#__codelineno-7-30"></a>30c33
-<a id="__codelineno-7-31" name="__codelineno-7-31" href="#__codelineno-7-31"></a><span class="gd">&lt; ; cache_credentials = true</span>
-<a id="__codelineno-7-32" name="__codelineno-7-32" href="#__codelineno-7-32"></a><span class="gs">---</span>
-<a id="__codelineno-7-33" name="__codelineno-7-33" href="#__codelineno-7-33"></a><span class="gi">&gt; cache_credentials = true</span>
-<a id="__codelineno-7-34" name="__codelineno-7-34" href="#__codelineno-7-34"></a>35c38
-<a id="__codelineno-7-35" name="__codelineno-7-35" href="#__codelineno-7-35"></a><span class="gd">&lt; # you must install Microsoft Services For UNIX and map LDAP attributes onto</span>
-<a id="__codelineno-7-36" name="__codelineno-7-36" href="#__codelineno-7-36"></a><span class="gs">---</span>
-<a id="__codelineno-7-37" name="__codelineno-7-37" href="#__codelineno-7-37"></a><span class="gi">&gt; # you must install Microsoft Services For Unix and map LDAP attributes onto</span>
+<h4 id="sssd">SSSD 配置<a class="headerlink" href="#sssd" title="Permanent link">&para;</a></h4>
+<p>由于 <code>sudo-ldap</code> 未来被废弃，sudo 的配置通过 sssd 实现，参考 <a href="https://access.redhat.com/site/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Deployment_Guide/sssd-ldap-sudo.html">https://access.redhat.com/site/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Deployment_Guide/sssd-ldap-sudo.html</a>。</p>
+<p>将 <code>/usr/share/doc/sssd-common/examples/sssd-example.conf</code> 复制到 <code>/etc/sssd/sssd.conf</code> 并修改权限为 600。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>[taoky@gateway-nic ~]$ sudo diff /usr/share/doc/sssd-common/examples/sssd-example.conf /etc/sssd/sssd.conf
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="gu">3c3</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="gd">&lt; services = nss, pam</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="gs">---</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="gi">&gt; services = nss, pam, sudo</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="gu">8c8,10</span>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="gd">&lt; ; domains = LDAP</span>
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="gs">---</span>
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="gi">&gt; domains = LDAP</span>
+<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a>&gt;
+<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a><span class="gi">&gt; [sudo]</span>
+<a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a>15,17c17,19
+<a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a><span class="gd">&lt; ; [domain/LDAP]</span>
+<a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a><span class="gd">&lt; ; id_provider = ldap</span>
+<a id="__codelineno-6-15" name="__codelineno-6-15" href="#__codelineno-6-15"></a><span class="gd">&lt; ; auth_provider = ldap</span>
+<a id="__codelineno-6-16" name="__codelineno-6-16" href="#__codelineno-6-16"></a><span class="gs">---</span>
+<a id="__codelineno-6-17" name="__codelineno-6-17" href="#__codelineno-6-17"></a><span class="gi">&gt; [domain/LDAP]</span>
+<a id="__codelineno-6-18" name="__codelineno-6-18" href="#__codelineno-6-18"></a><span class="gi">&gt; id_provider = ldap</span>
+<a id="__codelineno-6-19" name="__codelineno-6-19" href="#__codelineno-6-19"></a><span class="gi">&gt; auth_provider = ldap</span>
+<a id="__codelineno-6-20" name="__codelineno-6-20" href="#__codelineno-6-20"></a>22,24c24,26
+<a id="__codelineno-6-21" name="__codelineno-6-21" href="#__codelineno-6-21"></a><span class="gd">&lt; ; ldap_schema = rfc2307</span>
+<a id="__codelineno-6-22" name="__codelineno-6-22" href="#__codelineno-6-22"></a><span class="gd">&lt; ; ldap_uri = ldap://ldap.mydomain.org</span>
+<a id="__codelineno-6-23" name="__codelineno-6-23" href="#__codelineno-6-23"></a><span class="gd">&lt; ; ldap_search_base = dc=mydomain,dc=org</span>
+<a id="__codelineno-6-24" name="__codelineno-6-24" href="#__codelineno-6-24"></a><span class="gs">---</span>
+<a id="__codelineno-6-25" name="__codelineno-6-25" href="#__codelineno-6-25"></a><span class="gi">&gt; ldap_schema = rfc2307</span>
+<a id="__codelineno-6-26" name="__codelineno-6-26" href="#__codelineno-6-26"></a><span class="gi">&gt; ldap_uri = ldaps://ldap.lug.ustc.edu.cn</span>
+<a id="__codelineno-6-27" name="__codelineno-6-27" href="#__codelineno-6-27"></a><span class="gi">&gt; ldap_search_base = dc=lug,dc=ustc,dc=edu,dc=cn</span>
+<a id="__codelineno-6-28" name="__codelineno-6-28" href="#__codelineno-6-28"></a>30c32
+<a id="__codelineno-6-29" name="__codelineno-6-29" href="#__codelineno-6-29"></a><span class="gd">&lt; ; cache_credentials = true</span>
+<a id="__codelineno-6-30" name="__codelineno-6-30" href="#__codelineno-6-30"></a><span class="gs">---</span>
+<a id="__codelineno-6-31" name="__codelineno-6-31" href="#__codelineno-6-31"></a><span class="gi">&gt; cache_credentials = true</span>
 </code></pre></div>
 <div class="admonition danger">
 <p class="admonition-title">坑</p>
-<p>需要加上 <code>[sudo]</code>，否则 sudo 配置似乎不会生效，这个配置问题导致了修改前在 gateway-nic 上用户无法使用 sudo。</p>
+<p>需要加上 <code>[sudo]</code>，否则 sudo 配置不会生效，这个配置问题导致了修改前在 gateway-nic 上用户无法使用 sudo。</p>
 </div>
 <p>另外记得像前面在 Debian 中安装介绍到的那样修改 <code>/etc/nsswitch.conf</code> 以及 <code>/etc/nslcd.conf</code>.</p>
 <h3 id="nscd">NSCD 使用说明<a class="headerlink" href="#nscd" title="Permanent link">&para;</a></h3>
-<p>NSCD 是用于 LDAP 缓存的服务，目前在 mirrors 上的配置是保持 30 天。这导致的问题是每当 ldap 服务器上做出修改的时候需要在 mirrors 上执行，清除指定类型的缓存<s>(目前 mirrors 服务器暂未配置 LDAP 认证。)</s></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>nscd<span class="w"> </span>-i<span class="w"> </span>passwd
-<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>nscd<span class="w"> </span>-i<span class="w"> </span>group
+<p>在 SSSD 未安装的情况下，NSCD 会提供 LDAP 缓存服务。如果在使用 NSCD 的机器上需要清空 LDAP 缓存，执行以下命令：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>nscd<span class="w"> </span>-i<span class="w"> </span>passwd
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>nscd<span class="w"> </span>-i<span class="w"> </span>group
 </code></pre></div>
-<p>参考：<a href="https://wiki.debian.org/LDAP/NSS">https://wiki.debian.org/LDAP/NSS</a></p>
+<p>如果 SSSD 安装，<code>systemctl status sssd</code> 会显示 SSSD 与 NSCD 同时提供了相关缓存，可能存在冲突问题：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>NSCD socket was detected and seems to be configured to cache some of the databases controlled by SSSD [passwd,group,netgroup,services].
+</code></pre></div>
+<p>需要修改 <code>/etc/nscd.conf</code>，将提及的 <code>passwd</code>, <code>group</code>, <code>netgroup</code> 和 <code>services</code> 的 <code>enable-cache</code> 设置为 <code>no</code>。</p>
 <h2 id="ldap-cli">LDAP CLI 工具使用说明<a class="headerlink" href="#ldap-cli" title="Permanent link">&para;</a></h2>
 <p>这里以 <code>ldappasswd</code> 为例，其余 ldap 系列指令与其大致相同：</p>
 <p>LDAP 利用 dn 来定位一个用户，以下指令可以列出所有用户及其 dn：</p>
