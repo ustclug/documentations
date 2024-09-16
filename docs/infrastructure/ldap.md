@@ -60,15 +60,21 @@ gosa 的配置文件在 `/etc/gosa/gosa.conf`，它是在第一次运行 gosa �
 
     Debian 13 Trixie 是最后一个支持 `sudo-ldap` 的版本，Debian 14 将完全移除 `sudo-ldap`，需要尽快迁移至 `sssd`。
 
+    我们大部分现有的服务器仍在使用 `sudo-ldap`，在下次大版本升级前需要逐步迁移。以下提供使用 `sssd` 的配置方法。
+
     Ref: <https://packages.debian.org/trixie/sudo-ldap>
 
 #### 软件包安装
 
-Debian 7 以上系统安装 `libnss-ldapd`、`libpam-ldapd`、`sudo-ldap`
+Debian 7 以上系统安装 `libnss-ldapd`、`libpam-ldapd`、`sssd-ldap`、`libsss-sudo`
 
 !!! note
 
-    更新这些软件包时，注意保留一个 root 终端，更新后可能需要重启 daemon 进程
+    更新这些软件包时，注意保留一个 root 终端，更新后可能需要重启 daemon 进程。
+
+!!! note
+
+    如果已经安装了 `sudo-ldap`，请在全部配置完成**之后**运行 `apt install sudo`，迁移回原 `sudo`。
 
 在安装过程中会被问一些问题（不同版本的 Debian 的问题可能不同）：
 
@@ -91,10 +97,6 @@ SUDOERS_BASE ou=sudoers,dc=lug,dc=ustc,dc=edu,dc=cn
 ```
 
 为了安全性考虑，要以 ldaps 的方式连接 ldap 服务器，同时应配置好证书 (`/etc/ldap/slapd-ca-cert.pem`, 从其它服务器复制一个)
-
-#### /etc/sudo-ldap.conf
-
-这个文件应该直接软链接到 `/etc/ldap/ldap.conf`，通常 dpkg 已经为你创建好了。
 
 #### /etc/nslcd.conf
 
@@ -149,44 +151,24 @@ session required    pam_mkhomedir.so skel=/etc/skel umask=0022
 
 对于 Debian 5，请查阅本文档的 Git 记录。
 
-### CentOS 配置方法
+#### SSSD 配置
 
-通过 yum 安装 openldap openldap-clients nss_ldap nss-pam-ldap
+由于 `sudo-ldap` 未来被废弃，sudo 的配置通过 sssd 实现，参考 <https://access.redhat.com/site/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Deployment_Guide/sssd-ldap-sudo.html>。
 
-以 root 身份执行
-
-```shell
-authconfig --enablecache \
-       --enableldap \
-       --enableldapauth \
-       --ldapserver="ldaps://ldap.lug.ustc.edu.cn/" \
-       --ldapbasedn="dc=lug,dc=ustc,dc=edu,dc=cn" \
-       --enableshadow \
-       --enablemkhomedir \
-       --enablelocauthorize \
-       --update
-```
-
-注意，由于 authconfig 的 bug，上一条命令的执行环境必须是 `LC_ALL=en_US.UTF-8`
-
-Sudo 的配置是通过 sssd 实现的，参考 <https://access.redhat.com/site/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Deployment_Guide/sssd-ldap-sudo.html>
-
-安装 sssd libsss_sudo
-将 `/usr/share/doc/sssd-common/sssd-example.conf` 复制到 `/etc/sssd/sssd.conf` 并修改权限为 600。
+将 `/usr/share/doc/sssd-common/examples/sssd-example.conf` 复制到 `/etc/sssd/sssd.conf` 并修改权限为 600。
 
 ```diff
-[taoky@gateway-nic ~]$ sudo diff /usr/share/doc/sssd-common/sssd-example.conf /etc/sssd/sssd.conf
+[taoky@gateway-nic ~]$ sudo diff /usr/share/doc/sssd-common/examples/sssd-example.conf /etc/sssd/sssd.conf
 3c3
 < services = nss, pam
 ---
 > services = nss, pam, sudo
-8c8
+8c8,10
 < ; domains = LDAP
 ---
 > domains = LDAP
-13a14,15
-> [sudo]
 >
+> [sudo]
 15,17c17,19
 < ; [domain/LDAP]
 < ; id_provider = ldap
@@ -195,7 +177,7 @@ Sudo 的配置是通过 sssd 实现的，参考 <https://access.redhat.com/site/
 > [domain/LDAP]
 > id_provider = ldap
 > auth_provider = ldap
-22,24c24,27
+22,24c24,26
 < ; ldap_schema = rfc2307
 < ; ldap_uri = ldap://ldap.mydomain.org
 < ; ldap_search_base = dc=mydomain,dc=org
@@ -203,33 +185,34 @@ Sudo 的配置是通过 sssd 实现的，参考 <https://access.redhat.com/site/
 > ldap_schema = rfc2307
 > ldap_uri = ldaps://ldap.lug.ustc.edu.cn
 > ldap_search_base = dc=lug,dc=ustc,dc=edu,dc=cn
-> ldap_sudo_search_base = ou=sudoers,dc=lug,dc=ustc,dc=edu,dc=cn
-30c33
+30c32
 < ; cache_credentials = true
 ---
 > cache_credentials = true
-35c38
-< # you must install Microsoft Services For UNIX and map LDAP attributes onto
----
-> # you must install Microsoft Services For Unix and map LDAP attributes onto
 ```
 
 !!! danger "坑"
 
-    需要加上 `[sudo]`，否则 sudo 配置似乎不会生效，这个配置问题导致了修改前在 gateway-nic 上用户无法使用 sudo。
+    需要加上 `[sudo]`，否则 sudo 配置不会生效，这个配置问题导致了修改前在 gateway-nic 上用户无法使用 sudo。
 
 另外记得像前面在 Debian 中安装介绍到的那样修改 `/etc/nsswitch.conf` 以及 `/etc/nslcd.conf`.
 
 ### NSCD 使用说明
 
-NSCD 是用于 LDAP 缓存的服务，目前在 mirrors 上的配置是保持 30 天。这导致的问题是每当 ldap 服务器上做出修改的时候需要在 mirrors 上执行，清除指定类型的缓存<s>(目前 mirrors 服务器暂未配置 LDAP 认证。)</s>
+在 SSSD 未安装的情况下，NSCD 会提供 LDAP 缓存服务。如果在使用 NSCD 的机器上需要清空 LDAP 缓存，执行以下命令：
 
 ```shell
 nscd -i passwd
 nscd -i group
 ```
 
-参考：<https://wiki.debian.org/LDAP/NSS>
+如果 SSSD 安装，`systemctl status sssd` 会显示 SSSD 与 NSCD 同时提供了相关缓存，可能存在冲突问题：
+
+```log
+NSCD socket was detected and seems to be configured to cache some of the databases controlled by SSSD [passwd,group,netgroup,services].
+```
+
+需要修改 `/etc/nscd.conf`，将提及的 `passwd`, `group`, `netgroup` 和 `services` 的 `enable-cache` 设置为 `no`。
 
 ## LDAP CLI 工具使用说明
 
