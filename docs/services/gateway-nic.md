@@ -307,7 +307,7 @@ PartOf=netfilter-persistent.service
 
 ### ustclug.org issue {#unregistered-domain-traffic}
 
-To mitigate the issue of the complaints from ISPs and the regulation authorities caused by the gateways in USTCnet responding to the requests for `ustclug.org`, which is a unregistered domain in China MIIT, we make nginx listen on an alternative port 81/444 for HTTP and HTTPS respectively, to response to the requests for `lug.ustc.edu.cn` only, and rejecting the handshake for any other domain.
+To mitigate the issue of the complaints from ISPs and the regulation authorities caused by the gateways in USTCnet responding to the requests for `ustclug.org`, which is a unregistered domain in China MIIT, we make nginx listen on an alternative port 81/444 for HTTP and HTTPS respectively, to respond to requests for `lug.ustc.edu.cn` only, and rejecting the handshake for any other domain.
 
 ``` title="/etc/nginx/sites-available/default"
 server {
