@@ -2995,7 +2995,7 @@
 </code></pre></div>
 <h2 id="nginx">Nginx<a class="headerlink" href="#nginx" title="Permanent link">&para;</a></h2>
 <h3 id="unregistered-domain-traffic">ustclug.org issue<a class="headerlink" href="#unregistered-domain-traffic" title="Permanent link">&para;</a></h3>
-<p>To mitigate the issue of the complaints from ISPs and the regulation authorities caused by the gateways in USTCnet responding to the requests for <code>ustclug.org</code>, which is a unregistered domain in China MIIT, we make nginx listen on an alternative port 81/444 for HTTP and HTTPS respectively, to response to the requests for <code>lug.ustc.edu.cn</code> only, and rejecting the handshake for any other domain.</p>
+<p>To mitigate the issue of the complaints from ISPs and the regulation authorities caused by the gateways in USTCnet responding to the requests for <code>ustclug.org</code>, which is a unregistered domain in China MIIT, we make nginx listen on an alternative port 81/444 for HTTP and HTTPS respectively, to respond to requests for <code>lug.ustc.edu.cn</code> only, and rejecting the handshake for any other domain.</p>
 <div class="highlight"><span class="filename">/etc/nginx/sites-available/default</span><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>server {
 <a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>  listen 81 default_server;
 <a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>  listen [::]:81 default_server;

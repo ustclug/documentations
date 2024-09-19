@@ -1934,11 +1934,35 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#network-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Network configuration
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Network configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
   <a href="#iptables" class="md-nav__link">
     <span class="md-ellipsis">
       iptables
     </span>
   </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sysctl" class="md-nav__link">
+    <span class="md-ellipsis">
+      sysctl
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -2539,11 +2563,35 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#network-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Network configuration
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Network configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
   <a href="#iptables" class="md-nav__link">
     <span class="md-ellipsis">
       iptables
     </span>
   </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sysctl" class="md-nav__link">
+    <span class="md-ellipsis">
+      sysctl
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -2569,9 +2617,17 @@
 <div class="admonition info">
 <p class="admonition-title">This page is currently a stub.</p>
 </div>
-<h2 id="iptables">iptables<a class="headerlink" href="#iptables" title="Permanent link">&para;</a></h2>
+<h2 id="network-configuration">Network configuration<a class="headerlink" href="#network-configuration" title="Permanent link">&para;</a></h2>
+<h3 id="iptables">iptables<a class="headerlink" href="#iptables" title="Permanent link">&para;</a></h3>
 <p>See <a href="../gateway-nic/#iptables">Gateway NIC</a></p>
 <p>Blacklists are also managed with <code>ipset</code>, see <code>/root/iptables</code>.</p>
+<h3 id="sysctl">sysctl<a class="headerlink" href="#sysctl" title="Permanent link">&para;</a></h3>
+<p>When first applying iptables rules, we experienced severe performance degradation. Dmesg was flooded with messages like this:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>nf_conntrack: nf_conntrack: table full, dropping packet
+</code></pre></div>
+<p>So we increased this sysctl setting:</p>
+<div class="highlight"><span class="filename">/etc/sysctl.d/00-ustclug.conf</span><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>net.nf_conntrack_max<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">262144</span>
+</code></pre></div>
 
 
 
