@@ -2996,15 +2996,15 @@
 <h2 id="nginx">Nginx<a class="headerlink" href="#nginx" title="Permanent link">&para;</a></h2>
 <h3 id="unregistered-domain-traffic">ustclug.org issue<a class="headerlink" href="#unregistered-domain-traffic" title="Permanent link">&para;</a></h3>
 <p>To mitigate the issue of the complaints from ISPs and the regulation authorities caused by the gateways in USTCnet responding to the requests for <code>ustclug.org</code>, which is a unregistered domain in China MIIT, we make nginx listen on an alternative port 81/444 for HTTP and HTTPS respectively, to respond to requests for <code>lug.ustc.edu.cn</code> only, and rejecting the handshake for any other domain.</p>
-<div class="highlight"><span class="filename">/etc/nginx/sites-available/default</span><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>server {
-<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>  listen 81 default_server;
-<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>  listen [::]:81 default_server;
-<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a>  listen 444 ssl http2 default_server;
-<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a>  listen [::]:444 ssl http2 default_server;
-<a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a>  server_name _;
-<a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a>  ssl_reject_handshake on; 
-<a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a>  return 444;
-<a id="__codelineno-14-9" name="__codelineno-14-9" href="#__codelineno-14-9"></a>}
+<div class="highlight"><span class="filename">/etc/nginx/sites-available/default</span><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="k">server</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="w">  </span><span class="kn">listen</span><span class="w"> </span><span class="mi">81</span><span class="w"> </span><span class="s">default_server</span><span class="p">;</span>
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="w">  </span><span class="kn">listen</span><span class="w"> </span><span class="s">[::]:81</span><span class="w"> </span><span class="s">default_server</span><span class="p">;</span>
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="w">  </span><span class="kn">listen</span><span class="w"> </span><span class="mi">444</span><span class="w"> </span><span class="s">ssl</span><span class="w"> </span><span class="s">http2</span><span class="w"> </span><span class="s">default_server</span><span class="p">;</span>
+<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a><span class="w">  </span><span class="kn">listen</span><span class="w"> </span><span class="s">[::]:444</span><span class="w"> </span><span class="s">ssl</span><span class="w"> </span><span class="s">http2</span><span class="w"> </span><span class="s">default_server</span><span class="p">;</span>
+<a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a><span class="w">  </span><span class="kn">server_name</span><span class="w"> </span><span class="s">_</span><span class="p">;</span>
+<a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a><span class="w">  </span><span class="kn">ssl_reject_handshake</span><span class="w"> </span><span class="no">on</span><span class="p">;</span><span class="w"> </span>
+<a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a><span class="w">  </span><span class="kn">return</span><span class="w"> </span><span class="mi">444</span><span class="p">;</span>
+<a id="__codelineno-14-9" name="__codelineno-14-9" href="#__codelineno-14-9"></a><span class="p">}</span>
 </code></pre></div>
 <p>To whitelist any domain, add <code>listen 81</code> and <code>listen 444 http2 ssl</code> to corresponding site's server block.</p>
 <p>We use iptables to redirect any traffic from outside USTCnet whose destination is TCP port 80/443 on local machine to TCP port 81/444 respectively.</p>
