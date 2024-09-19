@@ -126,13 +126,17 @@ sudoers:        files ldap
 
 注意每一项后面的 `ldap`，如果没有要手动加上。不太清楚具体含义，反正给每一项都加上 `ldap` 是没有问题的。
 
-!!! info "Debian 10 要改一下 sudoers 那一行"
+对于使用 sssd 的配置，**注意 `sudoers` 一行需要有 `sss`**，类似于下面这样：
 
-    把 ldap 放前面，同时加上 `[SUCCESS=return]` 应该像下面这样：
+```yaml
+sudoers: files sss
+```
 
-    ```
-    sudoers:        ldap [SUCCESS=return] files
-    ```
+而如果使用传统的 `sudo-ldap`，那么 `sudoers` 一行应该类似于这样：
+
+```yaml
+sudoers:        ldap [SUCCESS=return] files
+```
 
 重启一下 `nscd` 和 `nslcd` 服务，此时运行 `getent passwd`，应该可以看到比 `/etc/passwd` 更多的内容，这就说明配置正确了。
 
