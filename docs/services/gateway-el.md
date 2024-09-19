@@ -2,7 +2,7 @@
 
 !!! todo
 
-	Currently `systemctl restart networking` is required after a reboot to set up tunnel. This bug should be fixed.
+    Currently `systemctl restart networking` is required after a reboot to set up tunnel. This bug should be fixed.
 
 ## Configurations
 
