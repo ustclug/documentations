@@ -35,6 +35,13 @@
         allowfilter = true
     ```
 
+    由于 git daemon/fcgiwrap 的用户不是 mirror，所以需要设置绕过 git 新的安全限制：
+
+    ```ini title="/etc/gitconfig"
+    [safe]
+        directory = *
+    ```
+
 ## 移动（删除）一个仓库
 
 !!! note
