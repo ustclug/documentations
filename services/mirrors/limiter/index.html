@@ -1853,7 +1853,7 @@
           <li class="md-nav__item">
   <a href="#nginx-mod-lua" class="md-nav__link">
     <span class="md-ellipsis">
-      Nginx LUA 组件
+      Nginx Lua 组件
     </span>
   </a>
   
@@ -2682,7 +2682,7 @@
           <li class="md-nav__item">
   <a href="#nginx-mod-lua" class="md-nav__link">
     <span class="md-ellipsis">
-      Nginx LUA 组件
+      Nginx Lua 组件
     </span>
   </a>
   
@@ -2837,7 +2837,7 @@
 <td style="text-align: center;">3</td>
 <td style="text-align: center;">873</td>
 <td style="text-align: center;">Rsync</td>
-<td style="text-align: center;">5*</td>
+<td style="text-align: center;">5</td>
 <td style="text-align: center;">32</td>
 <td style="text-align: center;">64</td>
 </tr>
@@ -2861,12 +2861,12 @@
 <li>1.1.1.1 发起的 HTTP 与 HTTPS 连接共享 12 个连接数限额</li>
 </ul>
 <p>超过配额的连接会返回 TCP Reset。</p>
-<p>* FTP 服务已停止提供，Rsync 仅从 mirrors2 提供，mirrors4 上的 Rsync 端口限制只能从 mirrors2 上访问。</p>
+<p>* FTP 服务已停止提供。</p>
 <h2 id="application">应用级别限制<a class="headerlink" href="#application" title="Permanent link">&para;</a></h2>
 <p>此类限制规则位于应用程序内。由于在用户态程序中实现，因此更加灵活。</p>
-<h3 id="nginx-mod-lua">Nginx LUA 组件<a class="headerlink" href="#nginx-mod-lua" title="Permanent link">&para;</a></h3>
-<p>代码位于 <a href="https://git.lug.ustc.edu.cn/mirrors/nginx-config/blob/master/lua/access.lua">/etc/nginx/lua/access.lua</a></p>
-<p>目前使用了 Nginx 的 lua 语言扩展实现对请求的限制。主要有以下三类限制方式：</p>
+<h3 id="nginx-mod-lua">Nginx Lua 组件<a class="headerlink" href="#nginx-mod-lua" title="Permanent link">&para;</a></h3>
+<p>代码位于 <a href="https://git.lug.ustc.edu.cn/mirrors/nginx-config/blob/master/lua/module/access_limiter.lua">/etc/nginx/lua/module/access_limiter.lua</a></p>
+<p>目前使用了 Nginx 的 Lua 语言扩展实现对请求的限制。主要有以下三类限制方式：</p>
 <ol>
 <li>按连接数限制（即：并发请求数）</li>
 <li>按请求速率限制</li>
@@ -2876,8 +2876,8 @@
 <ol>
 <li>全局请求速率限制器：对所有请求，限制单 IP 的请求速率。</li>
 <li>全局请求数限制器：对于所有请求，<strong>检测</strong>单 IP 在一天内的累计请求数。超过阈值后，降低该 IP 的<em>全局请求速率限制器</em>的阈值。</li>
-<li>HEAD 请求数限制器：对于 HTTP Method == HEAD 类型的请求，<strong>检测</strong>单 IP 在一天内的累计请求数。超过阈值后，开启 <em>HEAD 请求速率限制器</em>。</li>
-<li>HEAD 请求速率限制器：对于 HTTP Method == HEAD 类型的请求，限制单 IP 的请求速率。<strong>该限制器默认关闭。</strong></li>
+<li>HEAD 请求数限制器：对于 HTTP Method = HEAD 类型的请求，<strong>检测</strong>单 IP 在一天内的累计请求数。超过阈值后，开启 <em>HEAD 请求速率限制器</em>。</li>
+<li>HEAD 请求速率限制器：对于 HTTP Method = HEAD 类型的请求，限制单 IP 的请求速率。<strong>该限制器默认关闭。</strong></li>
 <li>断点续传请求速率限制器：对于断点续传类型的请求，限制单 IP 的请求速率。</li>
 <li>断点续传连接数限制器：对于断点续传类型的请求，限制单 IP <strong>单 URI</strong> 的连接数。</li>
 <li>目录请求速率限制器：对于列目录类型的请求，限制单 IP 请求速率。</li>
@@ -2885,9 +2885,11 @@
 </ol>
 <p>备注：</p>
 <ul>
-<li>例外：</li>
+<li>例外：<ol>
 <li>apt/yum 仓库的索引文件不受限制。</li>
 <li>AOSP 仓库不限制全局请求数（git objects 太多了，用户反馈见 <a href="https://github.com/ustclug/discussions/issues/397"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M8 0c4.42 0 8 3.58 8 8a8.01 8.01 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27s-1.36.09-2 .27c-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8"/></svg></span> Issue 397</a>）。</li>
+</ol>
+</li>
 <li>案例：曾遇到过攻击者分布式请求同一个大文件，导致 IO、网络同时过载。基于 IP 地址的限制措施对于源地址池很大的攻击往往没有效果，限制单文件的请求速率能够有效缓解这类攻击。</li>
 </ul>
 <p>具体参数参考下表：</p>
@@ -2994,26 +2996,25 @@
 <p>限制器之间相互独立，当被触发的所有限制器产生不一致的等待时间时，应用最长的等待时间。</p>
 <h3 id="large-files">大文件下载速度限制<a class="headerlink" href="#large-files" title="Permanent link">&para;</a></h3>
 <p>代码位于 <a href="https://git.lug.ustc.edu.cn/mirrors/nginx-config/blob/master/lua/header_filter.lua">/etc/nginx/lua/header_filter.lua</a></p>
-<p>针对大文件下载，限制每个文件的总带宽为 1Gbps，以避免大文件流量占满总带宽。</p>
+<p>针对大文件下载，限制每个文件的总带宽为 1 Gbps，以避免大文件流量占满总带宽。</p>
 <div class="admonition warning">
 <p class="admonition-title">注意事项</p>
 <p>如果有多个文件面临高压力访问，总带宽依然可能被占满</p>
 </div>
-<p>具体做法为，设置下载速度阈值 = 1Gbps / (该大文件的同时连接数 +1)</p>
-<p>当下载的文件无穷大时，将出现最差情形，即用户被分配到的下载速率服从类调和级数，函数发散。实际情况下，早期用户下载完成后连接释放，最终带宽将收敛到 1Gbps。</p>
-<p>注：大文件定义参照目前的 lua 脚本配置。</p>
+<p>具体做法为，设置下载速度阈值 = 1 Gbps / (该大文件的同时连接数 + 1)</p>
+<p>当下载的文件无穷大时，将出现最差情形，即用户被分配到的下载速率服从类调和级数，函数发散。实际情况下，早期用户下载完成后连接释放，最终带宽将收敛到 1 Gbps。</p>
+<p>注：大文件定义参照目前的 Lua 脚本配置。</p>
 <h3 id="nginx-js-challenge">Nginx JavaScript 挑战<a class="headerlink" href="#nginx-js-challenge" title="Permanent link">&para;</a></h3>
-<p>代码位于 <a href="https://git.lug.ustc.edu.cn/mirrors/nginx-config/blob/master/sites-available/iso.mirrors.ustc.edu.cn">/etc/nginx/sites-available/iso.mirrors.ustc.edu.cn</a></p>
+<p>代码位于 <a href="https://git.lug.ustc.edu.cn/mirrors/nginx-config/blob/master/lua/access-with-challenge.lua">/etc/nginx/lua/access-with-challenge.lua</a></p>
 <p>为了抵抗“迅雷攻击”。对于特定类型的文件，开启了 JS 挑战。如果客户端 User-Agent 为 Mozilla（即浏览器），则发送一段包含 JS 脚本的页面，检验运行的结果。如果挑战失败，则返回错误。</p>
-<p>被保护的文件类型有：</p>
-<ul>
-<li>iso</li>
-<li>exe</li>
-<li>dmg</li>
-<li>run</li>
-<li>zip</li>
-<li>tar</li>
-</ul>
+<p>被保护的文件类型参见 <a href="https://git.lug.ustc.edu.cn/mirrors/nginx-config/blob/master/conf.d/map_access.conf">/etc/nginx/conf.d/map_access.conf</a>，部分内容节选如下：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">map</span><span class="w"> </span><span class="nv">$uri</span><span class="w"> </span><span class="nv">$access_url_type</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">    </span><span class="kn">default</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">    </span><span class="c1"># 1: large files</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">    </span><span class="kn">&quot;~*\.(iso|exe|dmg|run|zip|tar)$&quot;</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="p">}</span>
+</code></pre></div>
 <h3 id="robots">爬虫限制<a class="headerlink" href="#robots" title="Permanent link">&para;</a></h3>
 <p>代码位于 <a href="https://git.lug.ustc.edu.cn/mirrors/nginx-config/blob/master/snippets/robots">/etc/nginx/snippets/robots</a></p>
 <p>如果客户端 User-Agent 包含 Spider、Robot 关键字，则禁止其访问仓库内容。避免由于频繁列目录带来大量 IO 负载。</p>
@@ -3032,7 +3033,7 @@
 <h2 id="interface-limit">网络接口级别限制<a class="headerlink" href="#interface-limit" title="Permanent link">&para;</a></h2>
 <p>mirrors 常态下没有网络接口限制，但在需要临时对某一接口进行限制时，可以使用 tc 来完成。</p>
 <p>例如可以参考这份回答：<a href="https://serverfault.com/questions/452829/limiting-interface-bandwidth-with-tc-under-linux">iptables - Limiting interface bandwidth with tc under Linux - Server Fault</a>，使用如下指令限制某一接口的网络速率为 1.5Gbps：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>tc<span class="w"> </span>qdisc<span class="w"> </span>add<span class="w"> </span>dev<span class="w"> </span>&lt;interface&gt;<span class="w"> </span>root<span class="w"> </span>handle<span class="w"> </span><span class="m">1</span>:<span class="w"> </span>tbf<span class="w"> </span>rate<span class="w"> </span>1500Mbit<span class="w"> </span>burst<span class="w"> </span>750K<span class="w"> </span>latency<span class="w"> </span>14ms
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>tc<span class="w"> </span>qdisc<span class="w"> </span>add<span class="w"> </span>dev<span class="w"> </span>&lt;interface&gt;<span class="w"> </span>root<span class="w"> </span>handle<span class="w"> </span><span class="m">1</span>:<span class="w"> </span>tbf<span class="w"> </span>rate<span class="w"> </span>1500Mbit<span class="w"> </span>burst<span class="w"> </span>750K<span class="w"> </span>latency<span class="w"> </span>14ms
 </code></pre></div>
 <p>这里使用了 TBF（令牌桶）算法，后面的 burst 和 latency 参数意义可以参见 <code>man tc-tbf</code>。
 具体而言，latency 没有推荐值，但 burst 要求至少为 <code>rate / HZ</code>，HZ = 100 时 10Mbps 至少约 10MB。
@@ -3041,20 +3042,20 @@ HZ 的值需要从内核的编译参数中查看：<code>egrep '^CONFIG_HZ_[0-9]
 <p>目前部署的限制有：</p>
 <ul>
 <li>unicom 1500Mbit（学校出口带宽 2 Gbps）</li>
-<li>telecom 2500Mbit（学校出口带宽 5 Gbps）</li>
+<li>telecom 2500Mbit（学校出口带宽 10 Gbps）</li>
 </ul>
 <p>在 mirrors4 上该配置的开机自启分别位于 <code>tc-unicom.service</code> 和 <code>tc-telecom.service</code> 两个服务中，其中 <code>tc-unicom.service</code> 配置如下：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="k">[Unit]</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="na">Description</span><span class="o">=</span><span class="s">Rate Limiting for Unicom Interface</span>
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="k">[Service]</span>
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="na">Type</span><span class="o">=</span><span class="s">oneshot</span>
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="na">RemainAfterExit</span><span class="o">=</span><span class="s">true</span>
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="na">ExecStart</span><span class="o">=</span><span class="s">/usr/sbin/tc qdisc replace dev unicom root handle 1: tbf rate 1500Mbit burst 750K latency 14ms</span>
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="na">ExecStop</span><span class="o">=</span><span class="s">/usr/sbin/tc qdisc delete dev unicom root handle 1</span>
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>
-<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="k">[Install]</span>
-<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="na">WantedBy</span><span class="o">=</span><span class="s">sys-subsystem-net-devices-unicom.device</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="k">[Unit]</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="na">Description</span><span class="o">=</span><span class="s">Rate Limiting for Unicom Interface</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="k">[Service]</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="na">Type</span><span class="o">=</span><span class="s">oneshot</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="na">RemainAfterExit</span><span class="o">=</span><span class="s">true</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="na">ExecStart</span><span class="o">=</span><span class="s">/usr/sbin/tc qdisc replace dev unicom root handle 1: tbf rate 1500Mbit burst 750K latency 14ms</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="na">ExecStop</span><span class="o">=</span><span class="s">/usr/sbin/tc qdisc delete dev unicom root handle 1</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="k">[Install]</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="na">WantedBy</span><span class="o">=</span><span class="s">sys-subsystem-net-devices-unicom.device</span>
 </code></pre></div>
 <p>Install 部分的 WantedBy 使用这种写法可以使该服务依赖于名为 <code>unicom</code> 的网口，详细回答可以看 <a href="https://serverfault.com/a/869916/450575">What is the systemd-networkd equivalent of post-up?</a>。</p>
 <h2 id="blacklists">IP 黑名单限制<a class="headerlink" href="#blacklists" title="Permanent link">&para;</a></h2>
@@ -3062,32 +3063,32 @@ HZ 的值需要从内核的编译参数中查看：<code>egrep '^CONFIG_HZ_[0-9]
 ipset 将某个 IP 匹配到一个集合中，iptables 再针对某一集合进行限制。</p>
 <p>ipset 和 iptables 的使用可以参考：<a href="https://wiki.archlinux.org/title/Ipset_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)">Ipset - Arch Wiki</a> 。</p>
 <p>我们已在 mirrors4 上配置了 <code>blacklist</code> 和 <code>blacklist6</code> 集合，若要封禁某个 IP 或网段，可以直接将该网段加入集合，例如：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>ipset<span class="w"> </span>add<span class="w"> </span>blacklist<span class="w"> </span><span class="m">192</span>.0.2.0/24
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>ipset<span class="w"> </span>add<span class="w"> </span>blacklist6<span class="w"> </span><span class="m">2001</span>:db8:114:514::/64
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>ipset<span class="w"> </span>add<span class="w"> </span>blacklist<span class="w"> </span><span class="m">192</span>.0.2.0/24
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>ipset<span class="w"> </span>add<span class="w"> </span>blacklist6<span class="w"> </span><span class="m">2001</span>:db8:114:514::/64
 </code></pre></div>
 <p>与 iptables 类似，ipset 也需要持久化。封禁名单的文件位于（mirrors4）<code>/usr/local/network_config/iptables/blacklist.list</code>，修改此文件增减条目后运行该目录下的 <code>apply.sh</code> 即可。</p>
 <p>由于封禁仅对新建立的连接有效，请在修改封禁名单后，使用 <code>ss -K dst 对应的网段</code> 关闭已经建立的连接（例如对于以上两行规则，命令分别为 <code>ss -K dst 192.0.2.0/24</code> 与 <code>ss -K dst 2001:db8:114:514::/64</code>）。</p>
 <h3 id="ipset-persistent">ipset 持久化<a class="headerlink" href="#ipset-persistent" title="Permanent link">&para;</a></h3>
 <p>我们使用软件源里的 <code>ipset-persistent</code> 包来帮助 ipset 在开机时自动恢复，该软件包会在开机加载 iptables 前先从 <code>/etc/iptables/ipsets</code> 中恢复 ipset 以确保 iptables 中的引用能正确处理。</p>
 <p>因为 ipset-persistent 在开机时自动加载，我们选择仅加载一个较小的子集，包含必要配置（create set）和较少发生变化的内容（如 ustcnet 的网段）。目前 <code>/etc/iptables/ipsets</code> 包含以下内容：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>create<span class="w"> </span>ustcnet<span class="w"> </span>hash:net<span class="w"> </span>family<span class="w"> </span>inet<span class="w"> </span>hashsize<span class="w"> </span><span class="m">1024</span><span class="w"> </span>maxelem<span class="w"> </span><span class="m">65536</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>create<span class="w"> </span>f2b-sshd<span class="w"> </span>hash:ip<span class="w"> </span>family<span class="w"> </span>inet<span class="w"> </span>hashsize<span class="w"> </span><span class="m">1024</span><span class="w"> </span>maxelem<span class="w"> </span><span class="m">65536</span><span class="w"> </span>timeout<span class="w"> </span><span class="m">3600</span>
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>create<span class="w"> </span>blacklist<span class="w"> </span>hash:net<span class="w"> </span>family<span class="w"> </span>inet<span class="w"> </span>hashsize<span class="w"> </span><span class="m">1024</span><span class="w"> </span>maxelem<span class="w"> </span><span class="m">65536</span>
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>create<span class="w"> </span>blacklist6<span class="w"> </span>hash:net<span class="w"> </span>family<span class="w"> </span>inet6<span class="w"> </span>hashsize<span class="w"> </span><span class="m">1024</span><span class="w"> </span>maxelem<span class="w"> </span><span class="m">65536</span>
-<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>
-<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>add<span class="w"> </span>ustcnet<span class="w"> </span><span class="m">202</span>.38.64.0/19
-<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="c1"># more ustcnet entries...</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>create<span class="w"> </span>ustcnet<span class="w"> </span>hash:net<span class="w"> </span>family<span class="w"> </span>inet<span class="w"> </span>hashsize<span class="w"> </span><span class="m">1024</span><span class="w"> </span>maxelem<span class="w"> </span><span class="m">65536</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>create<span class="w"> </span>f2b-sshd<span class="w"> </span>hash:ip<span class="w"> </span>family<span class="w"> </span>inet<span class="w"> </span>hashsize<span class="w"> </span><span class="m">1024</span><span class="w"> </span>maxelem<span class="w"> </span><span class="m">65536</span><span class="w"> </span>timeout<span class="w"> </span><span class="m">3600</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>create<span class="w"> </span>blacklist<span class="w"> </span>hash:net<span class="w"> </span>family<span class="w"> </span>inet<span class="w"> </span>hashsize<span class="w"> </span><span class="m">1024</span><span class="w"> </span>maxelem<span class="w"> </span><span class="m">65536</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>create<span class="w"> </span>blacklist6<span class="w"> </span>hash:net<span class="w"> </span>family<span class="w"> </span>inet6<span class="w"> </span>hashsize<span class="w"> </span><span class="m">1024</span><span class="w"> </span>maxelem<span class="w"> </span><span class="m">65536</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>add<span class="w"> </span>ustcnet<span class="w"> </span><span class="m">202</span>.38.64.0/19
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="c1"># more ustcnet entries...</span>
 </code></pre></div>
 <h3 id="403" page="page">403 页面<a class="headerlink" href="#403" title="Permanent link">&para;</a></h3>
 <p>目前 mirrors4 将来源 IP 属于 <code>blacklist</code> 或 <code>blacklist6</code> 集合且目标端口为 80 或 443 的连接重定向至 403 端口。403 页面位于 <code>/var/www/html/403.html</code>。</p>
 <p>相关 nginx 配置位于 <a href="https://git.lug.ustc.edu.cn/mirrors/nginx-config/-/blob/master/sites-available/mirrors.ustc.edu.cn-403">/etc/nginx/sites-available/mirrors.ustc.edu.cn-403</a>。</p>
 <p>我们使用 <code>ip{,6}tables</code> 将对 80 或 443 端口的访问重定向至 403 端口，在 <code>nat</code> 表的 <code>PREROUTING</code> 链添加规则：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>-A PREROUTING -m set --match-set blacklist src -p tcp -m multiport --dports 80,443 -j REDIRECT --to-port 403
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>-A PREROUTING -m set --match-set blacklist src -p tcp -m multiport --dports 80,443 -j REDIRECT --to-port 403
 </code></pre></div>
 <p>并在 <code>filter</code> 表 <code>BLACKLIST</code> 链放行已建立连接，对 403 端口限速：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>-A BLACKLIST -m conntrack --ctstate ESTABLISHED -j RETURN
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>-A BLACKLIST -p tcp --dport 403 -m hashlimit --hashlimit-upto 60/min --hashlimit-burst 5 --hashlimit-mode srcip --hashlimit-srcmask 64 --hashlimit-name nginx-403 --hashlimit-htable-expire 60000 -j RETURN
-<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>-A BLACKLIST -j DROP
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>-A BLACKLIST -m conntrack --ctstate ESTABLISHED -j RETURN
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>-A BLACKLIST -p tcp --dport 403 -m hashlimit --hashlimit-upto 60/min --hashlimit-burst 5 --hashlimit-mode srcip --hashlimit-srcmask 64 --hashlimit-name nginx-403 --hashlimit-htable-expire 60000 -j RETURN
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>-A BLACKLIST -j DROP
 </code></pre></div>
 
 
