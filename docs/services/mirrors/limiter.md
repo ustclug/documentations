@@ -19,12 +19,12 @@
 
 防火墙 (iptables) 目前只负责限制单 IP 的并发链接数。这是为了防止同时涌入大量并发连接，导致后端应用耗费大量 CPU 和 I/O 资源处理这些不合常理的请求。
 
-| 序号 |       端口        |    服务    | 最大连接数 | IPv4 CIDR | IPv6 CIDR |
-| :--: | :---------------: | :--------: | :--------: | :-------: | :-------: |
-|  1   |      80,443       | HTTP/HTTPS |     12     |    29     |    64     |
-|  2   | 20,21,50100:50200 |    FTP     |    4\*     |    32     |    64     |
-|  3   |        873        |   Rsync    |    5\*     |    32     |    64     |
-|  4   |       9418        |    Git     |     10     |    32     |    64     |
+| 序号  |       端口        |    服务    | 最大连接数 | IPv4 CIDR | IPv6 CIDR |
+| :---: | :---------------: | :--------: | :--------: | :-------: | :-------: |
+|   1   |      80,443       | HTTP/HTTPS |     12     |    29     |    64     |
+|   2   | 20,21,50100:50200 |    FTP     |    4\*     |    32     |    64     |
+|   3   |        873        |   Rsync    |     5      |    32     |    64     |
+|   4   |       9418        |    Git     |     10     |    32     |    64     |
 
 !!! warning "注意事项"
 
@@ -37,17 +37,17 @@
 
 超过配额的连接会返回 TCP Reset。
 
-\* FTP 服务已停止提供，Rsync 仅从 mirrors2 提供，mirrors4 上的 Rsync 端口限制只能从 mirrors2 上访问。
+\* FTP 服务已停止提供。
 
 ## 应用级别限制 {#application}
 
 此类限制规则位于应用程序内。由于在用户态程序中实现，因此更加灵活。
 
-### Nginx LUA 组件 {#nginx-mod-lua}
+### Nginx Lua 组件 {#nginx-mod-lua}
 
-代码位于 [/etc/nginx/lua/access.lua](https://git.lug.ustc.edu.cn/mirrors/nginx-config/blob/master/lua/access.lua)
+代码位于 [/etc/nginx/lua/module/access_limiter.lua](https://git.lug.ustc.edu.cn/mirrors/nginx-config/blob/master/lua/module/access_limiter.lua)
 
-目前使用了 Nginx 的 lua 语言扩展实现对请求的限制。主要有以下三类限制方式：
+目前使用了 Nginx 的 Lua 语言扩展实现对请求的限制。主要有以下三类限制方式：
 
 1. 按连接数限制（即：并发请求数）
 2. 按请求速率限制
@@ -57,8 +57,8 @@
 
 1. 全局请求速率限制器：对所有请求，限制单 IP 的请求速率。
 2. 全局请求数限制器：对于所有请求，**检测**单 IP 在一天内的累计请求数。超过阈值后，降低该 IP 的*全局请求速率限制器*的阈值。
-3. HEAD 请求数限制器：对于 HTTP Method == HEAD 类型的请求，**检测**单 IP 在一天内的累计请求数。超过阈值后，开启 _HEAD 请求速率限制器_。
-4. HEAD 请求速率限制器：对于 HTTP Method == HEAD 类型的请求，限制单 IP 的请求速率。**该限制器默认关闭。**
+3. HEAD 请求数限制器：对于 HTTP Method = HEAD 类型的请求，**检测**单 IP 在一天内的累计请求数。超过阈值后，开启 *HEAD 请求速率限制器*。
+4. HEAD 请求速率限制器：对于 HTTP Method = HEAD 类型的请求，限制单 IP 的请求速率。**该限制器默认关闭。**
 5. 断点续传请求速率限制器：对于断点续传类型的请求，限制单 IP 的请求速率。
 6. 断点续传连接数限制器：对于断点续传类型的请求，限制单 IP **单 URI** 的连接数。
 7. 目录请求速率限制器：对于列目录类型的请求，限制单 IP 请求速率。
@@ -67,8 +67,8 @@
 备注：
 
 - 例外：
-  1. apt/yum 仓库的索引文件不受限制。
-  2. AOSP 仓库不限制全局请求数（git objects 太多了，用户反馈见 [:octicons-mark-github-16: Issue 397](https://github.com/ustclug/discussions/issues/397)）。
+    1. apt/yum 仓库的索引文件不受限制。
+    2. AOSP 仓库不限制全局请求数（git objects 太多了，用户反馈见 [:octicons-mark-github-16: Issue 397](https://github.com/ustclug/discussions/issues/397)）。
 - 案例：曾遇到过攻击者分布式请求同一个大文件，导致 IO、网络同时过载。基于 IP 地址的限制措施对于源地址池很大的攻击往往没有效果，限制单文件的请求速率能够有效缓解这类攻击。
 
 具体参数参考下表：
@@ -110,32 +110,34 @@
 
 代码位于 [/etc/nginx/lua/header_filter.lua](https://git.lug.ustc.edu.cn/mirrors/nginx-config/blob/master/lua/header_filter.lua)
 
-针对大文件下载，限制每个文件的总带宽为 1Gbps，以避免大文件流量占满总带宽。
+针对大文件下载，限制每个文件的总带宽为 1 Gbps，以避免大文件流量占满总带宽。
 
 !!! warning "注意事项"
 
     如果有多个文件面临高压力访问，总带宽依然可能被占满
 
-具体做法为，设置下载速度阈值 = 1Gbps / (该大文件的同时连接数 +1)
+具体做法为，设置下载速度阈值 = 1 Gbps / (该大文件的同时连接数 + 1)
 
-当下载的文件无穷大时，将出现最差情形，即用户被分配到的下载速率服从类调和级数，函数发散。实际情况下，早期用户下载完成后连接释放，最终带宽将收敛到 1Gbps。
+当下载的文件无穷大时，将出现最差情形，即用户被分配到的下载速率服从类调和级数，函数发散。实际情况下，早期用户下载完成后连接释放，最终带宽将收敛到 1 Gbps。
 
-注：大文件定义参照目前的 lua 脚本配置。
+注：大文件定义参照目前的 Lua 脚本配置。
 
 ### Nginx JavaScript 挑战 {#nginx-js-challenge}
 
-代码位于 [/etc/nginx/sites-available/iso.mirrors.ustc.edu.cn](https://git.lug.ustc.edu.cn/mirrors/nginx-config/blob/master/sites-available/iso.mirrors.ustc.edu.cn)
+代码位于 [/etc/nginx/lua/access-with-challenge.lua](https://git.lug.ustc.edu.cn/mirrors/nginx-config/blob/master/lua/access-with-challenge.lua)
 
-为了抵抗“迅雷攻击”。对于特定类型的文件，开启了 JS 挑战。如果客户端 User-Agent 为 Mozilla（即浏览器），则发送一段包含 JS 脚本的页面，检验运行的结果。如果挑战失败，则返回错误。
+为了抵抗“迅雷攻击”。对于特定类型的文件，开启了 JS 挑战。如果客户端 User-Agent 为 Mozilla（即浏览器），则发送一段包含 JS 脚本的页面，检验运行的结果。如果挑战失败，则禁止访问。
 
-被保护的文件类型有：
+被保护的文件类型参见 [/etc/nginx/conf.d/map_access.conf](https://git.lug.ustc.edu.cn/mirrors/nginx-config/blob/master/conf.d/map_access.conf)，部分内容节选如下：
 
-- iso
-- exe
-- dmg
-- run
-- zip
-- tar
+```nginx
+map $uri $access_url_type {
+    default 0;
+
+    # 1: large files
+    "~*\.(iso|exe|dmg|run|zip|tar)$" 1;
+}
+```
 
 ### 爬虫限制 {#robots}
 
@@ -177,7 +179,7 @@ HZ 的值需要从内核的编译参数中查看：`` egrep '^CONFIG_HZ_[0-9]+' 
 目前部署的限制有：
 
 - unicom 1500Mbit（学校出口带宽 2 Gbps）
-- telecom 2500Mbit（学校出口带宽 5 Gbps）
+- telecom 2500Mbit（学校出口带宽 10 Gbps）
 
 在 mirrors4 上该配置的开机自启分别位于 `tc-unicom.service` 和 `tc-telecom.service` 两个服务中，其中 `tc-unicom.service` 配置如下：
 
