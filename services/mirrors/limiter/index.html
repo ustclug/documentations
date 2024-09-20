@@ -3006,7 +3006,7 @@
 <p>注：大文件定义参照目前的 Lua 脚本配置。</p>
 <h3 id="nginx-js-challenge">Nginx JavaScript 挑战<a class="headerlink" href="#nginx-js-challenge" title="Permanent link">&para;</a></h3>
 <p>代码位于 <a href="https://git.lug.ustc.edu.cn/mirrors/nginx-config/blob/master/lua/access-with-challenge.lua">/etc/nginx/lua/access-with-challenge.lua</a></p>
-<p>为了抵抗“迅雷攻击”。对于特定类型的文件，开启了 JS 挑战。如果客户端 User-Agent 为 Mozilla（即浏览器），则发送一段包含 JS 脚本的页面，检验运行的结果。如果挑战失败，则返回错误。</p>
+<p>为了抵抗“迅雷攻击”。对于特定类型的文件，开启了 JS 挑战。如果客户端 User-Agent 为 Mozilla（即浏览器），则发送一段包含 JS 脚本的页面，检验运行的结果。如果挑战失败，则禁止访问。</p>
 <p>被保护的文件类型参见 <a href="https://git.lug.ustc.edu.cn/mirrors/nginx-config/blob/master/conf.d/map_access.conf">/etc/nginx/conf.d/map_access.conf</a>，部分内容节选如下：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">map</span><span class="w"> </span><span class="nv">$uri</span><span class="w"> </span><span class="nv">$access_url_type</span><span class="w"> </span><span class="p">{</span>
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">    </span><span class="kn">default</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
