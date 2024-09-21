@@ -22,4 +22,5 @@ So we increased this sysctl setting:
 
 ```shell title="/etc/sysctl.d/00-ustclug.conf"
 net.nf_conntrack_max = 262144
+net.ipv4.tcp_max_orphans = 262144
 ```
