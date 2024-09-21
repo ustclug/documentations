@@ -2629,6 +2629,7 @@
 <div class="highlight"><span class="filename">/etc/sysctl.d/00-ustclug.conf</span><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>net.nf_conntrack_max<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">262144</span>
 <a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>net.ipv4.tcp_max_orphans<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">262144</span>
 </code></pre></div>
+<p>To ensure <code>net.nf_conntrack_max</code> is available at boot, we also added <code>nf_conntrack</code> to <code>/etc/modules</code> and ran <code>update-initramfs -u</code>.</p>
 
 
 
