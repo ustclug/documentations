@@ -241,13 +241,13 @@ add ustcnet 202.38.64.0/19
 
 我们使用 `ip{,6}tables` 将对 80 或 443 端口的访问重定向至 403 端口，在 `nat` 表的 `PREROUTING` 链添加规则：
 
-```
+```shell
 -A PREROUTING -m set --match-set blacklist src -p tcp -m multiport --dports 80,443 -j REDIRECT --to-port 403
 ```
 
 并在 `filter` 表 `BLACKLIST` 链放行已建立连接，对 403 端口限速：
 
-```
+```shell
 -A BLACKLIST -m conntrack --ctstate ESTABLISHED -j RETURN
 -A BLACKLIST -p tcp --dport 403 -m hashlimit --hashlimit-upto 60/min --hashlimit-burst 5 --hashlimit-mode srcip --hashlimit-srcmask 64 --hashlimit-name nginx-403 --hashlimit-htable-expire 60000 -j RETURN
 -A BLACKLIST -j DROP
