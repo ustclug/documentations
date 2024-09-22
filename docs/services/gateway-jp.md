@@ -22,7 +22,9 @@ So we increased this sysctl setting:
 
 ```shell title="/etc/sysctl.d/00-ustclug.conf"
 net.nf_conntrack_max = 262144
-net.ipv4.tcp_max_orphans = 262144
+net.ipv4.tcp_fin_timeout = 10
 ```
 
 To ensure `net.nf_conntrack_max` is available at boot, we also added `nf_conntrack` to `/etc/modules` and ran `update-initramfs -u`.
+
+The other setting is to prevent TCP connections from lingering too long in `FIN_WAIT_2` and `TIME_WAIT` states.
