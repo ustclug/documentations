@@ -22,7 +22,7 @@
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.36">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.39">
     
     
       
@@ -30,7 +30,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.06209087.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.8c3ca2c6.min.css">
       
         
         <link rel="stylesheet" href="../../../assets/stylesheets/palette.06af60db.min.css">
@@ -2876,8 +2876,8 @@
 <ol>
 <li>全局请求速率限制器：对所有请求，限制单 IP 的请求速率。</li>
 <li>全局请求数限制器：对于所有请求，<strong>检测</strong>单 IP 在一天内的累计请求数。超过阈值后，降低该 IP 的<em>全局请求速率限制器</em>的阈值。</li>
-<li>HEAD 请求数限制器：对于 HTTP Method = HEAD 类型的请求，<strong>检测</strong>单 IP 在一天内的累计请求数。超过阈值后，开启 <em>HEAD 请求速率限制器</em>。</li>
-<li>HEAD 请求速率限制器：对于 HTTP Method = HEAD 类型的请求，限制单 IP 的请求速率。<strong>该限制器默认关闭。</strong></li>
+<li><del>HEAD 请求数限制器：对于 HTTP Method = HEAD 类型的请求，<strong>检测</strong>单 IP 在一天内的累计请求数。超过阈值后，开启 <em>HEAD 请求速率限制器</em>。</del></li>
+<li><del>HEAD 请求速率限制器：对于 HTTP Method = HEAD 类型的请求，限制单 IP 的请求速率。<strong>该限制器默认关闭。</strong></del></li>
 <li>断点续传请求速率限制器：对于断点续传类型的请求，限制单 IP 的请求速率。</li>
 <li>断点续传连接数限制器：对于断点续传类型的请求，限制单 IP <strong>单 URI</strong> 的连接数。</li>
 <li>目录请求速率限制器：对于列目录类型的请求，限制单 IP 请求速率。</li>
@@ -2885,12 +2885,15 @@
 </ol>
 <p>备注：</p>
 <ul>
-<li>例外：<ol>
+<li>
+<p>例外：</p>
+<ol>
 <li>apt/yum 仓库的索引文件不受限制。</li>
-<li>AOSP 仓库不限制全局请求数（git objects 太多了，用户反馈见 <a href="https://github.com/ustclug/discussions/issues/397"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M8 0c4.42 0 8 3.58 8 8a8.01 8.01 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27s-1.36.09-2 .27c-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8"/></svg></span> Issue 397</a>）。</li>
+<li>AOSP 仓库不限制全局请求数（git objects 太多了，用户反馈见 <a href="https://github.com/ustclug/discussions/issues/397"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M8 0c4.42 0 8 3.58 8 8a8.01 8.01 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27s-1.36.09-2 .27c-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8"/></svg></span> Issue 397</a>）；nix-channels 也不限制全局请求数（nix 包管理器默认开启 16 并发）。</li>
 </ol>
+<p>例外文件的定义参考 <code>/etc/nginx/conf.d/access_limiter.conf</code>。
+- 案例：曾遇到过攻击者分布式请求同一个大文件，导致 IO、网络同时过载。基于 IP 地址的限制措施对于源地址池很大的攻击往往没有效果，限制单文件的请求速率能够有效缓解这类攻击。</p>
 </li>
-<li>案例：曾遇到过攻击者分布式请求同一个大文件，导致 IO、网络同时过载。基于 IP 地址的限制措施对于源地址池很大的攻击往往没有效果，限制单文件的请求速率能够有效缓解这类攻击。</li>
 </ul>
 <p>具体参数参考下表：</p>
 <table>
@@ -2906,7 +2909,7 @@
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;">全局请求速率限制器 <code>Main-Req</code></td>
+<td style="text-align: center;">全局请求速率限制器<br><code>Main-Req</code></td>
 <td style="text-align: center;">次/秒</td>
 <td style="text-align: center;">40</td>
 <td style="text-align: center;">100</td>
@@ -2914,7 +2917,7 @@
 <td style="text-align: center;">返回 429 错误</td>
 </tr>
 <tr>
-<td style="text-align: center;">全局请求数限制器 <code>Main-Count</code></td>
+<td style="text-align: center;">全局请求数限制器<br><code>Main-Count</code></td>
 <td style="text-align: center;">次</td>
 <td style="text-align: center;">15000</td>
 <td style="text-align: center;">/</td>
@@ -2922,7 +2925,7 @@
 <td style="text-align: center;">设置全局请求速率限制器阈值为 0.2 次/秒</td>
 </tr>
 <tr>
-<td style="text-align: center;">HEAD 请求数限制器 <code>Head-Count</code></td>
+<td style="text-align: center;">HEAD 请求数限制器<br><code>Head-Count</code></td>
 <td style="text-align: center;">次</td>
 <td style="text-align: center;">300</td>
 <td style="text-align: center;">/</td>
@@ -2930,7 +2933,7 @@
 <td style="text-align: center;">开启 HEAD 请求速率限制器</td>
 </tr>
 <tr>
-<td style="text-align: center;">HEAD 请求速率限制器 <code>Head-Req</code></td>
+<td style="text-align: center;">HEAD 请求速率限制器<br><code>Head-Req</code></td>
 <td style="text-align: center;">次/秒</td>
 <td style="text-align: center;">0.05</td>
 <td style="text-align: center;">5</td>
@@ -2938,7 +2941,7 @@
 <td style="text-align: center;">返回 429 错误</td>
 </tr>
 <tr>
-<td style="text-align: center;">断点续传请求速率限制器 <code>Partial-Req</code></td>
+<td style="text-align: center;">断点续传请求速率限制器<br><code>Partial-Req</code></td>
 <td style="text-align: center;">次/秒</td>
 <td style="text-align: center;">1</td>
 <td style="text-align: center;">10</td>
@@ -2946,7 +2949,7 @@
 <td style="text-align: center;">返回 429 错误</td>
 </tr>
 <tr>
-<td style="text-align: center;">断点续传连接数限制器 <code>Partial-Conn</code></td>
+<td style="text-align: center;">断点续传连接数限制器<br><code>Partial-Conn</code></td>
 <td style="text-align: center;">条</td>
 <td style="text-align: center;">1</td>
 <td style="text-align: center;">0</td>
@@ -2954,7 +2957,7 @@
 <td style="text-align: center;">返回 429 错误</td>
 </tr>
 <tr>
-<td style="text-align: center;">目录请求速率限制器 <code>Ls-Req</code></td>
+<td style="text-align: center;">目录请求速率限制器<br><code>Ls-Req</code></td>
 <td style="text-align: center;">次/秒</td>
 <td style="text-align: center;">0.5</td>
 <td style="text-align: center;">10</td>
@@ -2962,7 +2965,7 @@
 <td style="text-align: center;">返回 429 错误</td>
 </tr>
 <tr>
-<td style="text-align: center;">文件请求速率限制器 <code>File-Req</code></td>
+<td style="text-align: center;">文件请求速率限制器<br><code>File-Req</code></td>
 <td style="text-align: center;">次/秒</td>
 <td style="text-align: center;">5</td>
 <td style="text-align: center;">25</td>
@@ -2970,7 +2973,7 @@
 <td style="text-align: center;">返回 429 错误</td>
 </tr>
 <tr>
-<td style="text-align: center;">文件请求连接数限制器 <code>File-Conn</code></td>
+<td style="text-align: center;">文件请求连接数限制器<br><code>File-Conn</code></td>
 <td style="text-align: center;">条</td>
 <td style="text-align: center;">100</td>
 <td style="text-align: center;">0</td>
@@ -2979,6 +2982,10 @@
 </tr>
 </tbody>
 </table>
+<div class="admonition note">
+<p class="admonition-title">HEAD 限制器已关闭</p>
+<p>考虑到 ZFS 对 dnode 的缓存非常有效，在接到 AOSC 社区的反馈后，我们完全关闭了 HEAD 请求数限制器。</p>
+</div>
 <details class="note">
 <summary>How lua-resty-limit-traffic works</summary>
 <p>限制器逻辑使用 <a href="https://github.com/openresty/lua-resty-limit-traffic">https://github.com/openresty/lua-resty-limit-traffic</a> 实现，其中上表代号分别对应其 <code>req</code>, <code>count</code>, <code>conn</code> 三种实现，<code>traffic</code> 则 aggregate 了 <code>count</code> 之外的限制器，返回最大的延迟。</p>
@@ -3175,7 +3182,7 @@ ipset 将某个 IP 匹配到一个集合中，iptables 再针对某一集合进�
     <script id="__config" type="application/json">{"base": "../../..", "features": ["content.code.annotate", "content.code.copy", "navigation.indexes", "navigation.sections", "navigation.top"], "search": "../../../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.56dfad97.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.525ec568.min.js"></script>
       
     
   </body>
