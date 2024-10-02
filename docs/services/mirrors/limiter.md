@@ -69,6 +69,7 @@
 - 例外：
     1. apt/yum 仓库的索引文件不受限制。
     2. AOSP 仓库不限制全局请求数（git objects 太多了，用户反馈见 [:octicons-mark-github-16: Issue 397](https://github.com/ustclug/discussions/issues/397)）；nix-channels 也不限制全局请求数（nix 包管理器默认开启 16 并发）。
+    3. 对返回 403 的恶意请求（[见下](#robots)），仅应用全局请求速率/请求数限制器，跳过断点续传/目录/文件限制器，避免因为恶意请求刷满了目录/文件的限额导致正常用户的访问受限。
 
     例外文件的定义参考 `/etc/nginx/conf.d/access_limiter.conf`。
 - 案例：曾遇到过攻击者分布式请求同一个大文件，导致 IO、网络同时过载。基于 IP 地址的限制措施对于源地址池很大的攻击往往没有效果，限制单文件的请求速率能够有效缓解这类攻击。
@@ -147,9 +148,10 @@ map $uri $access_url_type {
 
 ### 爬虫限制 {#robots}
 
-代码位于 [/etc/nginx/snippets/robots](https://git.lug.ustc.edu.cn/mirrors/nginx-config/blob/master/snippets/robots)
+代码位于 `map_access.conf`（见上）和 [/etc/nginx/snippets/robots](https://git.lug.ustc.edu.cn/mirrors/nginx-config/blob/master/snippets/robots)，利用 nginx 的 `map` 实现组合逻辑，进行如下限制：
 
-如果客户端 User-Agent 包含 Spider、Robot 关键字，则禁止其访问仓库内容。避免由于频繁列目录带来大量 IO 负载。
+- 如果客户端 User-Agent 包含 Spider、Robot 等关键字，或者符合一些恶意流量的 pattern，则禁止其访问仓库内容。
+- 如果客户端 User-Agent 符合另一些 pattern，则禁止其访问大文件（定义同上）。
 
 ### Rsync 总连接数限制 {#rsync-connections}
 
