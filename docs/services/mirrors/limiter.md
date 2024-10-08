@@ -68,7 +68,7 @@
 
 1. apt/yum 仓库的索引文件不受限制。
 2. AOSP 仓库不限制全局请求数（git objects 太多了，用户反馈见 [:octicons-mark-github-16: Issue 397](https://github.com/ustclug/discussions/issues/397)）；nix-channels 也不限制全局请求数（nix 包管理器默认开启 16 并发）。
-3. 对返回 403 的恶意请求（[见下](#robots)），仅应用全局请求速率/请求数限制器，跳过断点续传/目录/文件限制器，避免因为恶意请求刷满了目录/文件的限额导致正常用户的访问受限。
+3. 对返回 403 的恶意请求（[见下](#robots)），仅应用全局请求速率/请求数限制器（Main-Req 和 Main-Count），且在这两个限制器里按双倍计数；同时跳过断点续传/目录/文件限制器，避免因为恶意请求刷满了目录/文件的限额导致正常用户的访问受限。
 
     例外文件的定义参考 `/etc/nginx/conf.d/access_limiter.conf`。
 
