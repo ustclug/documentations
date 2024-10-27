@@ -26,6 +26,12 @@
 >
 > 请不要“只回复邮件”。如果在回复中说“我们会做某某事”，请注意除非你明确转交给了别人，这件事应当由你来完成。
 
+### 加入 LUG @ USTC 列表 {#lug-ustc-mailing-list}
+
+!!! note "本节需要由 Microsoft 365 的管理员操作"
+
+邮件列表管理在 Microsoft Admin Portal 的 [Distribution list](https://admin.microsoft.com/Adminportal/Home#/groups/_/DistributionList) 页面，其中 Staff 组和 Mirrors 组的邮件地址分别是 `lug A ustc.edu.cn` 和 `mirrors A ustc.edu.cn` 的转发目标。
+
 ## 邮件签名 {#email-signature}
 
 Outlook 无法直接通过网页端添加发件人名称、设置回复地址，因此只能通过邮件客户端进行使用。在下一章节的 Thunderbird 中进行详细阐述。
@@ -179,12 +185,6 @@ Outlook 云端已经带有了垃圾邮件分类功能，不需要 Thunderbird �
 在添加了签名后，在下面的“默认签名设置”中，将“用于新电子邮件”以及“用于回复/转发”均选择为上面添加的签名。
 
 记得滚动到页面最下方点击“保存页面”！
-
-### 加入 lug @ ustc 列表 {#lug-ustc-mailing-list}
-
-!!! warning "本节写的是 G Suite 用法，需要更新成 Office 365"
-
-若要收到发往 lug A ustc.edu.cn 的邮件，需要在 [群组管理](https://admin.google.com/ac/groups) 这里将用户加入 USTC LUG Staff 组。这个群组就是 lug 和 mirrors 在学校邮箱设置的转发目标。
 
 ### 设置默认地址 {#default-route}
 
