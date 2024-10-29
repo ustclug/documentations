@@ -1,5 +1,9 @@
 # Volumes on mirrors4
 
+!!! warning "注意"
+
+    mirrors4 于 2024 年 7 月重建为 ZFS pool，以下内容已经过时。
+
 [介绍页](index.md)讲过了，控制器的坑导致不能直接把 12 块硬盘组成一个逻辑磁盘，因此我们在上层使用 LVM 来解决这个问题。
 
 ## 磁盘分区
