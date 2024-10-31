@@ -43,6 +43,55 @@ endscript
 
 未完待续。
 
+## Git 服务
+
+Mirrors 上的 Git 服务由两部分组成：
+
+- Git 协议（TCP 9418 端口）由 `git-daemon` 直接提供。Git daemon 由我们自己写的一个 systemd service 运行：
+
+    ```ini title="/etc/systemd/system/git-daemon.service"
+    [Unit]
+    Description=Git Daemon
+    After=network.target
+
+    [Service]
+    Type=exec
+    Nice=19
+    IOSchedulingClass=best-effort
+    IOSchedulingPriority=6
+    ExecStart=/usr/lib/git-core/git-daemon --user=gitdaemon --reuseaddr --verbose --export-all --forbid-override=receive-pack --timeout=180 --max-connections=32 --base-path=/srv/git
+
+    Slice=system-cgi.slice
+
+    [Install]
+    WantedBy=multi-user.target
+    ```
+
+- Git over HTTP 经过 Nginx 和 fcgiwrap 由 `git-http-backend` 提供。考虑到 fcgiwrap 主要用于 Git，我们将其放入同一个 slice 与 Git daemon 共享内存限制：
+
+    ```ini title="systemctl edit fcgiwrap.service"
+    [Service]
+    Type=exec
+    Nice=19
+    IOSchedulingClass=best-effort
+    IOSchedulingPriority=6
+
+    Slice=system-cgi.slice
+    ```
+
+其中 `system-cgi.slice` 是我们自己定义的一个 slice，用于限制 CGI 服务的资源使用。
+
+```ini title="/etc/systemd/system/system-cgi.slice"
+[Unit]
+Description=Slice for CGI services (notably Git daemon)
+
+[Slice]
+MemoryMax=32G
+MemoryHigh=28G
+
+IOAccounting=true
+```
+
 ## FTP 服务（已废弃）
 
 Mirrors 曾经提供 FTP 服务，由 vsftpd 提供。在将主力服务器从 mirrors2 迁移至 mirrors4 时废弃，即 mirrors4 上从未安装配置过 vsftpd（但 mirrors2 上还留存有配置文件）。
