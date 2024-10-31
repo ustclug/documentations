@@ -1291,8 +1291,6 @@
       
         
       
-        
-      
     
     
       
@@ -1805,27 +1803,6 @@
   
   <span class="md-ellipsis">
     Rsync
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../mail-list/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Mail list
   </span>
   
 
@@ -2574,11 +2551,7 @@
 <p>全部 12 块 HDD 用 ZFS 做了一个 pool，每个控制器上面的 6 块盘作为一个 RAIDZ2 vdev，这个 ZFS pool 用于 <code>/home</code> 和 <code>/srv/repo</code>（仓库数据）等。</p>
 <h3 id="swap-oom">Swap 与 OOM<a class="headerlink" href="#swap-oom" title="Permanent link">&para;</a></h3>
 <p>这台服务器初装时是没有配置 swap 的，在 2024-10-31 17:12 左右由 git daemon 导致 OOM 后补充了 64G swap，此时 VG 剩余空间还有 100 多 GB 留给以后使用。</p>
-<p>同时我们也给 git daemon 上了内存限制：</p>
-<div class="highlight"><span class="filename">systemctl edit git-daemon.service</span><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">[Service]</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="na">MemoryMax</span><span class="o">=</span><span class="s">32G</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="na">MemoryHigh</span><span class="o">=</span><span class="s">28G</span>
-</code></pre></div>
+<p>同时我们也给 git daemon 上了内存限制，详情见 <a href="services.md#git">Service</a>。</p>
 
 
 
