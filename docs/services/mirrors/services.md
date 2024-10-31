@@ -43,7 +43,7 @@ endscript
 
 未完待续。
 
-## Git 服务
+## Git 服务 {#git}
 
 Mirrors 上的 Git 服务由两部分组成：
 

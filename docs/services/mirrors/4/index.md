@@ -38,10 +38,4 @@ CPU
 
 这台服务器初装时是没有配置 swap 的，在 2024-10-31 17:12 左右由 git daemon 导致 OOM 后补充了 64G swap，此时 VG 剩余空间还有 100 多 GB 留给以后使用。
 
-同时我们也给 git daemon 上了内存限制：
-
-```ini title="systemctl edit git-daemon.service"
-[Service]
-MemoryMax=32G
-MemoryHigh=28G
-```
+同时我们也给 git daemon 上了内存限制，详情见 [Service](../services.md#git)。

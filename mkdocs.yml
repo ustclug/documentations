@@ -128,7 +128,6 @@ nav:
       - Monitoring: services/mirrors/monitor.md
       - Limiter: "services/mirrors/limiter.md"
       - Rsync: "services/mirrors/rsync.md"
-      - Mail list: "services/mirrors/mail-list.md"
     - Gateway EL: "services/gateway-el.md"
     - Gateway NIC: "services/gateway-nic.md"
     - Gateway JP: "services/gateway-jp.md"

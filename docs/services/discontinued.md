@@ -60,3 +60,11 @@ webhook from DockerHub: /srv/webhook/hooks.json
 ## Wordpress-based servers.ustclug.org & planet.ustclug.org
 
 为了减小攻击面与维护成本，servers.ustclug.org 迁移到了基于 Jekyll 的方案；planet.ustclug.org 在早前已经整合到了 LUG 主站中。
+
+### Mail List
+
+Plugin *Email Subscribers & Newsletters* on `servers.ustclug.org` sends a mail to Google Group when a new article posted on *mirrors* catalogue.
+
+The mails are sent from `servers@ustclug.org`, which is a member of Google Group with write permission.
+
+Google Group: [ustc-mirrors@googlegroups.com](https://groups.google.com/d/forum/ustc-mirrors)
