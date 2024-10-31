@@ -18,7 +18,7 @@
         <link rel="prev" href="../">
       
       
-        <link rel="next" href="volumes/">
+        <link rel="next" href="volumes-old/">
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
@@ -1407,11 +1407,11 @@
   
   
     <li class="md-nav__item">
-      <a href="volumes/" class="md-nav__link">
+      <a href="volumes-old/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    Volumes
+    Volumes (Old)
   </span>
   
 
@@ -2502,6 +2502,30 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      磁盘分区
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="磁盘分区">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#swap-oom" class="md-nav__link">
+    <span class="md-ellipsis">
+      Swap 与 OOM
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -2537,11 +2561,7 @@
 <p>一块三星 PM883 2TB</p>
 <p>12 块 HGST HUH721010AL (10 TB)</p>
 <p>两个硬盘控制器 MegaRAID SAS-3 3108</p>
-<p>采用 ZFS 将 12 块 HDD 组成一个 pool 中的两组 RAIDZ2 vdev。</p>
-<details class="bug">
-<summary>硬盘控制器 (old)</summary>
-<p>由于不能跨控制器组 RAID 或 LUN，且每个控制器只有 8 个插槽，因此将 12 块 HDD 分为 6 块一组插在两个控制器上组成 RAID6，以两个逻辑卷呈现给操作系统，上层用 LVM 处理。SSD 单独创建一个逻辑卷给操作系统。</p>
-</details>
+<p>采用 ZFS 将 12 块 HDD 组成一个 pool。</p>
 </dd>
 <dt>网卡</dt>
 <dd>
@@ -2549,6 +2569,16 @@
 <p>PCI-e 扩展卡：Intel X520 (82599ES) SFP+ (2 个万兆光口)</p>
 </dd>
 </dl>
+<h2 id="_2">磁盘分区<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<p>一块 SSD 分为 512M 的 EFI 分区，剩余空间建了一个 LVM（VG <code>lug</code>）。LVM 上装系统（<code>lug/root</code>）、swap（<code>lug/swap</code>）、Docker 数据（<code>lug/docker</code>）和 L2ARC（<code>lug/l2arc</code>，1.5 TB）。</p>
+<p>全部 12 块 HDD 用 ZFS 做了一个 pool，每个控制器上面的 6 块盘作为一个 RAIDZ2 vdev，这个 ZFS pool 用于 <code>/home</code> 和 <code>/srv/repo</code>（仓库数据）等。</p>
+<h3 id="swap-oom">Swap 与 OOM<a class="headerlink" href="#swap-oom" title="Permanent link">&para;</a></h3>
+<p>这台服务器初装时是没有配置 swap 的，在 2024-10-31 17:12 左右由 git daemon 导致 OOM 后补充了 64G swap，此时 VG 剩余空间还有 100 多 GB 留给以后使用。</p>
+<p>同时我们也给 git daemon 上了内存限制：</p>
+<div class="highlight"><span class="filename">systemctl edit git-daemon.service</span><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">[Service]</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="na">MemoryMax</span><span class="o">=</span><span class="s">32G</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="na">MemoryHigh</span><span class="o">=</span><span class="s">28G</span>
+</code></pre></div>
 
 
 

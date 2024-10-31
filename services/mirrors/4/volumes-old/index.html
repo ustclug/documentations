@@ -12,7 +12,7 @@
         <meta name="author" content="USTC Linux User Group">
       
       
-        <link rel="canonical" href="https://docs.ustclug.org/services/mirrors/4/volumes/">
+        <link rel="canonical" href="https://docs.ustclug.org/services/mirrors/4/volumes-old/">
       
       
         <link rel="prev" href="../">
@@ -26,7 +26,7 @@
     
     
       
-        <title>Volumes - LUG @ USTC</title>
+        <title>Volumes (Old) - LUG @ USTC</title>
       
     
     
@@ -116,7 +116,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Volumes
+              Volumes (Old)
             
           </span>
         </div>
@@ -1420,7 +1420,7 @@
           
   
   <span class="md-ellipsis">
-    Volumes
+    Volumes (Old)
   </span>
   
 
@@ -1431,7 +1431,7 @@
         
   
   <span class="md-ellipsis">
-    Volumes
+    Volumes (Old)
   </span>
   
 
@@ -2658,8 +2658,8 @@
 <p class="admonition-title">注意</p>
 <p>mirrors4 于 2024 年 7 月重建为 ZFS pool，以下内容已经过时。</p>
 </div>
-<p><a href="../">介绍页</a>讲过了，控制器的坑导致不能直接把 12 块硬盘组成一个逻辑磁盘，因此我们在上层使用 LVM 来解决这个问题。</p>
 <h2 id="_1">磁盘分区<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<p>由于不能跨控制器组 RAID 或 LUN，且每个控制器只有 8 个插槽，因此将 12 块 HDD 分为 6 块一组插在两个控制器上组成 RAID6，以两个逻辑卷呈现给操作系统，上层用 LVM 处理。SSD 单独创建一个逻辑卷给操作系统。</p>
 <div class="admonition warning">
 <p class="admonition-title">注意</p>
 <p>这里给出的命令仅用于展示分区（卷）的创建方式，除非完全重装，否则<strong>不应该执行</strong>其中任何一条有副作用的命令。</p>
@@ -2808,43 +2808,43 @@
 </code></pre></div>
 <h3 id="repo">repo 扩容<a class="headerlink" href="#repo" title="Permanent link">&para;</a></h3>
 <p>查看当前逻辑卷信息：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a># lvs -a -o +devices
-<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>  LV              VG  Attr       LSize   Pool     Origin       Data%  Meta%  Move Log         Cpy%Sync Convert Devices
-<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>  backup          lug -wi-ao----   8.00g                                                                       /dev/sda3(6307840)
-<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a>  docker          lug -wi-ao----  64.00g                                                                       /dev/sdc1(0)
-<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a>  docker2         lug -wi-a----- 300.00g                                                                       /dev/sda3(7925248)
-<a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a>  home            lug -wi-ao----  64.00g                                                                       /dev/sda3(8192),/dev/sdb3(8193)
-<a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a>  log             lug -wi-ao---- 300.00g                                                                       /dev/sda3(6309888),/dev/sdb3(6307841)
-<a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a>  log             lug -wi-ao---- 300.00g                                                                       /dev/sda3(7888896),/dev/sdb3(7882753)
-<a id="__codelineno-14-9" name="__codelineno-14-9" href="#__codelineno-14-9"></a>  [lvol0_pmspare] lug ewi-------  16.00g                                                                       /dev/sda3(7884800)
-<a id="__codelineno-14-10" name="__codelineno-14-10" href="#__codelineno-14-10"></a>  [mcache]        lug Cwi---C---   1.50t                       99.99  0.12                    0.00             mcache_cdata(0)
-<a id="__codelineno-14-11" name="__codelineno-14-11" href="#__codelineno-14-11"></a>  [mcache_cdata]  lug Cwi-ao----   1.50t                                                                       /dev/sdc1(20480)
-<a id="__codelineno-14-12" name="__codelineno-14-12" href="#__codelineno-14-12"></a>  [mcache_cmeta]  lug ewi-ao----  16.00g                                                                       /dev/sdc1(16384)
-<a id="__codelineno-14-13" name="__codelineno-14-13" href="#__codelineno-14-13"></a>  repo            lug Cwi-aoC---  60.00t [mcache] [repo_corig] 99.99  0.12                    0.00             repo_corig(0)
-<a id="__codelineno-14-14" name="__codelineno-14-14" href="#__codelineno-14-14"></a>  [repo_corig]    lug owi-aoC---  60.00t                                                                       /dev/sda3(16384),/dev/sdb3(16385)
-<a id="__codelineno-14-15" name="__codelineno-14-15" href="#__codelineno-14-15"></a>  [repo_corig]    lug owi-aoC---  60.00t                                                                       /dev/sda3(6311936),/dev/sdb3(6309889)
-<a id="__codelineno-14-16" name="__codelineno-14-16" href="#__codelineno-14-16"></a>  root            lug mwi-aom---  32.00g                                          [root_mlog] 100.00           root_mimage_0(0),root_mimage_1(0)
-<a id="__codelineno-14-17" name="__codelineno-14-17" href="#__codelineno-14-17"></a>  [root_mimage_0] lug iwi-aom---  32.00g                                                                       /dev/sda3(0)
-<a id="__codelineno-14-18" name="__codelineno-14-18" href="#__codelineno-14-18"></a>  [root_mimage_1] lug iwi-aom---  32.00g                                                                       /dev/sdb3(0)
-<a id="__codelineno-14-19" name="__codelineno-14-19" href="#__codelineno-14-19"></a>  [root_mlog]     lug lwi-aom---   4.00m                                                                       /dev/sdb3(8192)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="gp"># </span>lvs<span class="w"> </span>-a<span class="w"> </span>-o<span class="w"> </span>+devices
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="go">  LV              VG  Attr       LSize   Pool     Origin       Data%  Meta%  Move Log         Cpy%Sync Convert Devices</span>
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="go">  backup          lug -wi-ao----   8.00g                                                                       /dev/sda3(6307840)</span>
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="go">  docker          lug -wi-ao----  64.00g                                                                       /dev/sdc1(0)</span>
+<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a><span class="go">  docker2         lug -wi-a----- 300.00g                                                                       /dev/sda3(7925248)</span>
+<a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a><span class="go">  home            lug -wi-ao----  64.00g                                                                       /dev/sda3(8192),/dev/sdb3(8193)</span>
+<a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a><span class="go">  log             lug -wi-ao---- 300.00g                                                                       /dev/sda3(6309888),/dev/sdb3(6307841)</span>
+<a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a><span class="go">  log             lug -wi-ao---- 300.00g                                                                       /dev/sda3(7888896),/dev/sdb3(7882753)</span>
+<a id="__codelineno-14-9" name="__codelineno-14-9" href="#__codelineno-14-9"></a><span class="go">  [lvol0_pmspare] lug ewi-------  16.00g                                                                       /dev/sda3(7884800)</span>
+<a id="__codelineno-14-10" name="__codelineno-14-10" href="#__codelineno-14-10"></a><span class="go">  [mcache]        lug Cwi---C---   1.50t                       99.99  0.12                    0.00             mcache_cdata(0)</span>
+<a id="__codelineno-14-11" name="__codelineno-14-11" href="#__codelineno-14-11"></a><span class="go">  [mcache_cdata]  lug Cwi-ao----   1.50t                                                                       /dev/sdc1(20480)</span>
+<a id="__codelineno-14-12" name="__codelineno-14-12" href="#__codelineno-14-12"></a><span class="go">  [mcache_cmeta]  lug ewi-ao----  16.00g                                                                       /dev/sdc1(16384)</span>
+<a id="__codelineno-14-13" name="__codelineno-14-13" href="#__codelineno-14-13"></a><span class="go">  repo            lug Cwi-aoC---  60.00t [mcache] [repo_corig] 99.99  0.12                    0.00             repo_corig(0)</span>
+<a id="__codelineno-14-14" name="__codelineno-14-14" href="#__codelineno-14-14"></a><span class="go">  [repo_corig]    lug owi-aoC---  60.00t                                                                       /dev/sda3(16384),/dev/sdb3(16385)</span>
+<a id="__codelineno-14-15" name="__codelineno-14-15" href="#__codelineno-14-15"></a><span class="go">  [repo_corig]    lug owi-aoC---  60.00t                                                                       /dev/sda3(6311936),/dev/sdb3(6309889)</span>
+<a id="__codelineno-14-16" name="__codelineno-14-16" href="#__codelineno-14-16"></a><span class="go">  root            lug mwi-aom---  32.00g                                          [root_mlog] 100.00           root_mimage_0(0),root_mimage_1(0)</span>
+<a id="__codelineno-14-17" name="__codelineno-14-17" href="#__codelineno-14-17"></a><span class="go">  [root_mimage_0] lug iwi-aom---  32.00g                                                                       /dev/sda3(0)</span>
+<a id="__codelineno-14-18" name="__codelineno-14-18" href="#__codelineno-14-18"></a><span class="go">  [root_mimage_1] lug iwi-aom---  32.00g                                                                       /dev/sdb3(0)</span>
+<a id="__codelineno-14-19" name="__codelineno-14-19" href="#__codelineno-14-19"></a><span class="go">  [root_mlog]     lug lwi-aom---   4.00m                                                                       /dev/sdb3(8192)</span>
 </code></pre></div>
 <p>检查 cache 是否有 dirty block：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>$ sudo lvs -o name,cache_policy,cache_settings,chunk_size,cache_used_blocks,cache_dirty_blocks /dev/mapper/lug-repo
-<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>  LV   CachePolicy CacheSettings Chunk CacheUsedBlocks  CacheDirtyBlocks
-<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a>  repo smq                       1.00m          1048551                0
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="gp">$ </span>sudo<span class="w"> </span>lvs<span class="w"> </span>-o<span class="w"> </span>name,cache_policy,cache_settings,chunk_size,cache_used_blocks,cache_dirty_blocks<span class="w"> </span>/dev/mapper/lug-repo
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="go">  LV   CachePolicy CacheSettings Chunk CacheUsedBlocks  CacheDirtyBlocks</span>
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="go">  repo smq                       1.00m          1048551                0</span>
 </code></pre></div>
 <p>（正常重启之后可能会出现 dirty block，原因不明。如果看到有的话，那只能 <del>再次进入痛苦的轮回</del> 用上述的方法清除，并且清除的时候对系统负载影响很大，因为落盘的时候其他进程对应的 IO 会被暂停，在相对平衡时间和负载的命令下，估计需要 10 小时的时间。）</p>
 <p>然后 uncache、扩容：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a># lvconvert --uncache lug/repo
-<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a># lvextend -L +5T lug/repo
-<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a># xfs_growfs /srv
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="gp"># </span>lvconvert<span class="w"> </span>--uncache<span class="w"> </span>lug/repo
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="gp"># </span>lvextend<span class="w"> </span>-L<span class="w"> </span>+5T<span class="w"> </span>lug/repo
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="gp"># </span>xfs_growfs<span class="w"> </span>/srv
 </code></pre></div>
 <p>然后恢复 cache（参考上面 mcache_meta 和 mcache 逻辑卷的配置，<strong>请注意在理解命令后再执行</strong>！）：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a># lvcreate -L 16G -n mcache_meta lug /dev/sdc1  # SSD 设备路径重启后可能会变化
-<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a># lvcreate -l 100%FREE -n mcache lug /dev/sdc1
-<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a># lvreduce -l -2048 lug/mcache
-<a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a># lvconvert --type cache-pool --poolmetadata lug/mcache_meta --cachemode writethrough -c 64K --config allocation/cache_pool_max_chunks=30000000 lug/mcache
-<a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a># lvconvert --type cache --cachepool lug/mcache lug/repo
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="gp"># </span>lvcreate<span class="w"> </span>-L<span class="w"> </span>16G<span class="w"> </span>-n<span class="w"> </span>mcache_meta<span class="w"> </span>lug<span class="w"> </span>/dev/sdc1<span class="w">  </span><span class="c1"># SSD 设备路径重启后可能会变化</span>
+<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="gp"># </span>lvcreate<span class="w"> </span>-l<span class="w"> </span><span class="m">100</span>%FREE<span class="w"> </span>-n<span class="w"> </span>mcache<span class="w"> </span>lug<span class="w"> </span>/dev/sdc1
+<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a><span class="gp"># </span>lvreduce<span class="w"> </span>-l<span class="w"> </span>-2048<span class="w"> </span>lug/mcache
+<a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a><span class="gp"># </span>lvconvert<span class="w"> </span>--type<span class="w"> </span>cache-pool<span class="w"> </span>--poolmetadata<span class="w"> </span>lug/mcache_meta<span class="w"> </span>--cachemode<span class="w"> </span>writethrough<span class="w"> </span>-c<span class="w"> </span>64K<span class="w"> </span>--config<span class="w"> </span>allocation/cache_pool_max_chunks<span class="o">=</span><span class="m">30000000</span><span class="w"> </span>lug/mcache
+<a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a><span class="gp"># </span>lvconvert<span class="w"> </span>--type<span class="w"> </span>cache<span class="w"> </span>--cachepool<span class="w"> </span>lug/mcache<span class="w"> </span>lug/repo
 </code></pre></div>
 <div class="admonition danger">
 <p class="admonition-title">坑 5</p>
