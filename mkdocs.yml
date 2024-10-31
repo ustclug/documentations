@@ -110,7 +110,7 @@ nav:
       - services/mirrors/index.md
       - Current (4):
         - services/mirrors/4/index.md
-        - Volumes: services/mirrors/4/volumes.md
+        - Volumes (Old): services/mirrors/4/volumes-old.md
         - Networking: services/mirrors/4/networking/index.md
         - Networking - Routing: services/mirrors/4/networking/route.md
         - Networking - Misc: services/mirrors/4/networking/misc.md

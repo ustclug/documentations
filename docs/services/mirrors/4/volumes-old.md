@@ -4,9 +4,9 @@
 
     mirrors4 于 2024 年 7 月重建为 ZFS pool，以下内容已经过时。
 
-[介绍页](index.md)讲过了，控制器的坑导致不能直接把 12 块硬盘组成一个逻辑磁盘，因此我们在上层使用 LVM 来解决这个问题。
-
 ## 磁盘分区
+
+由于不能跨控制器组 RAID 或 LUN，且每个控制器只有 8 个插槽，因此将 12 块 HDD 分为 6 块一组插在两个控制器上组成 RAID6，以两个逻辑卷呈现给操作系统，上层用 LVM 处理。SSD 单独创建一个逻辑卷给操作系统。
 
 !!! warning "注意"
 
@@ -206,7 +206,7 @@ mount /dev/lug/docker /var/lib/docker
 
 查看当前逻辑卷信息：
 
-```
+```console
 # lvs -a -o +devices
   LV              VG  Attr       LSize   Pool     Origin       Data%  Meta%  Move Log         Cpy%Sync Convert Devices
   backup          lug -wi-ao----   8.00g                                                                       /dev/sda3(6307840)
@@ -230,7 +230,7 @@ mount /dev/lug/docker /var/lib/docker
 
 检查 cache 是否有 dirty block：
 
-```
+```console
 $ sudo lvs -o name,cache_policy,cache_settings,chunk_size,cache_used_blocks,cache_dirty_blocks /dev/mapper/lug-repo
   LV   CachePolicy CacheSettings Chunk CacheUsedBlocks  CacheDirtyBlocks
   repo smq                       1.00m          1048551                0
@@ -240,7 +240,7 @@ $ sudo lvs -o name,cache_policy,cache_settings,chunk_size,cache_used_blocks,cach
 
 然后 uncache、扩容：
 
-```
+```console
 # lvconvert --uncache lug/repo
 # lvextend -L +5T lug/repo
 # xfs_growfs /srv
@@ -248,7 +248,7 @@ $ sudo lvs -o name,cache_policy,cache_settings,chunk_size,cache_used_blocks,cach
 
 然后恢复 cache（参考上面 mcache_meta 和 mcache 逻辑卷的配置，**请注意在理解命令后再执行**！）：
 
-```
+```console
 # lvcreate -L 16G -n mcache_meta lug /dev/sdc1  # SSD 设备路径重启后可能会变化
 # lvcreate -l 100%FREE -n mcache lug /dev/sdc1
 # lvreduce -l -2048 lug/mcache
