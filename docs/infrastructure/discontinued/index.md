@@ -1,3 +1,7 @@
+---
+icon: octicons/circle-slash-16
+---
+
 # 不再使用的基础设施
 
 !!! warning
