@@ -1,6 +1,6 @@
 # NFS
 
-NFS 服务器（"vdp"）是东图三个 PVE 机器的虚拟机存储，型号为 DELL PowerEdge R510。磁盘阵列由于在 2021 年 3 月初损坏，目前容量缩减到 8T（4 块 4T 蓝盘 RAID10）。除虚拟机外，NFS 也存储 LUG 成员的个人数据及 LUG FTP。NFS 服务恢复后，为了保证数据冗余性，使用~~[科大 Office 365 A1 账号](http://staff.ustc.edu.cn/~wf0229/office365/)~~学校对象存储和 Rclone 每天增量备份 LUG FTP 和 LUG 成员的公开数据。
+NFS 服务器（"vdp"）是东图三个 PVE 机器的虚拟机存储，型号为 DELL PowerEdge R510。磁盘阵列由于在 2021 年 3 月初损坏，目前容量缩减到 8T（4 块 4T 蓝盘 RAID10）。除虚拟机外，NFS 也存储 LUG 成员的个人数据及 LUG FTP。NFS 服务恢复后，为了保证数据冗余性，使用 ~~[科大 Office 365 A1 账号](http://staff.ustc.edu.cn/~wf0229/office365/)~~、学校对象存储和 Rclone 每天增量备份 LUG FTP 和 LUG 成员的公开数据。
 
 vdp 的内网连接依赖于 gateway-el。
 
