@@ -22,7 +22,7 @@
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.46">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.47">
     
     
       
@@ -980,7 +980,7 @@
           <li class="md-nav__item">
   <a href="#html" class="md-nav__link">
     <span class="md-ellipsis">
-      HTML与纯文本
+      HTML 与纯文本
     </span>
   </a>
   
@@ -2734,7 +2734,7 @@
           <li class="md-nav__item">
   <a href="#html" class="md-nav__link">
     <span class="md-ellipsis">
-      HTML与纯文本
+      HTML 与纯文本
     </span>
   </a>
   
@@ -2885,12 +2885,21 @@
 <h3 id="tb-cc">抄送设置<a class="headerlink" href="#tb-cc" title="Permanent link">&para;</a></h3>
 <p>在账户设置中，选择身份管理，点击编辑，选择 <em>Copies and Folders</em>, 启用 <em>Cc these email addresses</em>, 并输入默认抄送地址 <code>lug A ustc.edu.cn</code></p>
 <p><img alt="Thunderbird cc" src="../img/thunderbird-account-settings-cc.png" /></p>
-<h3 id="html">HTML与纯文本<a class="headerlink" href="#html" title="Permanent link">&para;</a></h3>
+<h3 id="html">HTML 与纯文本<a class="headerlink" href="#html" title="Permanent link">&para;</a></h3>
 <p>邮件可以以 HTML 方式编写，也可以只是纯文本内容。为了降低对方阅读出现麻烦的可能性，建议使用纯文本消息。使用纯文本消息的方法是：打开 <em>Thunderbird 设置</em> ，打开 <em>Account Settings</em> ，打开对应邮件地址下的 <em>Composition &amp; Addressing</em> 页面，在 <em>Composition</em> 节下找到 <em>Compose messages in HTML format</em> ，将其复选框去除勾选即可。</p>
 <p><img alt="Thunderbird cc" src="../img/thunderbird-plain-text-mail.png" /></p>
 <h3 id="tb-folders">文件夹<a class="headerlink" href="#tb-folders" title="Permanent link">&para;</a></h3>
 <p>Thunderbird 维护了自己的文件夹，如果需要与云端的文件夹同步，可以进行如下操作</p>
 <p>在账户上右键，在弹出的菜单中点击 <em>Subscribe</em>。弹出的窗口中包含了云端的文件夹，由于 Thunderbird 会自行维护垃圾箱和已发邮件，因此可能会有两个垃圾箱，<em>Deleted Items</em> 和 <em>Trash</em>，可以在网页端删除不需要的文件夹，并在 Thunderbird 中选择需要的。</p>
+<div class="admonition tip">
+<p class="admonition-title">邮件文件夹术语</p>
+<p>请注意，以下两者是不同的：</p>
+<ul>
+<li>垃圾箱 = 已删除邮件 = Trash = Deleted Items</li>
+<li>垃圾邮件（箱） = Junk = Spam</li>
+</ul>
+<p>被邮件系统认为有问题的邮件会被扔进 <strong>垃圾邮件箱</strong>，而不是 <strong>垃圾箱</strong>。</p>
+</div>
 <p><img alt="thunderbird-subscribe" src="../img/thunderbird-subscribe.png" /></p>
 <p>然后打开账户设置，进行如下修改</p>
 <ol>
@@ -2906,7 +2915,7 @@
 <h3 id="tb-junk">垃圾邮件<a class="headerlink" href="#tb-junk" title="Permanent link">&para;</a></h3>
 <p>Outlook 云端已经带有了垃圾邮件分类功能，不需要 Thunderbird 自己的垃圾邮件分类功能。</p>
 <p>在账户设置的 <em>Local Folders</em> 下的 <em>Junk Settings</em> 中，取消选中 <em>Enable adaptive junk mail controls for this account</em>。</p>
-<p>请在上面的 Subscribe 中将垃圾邮件选中以同步。此外，由于 Outlook 目前会将几乎所有邮件都扔进垃圾邮件箱（原因似乎是 M365 的机器学习模型会把所有科大的邮件扔进垃圾箱），因此设置拉取邮件时总是检查垃圾邮件箱。设置方法为在垃圾邮件目录上点击右键 → 属性，然后选择这里第二个勾：</p>
+<p>请在上面的 Subscribe（见 <a href="#tb-folders">文件夹</a>）中将垃圾邮件选中以同步。此外，由于 Outlook 目前会将几乎所有邮件都扔进垃圾邮件箱（原因似乎是 M365 的机器学习模型会把所有科大的邮件扔进垃圾箱），因此设置拉取邮件时总是检查垃圾邮件箱。设置方法为在垃圾邮件目录上点击右键 → 属性，然后选择这里第二个勾：</p>
 <p><img alt="Always check spam" src="../img/thunderbird-spam-always-check.png" /></p>
 <div class="admonition warning">
 <p class="admonition-title">注意</p>
