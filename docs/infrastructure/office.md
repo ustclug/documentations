@@ -93,7 +93,7 @@ Outlook 无法直接通过网页端添加发件人名称、设置回复地址，
 
 ![Thunderbird cc](img/thunderbird-account-settings-cc.png)
 
-### HTML与纯文本
+### HTML 与纯文本
 
 邮件可以以 HTML 方式编写，也可以只是纯文本内容。为了降低对方阅读出现麻烦的可能性，建议使用纯文本消息。使用纯文本消息的方法是：打开 *Thunderbird 设置* ，打开 *Account Settings* ，打开对应邮件地址下的 *Composition & Addressing* 页面，在 *Composition* 节下找到 *Compose messages in HTML format* ，将其复选框去除勾选即可。
 
@@ -104,6 +104,15 @@ Outlook 无法直接通过网页端添加发件人名称、设置回复地址，
 Thunderbird 维护了自己的文件夹，如果需要与云端的文件夹同步，可以进行如下操作
 
 在账户上右键，在弹出的菜单中点击 *Subscribe*。弹出的窗口中包含了云端的文件夹，由于 Thunderbird 会自行维护垃圾箱和已发邮件，因此可能会有两个垃圾箱，*Deleted Items* 和 *Trash*，可以在网页端删除不需要的文件夹，并在 Thunderbird 中选择需要的。
+
+!!! tip "邮件文件夹术语"
+
+    请注意，以下两者是不同的：
+
+    - 垃圾箱 = 已删除邮件 = Trash = Deleted Items
+    - 垃圾邮件（箱） = Junk = Spam
+
+    被邮件系统认为有问题的邮件会被扔进 **垃圾邮件箱**，而不是 **垃圾箱**。
 
 ![thunderbird-subscribe](./img/thunderbird-subscribe.png)
 
@@ -123,7 +132,7 @@ Outlook 云端已经带有了垃圾邮件分类功能，不需要 Thunderbird �
 
 在账户设置的 *Local Folders* 下的 *Junk Settings* 中，取消选中 *Enable adaptive junk mail controls for this account*。
 
-请在上面的 Subscribe 中将垃圾邮件选中以同步。此外，由于 Outlook 目前会将几乎所有邮件都扔进垃圾邮件箱（原因似乎是 M365 的机器学习模型会把所有科大的邮件扔进垃圾箱），因此设置拉取邮件时总是检查垃圾邮件箱。设置方法为在垃圾邮件目录上点击右键 → 属性，然后选择这里第二个勾：
+请在上面的 Subscribe（见 [文件夹](#tb-folders)）中将垃圾邮件选中以同步。此外，由于 Outlook 目前会将几乎所有邮件都扔进垃圾邮件箱（原因似乎是 M365 的机器学习模型会把所有科大的邮件扔进垃圾箱），因此设置拉取邮件时总是检查垃圾邮件箱。设置方法为在垃圾邮件目录上点击右键 → 属性，然后选择这里第二个勾：
 
 ![Always check spam](img/thunderbird-spam-always-check.png)
 
