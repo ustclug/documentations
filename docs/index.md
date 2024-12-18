@@ -39,7 +39,7 @@ Our documentation is divided into these sections, as laid out on the left naviga
 
 </div>
 
-## References {#links}
+## Links
 
 - [LUG @ USTC homepage](https://lug.ustc.edu.cn/)
 - [sparanoid/chinese-copywriting-guidelines: Chinese copywriting guidelines for better written communication / 中文文案排版指北](https://github.com/sparanoid/chinese-copywriting-guidelines) (Try to follow any guidelines in this repository)
