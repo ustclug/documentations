@@ -11,10 +11,33 @@ Documentation for LUG @ USTC technical infrastructure.
 
 Our documentation is divided into these sections, as laid out on the left navigation menu:
 
-- The **Workflow** section provides guidance to (a few) common maintenance tasks.
-- The **Infrastructure** section describes our infrastructure, as well as common configurations across different servers (networking, firewalls, security, monitoring, etc.).
-- The **Services** section documents specific configurations on individual servers and service units (software and/or Docker containers).
-- The **Common Issues** (a.k.a. **FAQ**) section records our troubleshooting experiences and serves partially as a "notebook" for known traps and workarounds.
+<div class="grid cards" markdown>
+
+-   :fontawesome-solid-wrench:{ .lg .middle } **Workflow**
+
+    ---
+
+    Provides guidance to (a few) common maintenance tasks.
+
+-   :material-toy-brick:{ .lg .middle } **Infrastructure**
+
+    ---
+
+    Describes our infrastructure, as well as common configurations across different servers (networking, firewalls, security, monitoring, etc.).
+
+-   :fontawesome-solid-certificate:{ .lg .middle } **Services**
+
+    ---
+
+    Specific configurations on individual servers and service units (software and/or Docker containers).
+
+-   :fontawesome-solid-circle-question:{ .lg .middle } **Common Issues** (a.k.a. **FAQ**)
+
+    ---
+
+    For our troubleshooting experiences and serves partially as a "notebook" for known traps and workarounds.
+
+</div>
 
 ## References {#links}
 
