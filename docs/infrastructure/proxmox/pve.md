@@ -187,8 +187,8 @@ args: -chardev socket,id=virtfs0,path=/run/virtiofsd-230.sock -device vhost-user
 
 接下来需要配置 virtiofsd 在虚拟机开机前启动。注意一个 virtiofsd 只能供一个虚拟机访问一个主机上的目录，因此需要使用 PVE 的 hook script 来启动 virtiofsd。这个 hook script 放在 `/var/lib/vz` 目录下，接收两个命令行参数（VMID 和启动阶段）：
 
-```shell title="/var/lib/vz/snippets/mirrorlog.sh"
---8<-- "pve/mirrorlog.sh"
+```shell title="/var/lib/vz/snippets/virtiofsd.sh"
+--8<-- "pve/virtiofsd.sh"
 ```
 
 相比于 Proxmox 论坛里的教程贴，这里最重要的修改是给 `systemd-run` 加上了 `--collect` 参数，这样 virtiofsd 退出时无论是否 failed，systemd 都会清理掉这个临时的 service unit。
@@ -196,7 +196,7 @@ args: -chardev socket,id=virtfs0,path=/run/virtiofsd-230.sock -device vhost-user
 然后通过命令行配置使用：
 
 ```shell
-qm set 230 --hookscript local:snippets/mirrorlog.sh
+qm set 230 --hookscript local:snippets/virtiofsd.sh
 ```
 
 然后将虚拟机关机，通过 `qm start` 或者 web 界面启动，即可在虚拟机内挂载 virtiofsd 提供的目录。
