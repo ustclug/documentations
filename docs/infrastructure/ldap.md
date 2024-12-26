@@ -66,7 +66,7 @@ gosa 的配置文件在 `/etc/gosa/gosa.conf`，它是在第一次运行 gosa �
 
 #### 软件包安装
 
-Debian 7 以上系统安装 `libnss-ldapd`、`libpam-ldapd`、`sssd-ldap`、`libsss-sudo`
+Debian 系统安装 `libnss-ldapd`、`libpam-ldapd`、`sssd-ldap`、`libsss-sudo`
 
 !!! note
 
@@ -153,8 +153,6 @@ sudoers:        ldap [SUCCESS=return] files
 session required    pam_mkhomedir.so skel=/etc/skel umask=0022
 ```
 
-对于 Debian 5，请查阅本文档的 Git 记录。
-
 #### SSSD 配置
 
 由于 `sudo-ldap` 未来被废弃，sudo 的配置通过 sssd 实现，参考 <https://access.redhat.com/site/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Deployment_Guide/sssd-ldap-sudo.html>。
@@ -198,6 +196,16 @@ session required    pam_mkhomedir.so skel=/etc/skel umask=0022
 !!! danger "坑"
 
     需要加上 `[sudo]`，否则 sudo 配置不会生效，这个配置问题导致了修改前在 gateway-nic 上用户无法使用 sudo。
+
+!!! warning "Apparmor"
+
+    目前 Debian 打包中的 SSSD 存在一个小 bug，会导致在有 Apparmor 的系统上 kernel log 刷满 dmesg。解决方法是在 `/etc/apparmor.d/usr.sbin.sssd` 中，`@{PROC} r,` 后面加一行：
+
+    ```
+    @{PROC}/[0-9]*/cmdline r,
+    ```
+
+    然后 `sudo systemctl reload apparmor`。
 
 另外记得像前面在 Debian 中安装介绍到的那样修改 `/etc/nsswitch.conf` 以及 `/etc/nslcd.conf`.
 
