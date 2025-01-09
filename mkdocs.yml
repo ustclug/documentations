@@ -98,6 +98,7 @@ nav:
     - Docker Hub: infrastructure/dockerhub.md
     - Mail Agent: infrastructure/mail.md
     - RAID: infrastructure/raid.md
+    - DNS Caching: infrastructure/dnscache.md
     - Discontinued Infrastructure:
       - infrastructure/discontinued/index.md
       - G Suite: infrastructure/google.md
