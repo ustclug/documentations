@@ -458,6 +458,8 @@
       
         
       
+        
+      
     
     
       
@@ -955,6 +957,27 @@
   
   
   
+    <li class="md-nav__item">
+      <a href="../../infrastructure/dnscache/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    DNS Caching
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
     
     
       
@@ -975,7 +998,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_13" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_14" >
         
           
           
@@ -993,14 +1016,14 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_3_13" id="__nav_3_13_label" tabindex="0">
+              <label class="md-nav__link " for="__nav_3_14" id="__nav_3_14_label" tabindex="0">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_13_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_3_13">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_14_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_14">
             <span class="md-nav__icon md-icon"></span>
             Discontinued Infrastructure
           </label>
@@ -1053,10 +1076,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_13_3" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_14_3" >
         
           
-          <label class="md-nav__link" for="__nav_3_13_3" id="__nav_3_13_3_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_3_14_3" id="__nav_3_14_3_label" tabindex="0">
             
   
   <span class="md-ellipsis">
@@ -1067,8 +1090,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_3_13_3_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_3_13_3">
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_3_14_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_14_3">
             <span class="md-nav__icon md-icon"></span>
             vSphere Cluster
           </label>
@@ -2958,7 +2981,7 @@
 <a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="na">filter</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="s">sshd[mode=%(mode)s]</span>
 <a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="na">logpath</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">/var/log/auth.log</span>
 <a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="na">backend</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">pyinotify</span>
-<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a><span class="na">action</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="s">iptables-ipset-proto6[chain=&quot;fail2ban&quot;]</span>
+<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a><span class="na">action  = iptables-ipset-proto6[chain</span><span class="o">=</span><span class="s">&quot;fail2ban&quot;</span><span class="na">]</span>
 </code></pre></div>
 <p>We provide a pre-created empty chain named <code>fail2ban</code> for fail2ban to manipulate (see <a href="#iptables">iptables</a> above).</p>
 <p>To make sure fail2ban rules can be re-applied after reloading iptables manually, we override the systemd service so that fail2ban is restarted whenever the iptables service is restarted.</p>

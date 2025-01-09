@@ -458,6 +458,8 @@
       
         
       
+        
+      
     
     
       
@@ -955,6 +957,27 @@
   
   
   
+    <li class="md-nav__item">
+      <a href="../../infrastructure/dnscache/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    DNS Caching
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
     
     
       
@@ -975,7 +998,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_13" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_14" >
         
           
           
@@ -993,14 +1016,14 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_3_13" id="__nav_3_13_label" tabindex="0">
+              <label class="md-nav__link " for="__nav_3_14" id="__nav_3_14_label" tabindex="0">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_13_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_3_13">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_14_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_14">
             <span class="md-nav__icon md-icon"></span>
             Discontinued Infrastructure
           </label>
@@ -1053,10 +1076,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_13_3" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_14_3" >
         
           
-          <label class="md-nav__link" for="__nav_3_13_3" id="__nav_3_13_3_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_3_14_3" id="__nav_3_14_3_label" tabindex="0">
             
   
   <span class="md-ellipsis">
@@ -1067,8 +1090,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_3_13_3_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_3_13_3">
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_3_14_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_14_3">
             <span class="md-nav__icon md-icon"></span>
             vSphere Cluster
           </label>
@@ -2701,9 +2724,9 @@
 <h2 id="special-configurations">Special configurations<a class="headerlink" href="#special-configurations" title="Permanent link">&para;</a></h2>
 <h3 id="network-interfaces">Network interfaces<a class="headerlink" href="#network-interfaces" title="Permanent link">&para;</a></h3>
 <p>We use udev rules to assign consistent names to network interfaces, identified by their MAC addresses.</p>
-<div class="highlight"><span class="filename">/etc/udev/rules.d/70-persistent-net.rules</span><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="na">SUBSYSTEM</span><span class="o">=</span><span class="s">=&quot;net&quot;, ACTION==&quot;add&quot;, DRIVERS==&quot;?*&quot;, ATTR{address}==&quot;00:50:56:9f:00:22&quot;, NAME=&quot;Telecom&quot;</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="na">SUBSYSTEM</span><span class="o">=</span><span class="s">=&quot;net&quot;, ACTION==&quot;add&quot;, DRIVERS==&quot;?*&quot;, ATTR{address}==&quot;00:50:56:9f:00:5b&quot;, NAME=&quot;Mobile&quot;</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="na">SUBSYSTEM</span><span class="o">=</span><span class="s">=&quot;net&quot;, ACTION==&quot;add&quot;, DRIVERS==&quot;?*&quot;, ATTR{address}==&quot;00:50:56:9f:00:5d&quot;, NAME=&quot;ustclug&quot;</span>
+<div class="highlight"><span class="filename">/etc/udev/rules.d/70-persistent-net.rules</span><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="na">SUBSYSTEM=</span><span class="o">=</span><span class="s">&quot;net&quot;</span><span class="na">, ACTION=</span><span class="o">=</span><span class="s">&quot;add&quot;</span><span class="na">, DRIVERS=</span><span class="o">=</span><span class="s">&quot;?*&quot;</span><span class="na">, ATTR{address}=</span><span class="o">=</span><span class="s">&quot;00:50:56:9f:00:22&quot;</span><span class="na">, NAME</span><span class="o">=</span><span class="s">&quot;Telecom&quot;</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="na">SUBSYSTEM=</span><span class="o">=</span><span class="s">&quot;net&quot;</span><span class="na">, ACTION=</span><span class="o">=</span><span class="s">&quot;add&quot;</span><span class="na">, DRIVERS=</span><span class="o">=</span><span class="s">&quot;?*&quot;</span><span class="na">, ATTR{address}=</span><span class="o">=</span><span class="s">&quot;00:50:56:9f:00:5b&quot;</span><span class="na">, NAME</span><span class="o">=</span><span class="s">&quot;Mobile&quot;</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="na">SUBSYSTEM=</span><span class="o">=</span><span class="s">&quot;net&quot;</span><span class="na">, ACTION=</span><span class="o">=</span><span class="s">&quot;add&quot;</span><span class="na">, DRIVERS=</span><span class="o">=</span><span class="s">&quot;?*&quot;</span><span class="na">, ATTR{address}=</span><span class="o">=</span><span class="s">&quot;00:50:56:9f:00:5d&quot;</span><span class="na">, NAME</span><span class="o">=</span><span class="s">&quot;ustclug&quot;</span>
 </code></pre></div>
 <p>We then refer to these interfaces using their new names in <code>/etc/network/interfaces</code> to ensure consistent network configuration.</p>
 <div class="admonition note">
@@ -2754,7 +2777,7 @@
 <a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="na">Type</span><span class="o">=</span><span class="s">simple</span>
 <a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="na">User</span><span class="o">=</span><span class="s">root</span>
 <a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="na">Group</span><span class="o">=</span><span class="s">root</span>
-<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="na">ExecStart</span><span class="o">=</span><span class="s">/bin/sh -c &#39;IVAR=&quot;%i&quot;</span><span class="c1">; exec /usr/bin/docker exec &quot;$${IVAR%:*}&quot; ping -q -s 32 &quot;$${IVAR#*:}&quot;&#39;</span>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="na">ExecStart=/bin/sh -c &#39;IVAR</span><span class="o">=</span><span class="s">&quot;%i&quot;</span><span class="c1">; exec /usr/bin/docker exec &quot;$${IVAR%:*}&quot; ping -q -s 32 &quot;$${IVAR#*:}&quot;&#39;</span>
 <a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="na">ExecStop</span><span class="o">=</span><span class="s">/bin/kill -s INT $MAINPID</span>
 <a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="na">Restart</span><span class="o">=</span><span class="s">on-failure</span>
 <a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="na">RestartSec</span><span class="o">=</span><span class="s">3</span>

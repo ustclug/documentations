@@ -458,6 +458,8 @@
       
         
       
+        
+      
     
     
       
@@ -955,6 +957,27 @@
   
   
   
+    <li class="md-nav__item">
+      <a href="../../infrastructure/dnscache/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    DNS Caching
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
     
     
       
@@ -975,7 +998,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_13" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_14" >
         
           
           
@@ -993,14 +1016,14 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_3_13" id="__nav_3_13_label" tabindex="0">
+              <label class="md-nav__link " for="__nav_3_14" id="__nav_3_14_label" tabindex="0">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_13_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_3_13">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_14_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_14">
             <span class="md-nav__icon md-icon"></span>
             Discontinued Infrastructure
           </label>
@@ -1053,10 +1076,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_13_3" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_14_3" >
         
           
-          <label class="md-nav__link" for="__nav_3_13_3" id="__nav_3_13_3_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_3_14_3" id="__nav_3_14_3_label" tabindex="0">
             
   
   <span class="md-ellipsis">
@@ -1067,8 +1090,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_3_13_3_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_3_13_3">
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_3_14_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_14_3">
             <span class="md-nav__icon md-icon"></span>
             vSphere Cluster
           </label>
@@ -2803,21 +2826,21 @@
 <a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a><span class="p">}</span>
 </code></pre></div>
 <p>三个 lua:</p>
-<div class="highlight"><span class="filename">/etc/nginx/lua/access.lua</span><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kd">local</span> <span class="n">ctx</span> <span class="o">=</span> <span class="n">ngx</span><span class="p">.</span><span class="n">ctx</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="n">ctx</span><span class="p">.</span><span class="n">testvar</span> <span class="o">=</span> <span class="s2">&quot;testvar&quot;</span>
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="n">ngx</span><span class="p">.</span><span class="n">var</span><span class="p">.</span><span class="n">testvar</span> <span class="o">=</span> <span class="s2">&quot;testvar&quot;</span>
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="n">ngx</span><span class="p">.</span><span class="n">log</span><span class="p">(</span><span class="n">ngx</span><span class="p">.</span><span class="n">ERR</span><span class="p">,</span> <span class="s2">&quot;ctx &quot;</span><span class="p">,</span> <span class="n">ctx</span><span class="p">.</span><span class="n">testvar</span><span class="p">)</span>
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="n">ngx</span><span class="p">.</span><span class="n">log</span><span class="p">(</span><span class="n">ngx</span><span class="p">.</span><span class="n">ERR</span><span class="p">,</span> <span class="s2">&quot;var &quot;</span><span class="p">,</span> <span class="n">ngx</span><span class="p">.</span><span class="n">var</span><span class="p">.</span><span class="n">testvar</span><span class="p">)</span>
+<div class="highlight"><span class="filename">/etc/nginx/lua/access.lua</span><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kd">local</span><span class="w"> </span><span class="nv">ctx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">ngx</span><span class="p">.</span><span class="py">ctx</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="nv">ctx</span><span class="p">.</span><span class="py">testvar</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;testvar&quot;</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="nv">ngx</span><span class="p">.</span><span class="py">var</span><span class="p">.</span><span class="py">testvar</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;testvar&quot;</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="nv">ngx</span><span class="p">.</span><span class="nf">log</span><span class="p">(</span><span class="nv">ngx</span><span class="p">.</span><span class="py">ERR</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;ctx &quot;</span><span class="p">,</span><span class="w"> </span><span class="nv">ctx</span><span class="p">.</span><span class="py">testvar</span><span class="p">)</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="nv">ngx</span><span class="p">.</span><span class="nf">log</span><span class="p">(</span><span class="nv">ngx</span><span class="p">.</span><span class="py">ERR</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;var &quot;</span><span class="p">,</span><span class="w"> </span><span class="nv">ngx</span><span class="p">.</span><span class="py">var</span><span class="p">.</span><span class="py">testvar</span><span class="p">)</span>
 </code></pre></div>
-<div class="highlight"><span class="filename">/etc/nginx/lua/header_filter.lua</span><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kd">local</span> <span class="n">ctx</span> <span class="o">=</span> <span class="n">ngx</span><span class="p">.</span><span class="n">ctx</span>
+<div class="highlight"><span class="filename">/etc/nginx/lua/header_filter.lua</span><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kd">local</span><span class="w"> </span><span class="nv">ctx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">ngx</span><span class="p">.</span><span class="py">ctx</span>
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="n">ngx</span><span class="p">.</span><span class="n">log</span><span class="p">(</span><span class="n">ngx</span><span class="p">.</span><span class="n">ERR</span><span class="p">,</span> <span class="s2">&quot;ctx &quot;</span><span class="p">,</span> <span class="n">ctx</span><span class="p">.</span><span class="n">testvar</span><span class="p">)</span>
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="n">ngx</span><span class="p">.</span><span class="n">log</span><span class="p">(</span><span class="n">ngx</span><span class="p">.</span><span class="n">ERR</span><span class="p">,</span> <span class="s2">&quot;var &quot;</span><span class="p">,</span> <span class="n">ngx</span><span class="p">.</span><span class="n">var</span><span class="p">.</span><span class="n">testvar</span><span class="p">)</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="nv">ngx</span><span class="p">.</span><span class="nf">log</span><span class="p">(</span><span class="nv">ngx</span><span class="p">.</span><span class="py">ERR</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;ctx &quot;</span><span class="p">,</span><span class="w"> </span><span class="nv">ctx</span><span class="p">.</span><span class="py">testvar</span><span class="p">)</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="nv">ngx</span><span class="p">.</span><span class="nf">log</span><span class="p">(</span><span class="nv">ngx</span><span class="p">.</span><span class="py">ERR</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;var &quot;</span><span class="p">,</span><span class="w"> </span><span class="nv">ngx</span><span class="p">.</span><span class="py">var</span><span class="p">.</span><span class="py">testvar</span><span class="p">)</span>
 </code></pre></div>
-<div class="highlight"><span class="filename">/etc/nginx/lua/log.lua</span><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kd">local</span> <span class="n">ctx</span> <span class="o">=</span> <span class="n">ngx</span><span class="p">.</span><span class="n">ctx</span>
+<div class="highlight"><span class="filename">/etc/nginx/lua/log.lua</span><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kd">local</span><span class="w"> </span><span class="nv">ctx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">ngx</span><span class="p">.</span><span class="py">ctx</span>
 <a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="n">ngx</span><span class="p">.</span><span class="n">log</span><span class="p">(</span><span class="n">ngx</span><span class="p">.</span><span class="n">ERR</span><span class="p">,</span> <span class="s2">&quot;ctx &quot;</span><span class="p">,</span> <span class="n">ctx</span><span class="p">.</span><span class="n">testvar</span><span class="p">)</span>
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="n">ngx</span><span class="p">.</span><span class="n">log</span><span class="p">(</span><span class="n">ngx</span><span class="p">.</span><span class="n">ERR</span><span class="p">,</span> <span class="s2">&quot;var &quot;</span><span class="p">,</span> <span class="n">ngx</span><span class="p">.</span><span class="n">var</span><span class="p">.</span><span class="n">testvar</span><span class="p">)</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="nv">ngx</span><span class="p">.</span><span class="nf">log</span><span class="p">(</span><span class="nv">ngx</span><span class="p">.</span><span class="py">ERR</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;ctx &quot;</span><span class="p">,</span><span class="w"> </span><span class="nv">ctx</span><span class="p">.</span><span class="py">testvar</span><span class="p">)</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="nv">ngx</span><span class="p">.</span><span class="nf">log</span><span class="p">(</span><span class="nv">ngx</span><span class="p">.</span><span class="py">ERR</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;var &quot;</span><span class="p">,</span><span class="w"> </span><span class="nv">ngx</span><span class="p">.</span><span class="py">var</span><span class="p">.</span><span class="py">testvar</span><span class="p">)</span>
 </code></pre></div>
 <h4 id="rewritereturn-access_by">rewrite/return 与 access_by<a class="headerlink" href="#rewritereturn-access_by" title="Permanent link">&para;</a></h4>
 <p>访问 localhost/lua-test0 或者 localhost/lua-test1，没有 access.lua 的输出：</p>
@@ -2869,46 +2892,46 @@
 <div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="k">lua_package_path</span><span class="w"> </span><span class="s">&quot;/etc/nginx/lua/module/?.lua</span><span class="p">;</span>;<span class="k">&quot;</span><span class="p">;</span>
 </code></pre></div>
 <p>以 <a href="https://github.com/tokers/lua-resty-ctxdump/blob/master/lib/resty/ctxdump.lua">https://github.com/tokers/lua-resty-ctxdump/blob/master/lib/resty/ctxdump.lua</a> 为例，下载到 <code>/etc/nginx/lua/module/</code> 下之后，就可以在其他 lua 文件内使用了：</p>
-<div class="highlight"><span class="filename">/etc/nginx/lua/access.lua</span><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="kd">local</span> <span class="n">ctxdump</span> <span class="o">=</span> <span class="nb">require</span> <span class="s2">&quot;ctxdump&quot;</span>
-<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="kd">local</span> <span class="n">ctx</span> <span class="o">=</span> <span class="n">ngx</span><span class="p">.</span><span class="n">ctx</span>
-<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="n">ctx</span><span class="p">.</span><span class="n">testvar</span> <span class="o">=</span> <span class="p">{</span><span class="n">foo</span> <span class="o">=</span> <span class="s2">&quot;bar&quot;</span><span class="p">,</span> <span class="n">num</span> <span class="o">=</span> <span class="mi">42</span><span class="p">}</span>
+<div class="highlight"><span class="filename">/etc/nginx/lua/access.lua</span><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="kd">local</span><span class="w"> </span><span class="nv">ctxdump</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">require</span><span class="w"> </span><span class="s2">&quot;ctxdump&quot;</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="kd">local</span><span class="w"> </span><span class="nv">ctx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">ngx</span><span class="p">.</span><span class="py">ctx</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="nv">ctx</span><span class="p">.</span><span class="py">testvar</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="nv">foo</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;bar&quot;</span><span class="p">,</span><span class="w"> </span><span class="nv">num</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">42</span><span class="p">}</span>
 <a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="c1">-- 需要 set $ctx_ref &quot;&quot;;</span>
-<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="n">ngx</span><span class="p">.</span><span class="n">var</span><span class="p">.</span><span class="n">ctx_ref</span> <span class="o">=</span> <span class="n">ctxdump</span><span class="p">.</span><span class="n">stash_ngx_ctx</span><span class="p">()</span>
-<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="n">ngx</span><span class="p">.</span><span class="n">log</span><span class="p">(</span><span class="n">ngx</span><span class="p">.</span><span class="n">ERR</span><span class="p">,</span> <span class="s2">&quot;ctx foo &quot;</span><span class="p">,</span> <span class="n">ctx</span><span class="p">.</span><span class="n">testvar</span><span class="p">.</span><span class="n">foo</span><span class="p">)</span>
-<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="n">ngx</span><span class="p">.</span><span class="n">log</span><span class="p">(</span><span class="n">ngx</span><span class="p">.</span><span class="n">ERR</span><span class="p">,</span> <span class="s2">&quot;ctx num &quot;</span><span class="p">,</span> <span class="n">ctx</span><span class="p">.</span><span class="n">testvar</span><span class="p">.</span><span class="n">num</span><span class="p">)</span>
-<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a><span class="n">ngx</span><span class="p">.</span><span class="n">log</span><span class="p">(</span><span class="n">ngx</span><span class="p">.</span><span class="n">ERR</span><span class="p">,</span> <span class="s2">&quot;var ctx_ref &quot;</span><span class="p">,</span> <span class="n">ngx</span><span class="p">.</span><span class="n">var</span><span class="p">.</span><span class="n">ctx_ref</span><span class="p">)</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="nv">ngx</span><span class="p">.</span><span class="py">var</span><span class="p">.</span><span class="py">ctx_ref</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">ctxdump</span><span class="p">.</span><span class="nf">stash_ngx_ctx</span><span class="p">()</span>
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="nv">ngx</span><span class="p">.</span><span class="nf">log</span><span class="p">(</span><span class="nv">ngx</span><span class="p">.</span><span class="py">ERR</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;ctx foo &quot;</span><span class="p">,</span><span class="w"> </span><span class="nv">ctx</span><span class="p">.</span><span class="py">testvar</span><span class="p">.</span><span class="py">foo</span><span class="p">)</span>
+<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="nv">ngx</span><span class="p">.</span><span class="nf">log</span><span class="p">(</span><span class="nv">ngx</span><span class="p">.</span><span class="py">ERR</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;ctx num &quot;</span><span class="p">,</span><span class="w"> </span><span class="nv">ctx</span><span class="p">.</span><span class="py">testvar</span><span class="p">.</span><span class="py">num</span><span class="p">)</span>
+<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a><span class="nv">ngx</span><span class="p">.</span><span class="nf">log</span><span class="p">(</span><span class="nv">ngx</span><span class="p">.</span><span class="py">ERR</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;var ctx_ref &quot;</span><span class="p">,</span><span class="w"> </span><span class="nv">ngx</span><span class="p">.</span><span class="py">var</span><span class="p">.</span><span class="py">ctx_ref</span><span class="p">)</span>
 </code></pre></div>
-<div class="highlight"><span class="filename">/etc/nginx/lua/log.lua</span><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="kd">local</span> <span class="n">ctxdump</span> <span class="o">=</span> <span class="nb">require</span> <span class="s2">&quot;ctxdump&quot;</span>
-<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="n">ngx</span><span class="p">.</span><span class="n">log</span><span class="p">(</span><span class="n">ngx</span><span class="p">.</span><span class="n">ERR</span><span class="p">,</span> <span class="s2">&quot;var ctx_ref &quot;</span><span class="p">,</span> <span class="n">ngx</span><span class="p">.</span><span class="n">var</span><span class="p">.</span><span class="n">ctx_ref</span><span class="p">)</span>
-<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="n">ngx</span><span class="p">.</span><span class="n">ctx</span> <span class="o">=</span> <span class="n">ctxdump</span><span class="p">.</span><span class="n">apply_ngx_ctx</span><span class="p">(</span><span class="n">ngx</span><span class="p">.</span><span class="n">var</span><span class="p">.</span><span class="n">ctx_ref</span><span class="p">)</span>
-<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="kd">local</span> <span class="n">ctx</span> <span class="o">=</span> <span class="n">ngx</span><span class="p">.</span><span class="n">ctx</span>
-<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="n">ngx</span><span class="p">.</span><span class="n">log</span><span class="p">(</span><span class="n">ngx</span><span class="p">.</span><span class="n">ERR</span><span class="p">,</span> <span class="s2">&quot;ctx foo &quot;</span><span class="p">,</span> <span class="n">ctx</span><span class="p">.</span><span class="n">testvar</span><span class="p">.</span><span class="n">foo</span><span class="p">)</span>
-<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="n">ngx</span><span class="p">.</span><span class="n">log</span><span class="p">(</span><span class="n">ngx</span><span class="p">.</span><span class="n">ERR</span><span class="p">,</span> <span class="s2">&quot;ctx num &quot;</span><span class="p">,</span> <span class="n">ctx</span><span class="p">.</span><span class="n">testvar</span><span class="p">.</span><span class="n">num</span><span class="p">)</span>
+<div class="highlight"><span class="filename">/etc/nginx/lua/log.lua</span><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="kd">local</span><span class="w"> </span><span class="nv">ctxdump</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">require</span><span class="w"> </span><span class="s2">&quot;ctxdump&quot;</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="nv">ngx</span><span class="p">.</span><span class="nf">log</span><span class="p">(</span><span class="nv">ngx</span><span class="p">.</span><span class="py">ERR</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;var ctx_ref &quot;</span><span class="p">,</span><span class="w"> </span><span class="nv">ngx</span><span class="p">.</span><span class="py">var</span><span class="p">.</span><span class="py">ctx_ref</span><span class="p">)</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="nv">ngx</span><span class="p">.</span><span class="py">ctx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">ctxdump</span><span class="p">.</span><span class="nf">apply_ngx_ctx</span><span class="p">(</span><span class="nv">ngx</span><span class="p">.</span><span class="py">var</span><span class="p">.</span><span class="py">ctx_ref</span><span class="p">)</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="kd">local</span><span class="w"> </span><span class="nv">ctx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">ngx</span><span class="p">.</span><span class="py">ctx</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="nv">ngx</span><span class="p">.</span><span class="nf">log</span><span class="p">(</span><span class="nv">ngx</span><span class="p">.</span><span class="py">ERR</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;ctx foo &quot;</span><span class="p">,</span><span class="w"> </span><span class="nv">ctx</span><span class="p">.</span><span class="py">testvar</span><span class="p">.</span><span class="py">foo</span><span class="p">)</span>
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="nv">ngx</span><span class="p">.</span><span class="nf">log</span><span class="p">(</span><span class="nv">ngx</span><span class="p">.</span><span class="py">ERR</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;ctx num &quot;</span><span class="p">,</span><span class="w"> </span><span class="nv">ctx</span><span class="p">.</span><span class="py">testvar</span><span class="p">.</span><span class="py">num</span><span class="p">)</span>
 </code></pre></div>
 <p>如果没有找到文件，报错信息中会包含所有尝试过的路径。</p>
 <h4 id="_3">代码复用与模块编写<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h4>
 <p>最简单的代码复用的方法是使用 <code>loadfile()</code> 函数，这样几乎不需要修改代码内容。</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="kd">local</span> <span class="n">f</span> <span class="o">=</span> <span class="nb">loadfile</span><span class="p">(</span><span class="s2">&quot;/etc/nginx/lua/somefile.lua&quot;</span><span class="p">)</span>
-<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="kr">if</span> <span class="n">f</span> <span class="kr">then</span>
-<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>    <span class="n">f</span><span class="p">()</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="kd">local</span><span class="w"> </span><span class="nv">f</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">loadfile</span><span class="p">(</span><span class="s2">&quot;/etc/nginx/lua/somefile.lua&quot;</span><span class="p">)</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="kr">if</span><span class="w"> </span><span class="nv">f</span><span class="w"> </span><span class="kr">then</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="w">    </span><span class="nf">f</span><span class="p">()</span>
 <a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="kr">else</span>
-<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>    <span class="n">ngx</span><span class="p">.</span><span class="n">log</span><span class="p">(</span><span class="n">ngx</span><span class="p">.</span><span class="n">ERR</span><span class="p">,</span> <span class="s2">&quot;failed to load somefile.lua&quot;</span><span class="p">)</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="w">    </span><span class="nv">ngx</span><span class="p">.</span><span class="nf">log</span><span class="p">(</span><span class="nv">ngx</span><span class="p">.</span><span class="py">ERR</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;failed to load somefile.lua&quot;</span><span class="p">)</span>
 <a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="kr">end</span>
 </code></pre></div>
 <p>但是这么做是没有 JIT 缓存的，意味着每个请求都需要整个加载一遍对应的原始 lua 代码。一个基本的模块类似于下面这样：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="kd">local</span> <span class="n">_M</span> <span class="o">=</span> <span class="p">{}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="kd">local</span><span class="w"> </span><span class="nv">_M</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{}</span>
 <a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>
-<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="kd">local</span> <span class="kr">function</span> <span class="nf">some_internal_func</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
-<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>    <span class="kr">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">a</span>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="kd">local</span><span class="w"> </span><span class="kr">function</span><span class="w"> </span><span class="nf">some_internal_func</span><span class="p">(</span><span class="nv">a</span><span class="p">)</span>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="w">    </span><span class="kr">return</span><span class="w"> </span><span class="nv">a</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nv">a</span>
 <a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="kr">end</span>
 <a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a>
-<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a><span class="kr">function</span> <span class="nc">_M</span><span class="p">.</span><span class="nf">f1</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
-<a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a>    <span class="kd">local</span> <span class="n">aa</span> <span class="o">=</span> <span class="n">some_internal_func</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
-<a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a>    <span class="kd">local</span> <span class="n">bb</span> <span class="o">=</span> <span class="n">some_internal_func</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
-<a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a>    <span class="kr">return</span> <span class="n">aa</span> <span class="o">+</span> <span class="n">bb</span>
+<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a><span class="kr">function</span><span class="w"> </span><span class="nc">_M</span><span class="p">.</span><span class="nf">f1</span><span class="p">(</span><span class="nv">a</span><span class="p">,</span><span class="w"> </span><span class="nv">b</span><span class="p">)</span>
+<a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a><span class="w">    </span><span class="kd">local</span><span class="w"> </span><span class="nv">aa</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">some_internal_func</span><span class="p">(</span><span class="nv">a</span><span class="p">)</span>
+<a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a><span class="w">    </span><span class="kd">local</span><span class="w"> </span><span class="nv">bb</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">some_internal_func</span><span class="p">(</span><span class="nv">b</span><span class="p">)</span>
+<a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a><span class="w">    </span><span class="kr">return</span><span class="w"> </span><span class="nv">aa</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nv">bb</span>
 <a id="__codelineno-11-11" name="__codelineno-11-11" href="#__codelineno-11-11"></a><span class="kr">end</span>
 <a id="__codelineno-11-12" name="__codelineno-11-12" href="#__codelineno-11-12"></a>
-<a id="__codelineno-11-13" name="__codelineno-11-13" href="#__codelineno-11-13"></a><span class="kr">return</span> <span class="n">_M</span>
+<a id="__codelineno-11-13" name="__codelineno-11-13" href="#__codelineno-11-13"></a><span class="kr">return</span><span class="w"> </span><span class="nv">_M</span>
 </code></pre></div>
 
 
