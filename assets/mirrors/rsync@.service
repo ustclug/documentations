@@ -1,0 +1,31 @@
+[Unit]
+Description=fast remote file copy program daemon
+ConditionPathExists=/etc/rsyncd/rsyncd-%i.conf
+After=network.target network-online.target
+
+[Service]
+Type=exec
+PIDFile=rsyncd-%i.pid
+ExecStart=/usr/bin/rsync --daemon --no-detach --config=/etc/rsyncd/rsyncd-%i.conf
+
+Nice=19
+IOSchedulingClass=best-effort
+IOSchedulingPriority=7
+IOAccounting=true
+
+ProtectSystem=strict
+ProtectHome=true
+ProtectProc=invisible
+ProtectControlGroups=true
+ProtectKernelModules=true
+ProtectKernelTunables=true
+PrivateTmp=true
+PrivateDevices=true
+NoNewPrivileges=true
+MemoryDenyWriteExecute=true
+
+ReadWritePaths=/var/log/rsyncd
+
+[Install]
+WantedBy=multi-user.target
+Alias=rsyncd@.service
