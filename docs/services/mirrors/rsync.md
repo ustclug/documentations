@@ -7,14 +7,16 @@
 
 由于面向用户的服务程序实际上是 rsync-proxy（见下），因此我们在各个机器上实际启用的 instance 为：
 
-|  服务器  |  systemd 服务  | 备注                 |
-| :------: | :------------: | -------------------- |
-| mirrors2 |  rsync@cernet  |                      |
-| mirrors3 |  rsync@cernet  |                      |
-| mirrors4 |  rsync@cernet  |                      |
-| mirrors4 | rsync@mirrors2 | 供 mirrors2 拉取仓库 |
+|  服务器  |  systemd 服务  |           备注           |
+| :------: | :------------: | :----------------------: |
+| mirrors2 |  rsync@cernet  |   供 rsync-proxy 反代    |
+| mirrors3 |  rsync@cernet  |   供 rsync-proxy 反代    |
+| mirrors4 |  rsync@cernet  |   供 rsync-proxy 反代    |
+| mirrors4 | rsync@mirrors2 | 供 mirrors2 直接拉取仓库 |
 
 ??? abstract "我们的 systemd service 文件"
+
+    [Download link](../../assets/mirrors/rsync@.service)
 
     ```ini title="/etc/systemd/system/rsync@.service"
     --8<-- "mirrors/rsync@.service"
