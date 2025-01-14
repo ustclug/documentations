@@ -2589,8 +2589,42 @@
 
 <h1 id="rsync">Rsync<a class="headerlink" href="#rsync" title="Permanent link">&para;</a></h1>
 <h2 id="rsyncd">rsyncd<a class="headerlink" href="#rsyncd" title="Permanent link">&para;</a></h2>
-<p>经过 2024 年夏季的 <a href="https://lug.ustc.edu.cn/planet/2024/12/ustc-mirrors-zfs-rebuild/">ZFS rebuild</a> 之后，我们观测到 ZFS ARC cache 能够很好地缓存仓库文件的元数据，因此我们在 2025 年 1 月抛弃了 rsync-huai，改用原生的 rsync。</p>
-<p>我们的 systemd service 文件：</p>
+<p>经过 2024 年夏季的 <a href="https://lug.ustc.edu.cn/planet/2024/12/ustc-mirrors-zfs-rebuild/">ZFS rebuild</a> 之后，我们观测到 ZFS ARC cache 能够很好地缓存仓库文件的元数据，因此我们在 2025 年 1 月抛弃了 rsync-huai，改回原生的 rsync。
+这样就不需要自己维护一个 fork，还需要时不时跟进最新的 security patch 了。</p>
+<p>由于面向用户的服务程序实际上是 rsync-proxy（见下），因此我们在各个机器上实际启用的 instance 为：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">服务器</th>
+<th style="text-align: center;">systemd 服务</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">mirrors2</td>
+<td style="text-align: center;">rsync@cernet</td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align: center;">mirrors3</td>
+<td style="text-align: center;">rsync@cernet</td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align: center;">mirrors4</td>
+<td style="text-align: center;">rsync@cernet</td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align: center;">mirrors4</td>
+<td style="text-align: center;">rsync@mirrors2</td>
+<td>供 mirrors2 拉取仓库</td>
+</tr>
+</tbody>
+</table>
+<details class="abstract">
+<summary>我们的 systemd service 文件</summary>
 <div class="highlight"><span class="filename">/etc/systemd/system/rsync@.service</span><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">[Unit]</span>
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="na">Description</span><span class="o">=</span><span class="s">fast remote file copy program daemon</span>
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="na">ConditionPathExists</span><span class="o">=</span><span class="s">/etc/rsyncd/rsyncd-%i.conf</span>
@@ -2623,6 +2657,7 @@
 <a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a><span class="na">WantedBy</span><span class="o">=</span><span class="s">multi-user.target</span>
 <a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a><span class="na">Alias</span><span class="o">=</span><span class="s">rsyncd@.service</span>
 </code></pre></div>
+</details>
 <details class="info">
 <summary>rsync-huai (discontinued)</summary>
 <p>rsync-huai 是坏人的元数据加速版的 rsync，原始代码在 <a href="https://github.com/tuna/rsync">https://github.com/tuna/rsync</a>。</p>
@@ -2646,7 +2681,7 @@
 </code></pre></div>
 </details>
 <h2 id="rsync-proxy">rsync-proxy<a class="headerlink" href="#rsync-proxy" title="Permanent link">&para;</a></h2>
-<p>详参 <a href="https://github.com/ustclug/rsync-proxy">https://github.com/ustclug/rsync-proxy</a>。为了让服务器能够记录 IP 与访问路径的关系，我们打开了 proxy protocol 特性。</p>
+<p>详参 <a href="https://github.com/ustclug/rsync-proxy">https://github.com/ustclug/rsync-proxy</a>。为了让服务器能够记录 IP 与访问路径的关系，我们为 rsyncd 打开了 proxy protocol 特性。</p>
 
 
 
