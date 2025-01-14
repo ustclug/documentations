@@ -2597,34 +2597,35 @@
 <tr>
 <th style="text-align: center;">服务器</th>
 <th style="text-align: center;">systemd 服务</th>
-<th>备注</th>
+<th style="text-align: center;">备注</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td style="text-align: center;">mirrors2</td>
 <td style="text-align: center;">rsync@cernet</td>
-<td></td>
+<td style="text-align: center;">供 rsync-proxy 反代</td>
 </tr>
 <tr>
 <td style="text-align: center;">mirrors3</td>
 <td style="text-align: center;">rsync@cernet</td>
-<td></td>
+<td style="text-align: center;">供 rsync-proxy 反代</td>
 </tr>
 <tr>
 <td style="text-align: center;">mirrors4</td>
 <td style="text-align: center;">rsync@cernet</td>
-<td></td>
+<td style="text-align: center;">供 rsync-proxy 反代</td>
 </tr>
 <tr>
 <td style="text-align: center;">mirrors4</td>
 <td style="text-align: center;">rsync@mirrors2</td>
-<td>供 mirrors2 拉取仓库</td>
+<td style="text-align: center;">供 mirrors2 直接拉取仓库</td>
 </tr>
 </tbody>
 </table>
 <details class="abstract">
 <summary>我们的 systemd service 文件</summary>
+<p><a href="../../../assets/mirrors/rsync%40.service">Download link</a></p>
 <div class="highlight"><span class="filename">/etc/systemd/system/rsync@.service</span><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">[Unit]</span>
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="na">Description</span><span class="o">=</span><span class="s">fast remote file copy program daemon</span>
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="na">ConditionPathExists</span><span class="o">=</span><span class="s">/etc/rsyncd/rsyncd-%i.conf</span>
