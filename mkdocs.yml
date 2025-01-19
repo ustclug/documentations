@@ -49,7 +49,7 @@ extra:
       link: "https://github.com/ustclug"
 
 extra_css:
-  - https://101.ustclug.org/css/extra.css
+  - /css/extra.css
 
 # Extensions
 markdown_extensions:

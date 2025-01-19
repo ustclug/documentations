@@ -7,14 +7,22 @@ import material
 
 
 CUSTOM_ADMONITIONS = {
-    "comment": {
-        "icon": "material/comment",
-        "rgb": [0x00, 0xC8, 0x53],
+    "homepage-workflow": {
+        "icon": "fontawesome/solid/wrench",
+        "rgb": (241, 79, 33),
     },
-    "lab": {
-        "icon": "material/flask",
-        "rgb": [0xFF, 0xB3, 0x4D],
-    }
+    "homepage-infrastructure": {
+        "icon": "material/toy-brick",
+        "rgb": (126, 185, 0),
+    },
+    "homepage-services": {
+        "icon": "fontawesome/solid/certificate",
+        "rgb": (0, 163, 238),
+    },
+    "homepage-faq": {
+        "icon": "fontawesome/solid/circle-question",
+        "rgb": (254, 184, 0),
+    },
 }
 
 # ensure we're in project root directory
