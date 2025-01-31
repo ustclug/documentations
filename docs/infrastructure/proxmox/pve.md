@@ -311,6 +311,16 @@ ExecStart=/usr/bin/rsync -aHAXx --delete / /mnt/vdp2/rootfs/
 
 esxi-5 于 2021/8 发现自带阵列有两块坏盘，在更换后发现 storage "root"（存放 vcenter 虚拟机，组建 RAID 1 后大小 1.8 TB）无法正常 rebuild，并且 vcenter 虚拟机的 vmdk 文件有 4 个出现 I/O error。此后 vcenter 虚拟机已经迁移到 storage "data" (RAID10, 7.2 TB) 并正常工作。
 
+## pve-6
+
+pve-6 位于东图，是一台 HP DL380G6，配置为 2× Xeon E5620 (Westmere 4C8T, 2.50 GHz), 72 GB 内存和l两块 300 GB 的 SAS 硬盘。曾经叫做 esxi-6，在 2022 年 1 月统一更换为 Proxmox VE。
+
+机器有两个网卡，共有 4 个 1 Gbps 的接口，其中 3 个都接在 VLAN 交换机上（另一个不知道接了啥），通过 VLAN 同时连接图书馆的两个网段以及经由 gateway-el 桥接的内网，以及连接 vdp 挂载 NFS。
+
+!!! note "HP Smart Array"
+
+    HP 的自带 RAID 卡管理软件可以在 <http://downloads.linux.hpe.com/SDR/repo/mcp/Debian/pool/non-free/> 下载，安装 `ssacli` 软件包。相关使用方法可以参考 <https://sleeplessbeastie.eu/2017/03/06/how-to-use-hp-command-line-array-configuration-utility/>。
+
 ## 工作记录 {#records}
 
 ### 2021-12-31 迁移 docker2 {#migrate-docker2}
@@ -333,12 +343,22 @@ docker2 原先使用 QEMU 直接运行在 mirrors2 上，下层存储为 ZFS Zvo
 
 **解决办法**：由于 `/etc/pve` 下大多数内容在集群间是同步的，打开 `storage.cfg`，在 `zfspool: local-zfs` 下面加入一行，缩进一个 Tab 并加上 `nodes pve-5`，表示这个 storage 只在 pve-5 上使用。
 
-## pve-6
+## 备注：我们为什么从 VMware vSphere 迁移到 Proxmox VE {#why-proxmox}
 
-pve-6 位于东图，是一台 HP DL380G6，配置为 2× Xeon E5620 (Westmere 4C8T, 2.50 GHz), 72 GB 内存和l两块 300 GB 的 SAS 硬盘。曾经叫做 esxi-6，在 2022 年 1 月统一更换为 Proxmox VE。
+我们原先跑着一个集群的 ESXi 6.0，并且还在 esxi-5 上运行着 vCenter 和 vSphereDataProtection，但是我们决定迁移到 Proxmox VE 上。主要原因有：
 
-机器有两个网卡，共有 4 个 1 Gbps 的接口，其中 3 个都接在 VLAN 交换机上（另一个不知道接了啥），通过 VLAN 同时连接图书馆的两个网段以及经由 gateway-el 桥接的内网，以及连接 vdp 挂载 NFS。
+- ESXi 6.0 已 EOL，而能够原地升级的 ESXi 6.5 和 6.7 也即将（2022 年）EOL，并且 ESXi 7 无法原地升级 / 需要购买许可（ESXi 6 在一定规模以内可以免费使用）。
+- vCenter 的界面还在用 Flash，很快我们就没法用了（现代的浏览器已经淘汰了 Flash）。
+- 为了备份业务虚拟机，我们必须装 vDP 这一大坨厚重的东西（它自己就占了 4C 8G + 将近 1 TB 的硬盘），而且 vDP 也即将与 ESXi 6.x 一同 EOL。
+    - 而且 vDP 还是很难用（
+- ESXi 是一套私有的系统，不方便使用各种成熟的工具（如 `smartctl`）和不得不用的其他工具（如戴尔阵列卡的 `MegaCli`），也难以接入我们现有的 InfluxDB + Telegraf 监控系统，甚至有些东西还需要我们自己编译（如 `ipmitool`），编译环境又很难整。
 
-!!! note "HP Smart Array"
-
-    HP 的自带 RAID 卡管理软件可以在 <http://downloads.linux.hpe.com/SDR/repo/mcp/Debian/pool/non-free/> 下载，安装 `ssacli` 软件包。相关使用方法可以参考 <https://sleeplessbeastie.eu/2017/03/06/how-to-use-hp-command-line-array-configuration-utility/>。
+相比之下：
+- Proxmox VE 是基于 Debian 的，所有 Linux 软件和工具都可以直接使用，即使在最坏情况下我们也可以把它当作一个普通的 Debian 服务器来管理。
+    - 配置 RAID 和监控等功能更加方便，不需要单独为 ESXi 整一套方案，直接把我们已经在 Debian 上配好的方案搬过来就行。
+- 利用 Linux 下成熟的 QEMU/KVM 虚拟化方案，与 Linux 虚拟机无缝集成，各种诸如 VirtIO 等技术都可以直接使用。
+- 比 ESXi 更轻量，所有功能都可以在一个主机上完成，不需要额外开个虚拟机跑厚重的 vCenter。即使有 web 界面不方便/无法完成的任务，我们也可以 SSH 处理。
+- Host 上可以用 ZFS 等高端存储方案。
+- 结合 Proxmox Backup Server，可以实现自动备份虚拟机，而且 PBS 与 Linux 相关功能集成也更好，比如可以直接查看备份中的文件内容等。
+- 与 Debian 发行周期一致，可以像 Debian 一样长期维护和版本升级。
+- 最重要的是，它是全套开源软件（AGPLv3），必要的时候我们可以看代码自己进行需要的 patch。
