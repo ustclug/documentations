@@ -3259,7 +3259,7 @@
 <p>顾名思义本机器曾经运行的是 VMware ESXi，在 2022 年 1 月重装为 Proxmox VE 7.1，<s>因为咱们都是纠结怪所以决定不改名</s>，还叫 esxi-5。考虑到该机器配置了多个硬盘阵列，且阵列的可用容量比 pve-5 的硬盘的原始容量还大，我们在上面加装 Proxmox Backup Server 软件，主要用作虚拟机备份，替代原先运行在 ESXi 上的 vSphereDataProtection 虚拟机。</p>
 <h3 id="_1">网络<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h3>
 <p>网络配置与 pve-5 相似，其上有两个千兆网卡 enp3s0 和 enp4s0。enp3s0 连接网络中心的交换机，桥接不同的 VLAN 网络给虚拟机，并且各 vmbrX 的数字和端口与 pve-5 一致；而 enp4s0 连接一个外部阵列（vdp2），使用 iSCSI 访问该阵列。</p>
-<p>由于我们只有一个 gateway-nic，而 pve-5 和 esxi-5 两个主机都依赖 gw-nic 桥接的 tinc 来接入内网，因此我们在 pve-5 和 esxi-5 之间拉了一条 GRETAP 隧道，并在两个主机上分别将 VTEP 桥接到 vmbr1。</p>
+<p>由于我们只有一个 gateway-nic，而 pve-5 和 esxi-5 两个主机都依赖 gw-nic 桥接的 tinc 来接入内网，因此我们在 pve-5 和 esxi-5 之间拉了一条 GRETAP 隧道，并在两个主机上分别将该 GRETAP iface 桥接到 vmbr1 上。</p>
 <p>参考配置：</p>
 <div class="highlight"><span class="filename">pve-5:/etc/network/interfaces</span><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>auto<span class="w"> </span>gretap0esxi-5
 <a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>iface<span class="w"> </span>gretap0esxi-5<span class="w"> </span>inet<span class="w"> </span>manual
@@ -3342,15 +3342,19 @@
 </li>
 <li>ESXi 是一套私有的系统，不方便使用各种成熟的工具（如 <code>smartctl</code>）和不得不用的其他工具（如戴尔阵列卡的 <code>MegaCli</code>），也难以接入我们现有的 InfluxDB + Telegraf 监控系统，甚至有些东西还需要我们自己编译（如 <code>ipmitool</code>），编译环境又很难整。</li>
 </ul>
-<p>相比之下：
-- Proxmox VE 是基于 Debian 的，所有 Linux 软件和工具都可以直接使用，即使在最坏情况下我们也可以把它当作一个普通的 Debian 服务器来管理。
-    - 配置 RAID 和监控等功能更加方便，不需要单独为 ESXi 整一套方案，直接把我们已经在 Debian 上配好的方案搬过来就行。
-- 利用 Linux 下成熟的 QEMU/KVM 虚拟化方案，与 Linux 虚拟机无缝集成，各种诸如 VirtIO 等技术都可以直接使用。
-- 比 ESXi 更轻量，所有功能都可以在一个主机上完成，不需要额外开个虚拟机跑厚重的 vCenter。即使有 web 界面不方便/无法完成的任务，我们也可以 SSH 处理。
-- Host 上可以用 ZFS 等高端存储方案。
-- 结合 Proxmox Backup Server，可以实现自动备份虚拟机，而且 PBS 与 Linux 相关功能集成也更好，比如可以直接查看备份中的文件内容等。
-- 与 Debian 发行周期一致，可以像 Debian 一样长期维护和版本升级。
-- 最重要的是，它是全套开源软件（AGPLv3），必要的时候我们可以看代码自己进行需要的 patch。</p>
+<p>相比之下：</p>
+<ul>
+<li>Proxmox VE 是基于 Debian 的，所有 Linux 软件和工具都可以直接使用，即使在最坏情况下我们也可以把它当作一个普通的 Debian 服务器来管理。<ul>
+<li>配置 RAID 和监控等功能更加方便，不需要单独为 ESXi 整一套方案，直接把我们已经在 Debian 上配好的方案搬过来就行。</li>
+</ul>
+</li>
+<li>利用 Linux 下成熟的 QEMU/KVM 虚拟化方案，与 Linux 虚拟机无缝集成，各种诸如 VirtIO 等技术都可以直接使用。</li>
+<li>比 ESXi 更轻量，所有功能都可以在一个主机上完成，不需要额外开个虚拟机跑厚重的 vCenter。即使有 web 界面不方便/无法完成的任务，我们也可以 SSH 处理。</li>
+<li>Host 上可以用 ZFS 等高端存储方案。</li>
+<li>结合 Proxmox Backup Server，可以实现自动备份虚拟机，而且 PBS 与 Linux 相关功能集成也更好，比如可以直接查看备份中的文件内容等。</li>
+<li>与 Debian 发行周期一致，可以像 Debian 一样长期维护和版本升级。</li>
+<li>最重要的是，它是全套开源软件（AGPLv3），必要的时候我们可以看代码自己进行需要的 patch。</li>
+</ul>
 
 
 
