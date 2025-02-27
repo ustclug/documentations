@@ -1581,7 +1581,7 @@
               
   
   <span class="md-ellipsis">
-    Auxiliary (3)
+    Obsolete (3)
     
   </span>
   
@@ -1593,7 +1593,7 @@
         <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_4_2_3_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_4_2_3">
             <span class="md-nav__icon md-icon"></span>
-            Auxiliary (3)
+            Obsolete (3)
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
@@ -2826,39 +2826,40 @@
 <p>LUG 的主页上还有一份<a href="https://lug.ustc.edu.cn/wiki/lug/services/">《网络服务列表》 <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a>，如果有服务状态改变，记得同步更新主页上的列表。</p>
 </div>
 <h2 id="mirrors">Mirrors 镜像站<a class="headerlink" href="#mirrors" title="Permanent link">&para;</a></h2>
-<p>服务器：</p>
+<p>服役中的服务器：</p>
 <ul>
 <li>主：<a href="mirrors/4/">mirrors4</a><ul>
-<li>主服务器存储绝大部分仓库，对外提供 HTTP(S), git 与 Rsync 服务。<ul>
-<li>HTTP(S) 对应 nginx，Rsync 对应 rsync-proxy，两者均支持反向代理（因此可以将仓库放在别的机器上，同时在 mirrors4 向外提供对应的服务）。</li>
+<li>主服务器存储绝大部分仓库，对外提供 HTTP(S)、Git 与 Rsync 服务。<ul>
+<li>HTTP(S) 对应 nginx，Rsync 对应 rsync-proxy，两者均支持反向代理（因此可以将仓库放在别的机器上，同时通过 mirrors4 向外提供对应的服务）。</li>
 <li>接入了包括教育网等在内的多个 ISP。</li>
 </ul>
 </li>
-<li>状态页面通过 SSH 隧道与 mirrors[2-3] 暴露 Yuki 公开 API。</li>
-</ul>
-</li>
-<li>副：<a href="mirrors/3/">mirrors3</a><ul>
-<li>mirrors3 存储较大的存档类仓库、极冷门且空间极大与有需要但是 mirrors4 放不下的仓库。</li>
-<li>截至目前（2023/11），有 centos-vault, openeuler, percona, ubuntu-old-releases</li>
-<li><a href="https://mirrors.ustc.edu.cn/status/mirrors3.html">https://mirrors.ustc.edu.cn/status/mirrors3.html</a></li>
-<li><strong>注意：mirrors3 连接的 SAN 的管理口已经损坏，需要定期检查磁盘状态。</strong></li>
+<li>状态页面通过 SSH 隧道与 mirrors2 暴露 Yuki 公开的状态查询 API。</li>
 </ul>
 </li>
 <li>副：<a href="mirrors/2/">mirrors2</a><ul>
-<li>mirrors2 存储的内容是 mirrors4 的子集，负责帮助 mirrors4 承担一部分 rsync 流量的压力。</li>
-<li>rsync 相比 http(s)，给服务器带来的负载高得多。</li>
+<li>mirrors2 存储较大的存档类仓库、较冷门且空间极大与有需要但是 mirrors4 放不下的仓库。</li>
+<li>截至 2025/02 的仓库：centos-vault, mysql-repo, openeuler, percona, trisquel, ubuntu-old-releases</li>
 </ul>
 </li>
-<li>已废弃：<a href="mirrors/1/">mirrors1</a></li>
+</ul>
+<p>已淘汰的服务器：</p>
+<ul>
+<li><a href="mirrors/3/">mirrors3</a><ul>
+<li>由于该机器过于老旧，在图书馆老师的建议下，我们已于 2025 年初将其清空并下架。</li>
+<li>mirrors3 连接的 SAN 的管理口已经损坏，需要定期线下检查磁盘状态。</li>
+</ul>
+</li>
+<li><a href="mirrors/1/">mirrors1</a></li>
 </ul>
 <p>镜像站日志会备份至 mirrorlog 虚拟机上。</p>
 <h2 id="auth-dns"><a href="../infrastructure/auth-dns/">权威 DNS</a><a class="headerlink" href="#auth-dns" title="Permanent link">&para;</a></h2>
 <div class="admonition abstract">
 <p class="admonition-title">以下内容由 GPT-4 生成</p>
 <p>User: 向新手运维介绍什么是权威 DNS</p>
-<p>Bot: 权威DNS（Authoritative DNS）服务是因特网域名系统（DNS）的一部分，它负责处理关于其负责管理的一组域名的查询。这些DNS服务器带有关于他们所负责域的所有必要数据，并从管理该域的人或组织中收到更新。</p>
-<p>比如，如果你在浏览器中输入一个网站地址，你的请求首先发送到递归DNS服务器，然后递归服务器查询权威DNS服务器来获取对应的IP地址。权威服务器就是“权威”资源，能够告诉递归服务器对应的IP地址是什么。这个过程被称为DNS解析。</p>
-<p>总的来说，权威DNS服务器就是存储、管理并响应特定域名信息的“权威”来源。</p>
+<p>Assistant: 权威 DNS（Authoritative DNS）服务是因特网域名系统（DNS）的一部分，它负责处理关于其负责管理的一组域名的查询。这些 DNS 服务器带有关于他们所负责域的所有必要数据，并从管理该域的人或组织中收到更新。</p>
+<p>比如，如果你在浏览器中输入一个网站地址，你的请求首先发送到递归DNS服务器，然后递归服务器查询权威 DNS 服务器来获取对应的 IP 地址。权威服务器就是“权威”资源，能够告诉递归服务器对应的 IP 地址是什么。这个过程被称为DNS解析。</p>
+<p>总的来说，权威 DNS 服务器就是存储、管理并响应特定域名信息的“权威”来源。</p>
 </div>
 <p>我们的权威 DNS 服务器提供了与 LUG 有关的域名的相关解析信息，同时也是一个（通过域名）可以概览 LUG 曾经与目前有的服务的地方。</p>
 <h2 id="lug-ftp"><a href="ftp/">LUG FTP</a><a class="headerlink" href="#lug-ftp" title="Permanent link">&para;</a></h2>
