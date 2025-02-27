@@ -47,6 +47,9 @@ systemctl reload openresty.service
 # Other `cp -a` or `docker restart` commands, etc.
 ```
 
+For Proxmox VE hosts, as they (by default) don't have access to public internet and therefore cannot pull from GitHub directly, their SSL certificates are fetched with a small twist.
+See [Proxmox VE](proxmox/pve.md#ssl) for details.
+
 The DigitalOcean account we use is owned by iBug and has nothing else running.
 
 !!! note "Plan B"

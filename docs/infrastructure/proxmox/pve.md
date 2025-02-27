@@ -239,7 +239,7 @@ esxi-5 也位于网络中心，配置为 2× Xeon E5620（Westmere-EP 4C8T, 2.40
 
 网络配置与 pve-5 相似，其上有两个千兆网卡 enp3s0 和 enp4s0。enp3s0 连接网络中心的交换机，桥接不同的 VLAN 网络给虚拟机，并且各 vmbrX 的数字和端口与 pve-5 一致；而 enp4s0 连接一个外部阵列（vdp2），使用 iSCSI 访问该阵列。
 
-由于我们只有一个 gateway-nic，而 pve-5 和 esxi-5 两个主机都依赖 gw-nic 桥接的 tinc 来接入内网，因此我们在 pve-5 和 esxi-5 之间拉了一条 GRETAP 隧道，并在两个主机上分别将 VTEP 桥接到 vmbr1。
+由于我们只有一个 gateway-nic，而 pve-5 和 esxi-5 两个主机都依赖 gw-nic 桥接的 tinc 来接入内网，因此我们在 pve-5 和 esxi-5 之间拉了一条 GRETAP 隧道，并在两个主机上分别将该 GRETAP iface 桥接到 vmbr1 上。
 
 参考配置：
 
@@ -362,6 +362,7 @@ docker2 原先使用 QEMU 直接运行在 mirrors2 上，下层存储为 ZFS Zvo
 - ESXi 是一套私有的系统，不方便使用各种成熟的工具（如 `smartctl`）和不得不用的其他工具（如戴尔阵列卡的 `MegaCli`），也难以接入我们现有的 InfluxDB + Telegraf 监控系统，甚至有些东西还需要我们自己编译（如 `ipmitool`），编译环境又很难整。
 
 相比之下：
+
 - Proxmox VE 是基于 Debian 的，所有 Linux 软件和工具都可以直接使用，即使在最坏情况下我们也可以把它当作一个普通的 Debian 服务器来管理。
     - 配置 RAID 和监控等功能更加方便，不需要单独为 ESXi 整一套方案，直接把我们已经在 Debian 上配好的方案搬过来就行。
 - 利用 Linux 下成熟的 QEMU/KVM 虚拟化方案，与 Linux 虚拟机无缝集成，各种诸如 VirtIO 等技术都可以直接使用。
