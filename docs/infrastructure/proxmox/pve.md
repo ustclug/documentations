@@ -121,23 +121,31 @@ server time.ustc.edu.cn iburst
 
 ### SSL 证书
 
-参见 [SSL 证书](../ssl.md)，正好 vdp 上面运行了 LUG FTP 而因此配置了证书的自动更新，利用 vdp 提供的 NFS 服务，我们在 vdp 上的证书更新脚本中添加了将 vm 证书复制到 NFS 目录的功能，然后由 pve-6 部署到各个主机上。
+参见 [SSL 证书](../ssl.md)，正好 esxi-5 需要负责自己的 PBS 的证书，就由它兼任整个 PVE 集群的证书更新了。证书先从 gateway-nic 走 Rsync over SSH 拉下来，然后通过 PVE 自己的 `/etc/pve` 目录的同步机制复制到其他节点上，再 ssh 上去 reload pveproxy 服务。
 
-下面是 pve-6 上的脚本：
+gateway-nic 上为 root 用户添加了 esxi-5 的公钥：
+
+```shell title="/root/.ssh/authorized_keys"
+restrict,command="/usr/bin/rrsync -ro /etc/ssl/private/vm" ssh-rsa [...] root@pve-5
+```
+
+下面是 esxi-5 上的脚本：
 
 ```sh title="/etc/cron.daily/sync-cert"
-#!/bin/bash -e
+#!/bin/sh -e
 
 SRC="/etc/pve/nodes/$(hostname -s)"
-DSTROOT="/etc/pve/nodes"
-CERTSRC="/mnt/nfs-el/cert"
+DSTROOT=/etc/pve/nodes
+CERTSRC=/etc/ssl/private/vm
+
+rsync -a root@gateway-nic.s.ustclug.org:/ "$CERTSRC/"
 
 cp -u "$CERTSRC/privkey.pem" "$SRC/pveproxy-ssl.key"
 cp -u "$CERTSRC/fullchain.pem" "$SRC/pveproxy-ssl.pem"
 systemctl reload pveproxy.service
 
 for DST in "$DSTROOT"/*; do
-  [ "$DST" = "$SRC" ] && continue
+  [ "$DST" != "$SRC" ] || continue
   node="$(basename "$DST")"
   cp "$SRC/pveproxy-ssl.key" "$SRC/pveproxy-ssl.pem" "$DST/"
   ssh "$node" 'systemctl reload pveproxy.service' &
@@ -145,9 +153,9 @@ done
 wait
 ```
 
-由于 PVE 和 PBS 的数据不互通，因此 esxi-5 上的相同位置有**另一个**脚本为 PBS 部署证书：
+由于 PVE 和 PBS 的数据不互通，因此 esxi-5 上还有**另一个**脚本为 PBS 部署证书：
 
-```sh title="/etc/cron.daily/sync-cert"
+```sh title="/etc/cron.daily/sync-cert-pbs"
 #!/bin/bash
 
 SRC="/etc/pve/nodes/$(hostname -s)"
