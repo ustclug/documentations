@@ -10,22 +10,23 @@ icon: fontawesome/solid/certificate
 
 ## Mirrors 镜像站
 
-服务器：
+服役中的服务器：
 
 - 主：[mirrors4](mirrors/4/index.md)
-    - 主服务器存储绝大部分仓库，对外提供 HTTP(S), git 与 Rsync 服务。
-        - HTTP(S) 对应 nginx，Rsync 对应 rsync-proxy，两者均支持反向代理（因此可以将仓库放在别的机器上，同时在 mirrors4 向外提供对应的服务）。
+    - 主服务器存储绝大部分仓库，对外提供 HTTP(S)、Git 与 Rsync 服务。
+        - HTTP(S) 对应 nginx，Rsync 对应 rsync-proxy，两者均支持反向代理（因此可以将仓库放在别的机器上，同时通过 mirrors4 向外提供对应的服务）。
         - 接入了包括教育网等在内的多个 ISP。
-    - 状态页面通过 SSH 隧道与 mirrors[2-3] 暴露 Yuki 公开 API。
-- 副：[mirrors3](mirrors/3/index.md)
-    - mirrors3 存储较大的存档类仓库、极冷门且空间极大与有需要但是 mirrors4 放不下的仓库。
-    - 截至目前（2023/11），有 centos-vault, openeuler, percona, ubuntu-old-releases
-    - <https://mirrors.ustc.edu.cn/status/mirrors3.html>
-    - **注意：mirrors3 连接的 SAN 的管理口已经损坏，需要定期检查磁盘状态。**
+    - 状态页面通过 SSH 隧道与 mirrors2 暴露 Yuki 公开的状态查询 API。
 - 副：[mirrors2](mirrors/2/index.md)
-    - mirrors2 存储的内容是 mirrors4 的子集，负责帮助 mirrors4 承担一部分 rsync 流量的压力。
-    - rsync 相比 http(s)，给服务器带来的负载高得多。
-- 已废弃：[mirrors1](mirrors/1/index.md)
+    - mirrors2 存储较大的存档类仓库、较冷门且空间极大与有需要但是 mirrors4 放不下的仓库。
+    - 截至 2025/02 的仓库：centos-vault, mysql-repo, openeuler, percona, trisquel, ubuntu-old-releases
+
+已淘汰的服务器：
+
+- [mirrors3](mirrors/3/index.md)
+    - 由于该机器过于老旧，在图书馆老师的建议下，我们已于 2025 年初将其清空并下架。
+    - mirrors3 连接的 SAN 的管理口已经损坏，需要定期线下检查磁盘状态。
+- [mirrors1](mirrors/1/index.md)
 
 镜像站日志会备份至 mirrorlog 虚拟机上。
 
@@ -35,11 +36,11 @@ icon: fontawesome/solid/certificate
 
     User: 向新手运维介绍什么是权威 DNS
 
-    Bot: 权威DNS（Authoritative DNS）服务是因特网域名系统（DNS）的一部分，它负责处理关于其负责管理的一组域名的查询。这些DNS服务器带有关于他们所负责域的所有必要数据，并从管理该域的人或组织中收到更新。
+    Assistant: 权威 DNS（Authoritative DNS）服务是因特网域名系统（DNS）的一部分，它负责处理关于其负责管理的一组域名的查询。这些 DNS 服务器带有关于他们所负责域的所有必要数据，并从管理该域的人或组织中收到更新。
 
-    比如，如果你在浏览器中输入一个网站地址，你的请求首先发送到递归DNS服务器，然后递归服务器查询权威DNS服务器来获取对应的IP地址。权威服务器就是“权威”资源，能够告诉递归服务器对应的IP地址是什么。这个过程被称为DNS解析。
+    比如，如果你在浏览器中输入一个网站地址，你的请求首先发送到递归 DNS 服务器，然后递归服务器查询权威 DNS 服务器来获取对应的 IP 地址。权威服务器就是“权威”资源，能够告诉递归服务器对应的 IP 地址是什么。这个过程被称为 DNS 解析。
 
-    总的来说，权威DNS服务器就是存储、管理并响应特定域名信息的“权威”来源。
+    总的来说，权威 DNS 服务器就是存储、管理并响应特定域名信息的“权威”来源。
 
 我们的权威 DNS 服务器提供了与 LUG 有关的域名的相关解析信息，同时也是一个（通过域名）可以概览 LUG 曾经与目前有的服务的地方。
 
