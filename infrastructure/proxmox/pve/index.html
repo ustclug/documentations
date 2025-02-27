@@ -22,7 +22,7 @@
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.1">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.5">
     
     
       
@@ -30,7 +30,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.a40c8224.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.8608ea7d.min.css">
       
         
         <link rel="stylesheet" href="../../../assets/stylesheets/palette.06af60db.min.css">
@@ -3140,106 +3140,111 @@
 </code></pre></div>
 <p>然后运行 <code>systemctl restart chrony.service</code> 重启服务。</p>
 <h3 id="ssl">SSL 证书<a class="headerlink" href="#ssl" title="Permanent link">&para;</a></h3>
-<p>参见 <a href="../../ssl/">SSL 证书</a>，正好 vdp 上面运行了 LUG FTP 而因此配置了证书的自动更新，利用 vdp 提供的 NFS 服务，我们在 vdp 上的证书更新脚本中添加了将 vm 证书复制到 NFS 目录的功能，然后由 pve-6 部署到各个主机上。</p>
-<p>下面是 pve-6 上的脚本：</p>
-<div class="highlight"><span class="filename">/etc/cron.daily/sync-cert</span><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="ch">#!/bin/bash -e</span>
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>
-<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="nv">SRC</span><span class="o">=</span><span class="s2">&quot;/etc/pve/nodes/</span><span class="k">$(</span>hostname<span class="w"> </span>-s<span class="k">)</span><span class="s2">&quot;</span>
-<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="nv">DSTROOT</span><span class="o">=</span><span class="s2">&quot;/etc/pve/nodes&quot;</span>
-<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="nv">CERTSRC</span><span class="o">=</span><span class="s2">&quot;/mnt/nfs-el/cert&quot;</span>
-<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>
-<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>cp<span class="w"> </span>-u<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$CERTSRC</span><span class="s2">/privkey.pem&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$SRC</span><span class="s2">/pveproxy-ssl.key&quot;</span>
-<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>cp<span class="w"> </span>-u<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$CERTSRC</span><span class="s2">/fullchain.pem&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$SRC</span><span class="s2">/pveproxy-ssl.pem&quot;</span>
-<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a>systemctl<span class="w"> </span>reload<span class="w"> </span>pveproxy.service
-<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a>
-<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a><span class="k">for</span><span class="w"> </span>DST<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$DSTROOT</span><span class="s2">&quot;</span>/*<span class="p">;</span><span class="w"> </span><span class="k">do</span>
-<a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a><span class="w">  </span><span class="o">[</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$DST</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$SRC</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">]</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="k">continue</span>
-<a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a><span class="w">  </span><span class="nv">node</span><span class="o">=</span><span class="s2">&quot;</span><span class="k">$(</span>basename<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$DST</span><span class="s2">&quot;</span><span class="k">)</span><span class="s2">&quot;</span>
-<a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a><span class="w">  </span>cp<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$SRC</span><span class="s2">/pveproxy-ssl.key&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$SRC</span><span class="s2">/pveproxy-ssl.pem&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$DST</span><span class="s2">/&quot;</span>
-<a id="__codelineno-6-15" name="__codelineno-6-15" href="#__codelineno-6-15"></a><span class="w">  </span>ssh<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$node</span><span class="s2">&quot;</span><span class="w"> </span><span class="s1">&#39;systemctl reload pveproxy.service&#39;</span><span class="w"> </span><span class="p">&amp;</span>
-<a id="__codelineno-6-16" name="__codelineno-6-16" href="#__codelineno-6-16"></a><span class="k">done</span>
-<a id="__codelineno-6-17" name="__codelineno-6-17" href="#__codelineno-6-17"></a><span class="nb">wait</span>
+<p>参见 <a href="../../ssl/">SSL 证书</a>，正好 esxi-5 需要负责自己的 PBS 的证书，就由它兼任整个 PVE 集群的证书更新了。证书先从 gateway-nic 走 Rsync over SSH 拉下来，然后通过 PVE 自己的 <code>/etc/pve</code> 目录的同步机制复制到其他节点上，再 ssh 上去 reload pveproxy 服务。</p>
+<p>gateway-nic 上为 root 用户添加了 esxi-5 的公钥：</p>
+<div class="highlight"><span class="filename">/root/.ssh/authorized_keys</span><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>restrict,command<span class="o">=</span><span class="s2">&quot;/usr/bin/rrsync -ro /etc/ssl/private/vm&quot;</span><span class="w"> </span>ssh-rsa<span class="w"> </span><span class="o">[</span>...<span class="o">]</span><span class="w"> </span>root@pve-5
 </code></pre></div>
-<p>由于 PVE 和 PBS 的数据不互通，因此 esxi-5 上的相同位置有<strong>另一个</strong>脚本为 PBS 部署证书：</p>
-<div class="highlight"><span class="filename">/etc/cron.daily/sync-cert</span><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="ch">#!/bin/bash</span>
+<p>下面是 esxi-5 上的脚本：</p>
+<div class="highlight"><span class="filename">/etc/cron.daily/sync-cert</span><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="ch">#!/bin/sh -e</span>
 <a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>
 <a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="nv">SRC</span><span class="o">=</span><span class="s2">&quot;/etc/pve/nodes/</span><span class="k">$(</span>hostname<span class="w"> </span>-s<span class="k">)</span><span class="s2">&quot;</span>
-<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="nv">DST</span><span class="o">=</span><span class="s2">&quot;/etc/proxmox-backup&quot;</span>
-<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>
-<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="k">if</span><span class="w"> </span>!<span class="w"> </span>cmp<span class="w"> </span>-s<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$SRC</span><span class="s2">/pveproxy-ssl.pem&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$DST</span><span class="s2">/proxy.pem&quot;</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
-<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="w">  </span>cp<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$SRC</span><span class="s2">/pveproxy-ssl.key&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$DST</span><span class="s2">/proxy.key&quot;</span>
-<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="w">  </span>cp<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$SRC</span><span class="s2">/pveproxy-ssl.pem&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$DST</span><span class="s2">/proxy.pem&quot;</span>
-<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a><span class="w">  </span>systemctl<span class="w"> </span>reload<span class="w"> </span>proxmox-backup-proxy.service
-<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a><span class="k">fi</span>
-<a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a><span class="nb">exit</span><span class="w"> </span><span class="m">0</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="nv">DSTROOT</span><span class="o">=</span>/etc/pve/nodes
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="nv">CERTSRC</span><span class="o">=</span>/etc/ssl/private/vm
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>rsync<span class="w"> </span>-a<span class="w"> </span>root@gateway-nic.s.ustclug.org:/<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$CERTSRC</span><span class="s2">/&quot;</span>
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>
+<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a>cp<span class="w"> </span>-u<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$CERTSRC</span><span class="s2">/privkey.pem&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$SRC</span><span class="s2">/pveproxy-ssl.key&quot;</span>
+<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a>cp<span class="w"> </span>-u<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$CERTSRC</span><span class="s2">/fullchain.pem&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$SRC</span><span class="s2">/pveproxy-ssl.pem&quot;</span>
+<a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a>systemctl<span class="w"> </span>reload<span class="w"> </span>pveproxy.service
 <a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a>
-<a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a><span class="c1"># Unreachable code, leaving here for reference</span>
-<a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a><span class="k">if</span><span class="w"> </span><span class="nb">command</span><span class="w"> </span>-v<span class="w"> </span>openssl<span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="p">;</span><span class="w"> </span><span class="k">then</span>
-<a id="__codelineno-7-15" name="__codelineno-7-15" href="#__codelineno-7-15"></a><span class="w">  </span><span class="nv">FP</span><span class="o">=</span><span class="s2">&quot;</span><span class="k">$(</span>openssl<span class="w"> </span>x509<span class="w"> </span>-noout<span class="w"> </span>-fingerprint<span class="w"> </span>-sha256<span class="w"> </span>-inform<span class="w"> </span>pem<span class="w"> </span>-in<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$DST</span><span class="s2">/proxy.pem&quot;</span><span class="k">)</span><span class="s2">&quot;</span>
-<a id="__codelineno-7-16" name="__codelineno-7-16" href="#__codelineno-7-16"></a><span class="w">  </span><span class="nv">FP</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">FP</span><span class="p">##*=</span><span class="si">}</span><span class="s2">&quot;</span>
-<a id="__codelineno-7-17" name="__codelineno-7-17" href="#__codelineno-7-17"></a><span class="w">  </span>pvesm<span class="w"> </span><span class="nb">set</span><span class="w"> </span>esxi-5-data<span class="w"> </span>--finerprint<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$FP</span><span class="s2">&quot;</span>
-<a id="__codelineno-7-18" name="__codelineno-7-18" href="#__codelineno-7-18"></a><span class="w">  </span>pvesm<span class="w"> </span><span class="nb">set</span><span class="w"> </span>esxi-5-vdp2<span class="w"> </span>--finerprint<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$FP</span><span class="s2">&quot;</span>
-<a id="__codelineno-7-19" name="__codelineno-7-19" href="#__codelineno-7-19"></a><span class="k">fi</span>
+<a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a><span class="k">for</span><span class="w"> </span>DST<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$DSTROOT</span><span class="s2">&quot;</span>/*<span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a><span class="w">  </span><span class="o">[</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$DST</span><span class="s2">&quot;</span><span class="w"> </span>!<span class="o">=</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$SRC</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">]</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="k">continue</span>
+<a id="__codelineno-7-15" name="__codelineno-7-15" href="#__codelineno-7-15"></a><span class="w">  </span><span class="nv">node</span><span class="o">=</span><span class="s2">&quot;</span><span class="k">$(</span>basename<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$DST</span><span class="s2">&quot;</span><span class="k">)</span><span class="s2">&quot;</span>
+<a id="__codelineno-7-16" name="__codelineno-7-16" href="#__codelineno-7-16"></a><span class="w">  </span>cp<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$SRC</span><span class="s2">/pveproxy-ssl.key&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$SRC</span><span class="s2">/pveproxy-ssl.pem&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$DST</span><span class="s2">/&quot;</span>
+<a id="__codelineno-7-17" name="__codelineno-7-17" href="#__codelineno-7-17"></a><span class="w">  </span>ssh<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$node</span><span class="s2">&quot;</span><span class="w"> </span><span class="s1">&#39;systemctl reload pveproxy.service&#39;</span><span class="w"> </span><span class="p">&amp;</span>
+<a id="__codelineno-7-18" name="__codelineno-7-18" href="#__codelineno-7-18"></a><span class="k">done</span>
+<a id="__codelineno-7-19" name="__codelineno-7-19" href="#__codelineno-7-19"></a><span class="nb">wait</span>
+</code></pre></div>
+<p>由于 PVE 和 PBS 的数据不互通，因此 esxi-5 上还有<strong>另一个</strong>脚本为 PBS 部署证书：</p>
+<div class="highlight"><span class="filename">/etc/cron.daily/sync-cert-pbs</span><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="ch">#!/bin/bash</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="nv">SRC</span><span class="o">=</span><span class="s2">&quot;/etc/pve/nodes/</span><span class="k">$(</span>hostname<span class="w"> </span>-s<span class="k">)</span><span class="s2">&quot;</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="nv">DST</span><span class="o">=</span><span class="s2">&quot;/etc/proxmox-backup&quot;</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="k">if</span><span class="w"> </span>!<span class="w"> </span>cmp<span class="w"> </span>-s<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$SRC</span><span class="s2">/pveproxy-ssl.pem&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$DST</span><span class="s2">/proxy.pem&quot;</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="w">  </span>cp<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$SRC</span><span class="s2">/pveproxy-ssl.key&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$DST</span><span class="s2">/proxy.key&quot;</span>
+<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a><span class="w">  </span>cp<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$SRC</span><span class="s2">/pveproxy-ssl.pem&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$DST</span><span class="s2">/proxy.pem&quot;</span>
+<a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a><span class="w">  </span>systemctl<span class="w"> </span>reload<span class="w"> </span>proxmox-backup-proxy.service
+<a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a><span class="k">fi</span>
+<a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a><span class="nb">exit</span><span class="w"> </span><span class="m">0</span>
+<a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a>
+<a id="__codelineno-8-13" name="__codelineno-8-13" href="#__codelineno-8-13"></a><span class="c1"># Unreachable code, leaving here for reference</span>
+<a id="__codelineno-8-14" name="__codelineno-8-14" href="#__codelineno-8-14"></a><span class="k">if</span><span class="w"> </span><span class="nb">command</span><span class="w"> </span>-v<span class="w"> </span>openssl<span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<a id="__codelineno-8-15" name="__codelineno-8-15" href="#__codelineno-8-15"></a><span class="w">  </span><span class="nv">FP</span><span class="o">=</span><span class="s2">&quot;</span><span class="k">$(</span>openssl<span class="w"> </span>x509<span class="w"> </span>-noout<span class="w"> </span>-fingerprint<span class="w"> </span>-sha256<span class="w"> </span>-inform<span class="w"> </span>pem<span class="w"> </span>-in<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$DST</span><span class="s2">/proxy.pem&quot;</span><span class="k">)</span><span class="s2">&quot;</span>
+<a id="__codelineno-8-16" name="__codelineno-8-16" href="#__codelineno-8-16"></a><span class="w">  </span><span class="nv">FP</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">FP</span><span class="p">##*=</span><span class="si">}</span><span class="s2">&quot;</span>
+<a id="__codelineno-8-17" name="__codelineno-8-17" href="#__codelineno-8-17"></a><span class="w">  </span>pvesm<span class="w"> </span><span class="nb">set</span><span class="w"> </span>esxi-5-data<span class="w"> </span>--finerprint<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$FP</span><span class="s2">&quot;</span>
+<a id="__codelineno-8-18" name="__codelineno-8-18" href="#__codelineno-8-18"></a><span class="w">  </span>pvesm<span class="w"> </span><span class="nb">set</span><span class="w"> </span>esxi-5-vdp2<span class="w"> </span>--finerprint<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$FP</span><span class="s2">&quot;</span>
+<a id="__codelineno-8-19" name="__codelineno-8-19" href="#__codelineno-8-19"></a><span class="k">fi</span>
 </code></pre></div>
 <h3 id="virtiofs">VirtIO FS<a class="headerlink" href="#virtiofs" title="Permanent link">&para;</a></h3>
 <p>对于 mirrorlog 等重存储型的虚拟机，我们尝试把大量的数据文件放在 host 上，避免 ZFS（Zvol）和 ext4 的两层开销（以及在 ZFS 上也可以使用更大的 recordsize 获得更好的 I/O 体验和更低的 RAID-Z overhead），然后使用 virtiofs 供虚拟机访问。</p>
 <p>Virtiofs 的配置过程主要参考了 <a href="https://forum.proxmox.com/threads/virtiofsd-in-pve-8-0-x.130531/">https://forum.proxmox.com/threads/virtiofsd-in-pve-8-0-x.130531/</a>：</p>
 <p>首先配置虚拟机：</p>
-<div class="highlight"><span class="filename">/etc/pve/qemu-server/230.conf</span><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="nt">args</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">-chardev socket,id=virtfs0,path=/run/virtiofsd-230.sock -device vhost-user-fs-pci,queue-size=1024,chardev=virtfs0,tag=mirrorlog -object memory-backend-file,id=mem,size=8192M,mem-path=/dev/shm,share=on -numa node,memdev=mem</span>
+<div class="highlight"><span class="filename">/etc/pve/qemu-server/230.conf</span><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="nt">args</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">-chardev socket,id=virtfs0,path=/run/virtiofsd-230.sock -device vhost-user-fs-pci,queue-size=1024,chardev=virtfs0,tag=mirrorlog -object memory-backend-file,id=mem,size=8192M,mem-path=/dev/shm,share=on -numa node,memdev=mem</span>
 </code></pre></div>
 <p>其中 <code>path=</code> 指向 virtiofsd 的 socket 文件，<code>tag=</code> 可以任意指定，用于区分多个 virtiofsd 实例（对应虚拟机内的 mount source），<code>size=</code> 是共享内存大小。</p>
 <p>然后安装 virtiofsd，直接 <code>apt install virtiofsd</code> 即可（PVE 打包了 Rust 重写的新版 virtiofsd）。</p>
 <p>接下来需要配置 virtiofsd 在虚拟机开机前启动。注意一个 virtiofsd 只能供一个虚拟机访问一个主机上的目录，因此需要使用 PVE 的 hook script 来启动 virtiofsd。这个 hook script 放在 <code>/var/lib/vz</code> 目录下，接收两个命令行参数（VMID 和启动阶段）：</p>
-<div class="highlight"><span class="filename">/var/lib/vz/snippets/virtiofsd.sh</span><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="ch">#!/bin/sh</span>
-<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>
-<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="k">if</span><span class="w"> </span><span class="nb">test</span><span class="w"> </span><span class="nv">$#</span><span class="w"> </span>-ne<span class="w"> </span><span class="m">2</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
-<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Need exactly 2 arguments&quot;</span><span class="w"> </span>&gt;<span class="p">&amp;</span><span class="m">2</span>
-<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="w">  </span><span class="nb">exit</span><span class="w"> </span><span class="m">1</span>
-<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="k">fi</span>
-<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a>
-<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a><span class="nv">VMID</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$1</span><span class="s2">&quot;</span>
-<a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a><span class="nv">PHASE</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$2</span><span class="s2">&quot;</span>
-<a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a>
-<a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a><span class="k">case</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$VMID</span><span class="s2">&quot;</span><span class="w"> </span><span class="k">in</span>
-<a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a><span class="w">  </span><span class="m">201</span><span class="o">)</span><span class="w"> </span><span class="nv">SHARED_DIR</span><span class="o">=</span>/mnt/docker2<span class="w"> </span><span class="p">;;</span>
-<a id="__codelineno-9-13" name="__codelineno-9-13" href="#__codelineno-9-13"></a><span class="w">  </span><span class="m">230</span><span class="o">)</span><span class="w"> </span><span class="nv">SHARED_DIR</span><span class="o">=</span>/mnt/mirrorlog<span class="w"> </span><span class="p">;;</span>
-<a id="__codelineno-9-14" name="__codelineno-9-14" href="#__codelineno-9-14"></a><span class="w">  </span>*<span class="o">)</span><span class="w"> </span><span class="nb">exit</span><span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="p">;;</span>
-<a id="__codelineno-9-15" name="__codelineno-9-15" href="#__codelineno-9-15"></a><span class="k">esac</span>
-<a id="__codelineno-9-16" name="__codelineno-9-16" href="#__codelineno-9-16"></a>
-<a id="__codelineno-9-17" name="__codelineno-9-17" href="#__codelineno-9-17"></a><span class="nv">NAME</span><span class="o">=</span><span class="s2">&quot;virtiofsd-</span><span class="nv">$VMID</span><span class="s2">&quot;</span>
-<a id="__codelineno-9-18" name="__codelineno-9-18" href="#__codelineno-9-18"></a><span class="nv">SOCKPATH</span><span class="o">=</span><span class="s2">&quot;/run/</span><span class="nv">$NAME</span><span class="s2">.sock&quot;</span>
-<a id="__codelineno-9-19" name="__codelineno-9-19" href="#__codelineno-9-19"></a>
-<a id="__codelineno-9-20" name="__codelineno-9-20" href="#__codelineno-9-20"></a><span class="k">case</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$PHASE</span><span class="s2">&quot;</span><span class="w"> </span><span class="k">in</span>
-<a id="__codelineno-9-21" name="__codelineno-9-21" href="#__codelineno-9-21"></a><span class="w">  </span>pre-start<span class="o">)</span>
-<a id="__codelineno-9-22" name="__codelineno-9-22" href="#__codelineno-9-22"></a><span class="w">    </span>systemctl<span class="w"> </span>stop<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$NAME</span><span class="s2">&quot;</span>.service<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">true</span>
-<a id="__codelineno-9-23" name="__codelineno-9-23" href="#__codelineno-9-23"></a><span class="w">    </span>rm<span class="w"> </span>-f<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$SOCKPATH</span><span class="s2">&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$SOCKPATH</span><span class="s2">&quot;</span>.pid
-<a id="__codelineno-9-24" name="__codelineno-9-24" href="#__codelineno-9-24"></a>
-<a id="__codelineno-9-25" name="__codelineno-9-25" href="#__codelineno-9-25"></a><span class="w">    </span>systemd-run<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-9-26" name="__codelineno-9-26" href="#__codelineno-9-26"></a><span class="w">      </span>--collect<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-9-27" name="__codelineno-9-27" href="#__codelineno-9-27"></a><span class="w">      </span>--unit<span class="o">=</span><span class="s2">&quot;</span><span class="nv">$NAME</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-9-28" name="__codelineno-9-28" href="#__codelineno-9-28"></a><span class="w">      </span>/usr/libexec/virtiofsd<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-9-29" name="__codelineno-9-29" href="#__codelineno-9-29"></a><span class="w">      </span>--syslog<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-9-30" name="__codelineno-9-30" href="#__codelineno-9-30"></a><span class="w">      </span>--socket-path<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$SOCKPATH</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-9-31" name="__codelineno-9-31" href="#__codelineno-9-31"></a><span class="w">      </span>--shared-dir<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$SHARED_DIR</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-9-32" name="__codelineno-9-32" href="#__codelineno-9-32"></a><span class="w">      </span>--announce-submounts<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-9-33" name="__codelineno-9-33" href="#__codelineno-9-33"></a><span class="w">      </span>--inode-file-handles<span class="o">=</span>mandatory
-<a id="__codelineno-9-34" name="__codelineno-9-34" href="#__codelineno-9-34"></a><span class="w">      </span><span class="p">;;</span>
-<a id="__codelineno-9-35" name="__codelineno-9-35" href="#__codelineno-9-35"></a><span class="w">  </span>pre-stop<span class="o">)</span><span class="w"> </span><span class="p">;;</span>
-<a id="__codelineno-9-36" name="__codelineno-9-36" href="#__codelineno-9-36"></a><span class="w">  </span>post-start<span class="o">)</span><span class="w"> </span><span class="p">;;</span>
-<a id="__codelineno-9-37" name="__codelineno-9-37" href="#__codelineno-9-37"></a><span class="w">  </span>post-stop<span class="o">)</span><span class="w"> </span><span class="p">;;</span>
-<a id="__codelineno-9-38" name="__codelineno-9-38" href="#__codelineno-9-38"></a><span class="w">  </span>*<span class="o">)</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Unknown phase </span><span class="nv">$PHASE</span><span class="s2">&quot;</span><span class="w"> </span>&gt;<span class="p">&amp;</span><span class="m">2</span><span class="p">;</span><span class="w"> </span><span class="nb">exit</span><span class="w"> </span><span class="m">1</span><span class="p">;;</span>
-<a id="__codelineno-9-39" name="__codelineno-9-39" href="#__codelineno-9-39"></a><span class="k">esac</span>
+<div class="highlight"><span class="filename">/var/lib/vz/snippets/virtiofsd.sh</span><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="ch">#!/bin/sh</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="k">if</span><span class="w"> </span><span class="nb">test</span><span class="w"> </span><span class="nv">$#</span><span class="w"> </span>-ne<span class="w"> </span><span class="m">2</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Need exactly 2 arguments&quot;</span><span class="w"> </span>&gt;<span class="p">&amp;</span><span class="m">2</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="w">  </span><span class="nb">exit</span><span class="w"> </span><span class="m">1</span>
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="k">fi</span>
+<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a>
+<a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a><span class="nv">VMID</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$1</span><span class="s2">&quot;</span>
+<a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a><span class="nv">PHASE</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$2</span><span class="s2">&quot;</span>
+<a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a>
+<a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a><span class="k">case</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$VMID</span><span class="s2">&quot;</span><span class="w"> </span><span class="k">in</span>
+<a id="__codelineno-10-12" name="__codelineno-10-12" href="#__codelineno-10-12"></a><span class="w">  </span><span class="m">201</span><span class="o">)</span><span class="w"> </span><span class="nv">SHARED_DIR</span><span class="o">=</span>/mnt/docker2<span class="w"> </span><span class="p">;;</span>
+<a id="__codelineno-10-13" name="__codelineno-10-13" href="#__codelineno-10-13"></a><span class="w">  </span><span class="m">230</span><span class="o">)</span><span class="w"> </span><span class="nv">SHARED_DIR</span><span class="o">=</span>/mnt/mirrorlog<span class="w"> </span><span class="p">;;</span>
+<a id="__codelineno-10-14" name="__codelineno-10-14" href="#__codelineno-10-14"></a><span class="w">  </span>*<span class="o">)</span><span class="w"> </span><span class="nb">exit</span><span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="p">;;</span>
+<a id="__codelineno-10-15" name="__codelineno-10-15" href="#__codelineno-10-15"></a><span class="k">esac</span>
+<a id="__codelineno-10-16" name="__codelineno-10-16" href="#__codelineno-10-16"></a>
+<a id="__codelineno-10-17" name="__codelineno-10-17" href="#__codelineno-10-17"></a><span class="nv">NAME</span><span class="o">=</span><span class="s2">&quot;virtiofsd-</span><span class="nv">$VMID</span><span class="s2">&quot;</span>
+<a id="__codelineno-10-18" name="__codelineno-10-18" href="#__codelineno-10-18"></a><span class="nv">SOCKPATH</span><span class="o">=</span><span class="s2">&quot;/run/</span><span class="nv">$NAME</span><span class="s2">.sock&quot;</span>
+<a id="__codelineno-10-19" name="__codelineno-10-19" href="#__codelineno-10-19"></a>
+<a id="__codelineno-10-20" name="__codelineno-10-20" href="#__codelineno-10-20"></a><span class="k">case</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$PHASE</span><span class="s2">&quot;</span><span class="w"> </span><span class="k">in</span>
+<a id="__codelineno-10-21" name="__codelineno-10-21" href="#__codelineno-10-21"></a><span class="w">  </span>pre-start<span class="o">)</span>
+<a id="__codelineno-10-22" name="__codelineno-10-22" href="#__codelineno-10-22"></a><span class="w">    </span>systemctl<span class="w"> </span>stop<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$NAME</span><span class="s2">&quot;</span>.service<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">true</span>
+<a id="__codelineno-10-23" name="__codelineno-10-23" href="#__codelineno-10-23"></a><span class="w">    </span>rm<span class="w"> </span>-f<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$SOCKPATH</span><span class="s2">&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$SOCKPATH</span><span class="s2">&quot;</span>.pid
+<a id="__codelineno-10-24" name="__codelineno-10-24" href="#__codelineno-10-24"></a>
+<a id="__codelineno-10-25" name="__codelineno-10-25" href="#__codelineno-10-25"></a><span class="w">    </span>systemd-run<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-10-26" name="__codelineno-10-26" href="#__codelineno-10-26"></a><span class="w">      </span>--collect<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-10-27" name="__codelineno-10-27" href="#__codelineno-10-27"></a><span class="w">      </span>--unit<span class="o">=</span><span class="s2">&quot;</span><span class="nv">$NAME</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-10-28" name="__codelineno-10-28" href="#__codelineno-10-28"></a><span class="w">      </span>/usr/libexec/virtiofsd<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-10-29" name="__codelineno-10-29" href="#__codelineno-10-29"></a><span class="w">      </span>--syslog<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-10-30" name="__codelineno-10-30" href="#__codelineno-10-30"></a><span class="w">      </span>--socket-path<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$SOCKPATH</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-10-31" name="__codelineno-10-31" href="#__codelineno-10-31"></a><span class="w">      </span>--shared-dir<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$SHARED_DIR</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-10-32" name="__codelineno-10-32" href="#__codelineno-10-32"></a><span class="w">      </span>--announce-submounts<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-10-33" name="__codelineno-10-33" href="#__codelineno-10-33"></a><span class="w">      </span>--inode-file-handles<span class="o">=</span>mandatory
+<a id="__codelineno-10-34" name="__codelineno-10-34" href="#__codelineno-10-34"></a><span class="w">      </span><span class="p">;;</span>
+<a id="__codelineno-10-35" name="__codelineno-10-35" href="#__codelineno-10-35"></a><span class="w">  </span>pre-stop<span class="o">)</span><span class="w"> </span><span class="p">;;</span>
+<a id="__codelineno-10-36" name="__codelineno-10-36" href="#__codelineno-10-36"></a><span class="w">  </span>post-start<span class="o">)</span><span class="w"> </span><span class="p">;;</span>
+<a id="__codelineno-10-37" name="__codelineno-10-37" href="#__codelineno-10-37"></a><span class="w">  </span>post-stop<span class="o">)</span><span class="w"> </span><span class="p">;;</span>
+<a id="__codelineno-10-38" name="__codelineno-10-38" href="#__codelineno-10-38"></a><span class="w">  </span>*<span class="o">)</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Unknown phase </span><span class="nv">$PHASE</span><span class="s2">&quot;</span><span class="w"> </span>&gt;<span class="p">&amp;</span><span class="m">2</span><span class="p">;</span><span class="w"> </span><span class="nb">exit</span><span class="w"> </span><span class="m">1</span><span class="p">;;</span>
+<a id="__codelineno-10-39" name="__codelineno-10-39" href="#__codelineno-10-39"></a><span class="k">esac</span>
 </code></pre></div>
 <p>相比于 Proxmox 论坛里的教程贴，这里最重要的修改是给 <code>systemd-run</code> 加上了 <code>--collect</code> 参数，这样 virtiofsd 退出时无论是否 failed，systemd 都会清理掉这个临时的 service unit。</p>
 <p>然后通过命令行配置使用：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>qm<span class="w"> </span><span class="nb">set</span><span class="w"> </span><span class="m">230</span><span class="w"> </span>--hookscript<span class="w"> </span>local:snippets/virtiofsd.sh
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>qm<span class="w"> </span><span class="nb">set</span><span class="w"> </span><span class="m">230</span><span class="w"> </span>--hookscript<span class="w"> </span>local:snippets/virtiofsd.sh
 </code></pre></div>
 <p>然后将虚拟机关机，通过 <code>qm start</code> 或者 web 界面启动，即可在虚拟机内挂载 virtiofsd 提供的目录。</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="c1"># Manual</span>
-<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>mount<span class="w"> </span>-t<span class="w"> </span>virtiofs<span class="w"> </span>mirrorlog<span class="w"> </span>/mnt/mirrorlog
-<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>
-<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="c1"># via /etc/fstab</span>
-<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a>mirrorlog<span class="w"> </span>/mnt/mirrorlog<span class="w"> </span>virtiofs<span class="w"> </span>defaults<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="m">0</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="c1"># Manual</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>mount<span class="w"> </span>-t<span class="w"> </span>virtiofs<span class="w"> </span>mirrorlog<span class="w"> </span>/mnt/mirrorlog
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="c1"># via /etc/fstab</span>
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a>mirrorlog<span class="w"> </span>/mnt/mirrorlog<span class="w"> </span>virtiofs<span class="w"> </span>defaults<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="m">0</span>
 </code></pre></div>
 <h2 id="pve-5">pve-5<a class="headerlink" href="#pve-5" title="Permanent link">&para;</a></h2>
 <p>pve-5 位于网络中心，配置为 2× <del>Xeon E5-2603 v4 (Broadwell 6C6T, 1.70 GHz, no HT, no Turbo Boost)</del> Xeon E5-2667 v4 (Broadwell 8C16T, 3.20 GHz, Max 3.60 GHz)，256 GB 内存和一大堆 SSD（2× 三星 240 GB SATA + 10x Intel DC S4500 1.92 TB SATA）。我们将两块 240 GB 的盘组成一个 LVM VG，分配 16 GB 的 rootfs（LVM mirror）和 8 GB 的 swap，其余空间给一个 thinpool。十块 1.92 TB 的盘组成一个 RAIDZ2 的 zpool，用于存储虚拟机等数据。</p>
@@ -3256,56 +3261,56 @@
 <p>网络配置与 pve-5 相似，其上有两个千兆网卡 enp3s0 和 enp4s0。enp3s0 连接网络中心的交换机，桥接不同的 VLAN 网络给虚拟机，并且各 vmbrX 的数字和端口与 pve-5 一致；而 enp4s0 连接一个外部阵列（vdp2），使用 iSCSI 访问该阵列。</p>
 <p>由于我们只有一个 gateway-nic，而 pve-5 和 esxi-5 两个主机都依赖 gw-nic 桥接的 tinc 来接入内网，因此我们在 pve-5 和 esxi-5 之间拉了一条 GRETAP 隧道，并在两个主机上分别将 VTEP 桥接到 vmbr1。</p>
 <p>参考配置：</p>
-<div class="highlight"><span class="filename">pve-5:/etc/network/interfaces</span><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>auto<span class="w"> </span>gretap0esxi-5
-<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>iface<span class="w"> </span>gretap0esxi-5<span class="w"> </span>inet<span class="w"> </span>manual
-<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="w">    </span>pre-up<span class="w"> </span>ip<span class="w"> </span>link<span class="w"> </span>add<span class="w"> </span>name<span class="w"> </span><span class="nv">$IFACE</span><span class="w"> </span>mtu<span class="w"> </span><span class="nv">$IF_MTU</span><span class="w"> </span><span class="nb">type</span><span class="w"> </span>gretap<span class="w"> </span><span class="nb">local</span><span class="w"> </span><span class="m">10</span>.38.95.115<span class="w"> </span>remote<span class="w"> </span><span class="m">10</span>.38.95.111
-<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="w">    </span>post-down<span class="w"> </span>ip<span class="w"> </span>link<span class="w"> </span>delete<span class="w"> </span><span class="nv">$IFACE</span>
-<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="w">    </span>mtu<span class="w"> </span><span class="m">1500</span>
-<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a>
-<a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a>auto<span class="w"> </span>vmbr1
-<a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a>iface<span class="w"> </span>vmbr1<span class="w"> </span>inet<span class="w"> </span>static
-<a id="__codelineno-12-9" name="__codelineno-12-9" href="#__codelineno-12-9"></a><span class="w">    </span>address<span class="w"> </span><span class="m">10</span>.254.0.240/21
-<a id="__codelineno-12-10" name="__codelineno-12-10" href="#__codelineno-12-10"></a><span class="w">    </span>bridge-ports<span class="w"> </span>gretap0esxi-5
-<a id="__codelineno-12-11" name="__codelineno-12-11" href="#__codelineno-12-11"></a><span class="w">    </span>bridge-stp<span class="w"> </span>off
-<a id="__codelineno-12-12" name="__codelineno-12-12" href="#__codelineno-12-12"></a><span class="w">    </span>bridge-fd<span class="w"> </span><span class="m">0</span>
+<div class="highlight"><span class="filename">pve-5:/etc/network/interfaces</span><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>auto<span class="w"> </span>gretap0esxi-5
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>iface<span class="w"> </span>gretap0esxi-5<span class="w"> </span>inet<span class="w"> </span>manual
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="w">    </span>pre-up<span class="w"> </span>ip<span class="w"> </span>link<span class="w"> </span>add<span class="w"> </span>name<span class="w"> </span><span class="nv">$IFACE</span><span class="w"> </span>mtu<span class="w"> </span><span class="nv">$IF_MTU</span><span class="w"> </span><span class="nb">type</span><span class="w"> </span>gretap<span class="w"> </span><span class="nb">local</span><span class="w"> </span><span class="m">10</span>.38.95.115<span class="w"> </span>remote<span class="w"> </span><span class="m">10</span>.38.95.111
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="w">    </span>post-down<span class="w"> </span>ip<span class="w"> </span>link<span class="w"> </span>delete<span class="w"> </span><span class="nv">$IFACE</span>
+<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="w">    </span>mtu<span class="w"> </span><span class="m">1500</span>
+<a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a>
+<a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a>auto<span class="w"> </span>vmbr1
+<a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a>iface<span class="w"> </span>vmbr1<span class="w"> </span>inet<span class="w"> </span>static
+<a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a><span class="w">    </span>address<span class="w"> </span><span class="m">10</span>.254.0.240/21
+<a id="__codelineno-13-10" name="__codelineno-13-10" href="#__codelineno-13-10"></a><span class="w">    </span>bridge-ports<span class="w"> </span>gretap0esxi-5
+<a id="__codelineno-13-11" name="__codelineno-13-11" href="#__codelineno-13-11"></a><span class="w">    </span>bridge-stp<span class="w"> </span>off
+<a id="__codelineno-13-12" name="__codelineno-13-12" href="#__codelineno-13-12"></a><span class="w">    </span>bridge-fd<span class="w"> </span><span class="m">0</span>
 </code></pre></div>
 <p>esxi-5 这端的配置则将对应的 iface 名称和 IP 地址等全部对换即可。</p>
 <div class="admonition note">
 <p class="admonition-title">MTU 问题</p>
 <p>2022 年 2 月处理内网 tinc ARP 问题时发现 esxi-5 和 pve-5 的 vmbr1 MTU 都被设置成了 1462（GRETAP 的默认 MTU）。我们不确定 MTU 问题与 tinc 是否相关，但保险起见我们还是将该 GRETAP 界面的 MTU 设置成了 1500（GRE 具有分片功能）。</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="gd">-pre-up ip link add name $IFACE type gretap local 10.38.95.115 remote 10.38.95.111</span>
-<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="gi">+pre-up ip link add name $IFACE mtu $IF_MTU type gretap local 10.38.95.115 remote 10.38.95.111</span>
-<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="w"> </span>post-down ip link delete $IFACE
-<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="gi">+mtu 1500</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="gd">-pre-up ip link add name $IFACE type gretap local 10.38.95.115 remote 10.38.95.111</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="gi">+pre-up ip link add name $IFACE mtu $IF_MTU type gretap local 10.38.95.115 remote 10.38.95.111</span>
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="w"> </span>post-down ip link delete $IFACE
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="gi">+mtu 1500</span>
 </code></pre></div>
 </div>
 <h3 id="iscsi">iSCSI<a class="headerlink" href="#iscsi" title="Permanent link">&para;</a></h3>
 <p>设置 iSCSI 开机自动登录：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>iscsiadm<span class="w"> </span>-m<span class="w"> </span>node<span class="w"> </span>-T<span class="w"> </span>iqn.2002-10.com.infortrend:raid.sn8223150.001<span class="w"> </span>-p<span class="w"> </span><span class="m">192</span>.168.10.1:3260<span class="w"> </span>-o<span class="w"> </span>update<span class="w"> </span>-n<span class="w"> </span>node.startup<span class="w"> </span>-v<span class="w"> </span>automatic
-<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>iscsiadm<span class="w"> </span>-m<span class="w"> </span>node<span class="w"> </span>-T<span class="w"> </span>iqn.2002-10.com.infortrend:raid.sn8223150.001<span class="w"> </span>-p<span class="w"> </span><span class="m">192</span>.168.10.1:3260<span class="w"> </span>-o<span class="w"> </span>update<span class="w"> </span>-n<span class="w"> </span>node.conn<span class="o">[</span><span class="m">0</span><span class="o">]</span>.startup<span class="w"> </span>-v<span class="w"> </span>automatic
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>iscsiadm<span class="w"> </span>-m<span class="w"> </span>node<span class="w"> </span>-T<span class="w"> </span>iqn.2002-10.com.infortrend:raid.sn8223150.001<span class="w"> </span>-p<span class="w"> </span><span class="m">192</span>.168.10.1:3260<span class="w"> </span>-o<span class="w"> </span>update<span class="w"> </span>-n<span class="w"> </span>node.startup<span class="w"> </span>-v<span class="w"> </span>automatic
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>iscsiadm<span class="w"> </span>-m<span class="w"> </span>node<span class="w"> </span>-T<span class="w"> </span>iqn.2002-10.com.infortrend:raid.sn8223150.001<span class="w"> </span>-p<span class="w"> </span><span class="m">192</span>.168.10.1:3260<span class="w"> </span>-o<span class="w"> </span>update<span class="w"> </span>-n<span class="w"> </span>node.conn<span class="o">[</span><span class="m">0</span><span class="o">]</span>.startup<span class="w"> </span>-v<span class="w"> </span>automatic
 </code></pre></div>
 <p>参考链接：<a href="https://library.netapp.com/ecmdocs/ECMP1654943/html/GUID-8EC685B4-8CB6-40D8-A8D5-031A3899BCDC.html">https://library.netapp.com/ecmdocs/ECMP1654943/html/GUID-8EC685B4-8CB6-40D8-A8D5-031A3899BCDC.html</a></p>
 <details class="warning">
 <summary>过时信息</summary>
 <p>由于我们没有研究清楚 open-iscsi 的开机自动挂载机制，因此我们选择直接 override 对应的 service 来完成这个任务：</p>
-<div class="highlight"><span class="filename">$ systemctl edit open-iscsi.service</span><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="k">[Service]</span>
-<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="na">ExecStart</span><span class="o">=</span>
-<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="na">ExecStart</span><span class="o">=</span><span class="s">/sbin/iscsiadm -d8 -m node -T iqn.2002-10.com.infortrend:raid.sn8223150.001 -p 192.168.10.1:3260 --login</span>
-<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="na">ExecStart</span><span class="o">=</span><span class="s">/lib/open-iscsi/activate-storage.sh</span>
+<div class="highlight"><span class="filename">$ systemctl edit open-iscsi.service</span><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="k">[Service]</span>
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="na">ExecStart</span><span class="o">=</span>
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="na">ExecStart</span><span class="o">=</span><span class="s">/sbin/iscsiadm -d8 -m node -T iqn.2002-10.com.infortrend:raid.sn8223150.001 -p 192.168.10.1:3260 --login</span>
+<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="na">ExecStart</span><span class="o">=</span><span class="s">/lib/open-iscsi/activate-storage.sh</span>
 </code></pre></div>
 </details>
 <p>若 iSCSI 连接成功，应该可以在系统中看到一个新的硬盘，容量为 14.55 TiB，型号显示为 RS-3116I-S42-6。</p>
 <h3 id="rootfs-backup">rootfs 备份<a class="headerlink" href="#rootfs-backup" title="Permanent link">&para;</a></h3>
 <p>尽管 esxi-5 的 rootfs 也使用了 LVM mirror 在两块 SSD 上镜像，但是我们不太信任这块 RAID 卡，因此我们将 esxi-5 的 rootfs 每天备份到 vdp2 上。为了避免在 vdp2 掉线的时候乱“备份”，我们使用一个 systemd 服务，设置了 <a href="https://www.freedesktop.org/software/systemd/man/systemd.unit.html#RequiresMountsFor="><code>RequiresMountsFor</code> 依赖</a>：</p>
-<div class="highlight"><span class="filename">/etc/systemd/system/rootfs-backup.service</span><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="k">[Unit]</span>
-<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="na">Description</span><span class="o">=</span><span class="s">Backup rootfs to vdp2</span>
-<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="na">RequiresMountsFor</span><span class="o">=</span><span class="s">/mnt/vdp2</span>
-<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a>
-<a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a><span class="k">[Service]</span>
-<a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a><span class="na">Type</span><span class="o">=</span><span class="s">oneshot</span>
-<a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a><span class="na">ExecStart</span><span class="o">=</span><span class="s">/usr/bin/rsync -aHAXx --delete / /mnt/vdp2/rootfs/</span>
+<div class="highlight"><span class="filename">/etc/systemd/system/rootfs-backup.service</span><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="k">[Unit]</span>
+<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="na">Description</span><span class="o">=</span><span class="s">Backup rootfs to vdp2</span>
+<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a><span class="na">RequiresMountsFor</span><span class="o">=</span><span class="s">/mnt/vdp2</span>
+<a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a>
+<a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a><span class="k">[Service]</span>
+<a id="__codelineno-17-6" name="__codelineno-17-6" href="#__codelineno-17-6"></a><span class="na">Type</span><span class="o">=</span><span class="s">oneshot</span>
+<a id="__codelineno-17-7" name="__codelineno-17-7" href="#__codelineno-17-7"></a><span class="na">ExecStart</span><span class="o">=</span><span class="s">/usr/bin/rsync -aHAXx --delete / /mnt/vdp2/rootfs/</span>
 </code></pre></div>
-<div class="highlight"><span class="filename">crontab</span><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>21 4 * * * systemctl start rootfs-backup.service
+<div class="highlight"><span class="filename">crontab</span><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>21 4 * * * systemctl start rootfs-backup.service
 </code></pre></div>
 <h3 id="esxi-5-others">其他记录<a class="headerlink" href="#esxi-5-others" title="Permanent link">&para;</a></h3>
 <p>esxi-5 于 2021/8 发现自带阵列有两块坏盘，在更换后发现 storage "root"（存放 vcenter 虚拟机，组建 RAID 1 后大小 1.8 TB）无法正常 rebuild，并且 vcenter 虚拟机的 vmdk 文件有 4 个出现 I/O error。此后 vcenter 虚拟机已经迁移到 storage "data" (RAID10, 7.2 TB) 并正常工作。</p>
@@ -3431,7 +3436,7 @@
     <script id="__config" type="application/json">{"base": "../../..", "features": ["content.code.annotate", "content.code.copy", "navigation.indexes", "navigation.sections", "navigation.top"], "search": "../../../assets/javascripts/workers/search.f8cc74c7.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.5090c770.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.f1b6f286.min.js"></script>
       
     
   </body>
