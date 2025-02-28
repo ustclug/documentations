@@ -8,7 +8,7 @@ Git repository: [ustclug/lugftp](https://github.com/ustclug/lugftp)
 
 Docker Hub: [ustclug/ftp](https://hub.docker.com/r/ustclug/ftp/)
 
-Server: vdp.s.ustclug.org (management ssh port 2222)
+Server: ftp.s.ustclug.org (management SSH port 2222)
 
 Theme: [h5ai](https://larsjung.de/h5ai/)
 
