@@ -2655,6 +2655,15 @@
 <p>Server: vdp.s.ustclug.org (management ssh port 2222)</p>
 <p>Theme: <a href="https://larsjung.de/h5ai/">h5ai</a></p>
 <p>Deploy: <a href="https://github.com/ustclug/docker-run-script/blob/master/ftp/ftp.sh">ftp.sh</a></p>
+<p>Docker network (in case of need):</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>docker<span class="w"> </span>network<span class="w"> </span>create<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">  </span>-d<span class="w"> </span>macvlan<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">  </span>-o<span class="w"> </span><span class="nv">parent</span><span class="o">=</span>ustclug-master<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">  </span>--subnet<span class="o">=</span><span class="m">10</span>.254.1.0/24<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">  </span>ustclug
+</code></pre></div>
+<p>Note that the name <code>ustclug-master</code> is fixed by udev.
+Inspect <code>/etc/udev/rules.d/*.rules</code> for details.</p>
 <h2 id="notes">Notes<a class="headerlink" href="#notes" title="Permanent link">&para;</a></h2>
 <ol>
 <li>SSL cert is required when running LUG FTP.</li>
@@ -2665,7 +2674,6 @@
 <li>Subfolders: set owner to <code>1000:1000</code>. <code>_h5ai</code> and <code>wp-content</code> needs to be set to a different owner (misconfigured?). And <code>Incoming</code> shall be set to 0775.</li>
 </ol>
 </li>
-<li>Do not use Google DNS in host, as China Mobile network may drop UDP packets to 8.8.8.8. A misconfigured DNS may lead to LDAP in container broken.</li>
 <li>Port 22 is delegated to the LUG FTP container for SFTP, and SSH access to the host has been reassigned to port 2222.</li>
 </ol>
 
