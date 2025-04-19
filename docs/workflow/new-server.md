@@ -55,3 +55,9 @@ update-alternatives --set ip6tables /usr/sbin/ip6tables-nft
 ## Install console-setup
 
 This may have already come with the base system. It's more likely missed if the system is installed from scratch (bootstrapped).
+
+## Must-installed packages
+
+- systemd-oomd, to avoid OOM stopping admins accessing root shell.
+- systemd-coredump, to collect core dumps.
+- debug & diagnose tools listed in <https://www.brendangregg.com/blog/2024-03-24/linux-crisis-tools.html>. Specially, ensuring bpf-tools is installed and working.
