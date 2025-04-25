@@ -2262,13 +2262,37 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      修复
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="修复">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#authorized_keys" class="md-nav__link">
+    <span class="md-ellipsis">
+      重建 authorized_keys
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
       </ul>
     </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#_6" class="md-nav__link">
+  <a href="#_7" class="md-nav__link">
     <span class="md-ellipsis">
       紧急操作
     </span>
@@ -2278,7 +2302,7 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#_7" class="md-nav__link">
+  <a href="#_8" class="md-nav__link">
     <span class="md-ellipsis">
       设置为只读
     </span>
@@ -3008,13 +3032,37 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      修复
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="修复">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#authorized_keys" class="md-nav__link">
+    <span class="md-ellipsis">
+      重建 authorized_keys
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
       </ul>
     </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#_6" class="md-nav__link">
+  <a href="#_7" class="md-nav__link">
     <span class="md-ellipsis">
       紧急操作
     </span>
@@ -3024,7 +3072,7 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#_7" class="md-nav__link">
+  <a href="#_8" class="md-nav__link">
     <span class="md-ellipsis">
       设置为只读
     </span>
@@ -3138,13 +3186,19 @@
 </code></pre></div>
 <p><code>projectid_lfs</code> 是上文中「获取所有包含 LFS 的项目 ID」的去重后的输出。</p>
 <p>无 reference 的 LFS 文件每日 GitLab 会自动清除。如果需要立刻删除，可以使用 <code>gitlab:cleanup:orphan_lfs_files</code>。</p>
-<h2 id="_6">紧急操作<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
-<h3 id="_7">设置为只读<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h3>
+<h3 id="_6">修复<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h3>
+<h4 id="authorized_keys">重建 authorized_keys<a class="headerlink" href="#authorized_keys" title="Permanent link">&para;</a></h4>
+<p>如果发现用户的 pubkey 在 GitLab 中有，但是 <code>/home/git/.ssh/authorized_keys</code> 中没有或者有重复的，使用以下命令：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>--user<span class="w"> </span>git<span class="w"> </span>-it<span class="w"> </span>gitlab<span class="w"> </span>bundle<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>rake<span class="w"> </span>gitlab:shell:setup<span class="w"> </span><span class="nv">RAILS_ENV</span><span class="o">=</span>production
+</code></pre></div>
+<p>(<a href="https://docs.gitlab.com/administration/raketasks/maintenance/#rebuild-authorized_keys-file">https://docs.gitlab.com/administration/raketasks/maintenance/#rebuild-authorized_keys-file</a>)</p>
+<h2 id="_7">紧急操作<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h2>
+<h3 id="_8">设置为只读<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h3>
 <p>Ref: <a href="https://docs.gitlab.com/ee/administration/read_only_gitlab.html">https://docs.gitlab.com/ee/administration/read_only_gitlab.html</a></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>--user<span class="w"> </span>git<span class="w"> </span>-it<span class="w"> </span>gitlab<span class="w"> </span>bin/rails<span class="w"> </span>console
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>--user<span class="w"> </span>git<span class="w"> </span>-it<span class="w"> </span>gitlab<span class="w"> </span>bin/rails<span class="w"> </span>console
 </code></pre></div>
 <p>之后执行</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="no">Project</span><span class="o">.</span><span class="n">all</span><span class="o">.</span><span class="n">find_each</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="o">|</span><span class="n">project</span><span class="o">|</span><span class="w"> </span><span class="nb">puts</span><span class="w"> </span><span class="n">project</span><span class="o">.</span><span class="n">name</span><span class="p">;</span><span class="w"> </span><span class="n">project</span><span class="o">.</span><span class="n">update!</span><span class="p">(</span><span class="ss">repository_read_only</span><span class="p">:</span><span class="w"> </span><span class="kp">true</span><span class="p">)</span><span class="w"> </span><span class="p">}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="no">Project</span><span class="o">.</span><span class="n">all</span><span class="o">.</span><span class="n">find_each</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="o">|</span><span class="n">project</span><span class="o">|</span><span class="w"> </span><span class="nb">puts</span><span class="w"> </span><span class="n">project</span><span class="o">.</span><span class="n">name</span><span class="p">;</span><span class="w"> </span><span class="n">project</span><span class="o">.</span><span class="n">update!</span><span class="p">(</span><span class="ss">repository_read_only</span><span class="p">:</span><span class="w"> </span><span class="kp">true</span><span class="p">)</span><span class="w"> </span><span class="p">}</span>
 </code></pre></div>
 <p>将所有仓库设置为只读。如果中间出现错误（特殊的项目名可能会导致运行中断），重命名最后输出对应的项目。</p>
 <p>在设置前，需要添加 Messages 通知用户。</p>
