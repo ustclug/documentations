@@ -146,6 +146,18 @@ for i in `cat projectid_lfs`; do docker exec --user git -it gitlab bundle exec r
 
 无 reference 的 LFS 文件每日 GitLab 会自动清除。如果需要立刻删除，可以使用 `gitlab:cleanup:orphan_lfs_files`。
 
+### 修复
+
+#### 重建 authorized_keys
+
+如果发现用户的 pubkey 在 GitLab 中有，但是 `/home/git/.ssh/authorized_keys` 中没有或者有重复的，使用以下命令：
+
+```shell
+docker exec --user git -it gitlab bundle exec rake gitlab:shell:setup RAILS_ENV=production
+```
+
+(<https://docs.gitlab.com/administration/raketasks/maintenance/#rebuild-authorized_keys-file>)
+
 ## 紧急操作
 
 ### 设置为只读
