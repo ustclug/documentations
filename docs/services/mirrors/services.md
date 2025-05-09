@@ -6,13 +6,13 @@
 
 crontab 会定时运行该脚本，生成首页和 [mirrorz 项目](https://mirrorz.org/)需要的数据。
 
-在首页展示的「获取安装镜像」、「获取开源软件」、「反向代理列表」分别由 config 内配置指定，「文件列表」内容则会从[同步程序 yuki](https://github.com/ustclug/yuki) 的 api 中获取。
+在首页展示的「获取安装镜像」、「获取开源软件」、「反向代理列表」分别由 config 内配置指定，「文件列表」内容则会从[同步程序 yuki](https://github.com/ustclug/yuki) 的 API 中获取。
 
 ## HTTP 服务
 
 Mirrors 使用 OpenResty（一个打包 Nginx 和一堆有用的 Lua 模块的软件包）提供 HTTP 服务。
 
-配置文件位于 LUG GitLab 上：<https://git.lug.ustc.edu.cn/mirrors/nginx-config>，此仓库对应 mirrors 上的 `/etc/nginx` 目录。
+配置文件位于 LUG GitLab 上的 [:fontawesome-solid-lock: nginx-config](https://git.lug.ustc.edu.cn/mirrors/nginx-config) 仓库中，此仓库对应 mirrors 上的 `/etc/nginx` 目录。
 
 ### 请求限制策略
 
