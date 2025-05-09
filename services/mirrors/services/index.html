@@ -2870,10 +2870,10 @@
 <h2 id="_2">首页生成<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
 <p>镜像站主页是静态的，由 <a href="https://git.lug.ustc.edu.cn/mirrors/mirrors-index">https://git.lug.ustc.edu.cn/mirrors/mirrors-index</a> 脚本生成。</p>
 <p>crontab 会定时运行该脚本，生成首页和 <a href="https://mirrorz.org/">mirrorz 项目</a>需要的数据。</p>
-<p>在首页展示的「获取安装镜像」、「获取开源软件」、「反向代理列表」分别由 config 内配置指定，「文件列表」内容则会从<a href="https://github.com/ustclug/yuki">同步程序 yuki</a> 的 api 中获取。</p>
+<p>在首页展示的「获取安装镜像」、「获取开源软件」、「反向代理列表」分别由 config 内配置指定，「文件列表」内容则会从<a href="https://github.com/ustclug/yuki">同步程序 yuki</a> 的 API 中获取。</p>
 <h2 id="http">HTTP 服务<a class="headerlink" href="#http" title="Permanent link">&para;</a></h2>
 <p>Mirrors 使用 OpenResty（一个打包 Nginx 和一堆有用的 Lua 模块的软件包）提供 HTTP 服务。</p>
-<p>配置文件位于 LUG GitLab 上：<a href="https://git.lug.ustc.edu.cn/mirrors/nginx-config">https://git.lug.ustc.edu.cn/mirrors/nginx-config</a>，此仓库对应 mirrors 上的 <code>/etc/nginx</code> 目录。</p>
+<p>配置文件位于 LUG GitLab 上的 <a href="https://git.lug.ustc.edu.cn/mirrors/nginx-config"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M144 144v48h160v-48c0-44.2-35.8-80-80-80s-80 35.8-80 80m-64 48v-48C80 64.5 144.5 0 224 0s144 64.5 144 144v48h16c35.3 0 64 28.7 64 64v192c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V256c0-35.3 28.7-64 64-64z"/></svg></span> nginx-config</a> 仓库中，此仓库对应 mirrors 上的 <code>/etc/nginx</code> 目录。</p>
 <h3 id="_3">请求限制策略<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h3>
 <p>见<a href="../limiter/">限制策略</a>。</p>
 <h3 id="repo-stats">每日流量统计<a class="headerlink" href="#repo-stats" title="Permanent link">&para;</a></h3>
