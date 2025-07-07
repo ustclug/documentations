@@ -84,7 +84,7 @@ nav:
     - Mirrors maintenance: "workflow/mirrors/maintenance.md"
     - New VM in Proxmox VE: "workflow/new-vm.md"
     - Add New User in LDAP: "workflow/ldap/add-new-user.md"
-    - New Member: "workflow/new-member.md"
+    - New Member: "https://www.notion.so/ustclug/2298543aed5e80c89c0fd1ed1a902abe"
   - Infrastructure:
     - Intranet:
       - infrastructure/intranet/index.md
