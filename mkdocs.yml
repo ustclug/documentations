@@ -71,6 +71,8 @@ markdown_extensions:
   - pymdownx.superfences
   - pymdownx.tabbed:
       alternate_style: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
   - pymdownx.tilde
   - toc:
       permalink: true
@@ -82,6 +84,7 @@ nav:
     - Mirrors maintenance: "workflow/mirrors/maintenance.md"
     - New VM in Proxmox VE: "workflow/new-vm.md"
     - Add New User in LDAP: "workflow/ldap/add-new-user.md"
+    - New Member: "workflow/new-member.md"
   - Infrastructure:
     - Intranet:
       - infrastructure/intranet/index.md
