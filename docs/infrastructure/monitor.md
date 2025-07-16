@@ -2,9 +2,13 @@
 
 监控系统由以下几个组件组成：
 
-- Telegraf: agent，运行在每个被监控的机器上
-- InfluxDB: 数据库，运行在 influxdb.ustclug.org (docker2.s.ustclug.org)
+- Telegraf: 采集数据的 agent，运行在每个被监控的机器上
+- InfluxDB: 数据库，运行在 `influxdb.ustclug.org` (docker2.s.ustclug.org)
 - Grafana: 可视化工具，监控报警，地址：[monitor.ustclug.org](https://monitor.ustclug.org) (docker2.s.ustclug.org)
+
+!!! tip "Telegraf 采集的指标含义"
+
+    如果你想要检查 Telegraf 支持的数据源（input plugin）及其所有指标和含义，可以在 Telegraf 仓库中的 [inputs 目录](https://github.com/influxdata/telegraf/tree/master/plugins/inputs)下找到你想要的 plugin，点进去看这个 plugin 的 README。
 
 ## Install & Configure InfluxDB
 
