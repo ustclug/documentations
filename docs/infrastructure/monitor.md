@@ -6,9 +6,11 @@
 - InfluxDB: 数据库，运行在 influxdb.ustclug.org (docker2.s.ustclug.org)
 - Grafana: 可视化工具，监控报警，地址：[monitor.ustclug.org](https://monitor.ustclug.org) (docker2.s.ustclug.org)
 
-## Configure InfluxDB
+## Install & Configure InfluxDB
 
-**特别注意** ：InfluxDB 默认没有开启认证。
+!!! info "此为 InfluxDB 的搭建过程，一般情况无需修改或配置 InfluxDB"
+
+!!! warning "InfluxDB 默认没有开启认证"
 
 首次运行时，创建好管理账号（`admin`），只读账号（`grafana`）和写入账号（`telegraf`）。
 
