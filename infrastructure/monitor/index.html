@@ -953,9 +953,9 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#configure-influxdb" class="md-nav__link">
+  <a href="#install-configure-influxdb" class="md-nav__link">
     <span class="md-ellipsis">
-      Configure InfluxDB
+      Install &amp; Configure InfluxDB
     </span>
   </a>
   
@@ -2775,9 +2775,9 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#configure-influxdb" class="md-nav__link">
+  <a href="#install-configure-influxdb" class="md-nav__link">
     <span class="md-ellipsis">
-      Configure InfluxDB
+      Install &amp; Configure InfluxDB
     </span>
   </a>
   
@@ -2860,8 +2860,13 @@
 <li>InfluxDB: 数据库，运行在 influxdb.ustclug.org (docker2.s.ustclug.org)</li>
 <li>Grafana: 可视化工具，监控报警，地址：<a href="https://monitor.ustclug.org">monitor.ustclug.org</a> (docker2.s.ustclug.org)</li>
 </ul>
-<h2 id="configure-influxdb">Configure InfluxDB<a class="headerlink" href="#configure-influxdb" title="Permanent link">&para;</a></h2>
-<p><strong>特别注意</strong> ：InfluxDB 默认没有开启认证。</p>
+<h2 id="install-configure-influxdb">Install &amp; Configure InfluxDB<a class="headerlink" href="#install-configure-influxdb" title="Permanent link">&para;</a></h2>
+<div class="admonition info">
+<p class="admonition-title">此为 InfluxDB 的搭建过程，一般情况无需修改或陪着 InfluxDB</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">InfluxDB 默认没有开启认证</p>
+</div>
 <p>首次运行时，创建好管理账号（<code>admin</code>），只读账号（<code>grafana</code>）和写入账号（<code>telegraf</code>）。</p>
 <p>然后修改位于 <code>/srv/docker/influxdb/conf/influxdb.conf</code> 的配置，修改以启用认证：</p>
 <div class="highlight"><span class="filename">/srv/docker/influxdb/conf/influxdb.conf</span><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="o">[</span>http<span class="o">]</span>
