@@ -2856,10 +2856,14 @@
 <h1 id="_1">监控系统使用及配置说明<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
 <p>监控系统由以下几个组件组成：</p>
 <ul>
-<li>Telegraf: agent，运行在每个被监控的机器上</li>
-<li>InfluxDB: 数据库，运行在 influxdb.ustclug.org (docker2.s.ustclug.org)</li>
+<li>Telegraf: 采集数据的 agent，运行在每个被监控的机器上</li>
+<li>InfluxDB: 数据库，运行在 <code>influxdb.ustclug.org</code> (docker2.s.ustclug.org)</li>
 <li>Grafana: 可视化工具，监控报警，地址：<a href="https://monitor.ustclug.org">monitor.ustclug.org</a> (docker2.s.ustclug.org)</li>
 </ul>
+<div class="admonition tip">
+<p class="admonition-title">Telegraf 采集的指标含义</p>
+<p>如果你想要检查 Telegraf 支持的数据源（input plugin）及其所有指标和含义，可以在 Telegraf 仓库中的 <a href="https://github.com/influxdata/telegraf/tree/master/plugins/inputs">inputs 目录</a>下找到你想要的 plugin，点进去看这个 plugin 的 README。</p>
+</div>
 <h2 id="install-configure-influxdb">Install &amp; Configure InfluxDB<a class="headerlink" href="#install-configure-influxdb" title="Permanent link">&para;</a></h2>
 <div class="admonition info">
 <p class="admonition-title">此为 InfluxDB 的搭建过程，一般情况无需修改或配置 InfluxDB</p>
