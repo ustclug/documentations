@@ -42,6 +42,14 @@
         directory = *
     ```
 
+    为了限制 pack object 的内存使用，添加了以下配置：
+
+    ```ini title="/etc/gitconfig"
+    [pack]
+        threads = 8
+        windowMemory = 1g
+    ```
+
 ## 移动（删除）一个仓库
 
 !!! note
