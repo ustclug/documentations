@@ -2983,6 +2983,11 @@
 <div class="highlight"><span class="filename">/etc/gitconfig</span><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="k">[safe]</span>
 <a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">    </span><span class="na">directory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">*</span>
 </code></pre></div>
+<p>为了限制 pack object 的内存使用，添加了以下配置：</p>
+<div class="highlight"><span class="filename">/etc/gitconfig</span><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="k">[pack]</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">    </span><span class="na">threads</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">8</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">    </span><span class="na">windowMemory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">1g</span>
+</code></pre></div>
 </div>
 <h2 id="_3">移动（删除）一个仓库<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
 <div class="admonition note">
@@ -2995,10 +3000,10 @@
 <p>由于我们的例子是移动目录，可以直接使用 <code>mv</code> 命令（<code>sb</code> 仓库很小）。</p>
 <h3 id="yuki">修改 Yuki 配置<a class="headerlink" href="#yuki" title="Permanent link">&para;</a></h3>
 <p>修改 <code>/home/mirror/repos/sb.yaml</code>，将 <code>path</code> 修改为 <code>/srv/repo/sb</code>。然后重新加载：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="go">yukictl reload sb</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="go">yukictl reload sb</span>
 </code></pre></div>
 <h3 id="rsync-attrs">测试同步，并删除 rsync-attrs 中的旧目录<a class="headerlink" href="#rsync-attrs" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="go">yukictl sync --debug sb</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="go">yukictl sync --debug sb</span>
 </code></pre></div>
 <p>确认同步无误后，检查 <code>/srv/rsync-attrs</code> 的内容，并删除旧目录 <code>/srv/rsync-attrs/.private</code>。</p>
 <div class="admonition tip">
@@ -3009,17 +3014,17 @@
 <h3 id="nginx">修改 nginx 配置<a class="headerlink" href="#nginx" title="Permanent link">&para;</a></h3>
 <p>由于我们这里是移动仓库，为了保证旧用户能够正常使用，需要修改 nginx 配置，将旧的路径重定向到新的路径。</p>
 <p>相关的配置一般位于 <code>/etc/nginx/snippets/mirrors-locations</code>，本次我们新增的内容如下：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="k">location</span><span class="w"> </span><span class="s">/.private/sb/</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">    </span><span class="kn">rewrite</span><span class="w"> </span><span class="s">^/.private(/sb/.*</span>$<span class="s">)</span><span class="w"> </span><span class="nv">$1</span><span class="w"> </span><span class="s">permanent</span><span class="p">;</span>
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="p">}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="k">location</span><span class="w"> </span><span class="s">/.private/sb/</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">    </span><span class="kn">rewrite</span><span class="w"> </span><span class="s">^/.private(/sb/.*</span>$<span class="s">)</span><span class="w"> </span><span class="nv">$1</span><span class="w"> </span><span class="s">permanent</span><span class="p">;</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="p">}</span>
 </code></pre></div>
 <p>Nginx rewrite 相关的语法知识需读者自行学习。</p>
 <p>修改完成后，重载配置：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="go">nginx -t</span>
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="go">nginx -s reload  # 或者 systemctl reload nginx</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="go">nginx -t</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="go">nginx -s reload  # 或者 systemctl reload nginx</span>
 </code></pre></div>
 <p>并且 commit 有关修改：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="go">git -c user.name=你的名字 -c user.email=你的邮箱 commit -m &quot;...&quot;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="go">git -c user.name=你的名字 -c user.email=你的邮箱 commit -m &quot;...&quot;</span>
 </code></pre></div>
 <h3 id="rsync-proxy-rsyncd">修改 rsync-proxy 与 rsyncd 配置<a class="headerlink" href="#rsync-proxy-rsyncd" title="Permanent link">&para;</a></h3>
 <p><a href="https://github.com/ustclug/rsync-proxy">rsync-proxy</a> 为近年来我们自行编写的 rsync 反向代理服务。
@@ -3028,7 +3033,7 @@
 在 <code>/etc/rsyncd</code> 下执行 <code>python3 generate_common.py --write</code> 写入配置，使用 <code>git diff</code> 检查无误后 <code>git commit</code>。
 rsyncd 配置中包含不公开 rsync 的内容（如 git 目录）不会导致问题，因为所有用户接触到的都是 rsync-proxy。</p>
 <p>确认后重载 rsync-proxy:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="go">systemctl reload rsync-proxy</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="go">systemctl reload rsync-proxy</span>
 </code></pre></div>
 <p>Rsyncd 不需要重载：每个有效连接会启动新进程，而新进程会重新读取配置。</p>
 <h3 id="mirrors2">删除 mirrors2 上的仓库与相关项<a class="headerlink" href="#mirrors2" title="Permanent link">&para;</a></h3>
