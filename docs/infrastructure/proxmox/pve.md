@@ -138,7 +138,9 @@ SRC="/etc/pve/nodes/$(hostname -s)"
 DSTROOT=/etc/pve/nodes
 CERTSRC=/etc/ssl/private/vm
 
-rsync -a root@gateway-nic.s.ustclug.org:/ "$CERTSRC/"
+for tries in $(seq 3); do
+  rsync -a root@gateway-nic.s.ustclug.org:/ "$CERTSRC/" && break
+done
 
 cp -u "$CERTSRC/privkey.pem" "$SRC/pveproxy-ssl.key"
 cp -u "$CERTSRC/fullchain.pem" "$SRC/pveproxy-ssl.pem"
