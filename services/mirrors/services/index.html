@@ -2947,18 +2947,37 @@
 <a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>
 <a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="na">Slice</span><span class="o">=</span><span class="s">system-cgi.slice</span>
 </code></pre></div>
+<p>Nginx 配置如下：</p>
+<div class="highlight"><span class="filename">snippets/git-http</span><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="k">fastcgi_read_timeout</span><span class="w"> </span><span class="mi">5m</span><span class="p">;</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="k">fastcgi_pass</span><span class="w">    </span><span class="s">unix:/var/run/fcgiwrap.socket</span><span class="p">;</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="k">fastcgi_buffering</span><span class="w"> </span><span class="no">off</span><span class="p">;</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="k">fastcgi_param</span><span class="w">   </span><span class="s">SCRIPT_FILENAME</span><span class="w"> </span><span class="s">/usr/lib/git-core/git-http-backend</span><span class="p">;</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="k">fastcgi_param</span><span class="w">   </span><span class="s">GIT_HTTP_EXPORT_ALL</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p">;</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="k">fastcgi_param</span><span class="w">   </span><span class="s">GIT_PROJECT_ROOT</span><span class="w">    </span><span class="s">/srv/git</span><span class="p">;</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="k">fastcgi_param</span><span class="w">   </span><span class="s">PATH_INFO</span><span class="w">           </span><span class="nv">$uri</span><span class="p">;</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="k">fastcgi_param</span><span class="w">   </span><span class="s">NO_BUFFERING</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p">;</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="k">fastcgi_param</span><span class="w">   </span><span class="s">GIT_PROTOCOL</span><span class="w"> </span><span class="nv">$http_git_protocol</span><span class="p">;</span>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="c1"># https://github.com/ustclug/discussions/issues/432</span>
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="k">client_max_body_size</span><span class="w"> </span><span class="mi">16m</span><span class="p">;</span>
+<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a>
+<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a><span class="k">include</span><span class="w">         </span><span class="n">fastcgi_params</span>;
+</code></pre></div>
+<p>在 git 仓库对应的 <code>location</code> 里面 <code>include</code> 这个配置片段即可。</p>
 </li>
 </ul>
 <p>其中 <code>system-cgi.slice</code> 是我们自己定义的一个 slice，用于限制 CGI 服务的资源使用。</p>
-<div class="highlight"><span class="filename">/etc/systemd/system/system-cgi.slice</span><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="k">[Unit]</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="na">Description</span><span class="o">=</span><span class="s">Slice for CGI services (notably Git daemon)</span>
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="k">[Slice]</span>
-<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="na">MemoryMax</span><span class="o">=</span><span class="s">32G</span>
-<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="na">MemoryHigh</span><span class="o">=</span><span class="s">28G</span>
-<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>
-<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="na">IOAccounting</span><span class="o">=</span><span class="s">true</span>
+<div class="highlight"><span class="filename">/etc/systemd/system/system-cgi.slice</span><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="k">[Unit]</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="na">Description</span><span class="o">=</span><span class="s">Slice for CGI services (notably Git daemon)</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="k">[Slice]</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="na">MemoryMax</span><span class="o">=</span><span class="s">32G</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="na">MemoryHigh</span><span class="o">=</span><span class="s">28G</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="na">IOAccounting</span><span class="o">=</span><span class="s">true</span>
 </code></pre></div>
+<p>此外，<code>/etc/gitconfig</code> 中的配置也会影响 Git 服务的行为，相关介绍在 <a href="../repos/#git">Repositories</a> 中。</p>
 <h2 id="ftp">FTP 服务（已废弃）<a class="headerlink" href="#ftp" title="Permanent link">&para;</a></h2>
 <p>Mirrors 曾经提供 FTP 服务，由 vsftpd 提供。在将主力服务器从 mirrors2 迁移至 mirrors4 时废弃，即 mirrors4 上从未安装配置过 vsftpd（但 mirrors2 上还留存有配置文件）。</p>
 <p>由于年代久远且我们不再打算恢复 FTP 服务，这部分文档也就咕咕咕了。</p>

@@ -1889,7 +1889,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#git-srvgit" class="md-nav__link">
+  <a href="#git" class="md-nav__link">
     <span class="md-ellipsis">
       为 Git 类型仓库添加软链接至 /srv/git
     </span>
@@ -2856,7 +2856,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#git-srvgit" class="md-nav__link">
+  <a href="#git" class="md-nav__link">
     <span class="md-ellipsis">
       为 Git 类型仓库添加软链接至 /srv/git
     </span>
@@ -2971,7 +2971,7 @@
 <p>另外，<code>bindIP</code> 不适用于所有的同步镜像（一部分程序不支持修改 <code>bind()</code> 的参数），此时可以使用基于 Docker Network 的 <code>network</code> 配置。</p>
 </div>
 <p>写好新仓库的配置文件之后运行 <code>yuki reload</code>，然后 <code>yuki sync &lt;repo&gt;</code> 就可以开始初次同步了。</p>
-<h3 id="git-srvgit">为 Git 类型仓库添加软链接至 <code>/srv/git</code><a class="headerlink" href="#git-srvgit" title="Permanent link">&para;</a></h3>
+<h3 id="git">为 Git 类型仓库添加软链接至 <code>/srv/git</code><a class="headerlink" href="#git" title="Permanent link">&para;</a></h3>
 <p><code>git-daemon.service</code> 根据 <code>/srv/git</code> 下的内容对外提供 Git 服务。所以如果是 git 类型的仓库，需要添加软链接，否则无法使用 <code>git://</code> 的协议访问。（<code>http(s)://</code> 协议没有问题）</p>
 <div class="admonition info">
 <p class="admonition-title">Git 仓库服务的其他相关配置</p>
