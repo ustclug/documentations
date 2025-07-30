@@ -79,6 +79,28 @@ Mirrors 上的 Git 服务由两部分组成：
     Slice=system-cgi.slice
     ```
 
+    Nginx 配置如下：
+
+    ```nginx title="snippets/git-http"
+    fastcgi_read_timeout 5m;
+    fastcgi_pass    unix:/var/run/fcgiwrap.socket;
+    fastcgi_buffering off;
+
+    fastcgi_param   SCRIPT_FILENAME /usr/lib/git-core/git-http-backend;
+    fastcgi_param   GIT_HTTP_EXPORT_ALL "";
+    fastcgi_param   GIT_PROJECT_ROOT    /srv/git;
+    fastcgi_param   PATH_INFO           $uri;
+    fastcgi_param   NO_BUFFERING "";
+    fastcgi_param   GIT_PROTOCOL $http_git_protocol;
+
+    # https://github.com/ustclug/discussions/issues/432
+    client_max_body_size 16m;
+
+    include         fastcgi_params;
+    ```
+
+    在 git 仓库对应的 `location` 里面 `include` 这个配置片段即可。
+
 其中 `system-cgi.slice` 是我们自己定义的一个 slice，用于限制 CGI 服务的资源使用。
 
 ```ini title="/etc/systemd/system/system-cgi.slice"
@@ -91,6 +113,8 @@ MemoryHigh=28G
 
 IOAccounting=true
 ```
+
+此外，`/etc/gitconfig` 中的配置也会影响 Git 服务的行为，相关介绍在 [Repositories](./repos.md#git) 中。
 
 ## FTP 服务（已废弃）
 
