@@ -2335,6 +2335,15 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#anubis" class="md-nav__link">
+    <span class="md-ellipsis">
+      部署 Anubis
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -3105,6 +3114,15 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#anubis" class="md-nav__link">
+    <span class="md-ellipsis">
+      部署 Anubis
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -3228,6 +3246,52 @@
 <p>将所有仓库设置为只读。如果中间出现错误（特殊的项目名可能会导致运行中断），重命名最后输出对应的项目。</p>
 <p>在设置前，需要添加 Messages 通知用户。</p>
 <p>此时数据库仍然可写入。如果需要数据库只读，参考以上链接配置。</p>
+<h3 id="anubis">部署 Anubis<a class="headerlink" href="#anubis" title="Permanent link">&para;</a></h3>
+<p>2025 年 8 月 8 日，由于偶尔但长期有人疑似 DDoS 我们导致 gitlab 虚拟机 CPU 占用过高，GitLab 服务响应缓慢，我们部署了 <a href="https://github.com/TecharoHQ/anubis">Anubis</a> 阻止异常请求。
+这些异常请求都使用浏览器 UA，大量请求各种仓库的 tree 和 blob，使 GitLab 花费大量 CPU 资源在处理这些请求上，非常适合用 Anubis 拦截。</p>
+<p>部署过程（留作记录）：</p>
+<ol>
+<li>
+<p>从 Anubis 的 GitHub Releases 页面获取合适的安装包安装（很不错，还提供了 deb）：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>wget<span class="w"> </span>https://github.com/TecharoHQ/anubis/releases/download/v1.21.3/anubis_1.21.3_amd64.deb
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>apt<span class="w"> </span>install<span class="w"> </span>./anubis_1.21.3_amd64.deb
+</code></pre></div>
+</li>
+<li>
+<p>观察软件包内容决定操作方式：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="gp"># </span>dpkg<span class="w"> </span>-L<span class="w"> </span>anubis
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="go">/etc</span>
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="go">/etc/anubis</span>
+<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="go">/etc/anubis/default.env</span>
+<a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a><span class="go">/usr</span>
+<a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a><span class="go">/usr/lib</span>
+<a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a><span class="go">/usr/lib/systemd</span>
+<a id="__codelineno-15-8" name="__codelineno-15-8" href="#__codelineno-15-8"></a><span class="go">/usr/lib/systemd/system</span>
+<a id="__codelineno-15-9" name="__codelineno-15-9" href="#__codelineno-15-9"></a><span class="go">/usr/lib/systemd/system/anubis@.service</span>
+<a id="__codelineno-15-10" name="__codelineno-15-10" href="#__codelineno-15-10"></a><span class="go">[...]</span>
+</code></pre></div>
+<p>配置 Anubis：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="nb">cd</span><span class="w"> </span>/etc/anubis
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>cp<span class="w"> </span>default.env<span class="w"> </span>gitlab.env
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a>vim<span class="w"> </span>gitlab.env
+</code></pre></div>
+<div class="highlight"><span class="filename">/etc/anubis/gitlab.env</span><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="nv">BIND</span><span class="o">=</span><span class="m">127</span>.0.0.1:8923
+<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="nv">DIFFICULTY</span><span class="o">=</span><span class="m">4</span>
+<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a><span class="nv">METRICS_BIND</span><span class="o">=</span><span class="m">127</span>.0.0.1:9090
+<a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a><span class="nv">SERVE_ROBOTS_TXT</span><span class="o">=</span><span class="m">1</span>
+<a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a><span class="nv">TARGET</span><span class="o">=</span>https://127.0.0.1:10443
+<a id="__codelineno-17-6" name="__codelineno-17-6" href="#__codelineno-17-6"></a>
+<a id="__codelineno-17-7" name="__codelineno-17-7" href="#__codelineno-17-7"></a><span class="nv">TARGET_INSECURE_SKIP_VERIFY</span><span class="o">=</span><span class="nb">true</span>
+</code></pre></div>
+<p>其中最后一行是因为 GitLab 用自签证书监听 HTTPS，可以在 Anubis 的 issue 区搜到（<a href="https://github.com/TecharoHQ/anubis/issues/353">#353</a> → <a href="https://github.com/TecharoHQ/anubis/pull/426">#426</a>）。</p>
+</li>
+<li>
+<p>更新 Nginx:</p>
+<p>仅更新了一行：将 <code>proxy_pass</code> 的目标设为 Anubis。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>systemctl<span class="w"> </span>reload<span class="w"> </span>nginx
+</code></pre></div>
+</li>
+</ol>
 
 
 
