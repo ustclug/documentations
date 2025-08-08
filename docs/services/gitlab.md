@@ -219,7 +219,7 @@ Project.all.find_each { |project| puts project.name; project.update!(repository_
 
     ```shell title="/etc/anubis/gitlab.env"
     BIND=127.0.0.1:8923
-    DIFFICULTY=4
+    POLICY_FNAME=/etc/anubis/policy.yaml
     METRICS_BIND=127.0.0.1:9090
     SERVE_ROBOTS_TXT=1
     TARGET=https://127.0.0.1:10443
@@ -228,6 +228,16 @@ Project.all.find_each { |project| puts project.name; project.update!(repository_
     ```
 
     其中最后一行是因为 GitLab 用自签证书监听 HTTPS，可以在 Anubis 的 issue 区搜到（[#353](https://github.com/TecharoHQ/anubis/issues/353) → [#426](https://github.com/TecharoHQ/anubis/pull/426)）。
+
+    然后将 <https://github.com/TecharoHQ/anubis/blob/main/data/botPolicies.yaml> 的内容复制到 `/etc/anubis/policy.yaml`，根据需要修改。
+
+    其中难度参考（HASH 前 x 位需要为 0，因此难度是指数提升的）：
+
+    - 默认的 2 太小了
+    - 4 比较合适
+    - 5 需要等待几秒钟
+    - 6 需要等待几分钟，除非情况非常严重，否则不建议设置
+    - 7 以上可以看作是拒绝
 
 3. 更新 Nginx:
 
