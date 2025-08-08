@@ -3276,7 +3276,7 @@
 <a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a>vim<span class="w"> </span>gitlab.env
 </code></pre></div>
 <div class="highlight"><span class="filename">/etc/anubis/gitlab.env</span><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="nv">BIND</span><span class="o">=</span><span class="m">127</span>.0.0.1:8923
-<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="nv">DIFFICULTY</span><span class="o">=</span><span class="m">4</span>
+<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="nv">POLICY_FNAME</span><span class="o">=</span>/etc/anubis/policy.yaml
 <a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a><span class="nv">METRICS_BIND</span><span class="o">=</span><span class="m">127</span>.0.0.1:9090
 <a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a><span class="nv">SERVE_ROBOTS_TXT</span><span class="o">=</span><span class="m">1</span>
 <a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a><span class="nv">TARGET</span><span class="o">=</span>https://127.0.0.1:10443
@@ -3284,6 +3284,15 @@
 <a id="__codelineno-17-7" name="__codelineno-17-7" href="#__codelineno-17-7"></a><span class="nv">TARGET_INSECURE_SKIP_VERIFY</span><span class="o">=</span><span class="nb">true</span>
 </code></pre></div>
 <p>其中最后一行是因为 GitLab 用自签证书监听 HTTPS，可以在 Anubis 的 issue 区搜到（<a href="https://github.com/TecharoHQ/anubis/issues/353">#353</a> → <a href="https://github.com/TecharoHQ/anubis/pull/426">#426</a>）。</p>
+<p>然后将 <a href="https://github.com/TecharoHQ/anubis/blob/main/data/botPolicies.yaml">https://github.com/TecharoHQ/anubis/blob/main/data/botPolicies.yaml</a> 的内容复制到 <code>/etc/anubis/policy.yaml</code>，根据需要修改。</p>
+<p>其中难度参考（HASH 前 x 位需要为 0，因此难度是指数提升的）：</p>
+<ul>
+<li>默认的 2 太小了</li>
+<li>4 比较合适</li>
+<li>5 需要等待几秒钟</li>
+<li>6 需要等待几分钟，除非情况非常严重，否则不建议设置</li>
+<li>7 以上可以看作是拒绝</li>
+</ul>
 </li>
 <li>
 <p>更新 Nginx:</p>
