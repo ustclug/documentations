@@ -55,7 +55,7 @@ ProjectRepository.find_by(disk_path: '@hashed/23/33/2333333333333333333333333333
 
 如果存在，会返回类似以下的内容：
 
-```
+```text
 => #<Project id:23333 username/project>>
 ```
 
@@ -179,3 +179,60 @@ Project.all.find_each { |project| puts project.name; project.update!(repository_
 在设置前，需要添加 Messages 通知用户。
 
 此时数据库仍然可写入。如果需要数据库只读，参考以上链接配置。
+
+### 部署 Anubis
+
+2025 年 8 月 8 日，由于偶尔但长期有人疑似 DDoS 我们导致 gitlab 虚拟机 CPU 占用过高，GitLab 服务响应缓慢，我们部署了 [Anubis](https://github.com/TecharoHQ/anubis) 阻止异常请求。
+这些异常请求都使用浏览器 UA，大量请求各种仓库的 tree 和 blob，使 GitLab 花费大量 CPU 资源在处理这些请求上，非常适合用 Anubis 拦截。
+
+部署过程（留作记录）：
+
+1. 从 Anubis 的 GitHub Releases 页面获取合适的安装包安装（很不错，还提供了 deb）：
+
+    ```shell
+    wget https://github.com/TecharoHQ/anubis/releases/download/v1.21.3/anubis_1.21.3_amd64.deb
+    apt install ./anubis_1.21.3_amd64.deb
+    ```
+
+2. 观察软件包内容决定操作方式：
+
+    ```console
+    # dpkg -L anubis
+    /etc
+    /etc/anubis
+    /etc/anubis/default.env
+    /usr
+    /usr/lib
+    /usr/lib/systemd
+    /usr/lib/systemd/system
+    /usr/lib/systemd/system/anubis@.service
+    [...]
+    ```
+
+    配置 Anubis：
+
+    ```shell
+    cd /etc/anubis
+    cp default.env gitlab.env
+    vim gitlab.env
+    ```
+
+    ```shell title="/etc/anubis/gitlab.env"
+    BIND=127.0.0.1:8923
+    DIFFICULTY=4
+    METRICS_BIND=127.0.0.1:9090
+    SERVE_ROBOTS_TXT=1
+    TARGET=https://127.0.0.1:10443
+
+    TARGET_INSECURE_SKIP_VERIFY=true
+    ```
+
+    其中最后一行是因为 GitLab 用自签证书监听 HTTPS，可以在 Anubis 的 issue 区搜到（[#353](https://github.com/TecharoHQ/anubis/issues/353) → [#426](https://github.com/TecharoHQ/anubis/pull/426)）。
+
+3. 更新 Nginx:
+
+    仅更新了一行：将 `proxy_pass` 的目标设为 Anubis。
+
+    ```shell
+    systemctl reload nginx
+    ```
