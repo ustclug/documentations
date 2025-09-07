@@ -25,7 +25,7 @@ Users 是用来添加和配置用户信息的地方。最主要的功能位于�
         小心输出的顺序，最大的 UID 不一定是最后一个（而且事实上经常不是），建议配合 sed, awk, sort 之类的命令妥善处理，例如
 
         ```shell
-        getent -s ldap passwd | cut -d: -f3 | sort -n
+        getent -s ldap passwd | sort -t: -k 3n
         ```
 
         同时还有若干 UID 很大但是离散的特殊账号，很容易分辨。显然新 UID 是 2000 开始连续的最大 UID + 1.
@@ -34,7 +34,7 @@ Users 是用来添加和配置用户信息的地方。最主要的功能位于�
 
 - 建账号之前先注意一下各个服务器上有没有相同的用户名，有的话把原家目录 chown 到新的 UID GID，删除同名用户。
 
-Groups 中以 ssh 开头的组控制对应机器的 ssh 权限，sudo 开头同理。super_maneger 组包含所有机器的权限，以及 LDAP 的 admin 身份。加入对应的组即授予相应权限。[已知的 GID](#ldap-known-gids)
+Groups 中以 ssh 开头的组控制对应机器的 ssh 权限，sudo 开头同理。`super_maneger` 组包含所有机器的权限，以及 LDAP 的 admin 身份。加入对应的组即授予相应权限。[已知的 GID](#ldap-known-gids)
 
 ### Access Control
 
