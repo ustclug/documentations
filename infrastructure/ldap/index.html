@@ -3145,6 +3145,7 @@
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>如果已经安装了 <code>sudo-ldap</code>，请在全部配置完成<strong>之后</strong>运行 <code>apt install sudo</code>，迁移回原 <code>sudo</code>。</p>
+<p>如果已经安装了 <code>nscd</code>，可以在配置完成后将其删除，避免与 <code>sssd</code> 冲突。</p>
 </div>
 <p>在安装过程中会被问一些问题（不同版本的 Debian 的问题可能不同）：</p>
 <ul>
@@ -3181,16 +3182,16 @@
 <a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="nt">group</span><span class="p">:</span><span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">compat ldap</span>
 <a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="nt">shadow</span><span class="p">:</span><span class="w">         </span><span class="l l-Scalar l-Scalar-Plain">compat ldap</span>
 <a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="l l-Scalar l-Scalar-Plain">......</span>
-<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="nt">sudoers</span><span class="p">:</span><span class="w">        </span><span class="l l-Scalar l-Scalar-Plain">files ldap</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="nt">sudoers</span><span class="p">:</span><span class="w">        </span><span class="l l-Scalar l-Scalar-Plain">files</span>
 </code></pre></div>
-<p>注意每一项后面的 <code>ldap</code>，如果没有要手动加上。不太清楚具体含义，反正给每一项都加上 <code>ldap</code> 是没有问题的。</p>
+<p>注意每一项后面的 <code>ldap</code>（<code>sudoers</code> 一行除外），如果没有要手动加上。</p>
 <p>对于使用 sssd 的配置，<strong>注意 <code>sudoers</code> 一行需要有 <code>sss</code></strong>，类似于下面这样：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nt">sudoers</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">files sss</span>
 </code></pre></div>
 <p>而如果使用传统的 <code>sudo-ldap</code>，那么 <code>sudoers</code> 一行应该类似于这样：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="nt">sudoers</span><span class="p">:</span><span class="w">        </span><span class="l l-Scalar l-Scalar-Plain">ldap [SUCCESS=return] files</span>
 </code></pre></div>
-<p>重启一下 <code>nscd</code> 和 <code>nslcd</code> 服务，此时运行 <code>getent passwd</code>，应该可以看到比 <code>/etc/passwd</code> 更多的内容，这就说明配置正确了。</p>
+<p>重启一下 <code>nscd</code> 和 <code>nslcd</code> 服务，此时运行 <code>getent passwd -s ldap</code>，应该可以看到 LDAP 中的用户列表，这就说明配置正确了。</p>
 <h4 id="pam">PAM 配置<a class="headerlink" href="#pam" title="Permanent link">&para;</a></h4>
 <p>如果 PAM 配置错误，可能导致用户无法使用 SSH 登录，甚至连 sudo 也可能挂掉。所以修改 PAM 配置时：</p>
 <ol>
@@ -3202,7 +3203,7 @@
 </code></pre></div>
 <h4 id="sssd">SSSD 配置<a class="headerlink" href="#sssd" title="Permanent link">&para;</a></h4>
 <p>由于 <code>sudo-ldap</code> 未来被废弃，sudo 的配置通过 sssd 实现，参考 <a href="https://access.redhat.com/site/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Deployment_Guide/sssd-ldap-sudo.html">https://access.redhat.com/site/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Deployment_Guide/sssd-ldap-sudo.html</a>。</p>
-<p>创建 <code>/etc/sssd/sssd.conf</code> 并修改权限为 600。</p>
+<p>创建 <code>/etc/sssd/sssd.conf</code> 并<strong>修改权限为 600</strong>。</p>
 <div class="highlight"><span class="filename">/etc/sssd/sssd.conf</span><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="k">[sssd]</span>
 <a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="na">services</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">nss, pam, sudo</span>
 <a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="na">domains</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">LDAP</span>
@@ -3229,8 +3230,8 @@
 </div>
 <div class="admonition warning">
 <p class="admonition-title">Apparmor</p>
-<p>目前 Debian 打包中的 SSSD 存在一个小 bug，会导致在有 Apparmor 的系统上 kernel log 刷满 dmesg。解决方法是在 <code>/etc/apparmor.d/usr.sbin.sssd</code> 中，<code>@{PROC} r,</code> 后面加一行：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>@{PROC}/[0-9]*/cmdline r,
+<p>Debian Bookworm 打包中的 SSSD 存在一个小 bug，会导致在有 Apparmor 的系统上 kernel log 刷满 dmesg。解决方法是在 <code>/etc/apparmor.d/usr.sbin.sssd</code> 中，<code>@{PROC} r,</code> 后面加一行：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>@<span class="o">{</span>PROC<span class="o">}</span>/<span class="o">[</span><span class="m">0</span>-9<span class="o">]</span>*/cmdline<span class="w"> </span>r,
 </code></pre></div>
 <p>然后 <code>sudo systemctl reload apparmor</code>。</p>
 </div>
