@@ -2,7 +2,9 @@
 
 !!! warning "注意"
 
-    mirrors4 于 2024 年 7 月重建为 ZFS pool，以下内容已经过时。
+    [mirrors4 于 2024 年 7 月重建为 ZFS pool](https://lug.ustc.edu.cn/planet/2024/12/ustc-mirrors-zfs-rebuild/)，以下内容保留作为归档。
+
+    关键词：硬件 RAID、LVM、LVM Cache、XFS。
 
 ## 磁盘分区
 

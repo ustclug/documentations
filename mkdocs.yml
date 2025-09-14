@@ -119,7 +119,6 @@ nav:
       - services/mirrors/index.md
       - Current (4):
         - services/mirrors/4/index.md
-        - Volumes (Old): services/mirrors/4/volumes-old.md
         - Networking: services/mirrors/4/networking/index.md
         - Networking - Routing: services/mirrors/4/networking/route.md
         - Networking - Misc: services/mirrors/4/networking/misc.md
@@ -153,7 +152,10 @@ nav:
     - Documentations: services/documentations.md
     - Generate 204: "services/generate-204.md"
     - MirrorZ: services/mirrorz.md
-    - Discontinued Services: "services/discontinued.md"
+    - Discontinued Services:
+      - services/discontinued/index.md
+      - Mirrors2 Networking: services/discontinued/mirrors2-networking.md
+      - Mirrors4 Volumes: services/discontinued/mirrors4-volumes.md
   - Common Issues:
     - DNS: faq/dns.md
     - LDAP: faq/ldap.md

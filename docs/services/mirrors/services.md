@@ -114,7 +114,7 @@ MemoryHigh=28G
 IOAccounting=true
 ```
 
-此外，`/etc/gitconfig` 中的配置也会影响 Git 服务的行为，相关介绍在 [Repositories](./repos.md#git) 中。
+此外，`/etc/gitconfig` 中的配置也会影响 Git 服务的行为，相关介绍在 [Repositories](repos.md#git) 中。
 
 ## FTP 服务（已废弃）
 
