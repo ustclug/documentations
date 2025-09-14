@@ -133,10 +133,6 @@
          <lastmod>2025-09-14</lastmod>
     </url>
     <url>
-         <loc>https://docs.ustclug.org/services/discontinued/</loc>
-         <lastmod>2025-09-14</lastmod>
-    </url>
-    <url>
          <loc>https://docs.ustclug.org/services/docker2/</loc>
          <lastmod>2025-09-14</lastmod>
     </url>
@@ -182,6 +178,18 @@
     </url>
     <url>
          <loc>https://docs.ustclug.org/services/vpn/</loc>
+         <lastmod>2025-09-14</lastmod>
+    </url>
+    <url>
+         <loc>https://docs.ustclug.org/services/discontinued/</loc>
+         <lastmod>2025-09-14</lastmod>
+    </url>
+    <url>
+         <loc>https://docs.ustclug.org/services/discontinued/mirrors2-networking/</loc>
+         <lastmod>2025-09-14</lastmod>
+    </url>
+    <url>
+         <loc>https://docs.ustclug.org/services/discontinued/mirrors4-volumes/</loc>
          <lastmod>2025-09-14</lastmod>
     </url>
     <url>
@@ -238,10 +246,6 @@
     </url>
     <url>
          <loc>https://docs.ustclug.org/services/mirrors/4/</loc>
-         <lastmod>2025-09-14</lastmod>
-    </url>
-    <url>
-         <loc>https://docs.ustclug.org/services/mirrors/4/volumes-old/</loc>
          <lastmod>2025-09-14</lastmod>
     </url>
     <url>
