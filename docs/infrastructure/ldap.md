@@ -87,7 +87,7 @@ Debian 系统安装 `libnss-ldapd`、`libpam-ldapd`、`sssd-ldap`、`libsss-sudo
 
 编辑内容如下：
 
-``` title="/etc/ldap/ldap.conf"
+```shell title="/etc/ldap/ldap.conf"
 BASE dc=lug,dc=ustc,dc=edu,dc=cn
 URI ldaps://ldap.lug.ustc.edu.cn
 SSL yes
@@ -102,7 +102,7 @@ SUDOERS_BASE ou=sudoers,dc=lug,dc=ustc,dc=edu,dc=cn
 
 注意检查一下此配置文件是否与 `/etc/ldap/ldap.conf` 下的内容相一致，如
 
-``` title="/etc/nslcd.conf"
+```shell title="/etc/nslcd.conf"
 uid nslcd
 gid nslcd
 uri ldaps://ldap.lug.ustc.edu.cn
@@ -157,40 +157,10 @@ session required    pam_mkhomedir.so skel=/etc/skel umask=0022
 
 由于 `sudo-ldap` 未来被废弃，sudo 的配置通过 sssd 实现，参考 <https://access.redhat.com/site/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Deployment_Guide/sssd-ldap-sudo.html>。
 
-将 `/usr/share/doc/sssd-common/examples/sssd-example.conf` 复制到 `/etc/sssd/sssd.conf` 并修改权限为 600。
+创建 `/etc/sssd/sssd.conf` 并修改权限为 600。
 
-```diff
-[taoky@gateway-nic ~]$ sudo diff /usr/share/doc/sssd-common/examples/sssd-example.conf /etc/sssd/sssd.conf
-3c3
-< services = nss, pam
----
-> services = nss, pam, sudo
-8c8,10
-< ; domains = LDAP
----
-> domains = LDAP
->
-> [sudo]
-15,17c17,19
-< ; [domain/LDAP]
-< ; id_provider = ldap
-< ; auth_provider = ldap
----
-> [domain/LDAP]
-> id_provider = ldap
-> auth_provider = ldap
-22,24c24,26
-< ; ldap_schema = rfc2307
-< ; ldap_uri = ldap://ldap.mydomain.org
-< ; ldap_search_base = dc=mydomain,dc=org
----
-> ldap_schema = rfc2307
-> ldap_uri = ldaps://ldap.lug.ustc.edu.cn
-> ldap_search_base = dc=lug,dc=ustc,dc=edu,dc=cn
-30c32
-< ; cache_credentials = true
----
-> cache_credentials = true
+```ini title="/etc/sssd/sssd.conf"
+--8<-- "sssd.conf"
 ```
 
 !!! danger "坑"
