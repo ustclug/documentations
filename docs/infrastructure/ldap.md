@@ -76,6 +76,8 @@ Debian 系统安装 `libnss-ldapd`、`libpam-ldapd`、`sssd-ldap`、`libsss-sudo
 
     如果已经安装了 `sudo-ldap`，请在全部配置完成**之后**运行 `apt install sudo`，迁移回原 `sudo`。
 
+    如果已经安装了 `nscd`，可以在配置完成后将其删除，避免与 `sssd` 冲突。
+
 在安装过程中会被问一些问题（不同版本的 Debian 的问题可能不同）：
 
 - LDAP 服务器地址是 `ldaps://ldap.lug.ustc.edu.cn`
@@ -121,10 +123,10 @@ passwd:         compat ldap
 group:          compat ldap
 shadow:         compat ldap
 ......
-sudoers:        files ldap
+sudoers:        files
 ```
 
-注意每一项后面的 `ldap`，如果没有要手动加上。不太清楚具体含义，反正给每一项都加上 `ldap` 是没有问题的。
+注意每一项后面的 `ldap`（`sudoers` 一行除外），如果没有要手动加上。
 
 对于使用 sssd 的配置，**注意 `sudoers` 一行需要有 `sss`**，类似于下面这样：
 
@@ -138,7 +140,7 @@ sudoers: files sss
 sudoers:        ldap [SUCCESS=return] files
 ```
 
-重启一下 `nscd` 和 `nslcd` 服务，此时运行 `getent passwd`，应该可以看到比 `/etc/passwd` 更多的内容，这就说明配置正确了。
+重启一下 `nscd` 和 `nslcd` 服务，此时运行 `getent passwd -s ldap`，应该可以看到 LDAP 中的用户列表，这就说明配置正确了。
 
 #### PAM 配置
 
@@ -157,7 +159,7 @@ session required    pam_mkhomedir.so skel=/etc/skel umask=0022
 
 由于 `sudo-ldap` 未来被废弃，sudo 的配置通过 sssd 实现，参考 <https://access.redhat.com/site/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Deployment_Guide/sssd-ldap-sudo.html>。
 
-创建 `/etc/sssd/sssd.conf` 并修改权限为 600。
+创建 `/etc/sssd/sssd.conf` 并**修改权限为 600**。
 
 ```ini title="/etc/sssd/sssd.conf"
 --8<-- "sssd.conf"
@@ -169,9 +171,9 @@ session required    pam_mkhomedir.so skel=/etc/skel umask=0022
 
 !!! warning "Apparmor"
 
-    目前 Debian 打包中的 SSSD 存在一个小 bug，会导致在有 Apparmor 的系统上 kernel log 刷满 dmesg。解决方法是在 `/etc/apparmor.d/usr.sbin.sssd` 中，`@{PROC} r,` 后面加一行：
+    Debian Bookworm 打包中的 SSSD 存在一个小 bug，会导致在有 Apparmor 的系统上 kernel log 刷满 dmesg。解决方法是在 `/etc/apparmor.d/usr.sbin.sssd` 中，`@{PROC} r,` 后面加一行：
 
-    ```
+    ```shell
     @{PROC}/[0-9]*/cmdline r,
     ```
 
