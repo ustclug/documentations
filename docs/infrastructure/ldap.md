@@ -169,9 +169,9 @@ session required    pam_mkhomedir.so skel=/etc/skel umask=0022
 
     需要加上 `[sudo]`，否则 sudo 配置不会生效，这个配置问题导致了修改前在 gateway-nic 上用户无法使用 sudo。
 
-!!! warning "Apparmor"
+!!! warning "AppArmor (Debian Bookworm)"
 
-    Debian Bookworm 打包中的 SSSD 存在一个小 bug，会导致在有 Apparmor 的系统上 kernel log 刷满 dmesg。解决方法是在 `/etc/apparmor.d/usr.sbin.sssd` 中，`@{PROC} r,` 后面加一行：
+    Debian Bookworm 打包中的 SSSD 存在一个小 bug，会导致在有 AppArmor 的系统上 kernel log 刷满 dmesg。解决方法是在 `/etc/apparmor.d/usr.sbin.sssd` 中，`@{PROC} r,` 后面加一行：
 
     ```shell
     @{PROC}/[0-9]*/cmdline r,
