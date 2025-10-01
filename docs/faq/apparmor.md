@@ -14,7 +14,7 @@ Proxmox 的 lxc 支持包会覆盖 `/usr/share/apparmor-features/features` 为 U
 
 一个 workaround 是注释掉 `/etc/apparmor/parser.conf` 的对应行。
 
-### PVE 的解决方案
+### PVE 的解决方案（不推荐）
 
 后续调查发现 `lxc-pve` 打包了自己的 `/usr/share/apparmor-features/features` 并覆盖了 Debian 的版本，因此我们模仿 `lxc-pve` 的做法把 Debian 的版本覆盖掉，然后下载 Proxmox 的版本：
 
