@@ -20,5 +20,7 @@ Proxmox 的 lxc 支持包会覆盖 `/usr/share/apparmor-features/features` 为 U
 
 ```shell
 dpkg-divert --package lxc-pve --rename --divert /usr/share/apparmor-features/features.stock --add /usr/share/apparmor-features/features
-wget -O /usr/share/apparmor-features/features https://github.com/proxmox/lxc/raw/master/debian/features
+wget -O /usr/share/apparmor-features/features https://github.com/proxmox/lxc/raw/master/debian/apparmor-abi/lxc
 ```
+
+如果你搞砸了，先 `aa-teardown` 移除所有的 profile，弄好之后再 `systemctl restart apparmor` 恢复并测试。
