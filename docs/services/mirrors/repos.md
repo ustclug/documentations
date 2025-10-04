@@ -16,7 +16,12 @@
 
     镜像站有多个来自不同运营商的 IP 可用于同步任务。由于网络环境的不确定性，有时会出现某个 IP 同步速度极慢的情况。
 
-    @taoky 的 [admirror-speedtest](https://github.com/taoky/admirror-speedtest/) 可以帮助决定最快速的 IP。
+    @taoky 的 [bestbind](https://github.com/taoky/bestbind/) 可以帮助决定最快速的 IP（或 Docker Network）。在 mirrors4 上已经配置完成（参考 `/etc/bestbind.conf`），例子如下：
+
+    ```console
+    bestbind <path to a file on remote>
+    sudo bestbind --profile docker <path to a file on remote>
+    ```
 
     另外，`bindIP` 不适用于所有的同步镜像（一部分程序不支持修改 `bind()` 的参数），此时可以使用基于 Docker Network 的 `network` 配置。
 
