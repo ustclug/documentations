@@ -25,6 +25,13 @@
 
     另外，`bindIP` 不适用于所有的同步镜像（一部分程序不支持修改 `bind()` 的参数），此时可以使用基于 Docker Network 的 `network` 配置。
 
+    !!! example "使用 bestbind 找到最佳的 freebsd-pkg 上游"
+
+        ```shell
+        dig +short _http._tcp.pkg.all.freebsd.org srv | cut -d ' ' -f 4 > freebsd
+        for i in $(cat freebsd); do echo $i; bestbind "http://$i/FreeBSD:15:amd64/quarterly/All/virtualbox-ose-71-7.1.12_1.pkg"; done
+        ```
+
 写好新仓库的配置文件之后运行 `yuki reload`，然后 `yuki sync <repo>` 就可以开始初次同步了。
 
 ### 为 Git 类型仓库添加软链接至 `/srv/git` {#git}
