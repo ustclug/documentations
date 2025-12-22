@@ -181,6 +181,15 @@ session required    pam_mkhomedir.so skel=/etc/skel umask=0022
 
 另外记得像前面在 Debian 中安装介绍到的那样修改 `/etc/nsswitch.conf` 以及 `/etc/nslcd.conf`.
 
+#### 通过 SSSD 从 LDAP 获取 SSH 公钥
+
+```shell title="/etc/ssh/sshd_config.d/sss.conf"
+AuthorizedKeysCommand /usr/bin/sss_ssh_authorizedkeys %u
+AuthorizedKeysCommandUser nobody
+```
+
+当然你也可以直接加在 `ustclug.conf` 里。
+
 ### NSCD 使用说明
 
 在 SSSD 未安装的情况下，NSCD 会提供 LDAP 缓存服务。如果在使用 NSCD 的机器上需要清空 LDAP 缓存，执行以下命令：
