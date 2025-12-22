@@ -25,7 +25,7 @@
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
     
     
       
@@ -33,7 +33,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.618322db.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -1124,6 +1124,17 @@
     <span class="md-ellipsis">
       
         SSSD 配置
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sssd-ldap-ssh" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        通过 SSSD 从 LDAP 获取 SSH 公钥
       
     </span>
   </a>
@@ -3610,6 +3621,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#sssd-ldap-ssh" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        通过 SSSD 从 LDAP 获取 SSH 公钥
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -3827,27 +3849,32 @@
 <p>然后 <code>sudo systemctl reload apparmor</code>。</p>
 </div>
 <p>另外记得像前面在 Debian 中安装介绍到的那样修改 <code>/etc/nsswitch.conf</code> 以及 <code>/etc/nslcd.conf</code>.</p>
+<h4 id="sssd-ldap-ssh">通过 SSSD 从 LDAP 获取 SSH 公钥<a class="headerlink" href="#sssd-ldap-ssh" title="Permanent link">&para;</a></h4>
+<div class="highlight"><span class="filename">/etc/ssh/sshd_config.d/sss.conf</span><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>AuthorizedKeysCommand<span class="w"> </span>/usr/bin/sss_ssh_authorizedkeys<span class="w"> </span>%u
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>AuthorizedKeysCommandUser<span class="w"> </span>nobody
+</code></pre></div>
+<p>当然你也可以直接加在 <code>ustclug.conf</code> 里。</p>
 <h3 id="nscd">NSCD 使用说明<a class="headerlink" href="#nscd" title="Permanent link">&para;</a></h3>
 <p>在 SSSD 未安装的情况下，NSCD 会提供 LDAP 缓存服务。如果在使用 NSCD 的机器上需要清空 LDAP 缓存，执行以下命令：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>nscd<span class="w"> </span>-i<span class="w"> </span>passwd
-<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>nscd<span class="w"> </span>-i<span class="w"> </span>group
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>nscd<span class="w"> </span>-i<span class="w"> </span>passwd
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>nscd<span class="w"> </span>-i<span class="w"> </span>group
 </code></pre></div>
 <p>如果 SSSD 安装，<code>systemctl status sssd</code> 会显示 SSSD 与 NSCD 同时提供了相关缓存，可能存在冲突问题：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>NSCD socket was detected and seems to be configured to cache some of the databases controlled by SSSD [passwd,group,netgroup,services].
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>NSCD socket was detected and seems to be configured to cache some of the databases controlled by SSSD [passwd,group,netgroup,services].
 </code></pre></div>
 <p>需要修改 <code>/etc/nscd.conf</code>，将提及的 <code>passwd</code>, <code>group</code>, <code>netgroup</code> 和 <code>services</code> 的 <code>enable-cache</code> 设置为 <code>no</code>。</p>
 <h2 id="ldap-cli">LDAP CLI 工具使用说明<a class="headerlink" href="#ldap-cli" title="Permanent link">&para;</a></h2>
 <p>这里以 <code>ldappasswd</code> 为例，其余 ldap 系列指令与其大致相同：</p>
 <p>LDAP 利用 dn 来定位一个用户，以下指令可以列出所有用户及其 dn：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>ldapsearch<span class="w"> </span>-x<span class="w"> </span>-LLL<span class="w"> </span><span class="nv">uid</span><span class="o">=</span>*<span class="w"> </span>uid
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>ldapsearch<span class="w"> </span>-x<span class="w"> </span>-LLL<span class="w"> </span><span class="nv">uid</span><span class="o">=</span>*<span class="w"> </span>uid
 </code></pre></div>
 <p><code>-x</code> 指定使用 Simple authentication，即使用密码认证。</p>
 <p>如果要修改一个用户的密码，使用：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>ldappasswd<span class="w"> </span>-x<span class="w"> </span>-D<span class="w"> </span><span class="s1">&#39;&lt;executor dn&gt;&#39;</span><span class="w"> </span>-W<span class="w"> </span>-S<span class="w"> </span><span class="s1">&#39;&lt;target user dn&gt;&#39;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>ldappasswd<span class="w"> </span>-x<span class="w"> </span>-D<span class="w"> </span><span class="s1">&#39;&lt;executor dn&gt;&#39;</span><span class="w"> </span>-W<span class="w"> </span>-S<span class="w"> </span><span class="s1">&#39;&lt;target user dn&gt;&#39;</span>
 </code></pre></div>
 <p><code>-D '&lt;executor dn&gt;'</code> 指定了执行者的身份，<code>-W</code>/<code>-S</code> 指定了接下来询问执行者/目标用户的密码/旧密码。</p>
 <p>需要额外注意的是，在 CLI 中添加/删除用户或更改用户密码时需要以 LDAP admin 执行，否则会有报错：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>Insufficient access (50) additional info: no write access to parent
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>Insufficient access (50) additional info: no write access to parent
 </code></pre></div>
 <p>或是其他的权限不足的错误。</p>
 <h2 id="_4">部署情况<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
@@ -4112,10 +4139,10 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["content.code.annotate", "content.code.copy", "navigation.indexes", "navigation.sections", "navigation.top"], "search": "../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["content.code.annotate", "content.code.copy", "navigation.indexes", "navigation.sections", "navigation.top"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
       
     
   </body>
