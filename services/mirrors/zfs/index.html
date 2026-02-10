@@ -2245,6 +2245,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Notes
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -3446,6 +3457,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Notes
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -3643,6 +3665,18 @@
 <p><del>Do <strong>NOT</strong> install <code>zfs-dkms</code> and related packages from Debian backports repositories. They'll easily break when upgrading.</del></p>
 <p><del>As of Debian Buster the ZFS packages from the mainstream repository is stable and new enough for our use.</del></p>
 <p>仍然建议安装 Backports 版本的 ZFS。「Stable 越往后（对 ZFS 相关软件包的）维护越弱」，从而导致 stable 的 ZFS 反而质量不如 backports 版本的。</p>
+<h2 id="notes">Notes<a class="headerlink" href="#notes" title="Permanent link">&para;</a></h2>
+<p>Since our ZFS rebuild in mid-2024 (writeups: <a href="https://ibug.io/p/74">English</a>, <a href="https://lug.ustc.edu.cn/planet/2024/12/ustc-mirrors-zfs-rebuild/">中文版</a>), several extra changes have been made:</p>
+<ul>
+<li>We no longer install <code>zfs-dkms</code> from Debian backports. Instead we run <code>proxmox-default-kernel</code> from the corresponding Proxmox VE release (e.g. PVE 9 = Debian Trixie), with additial AppArmor profile tweaks to allow <code>rsync</code> to run normally (see the "AppArmor" section in the writeup articles).</li>
+<li><code>recordsize</code> has been further increased to 4 MiB. However, minimal differences have been observed.</li>
+<li><code>secondarycache</code> has been reduced from <code>all</code> to <code>metadata</code> on mirrors4 as it began serving Rsync traffic. L2ARC hit rate remained above 50%, though, which is surprisingly good.</li>
+<li>An additional ZFS module parameter has been added: <code>zfs_immediate_write_sz=16777216</code> (default value is 32 KiB).</li>
+<li>We have ditched the userspace deduplication solution (jdupes) in favor of OpenZFS 2.3 Fast Dedup feature. This is done by enabling <code>feature@fast_dedup</code> on the zpool level, <em>before</em> enabling <code>dedup</code> on each dedup'd dataset.<ul>
+<li>The datasets with <code>dedup</code> enabled are the same dataset listed in the writeup article, excluding <code>mysql-repo</code> (which was already excluded from the original jdupes plan) and <code>salt</code> (later structural changes in the repository rendered dedup ineffective), leaving 7 remaining.</li>
+</ul>
+</li>
+</ul>
 <div class="footnote">
 <hr />
 <ol>
