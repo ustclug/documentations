@@ -10,7 +10,6 @@
 |  服务器  |  systemd 服务  |           备注           |
 | :------: | :------------: | :----------------------: |
 | mirrors2 |  rsync@cernet  |   供 rsync-proxy 反代    |
-| mirrors3 |  rsync@cernet  |   供 rsync-proxy 反代    |
 | mirrors4 |  rsync@cernet  |   供 rsync-proxy 反代    |
 | mirrors4 | rsync@mirrors2 | 供 mirrors2 直接拉取仓库 |
 
@@ -47,6 +46,11 @@
     [Install]
     WantedBy=multi-user.target
     ```
+
+??? info "曾经的连接数限制"
+
+    2020 年 8 月 25 日，Rsync 总连接数限制从夜晚 60 个连接、白天 30 个连接提升为全天 60 个连接。
+    2021 年 2 月 6 日，单 IP 连接数限制从 2 个连接提升为 5 个连接。
 
 ## rsync-proxy
 
