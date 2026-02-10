@@ -214,3 +214,14 @@ Refer to [`zfsprops(7)`](https://openzfs.github.io/openzfs-docs/man/master/7/zfs
 <del>As of Debian Buster the ZFS packages from the mainstream repository is stable and new enough for our use.</del>
 
 仍然建议安装 Backports 版本的 ZFS。「Stable 越往后（对 ZFS 相关软件包的）维护越弱」，从而导致 stable 的 ZFS 反而质量不如 backports 版本的。
+
+## Notes
+
+Since our ZFS rebuild in mid-2024 (writeups: [English](https://ibug.io/p/74), [中文版](https://lug.ustc.edu.cn/planet/2024/12/ustc-mirrors-zfs-rebuild/)), several extra changes have been made:
+
+- We no longer install `zfs-dkms` from Debian backports. Instead we run `proxmox-default-kernel` from the corresponding Proxmox VE release (e.g. PVE 9 = Debian Trixie), with additial AppArmor profile tweaks to allow `rsync` to run normally (see the "AppArmor" section in the writeup articles).
+- `recordsize` has been further increased to 4 MiB. However, minimal differences have been observed.
+- `secondarycache` has been reduced from `all` to `metadata` on mirrors4 as it began serving Rsync traffic. L2ARC hit rate remained above 50%, though, which is surprisingly good.
+- An additional ZFS module parameter has been added: `zfs_immediate_write_sz=16777216` (default value is 32 KiB).
+- We have ditched the userspace deduplication solution (jdupes) in favor of OpenZFS 2.3 Fast Dedup feature. This is done by enabling `feature@fast_dedup` on the zpool level, *before* enabling `dedup` on each dedup'd dataset.
+    - The datasets with `dedup` enabled are the same dataset listed in the writeup article, excluding `mysql-repo` (which was already excluded from the original jdupes plan) and `salt` (later structural changes in the repository rendered dedup ineffective), leaving 7 remaining.
