@@ -1247,6 +1247,23 @@
   
 </li>
         
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#admin" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Google 设置
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Google 设置">
+      <ul class="md-nav__list">
+        
           <li class="md-nav__item">
   <a href="#default-route" class="md-nav__link">
     <span class="md-ellipsis">
@@ -1260,6 +1277,17 @@
         
       </ul>
     </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#history" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        沿革历史
+      
+    </span>
+  </a>
   
 </li>
       
@@ -3526,6 +3554,23 @@
   
 </li>
         
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#admin" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Google 设置
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Google 设置">
+      <ul class="md-nav__list">
+        
           <li class="md-nav__item">
   <a href="#default-route" class="md-nav__link">
     <span class="md-ellipsis">
@@ -3539,6 +3584,17 @@
         
       </ul>
     </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#history" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        沿革历史
+      
+    </span>
+  </a>
   
 </li>
       
@@ -3563,11 +3619,6 @@
 
 
 <h1 id="g-suite">G Suite<a class="headerlink" href="#g-suite" title="Permanent link">&para;</a></h1>
-<p><s>由于 G Suite 自 2022 年 7 月起不再提供免费的 Teams，且已有的免费 Teams 也将停止服务，我们已于 2022 年 3 月全面迁移至 Office 365。</s></p>
-<p>由于 2026 年 2 月 23 日 <code>lug.ustc.edu.cn</code> 在 Office 365 上的 tenant 被无预警地封禁，包括管理员也无法登录（甚至连同 <code>mail.ustc.edu.cn</code> 和 <code>ustc.edu.cn</code> 两个域），我们于次日将邮件服务又迁移回了 G Suite。
-好消息是，我们在 2023～2024 年申请保留免费的 G Suite Teams 服务并且通过了，因此我们仍然可以继续以 <code>ustclug.org</code> 域名使用 G Suite，包括原有的 50 用户限制。</p>
-<!-- 考虑到此页面的 URL 还有一定数量的外链，我们把本页文档重新加了回来，但是所有有意义的内容都已经移动到了 [Office 365](office.md) 页面中。 -->
-
 <h2 id="application">申请方式<a class="headerlink" href="#application" title="Permanent link">&para;</a></h2>
 <p>理论上任何社团负责人或者在社团中负责重要项目的人员都可以申请，原则是按需分配，因为邮箱是工作工具，而不是福利资源。</p>
 <p>同理，不再担任负责人且不再处理事务的同学使用的邮箱应该收回（见下方 <a href="#default-route">默认地址</a> 一节）。</p>
@@ -3704,10 +3755,17 @@
 <p>james: "thunderbird某次升级后出了一个bug，连接时服务器返回支持utf8，tb发了一个命令enable utf8，服务器正常返回后，tb有bug认为一直在等服务器应答。"</p>
 <p>所以如果需要使用 Thunderbird 从 mail.ustc.edu.cn 收发邮件，需要做以下的配置：Edit -&gt; Settings，在 "General" 中拖到最下面选择 "Config Editor..."。在新弹出的高级配置的标签中输入 utf8，将 <code>mail.server.default.allow_utf8_accept</code> 的值从 true 改成 false。这个设置不会影响其他邮箱的使用。</p>
 </details>
+<h2 id="admin">Google 设置<a class="headerlink" href="#admin" title="Permanent link">&para;</a></h2>
 <h3 id="default-route">设置默认地址<a class="headerlink" href="#default-route" title="Permanent link">&para;</a></h3>
 <p>G Suite 支持将单个地址设为“默认地址”，用于接受发往不存在的地址的邮件。</p>
 <p>参考资料：<a href="https://support.google.com/a/answer/2368153">https://support.google.com/a/answer/2368153</a></p>
 <p>对于中文界面，应该从 Google Admin 控制台按顺序选择 <strong>应用</strong> → <strong>G Suite</strong> → <strong>Gmail</strong> → <strong>高级设置</strong>，其中的 <strong>无限别名地址</strong> 就是这个选项，一般发给会长或 CTO。</p>
+<h2 id="history">沿革历史<a class="headerlink" href="#history" title="Permanent link">&para;</a></h2>
+<p>2017 年及已经无从考据的更久前，我们使用 G Suite 服务作为 <code>ustclug.org</code> 域名的邮件服务提供商。</p>
+<p>由于 G Suite 自 2022 年 7 月起不再提供免费的 Teams，且已有的免费 Teams 也将停止服务，我们于 2022 年 3 月全面迁移至了 Office 365。</p>
+<p>由于 2026 年 2 月 23 日 <code>lug.ustc.edu.cn</code> 在 Office 365 上的 tenant 被无预警地封禁，包括管理员也无法登录（甚至连同 <code>mail.ustc.edu.cn</code> 和 <code>ustc.edu.cn</code> 两个域也被同时封禁），我们于次日将邮件服务又迁移回了 G Suite。
+好消息是，我们在 2023～2024 年申请保留免费的 G Suite 服务并且通过了，因此我们仍然可以继续以 <code>ustclug.org</code> 域名使用 G Suite，包括原有的 <strong>50 用户限制</strong>。</p>
+<!-- 考虑到此页面的 URL 还有一定数量的外链，我们把本页文档重新加了回来，但是所有有意义的内容都已经移动到了 [Office 365](office.md) 页面中。 -->
 
 
 
