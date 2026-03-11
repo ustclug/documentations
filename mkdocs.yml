@@ -100,7 +100,7 @@ nav:
     - Authoritative DNS: "infrastructure/auth-dns.md"
     - SSL Certificates: "infrastructure/ssl.md"
     - Monitor: "infrastructure/monitor.md"
-    - Office 365 and Mail: "infrastructure/office.md"
+    - G Suite: infrastructure/google.md
     - GitHub: infrastructure/github.md
     - Docker Hub: infrastructure/dockerhub.md
     - Mail Agent: infrastructure/mail.md
@@ -108,7 +108,7 @@ nav:
     - DNS Caching: infrastructure/dnscache.md
     - Discontinued Infrastructure:
       - infrastructure/discontinued/index.md
-      - G Suite: infrastructure/google.md
+      - Office 365 and Mail: "infrastructure/office.md"
       - vSphere Cluster:
         - ESXi: "infrastructure/discontinued/vsphere/esxi.md"
         - vCenter: "infrastructure/discontinued/vsphere/vcenter.md"
