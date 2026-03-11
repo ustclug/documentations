@@ -3645,11 +3645,15 @@
 <p>登录网页版 Gmail，在右上角点开设置，于“常规”标签页中设置“签名”为纯文本如下内容（共 5 行，将最后一行换成自己的信息）：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>Linux User Group
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>University of Science and Technology of China
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>Homepage: &lt;https://lug.ustc.edu.cn/&gt;
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>E-Mail: &lt;lug@ustc.edu.cn&gt;
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>Zibo Wang (王子博) &amp;lt;&lt;example@ustclug.org&gt;&amp;gt;
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>Homepage: https://lug.ustc.edu.cn/
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>E-Mail: lug@ustc.edu.cn
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>Zibo Wang (王子博) &lt;example@ustclug.org&gt;
 </code></pre></div>
-<p>于“账号”标签页中“用这个地址发送邮件”内点“修改信息”，在弹出窗口中输入名称“Zibo Wang on behalf of USTC LUG”（请换成自己的名字），输入回复地址“<code>lug@ustc.edu.cn</code>”。</p>
+<p>于“账号”标签页中“用这个地址发送邮件”内点“修改信息”，在弹出窗口中配置以下项目：</p>
+<ul>
+<li>名称：<code>Zibo Wang on behalf of USTC LUG</code>（请换成自己的名字）</li>
+<li>回复地址：<code>lug@ustc.edu.cn</code></li>
+</ul>
 <p>还可以视自己需要在“转发和 POP / IMAP”标签页中配置自动转发，但请注意，如果你配置了转发到自己的常用邮箱，请不要直接从常用邮箱回复邮件，而应该登录 LUG 邮箱回复。</p>
 <p>在添加了签名后，在下面的“默认签名设置”中，将“用于新电子邮件”以及“用于回复/转发”均选择为上面添加的签名。</p>
 <p>记得滚动到页面最下方点击“保存页面”！</p>
@@ -3700,7 +3704,7 @@
 <p>结果如图：</p>
 <p><img alt="Thunderbird Conf" src="../img/thunderbird-account-settings.jpg" /></p>
 <h3 id="tb-cc">抄送设置<a class="headerlink" href="#tb-cc" title="Permanent link">&para;</a></h3>
-<p>在账户设置中，选择身份管理，点击编辑，选择 <em>Copies and Folders</em>, 启用 <em>Cc these email addresses</em>, 并输入默认抄送地址 <code>lug A ustc.edu.cn</code></p>
+<p>在账户设置中，选择身份管理，点击编辑，选择 <em>Copies and Folders</em>, 启用 <em>Cc these email addresses</em>, 并输入默认抄送地址 <code>lug@ustc.edu.cn</code>。</p>
 <p><img alt="Thunderbird cc" src="../img/thunderbird-account-settings-cc.png" /></p>
 <h3 id="html">HTML 与纯文本<a class="headerlink" href="#html" title="Permanent link">&para;</a></h3>
 <p>邮件可以以 HTML 方式编写，也可以只是纯文本内容。为了降低对方阅读出现麻烦的可能性，建议使用纯文本消息。使用纯文本消息的方法是：打开 <em>Thunderbird 设置</em> ，打开 <em>Account Settings</em> ，打开对应邮件地址下的 <em>Composition &amp; Addressing</em> 页面，在 <em>Composition</em> 节下找到 <em>Compose messages in HTML format</em> ，将其复选框去除勾选即可。</p>
@@ -3748,12 +3752,12 @@
 <p><img alt="Thunderbird - 1" src="../img/thunderbird-1.jpg" /></p>
 <p>需要添加新身份时，点击右下角「管理标识」，添加对应的标识。对于 hackergame，可以配置如下：</p>
 <p><img alt="Thunderbird - 2" src="../img/thunderbird-2.png" /></p>
-<p>并参考<a href="#tb-cc">抄送设置</a> 配置默认抄送地址 (<code>hackergame A ustclug.org</code>)</p>
+<p>并参考<a href="#tb-cc">抄送设置</a> 配置默认抄送地址 (<code>hackergame@ustclug.org</code>)</p>
 <p>配置完成后，在编写邮件时，就可以选择新的标识了，并且发件人名称、回复地址和签名都会自动设置好。</p>
 <details class="info">
 <summary>使用 Thunderbird 配置学校邮箱需要的额外设置</summary>
 <p>james: "thunderbird某次升级后出了一个bug，连接时服务器返回支持utf8，tb发了一个命令enable utf8，服务器正常返回后，tb有bug认为一直在等服务器应答。"</p>
-<p>所以如果需要使用 Thunderbird 从 mail.ustc.edu.cn 收发邮件，需要做以下的配置：Edit -&gt; Settings，在 "General" 中拖到最下面选择 "Config Editor..."。在新弹出的高级配置的标签中输入 utf8，将 <code>mail.server.default.allow_utf8_accept</code> 的值从 true 改成 false。这个设置不会影响其他邮箱的使用。</p>
+<p>所以如果需要使用 Thunderbird 从 mail.ustc.edu.cn 收发邮件，需要做以下的配置：Edit → Settings，在 "General" 中拖到最下面选择 "Config Editor..."。在新弹出的高级配置的标签中输入 utf8，将 <code>mail.server.default.allow_utf8_accept</code> 的值从 true 改成 false。这个设置不会影响其他邮箱的使用。</p>
 </details>
 <h2 id="admin">Google 设置<a class="headerlink" href="#admin" title="Permanent link">&para;</a></h2>
 <h3 id="default-route">设置默认地址<a class="headerlink" href="#default-route" title="Permanent link">&para;</a></h3>
