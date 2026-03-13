@@ -149,7 +149,6 @@ nav:
       - Images: "services/pxe/images.md"
       - LIIMS: "services/pxe/liims.md"
     - FTP: "services/ftp.md"
-    - Documentations: services/documentations.md
     - Generate 204: "services/generate-204.md"
     - MirrorZ: services/mirrorz.md
     - Discontinued Services:
