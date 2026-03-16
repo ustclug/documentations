@@ -34,9 +34,17 @@
 
 写好新仓库的配置文件之后运行 `yuki reload`，然后 `yuki sync <repo>` 就可以开始初次同步了。
 
-### 为 Git 类型仓库添加软链接至 `/srv/git` {#git}
+### Git 类型仓库的额外配置 {#git}
 
-`git-daemon.service` 根据 `/srv/git` 下的内容对外提供 Git 服务。所以如果是 git 类型的仓库，需要添加软链接，否则无法使用 `git://` 的协议访问。（`http(s)://` 协议没有问题）
+??? note "`git://` 协议服务已于 2025 年 12 月[停止服务](https://servers.ustclug.org/2025/10/mirrors-remove-git-protocol/)"
+
+    `git-daemon.service` 根据 `/srv/git` 下的内容对外提供 `git://` 协议服务。所以如果是 git 类型的仓库，需要添加软链接，否则无法使用 `git://` 的协议访问，例如：
+
+    ```shell
+    ln -s /srv/repo/linux.git /srv/git/
+    ```
+
+    通过 `http(s)://` 协议访问 Git 仓库无需此软链接，因此 `/srv/git` 目录现在是已经淘汰的配置了。
 
 !!! info "Git 仓库服务的其他相关配置"
 
