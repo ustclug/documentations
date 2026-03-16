@@ -33,9 +33,11 @@ docker network create --driver=bridge --subnet=172.17.6.0/24 --gateway=172.17.6.
 docker network create --driver=bridge --subnet=172.17.7.0/24 --gateway=172.17.7.1 -o "com.docker.network.bridge.name=dockerU" unicom
 
 docker network create --driver=bridge --subnet=172.17.8.0/24 --gateway=172.17.8.1 \
-  --ipv6 --subnet=fd00:6::/64 --gateway=fd00:6::1 \
+  --ipv6 --subnet=2001:db8:6::/64 --gateway=2001:db8:6::1 \
   -o "com.docker.network.bridge.name=dockerC6" cernet6
 ```
+
+其中 `cernet6` 选用 `2001:db8` 开头的地址是因为 glibc 实现的 `getaddrinfo(3)` 的默认配置下优先级（大致）为 IPv6 GUA > IPv4 > IPv6 ULA。
 
 对应地，主机上也配置好了策略路由，例如：
 
