@@ -67,7 +67,7 @@ icon: fontawesome/solid/certificate
 - 镜像站、LUG FTP、GitLab 和 PXE 网络启动（它们分别各自独立运行 Nginx）
 - GOsa²（运行在 `ldap` 服务器上，并且使用 Apache2，建议别动）
 - [Light](light.md)
-- [技术文档](documentations.md)、Linux 101 文档的海外版（<https://101.ustclug.org>）和其他指向 `*.cdn.cloudflare.net.` 的域名
+- 技术文档（本文档）、Linux 101 文档的海外版（<https://101.ustclug.org>）和其他指向 `*.cdn.cloudflare.net.` 的域名
 - 其他指向 `web-cf.cname.ustclug.org.` 的域名
 
 ### LUG 主页 {#homepage}
@@ -153,7 +153,7 @@ PVE: 提供虚拟化支持；PBS: PVE 的虚拟机备份。
 
 此处所列出的“服务”没有使用我们自己的服务器资源，都托管在外部平台上，仅域名（即 DNS）由我们维护。
 
-### [技术文档](documentations.md) {#documentations}
+### 技术文档 {#documentations}
 
 也就是本文档，运行在 Cloudflare Pages 上。
 
@@ -163,4 +163,4 @@ PVE: 提供虚拟化支持；PBS: PVE 的虚拟机备份。
 
 用于双向验证 GitHub 账号与科大学号的服务（类似于 <https://qq.ustc.life>），目前处于闲置，运行在 iBug 的 AWS Lambda 上。
 
-## [已废弃服务](discontinued.md) {#discontinued}
+## [已废弃服务](discontinued/index.md) {#discontinued}
