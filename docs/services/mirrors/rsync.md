@@ -7,15 +7,18 @@
 
 由于面向用户的服务程序实际上是 rsync-proxy（见下），因此我们在各个机器上实际启用的 instance 为：
 
-|  服务器  |  systemd 服务  |           备注           |
-| :------: | :------------: | :----------------------: |
-| mirrors2 |  rsync@cernet  |   供 rsync-proxy 反代    |
-| mirrors4 |  rsync@cernet  |   供 rsync-proxy 反代    |
-| mirrors4 | rsync@mirrors2 | 供 mirrors2 直接拉取仓库 |
+|  服务器  |          systemd 服务          |                     备注                      |
+| :------: | :----------------------------: | :-------------------------------------------: |
+| mirrors2 |      rsync@cernet.service      |              供 rsync-proxy 反代              |
+| mirrors4 | rsync.socket<br>rsync@.service | 由 systemd socket 启动<br>供 rsync-proxy 反代 |
 
-??? abstract "我们的 systemd service 文件"
+??? abstract "我们的 systemd socket 和 service 文件"
 
     [Download link](../../assets/mirrors/rsync@.service)
+
+    ```ini title="/etc/systemd/system/rsync.socket"
+    --8<-- "mirrors/rsync.socket"
+    ```
 
     ```ini title="/etc/systemd/system/rsync@.service"
     --8<-- "mirrors/rsync@.service"
@@ -30,27 +33,13 @@
     特别地，systemd service 内容如下：
 
     ```ini title="/etc/systemd/system/rsyncd-huai@.service"
-    [Unit]
-    Description=fast remote file copy program daemon
-    ConditionPathExists=/etc/rsyncd/rsyncd-%i.conf
-    After=network.target network-online.target
-
-    [Service]
-    Type=simple
-    PIDFile=/run/rsyncd-%i.pid
-    ExecStart=/usr/bin/rsync-huai --daemon --no-detach --config=/etc/rsyncd/rsyncd-%i.conf
-    IOSchedulingClass=best-effort
-    IOSchedulingPriority=7
-    IOAccounting=true
-
-    [Install]
-    WantedBy=multi-user.target
+    --8<-- "mirrors/rsyncd-huai@.service"
     ```
 
 ??? info "曾经的连接数限制"
 
-    2020 年 8 月 25 日，Rsync 总连接数限制从夜晚 60 个连接、白天 30 个连接提升为全天 60 个连接。
-    2021 年 2 月 6 日，单 IP 连接数限制从 2 个连接提升为 5 个连接。
+    - 2020 年 8 月 25 日，Rsync 总连接数限制从夜晚 60 个连接、白天 30 个连接提升为全天 60 个连接。
+    - 2021 年 2 月 6 日，单 IP 连接数限制从 2 个连接提升为 5 个连接。
 
 ## rsync-proxy
 

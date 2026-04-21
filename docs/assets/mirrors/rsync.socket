@@ -1,0 +1,10 @@
+[Unit]
+Description=systemd socket activation for rsync
+
+[Socket]
+#ListenStream=/run/rsync.socket
+ListenStream=127.0.0.1:872
+Accept=yes
+
+[Install]
+WantedBy=sockets.target
