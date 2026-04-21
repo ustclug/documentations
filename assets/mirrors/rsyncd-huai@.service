@@ -1,0 +1,15 @@
+[Unit]
+Description=fast remote file copy program daemon
+ConditionPathExists=/etc/rsyncd/rsyncd-%i.conf
+After=network.target network-online.target
+
+[Service]
+Type=simple
+PIDFile=/run/rsyncd-%i.pid
+ExecStart=/usr/bin/rsync-huai --daemon --no-detach --config=/etc/rsyncd/rsyncd-%i.conf
+IOSchedulingClass=best-effort
+IOSchedulingPriority=7
+IOAccounting=true
+
+[Install]
+WantedBy=multi-user.target
