@@ -3301,9 +3301,9 @@
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="na">Description</span><span class="o">=</span><span class="s">systemd socket activation for rsync</span>
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
 <a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="k">[Socket]</span>
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="c1">#ListenStream=/run/rsync.socket</span>
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="na">ListenStream</span><span class="o">=</span><span class="s">127.0.0.1:872</span>
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="na">Accept</span><span class="o">=</span><span class="s">yes</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="na">ListenStream</span><span class="o">=</span><span class="s">/run/rsyncd.sock</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="na">Accept</span><span class="o">=</span><span class="s">yes</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="na">MaxConnections</span><span class="o">=</span><span class="s">128</span>
 <a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>
 <a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="k">[Install]</span>
 <a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="na">WantedBy</span><span class="o">=</span><span class="s">sockets.target</span>
@@ -3316,27 +3316,31 @@
 <a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>
 <a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="k">[Service]</span>
 <a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="na">Type</span><span class="o">=</span><span class="s">exec</span>
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="na">PIDFile</span><span class="o">=</span><span class="s">rsyncd-%i.pid</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="c1">#PIDFile=rsyncd-%i.pid</span>
 <a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="na">ExecStart</span><span class="o">=</span><span class="s">/usr/bin/rsync --daemon --no-detach --config=/etc/rsyncd/rsyncd.conf</span>
 <a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="na">StandardInput</span><span class="o">=</span><span class="s">socket</span>
 <a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>
-<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="na">Nice</span><span class="o">=</span><span class="s">19</span>
-<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="na">IOSchedulingClass</span><span class="o">=</span><span class="s">best-effort</span>
-<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="na">IOSchedulingPriority</span><span class="o">=</span><span class="s">7</span>
-<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="na">IOAccounting</span><span class="o">=</span><span class="s">true</span>
-<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>
-<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a><span class="na">ProtectSystem</span><span class="o">=</span><span class="s">strict</span>
-<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a><span class="na">ProtectHome</span><span class="o">=</span><span class="s">true</span>
-<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a><span class="na">ProtectProc</span><span class="o">=</span><span class="s">invisible</span>
-<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a><span class="na">ProtectControlGroups</span><span class="o">=</span><span class="s">true</span>
-<a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a><span class="na">ProtectKernelModules</span><span class="o">=</span><span class="s">true</span>
-<a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a><span class="na">ProtectKernelTunables</span><span class="o">=</span><span class="s">true</span>
-<a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a><span class="na">PrivateTmp</span><span class="o">=</span><span class="s">true</span>
-<a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a><span class="na">PrivateDevices</span><span class="o">=</span><span class="s">true</span>
-<a id="__codelineno-1-26" name="__codelineno-1-26" href="#__codelineno-1-26"></a><span class="na">NoNewPrivileges</span><span class="o">=</span><span class="s">true</span>
-<a id="__codelineno-1-27" name="__codelineno-1-27" href="#__codelineno-1-27"></a><span class="na">MemoryDenyWriteExecute</span><span class="o">=</span><span class="s">true</span>
-<a id="__codelineno-1-28" name="__codelineno-1-28" href="#__codelineno-1-28"></a>
-<a id="__codelineno-1-29" name="__codelineno-1-29" href="#__codelineno-1-29"></a><span class="na">ReadWritePaths</span><span class="o">=</span><span class="s">/var/log/rsyncd</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="c1">#TasksMax=4</span>
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="na">Nice</span><span class="o">=</span><span class="s">19</span>
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="na">IOSchedulingClass</span><span class="o">=</span><span class="s">best-effort</span>
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="na">IOSchedulingPriority</span><span class="o">=</span><span class="s">7</span>
+<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a><span class="na">IOAccounting</span><span class="o">=</span><span class="s">true</span>
+<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a>
+<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a><span class="na">ProtectSystem</span><span class="o">=</span><span class="s">strict</span>
+<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a><span class="na">ProtectHome</span><span class="o">=</span><span class="s">true</span>
+<a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a><span class="na">ProtectProc</span><span class="o">=</span><span class="s">invisible</span>
+<a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a><span class="na">ProtectControlGroups</span><span class="o">=</span><span class="s">true</span>
+<a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a><span class="na">ProtectKernelModules</span><span class="o">=</span><span class="s">true</span>
+<a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a><span class="na">ProtectKernelTunables</span><span class="o">=</span><span class="s">true</span>
+<a id="__codelineno-1-26" name="__codelineno-1-26" href="#__codelineno-1-26"></a><span class="na">PrivateTmp</span><span class="o">=</span><span class="s">true</span>
+<a id="__codelineno-1-27" name="__codelineno-1-27" href="#__codelineno-1-27"></a><span class="na">PrivateDevices</span><span class="o">=</span><span class="s">true</span>
+<a id="__codelineno-1-28" name="__codelineno-1-28" href="#__codelineno-1-28"></a><span class="na">NoNewPrivileges</span><span class="o">=</span><span class="s">true</span>
+<a id="__codelineno-1-29" name="__codelineno-1-29" href="#__codelineno-1-29"></a><span class="na">MemoryDenyWriteExecute</span><span class="o">=</span><span class="s">true</span>
+<a id="__codelineno-1-30" name="__codelineno-1-30" href="#__codelineno-1-30"></a>
+<a id="__codelineno-1-31" name="__codelineno-1-31" href="#__codelineno-1-31"></a><span class="na">ReadWritePaths</span><span class="o">=</span><span class="s">/var/log/rsyncd</span>
+<a id="__codelineno-1-32" name="__codelineno-1-32" href="#__codelineno-1-32"></a>
+<a id="__codelineno-1-33" name="__codelineno-1-33" href="#__codelineno-1-33"></a><span class="c1"># [Install] section removed</span>
 </code></pre></div>
 </details>
 <details class="info">
