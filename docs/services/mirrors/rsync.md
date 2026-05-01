@@ -36,10 +36,9 @@
     --8<-- "mirrors/rsyncd-huai@.service"
     ```
 
-??? info "曾经的连接数限制"
+!!! info "曾经的连接数限制"
 
-    - 2020 年 8 月 25 日，Rsync 总连接数限制从夜晚 60 个连接、白天 30 个连接提升为全天 60 个连接。
-    - 2021 年 2 月 6 日，单 IP 连接数限制从 2 个连接提升为 5 个连接。
+    见 [Limiters](limiters.md) 页面。
 
 ## rsync-proxy
 

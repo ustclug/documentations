@@ -99,7 +99,7 @@
     `req` 的核心公式是：`excess = max(excess - rate * elapsed / 1000 + 1000, 0)`，其中时间单位是毫秒（`rate` 和 `burst` 参数计算时都需要乘以 1000）。`excess` 会先和 `burst` 比较（如果超出，则 reject），如果没有超出，则 delay `excess / rate` 秒。
 
     当 elapsed = 1000/rate 时，恰好不会增加 `excess` 的值，此时 1 秒内恰好可以容纳 rate 个请求；当 elapsed = 1000/(rate+burst) 时，`excess` 增量为 1000(1-r/(r+b))，此时 1 秒内恰好有 (rate+burst) 个请求不会被 reject。
-    
+
     理想情况下的例子：如果 rate = 40r/s = 40 * 1000 r/ms，则 elapsed 需要至少为 1/40 秒（25 毫秒），才能和后面的 `+ 1000` 抵消，否则 `excess` 会一直增加。如果 burst = 100r/s = 100 * 1000 r/ms，那么假设有用户每 1/140 秒（7.1 毫秒）访问一次，那么 `excess` 每次会增加 714.28，如果有 140 个这样的请求，那么 `excess` 的值则恰好是 `burst` 的值。
 
     `count` 的逻辑简单很多，使用 lua-nginx-module 带的 https://github.com/openresty/lua-nginx-module?tab=readme-ov-file#ngxshareddictincr 为每次自增设置 TTL 即可。
@@ -155,18 +155,24 @@ map $uri $access_url_type {
 
 ### Rsync 总连接数限制 {#rsync-connections}
 
-Rsync 服务设置了总连接数限制。即：当建立的连接数到达某个阈值后，拒绝之后收到的连接。
+2026 年 4 月下旬，我们再次更新了 rsync-proxy 程序，增加了 rsync 请求排队功能，并将连接数限制（队列容量）调整为每个后端分别配置。
+初次部署时的配置为 mirrors4 和 mirrors2 各 60 个并发请求和 60 个排队请求，并移除了三层（iptables）的连接数限制。
 
-!!! note "历史记录"
+特别的，科大校内 IP 地址受到 rsync 连接数限制。
+
+??? note "历史记录"
+
+    Rsync 服务设置了总连接数限制。即：当建立的连接数到达某个阈值后，拒绝之后收到的连接。
 
     以前 HTTP 和 Rsync 服务由同一台服务器提供，由于白天 HTTP 访问压力较大，夜晚 HTTP 访问量较小，为了实现错峰同步，保证白天 HTTP 的服务质量，因此针对不同时段设置了不同的阈值，具体如下：
 
     - 23:00 ~ 8:00：最多 60 个连接
     - 8:00 ~ 23:00：最多 30 个连接
 
-在 2020 年 8 月 25 日后，由于更换了新服务器，Rsync 由单独机器提供服务，总连接数提升到了全天 60 个连接。
+    在 2020 年 8 月 25 日后，由于更换了新服务器，Rsync 由单独机器提供服务，总连接数提升到了全天 60 个连接。
+    2021 年 2 月 6 日，单 IP 连接数限制从 2 个连接提升为 5 个连接。
 
-特别的，科大校内 IP 地址受到 rsync 连接数限制。
+    2022 年我们编写了 rsync-proxy 并重新调整了 mirrors4 和 mirrors2 上的仓库，两台服务器存储不相交的仓库集合，由 rsync-proxy 根据 module 反代。此时的总连接数仍为 60，即外部 rsync 客户端到 rsync-proxy 的并发连接数限制为 60。
 
 ## 网络接口级别限制 {#interface-limit}
 
