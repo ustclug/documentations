@@ -6,9 +6,11 @@ CollectMode=inactive-or-failed
 
 [Service]
 Type=exec
-PIDFile=rsyncd-%i.pid
+#PIDFile=rsyncd-%i.pid
 ExecStart=/usr/bin/rsync --daemon --no-detach --config=/etc/rsyncd/rsyncd.conf
 StandardInput=socket
+
+#TasksMax=4
 
 Nice=19
 IOSchedulingClass=best-effort
@@ -27,3 +29,5 @@ NoNewPrivileges=true
 MemoryDenyWriteExecute=true
 
 ReadWritePaths=/var/log/rsyncd
+
+# [Install] section removed
