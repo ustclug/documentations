@@ -87,9 +87,11 @@ endscript
 
 ## Git 服务 {#git}
 
-Mirrors 上的 Git 服务由两部分组成：
+Mirrors 上的 Git over HTTP 服务经过 Nginx 和 fcgiwrap 由 `git-http-backend` 提供。考虑到 fcgiwrap 主要用于 Git，我们将其放入同一个 slice 与 Git daemon 共享内存限制：
 
-- Git 协议（TCP 9418 端口）由 `git-daemon` 直接提供。Git daemon 由我们自己写的一个 systemd service 运行：
+??? info "已停止服务：Git 协议（`git://`）"
+
+    Git 协议（TCP 9418 端口）由 `git-daemon` 直接提供。Git daemon 由我们自己写的一个 systemd service 运行：
 
     ```ini title="/etc/systemd/system/git-daemon.service"
     [Unit]
@@ -109,39 +111,37 @@ Mirrors 上的 Git 服务由两部分组成：
     WantedBy=multi-user.target
     ```
 
-- Git over HTTP 经过 Nginx 和 fcgiwrap 由 `git-http-backend` 提供。考虑到 fcgiwrap 主要用于 Git，我们将其放入同一个 slice 与 Git daemon 共享内存限制：
+```ini title="systemctl edit fcgiwrap.service"
+[Service]
+Type=exec
+Nice=19
+IOSchedulingClass=best-effort
+IOSchedulingPriority=6
 
-    ```ini title="systemctl edit fcgiwrap.service"
-    [Service]
-    Type=exec
-    Nice=19
-    IOSchedulingClass=best-effort
-    IOSchedulingPriority=6
+Slice=system-cgi.slice
+```
 
-    Slice=system-cgi.slice
-    ```
+Nginx 配置如下：
 
-    Nginx 配置如下：
+```nginx title="snippets/git-http"
+fastcgi_read_timeout 5m;
+fastcgi_pass    unix:/var/run/fcgiwrap.socket;
+fastcgi_buffering off;
 
-    ```nginx title="snippets/git-http"
-    fastcgi_read_timeout 5m;
-    fastcgi_pass    unix:/var/run/fcgiwrap.socket;
-    fastcgi_buffering off;
+fastcgi_param   SCRIPT_FILENAME /usr/lib/git-core/git-http-backend;
+fastcgi_param   GIT_HTTP_EXPORT_ALL "";
+fastcgi_param   GIT_PROJECT_ROOT    /srv/git;
+fastcgi_param   PATH_INFO           $uri;
+fastcgi_param   NO_BUFFERING "";
+fastcgi_param   GIT_PROTOCOL $http_git_protocol;
 
-    fastcgi_param   SCRIPT_FILENAME /usr/lib/git-core/git-http-backend;
-    fastcgi_param   GIT_HTTP_EXPORT_ALL "";
-    fastcgi_param   GIT_PROJECT_ROOT    /srv/git;
-    fastcgi_param   PATH_INFO           $uri;
-    fastcgi_param   NO_BUFFERING "";
-    fastcgi_param   GIT_PROTOCOL $http_git_protocol;
+# https://github.com/ustclug/discussions/issues/432
+client_max_body_size 16m;
 
-    # https://github.com/ustclug/discussions/issues/432
-    client_max_body_size 16m;
+include         fastcgi_params;
+```
 
-    include         fastcgi_params;
-    ```
-
-    在 git 仓库对应的 `location` 里面 `include` 这个配置片段即可。
+在 git 仓库对应的 `location` 里面 `include` 这个配置片段即可。
 
 其中 `system-cgi.slice` 是我们自己定义的一个 slice，用于限制 CGI 服务的资源使用。
 
