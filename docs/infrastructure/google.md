@@ -199,7 +199,7 @@ G Suite 支持将单个地址设为“默认地址”，用于接受发往不存
 
 ## 沿革历史 {#history}
 
-2017 年及已经无从考据的更久前，我们使用 G Suite 服务作为 `ustclug.org` 域名的邮件服务提供商。
+2016 年 4 月，由时任 CTO(@gaoyifan) 购置并向 LUG 捐赠了一个二手的 50 用户的 Google Workspace 免费版账号，并作为 `ustclug.org` 域名的邮件服务提供商。
 
 由于 G Suite 自 2022 年 7 月起不再提供免费的 Teams，且已有的免费 Teams 也将停止服务，我们于 2022 年 3 月全面迁移至了 Office 365。
 
