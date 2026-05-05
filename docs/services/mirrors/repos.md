@@ -62,12 +62,12 @@
         directory = *
     ```
 
-    为了限制 pack object 的内存使用，添加了以下配置：
+    为了限制 pack object 的内存使用，根据 [GitLab gitaly 的参数](https://gitlab.com/gitlab-org/gitaly/-/blob/7b6c44c6d5df11072c7e87b8e85beb773bba8765/internal/git/gitcmd/command_description.go#L541)，添加了以下配置：
 
     ```ini title="/etc/gitconfig"
     [pack]
-        threads = 8
-        windowMemory = 1g
+        threads = 6
+        windowMemory = 100m
     ```
 
 ## 移动（删除）一个仓库
