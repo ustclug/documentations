@@ -3501,10 +3501,10 @@
 <div class="highlight"><span class="filename">/etc/gitconfig</span><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="k">[safe]</span>
 <a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">    </span><span class="na">directory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">*</span>
 </code></pre></div>
-<p>为了限制 pack object 的内存使用，添加了以下配置：</p>
+<p>为了限制 pack object 的内存使用，根据 <a href="https://gitlab.com/gitlab-org/gitaly/-/blob/7b6c44c6d5df11072c7e87b8e85beb773bba8765/internal/git/gitcmd/command_description.go#L541">GitLab gitaly 的参数</a>，添加了以下配置：</p>
 <div class="highlight"><span class="filename">/etc/gitconfig</span><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="k">[pack]</span>
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">    </span><span class="na">threads</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">8</span>
-<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">    </span><span class="na">windowMemory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">1g</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">    </span><span class="na">threads</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">6</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">    </span><span class="na">windowMemory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">100m</span>
 </code></pre></div>
 </div>
 <h2 id="_3">移动（删除）一个仓库<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
