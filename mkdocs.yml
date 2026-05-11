@@ -95,6 +95,7 @@ nav:
       - Proxmox VE: "infrastructure/proxmox/pve.md"
       - Proxmox Backup Server: "infrastructure/proxmox/pbs.md"
       - NFS: "infrastructure/proxmox/nfs.md"
+    - Automation: "infrastructure/automation.md"
     - "LDAP: Servers Unified Authentication": "infrastructure/ldap.md"
     - SSH Certificate Authority: "infrastructure/sshca.md"
     - Authoritative DNS: "infrastructure/auth-dns.md"
