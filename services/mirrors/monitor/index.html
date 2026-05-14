@@ -3248,7 +3248,7 @@
 
 <h1 id="mirrors-specific-monitoring">Mirrors-specific monitoring<a class="headerlink" href="#mirrors-specific-monitoring" title="Permanent link">&para;</a></h1>
 <h2 id="connections-users-online">Connections (Users online)<a class="headerlink" href="#connections-users-online" title="Permanent link">&para;</a></h2>
-<div class="highlight"><span class="filename">/etc/telegraf/telegraf.d/exec.conf</span><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">[[inputs.exec]]</span>
+<div class="highlight"><span class="filename">ustclug/telegraf-config:mirrors-opt-monitor.conf</span><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">[[inputs.exec]]</span>
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">  </span><span class="n">commands</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span>
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span><span class="s2">&quot;/opt/monitor/telegraf/connection.sh 21:80:443:873:9418&quot;</span><span class="p">,</span>
 <a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">    </span><span class="s2">&quot;/opt/monitor/telegraf/nfacct.sh&quot;</span><span class="p">,</span>

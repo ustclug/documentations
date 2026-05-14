@@ -3469,13 +3469,13 @@
 <div class="highlight"><span class="filename">New ZFS file system</span><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>zfs<span class="w"> </span>create<span class="w"> </span><span class="o">[</span>-o<span class="w"> </span><span class="nv">option</span><span class="o">=</span>value<span class="w"> </span>...<span class="o">]</span><span class="w"> </span>&lt;filesystem&gt;
 <a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
 <a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="c1"># Example</span>
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>zfs<span class="w"> </span>create<span class="w"> </span>pool0/repo/debian
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>zfs<span class="w"> </span>create<span class="w"> </span>pool0/repo/example
 </code></pre></div>
 <p>If <code>mountpoint</code> is not specified, then it's inherited from the parent with a subpath appended. E.g. when <code>pool0/example</code> is mounted on <code>/mnt/haha</code> then <code>pool0/example/test</code> will by default mount on <code>/mnt/haha/test</code>.</p>
 <div class="highlight"><span class="filename">Destory ZFS file system</span><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>zfs<span class="w"> </span>destroy<span class="w"> </span>&lt;filesystem&gt;
 <a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>
 <a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="c1"># Example</span>
-<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>zfs<span class="w"> </span>destroy<span class="w"> </span>pool0/repo/debian
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>zfs<span class="w"> </span>destroy<span class="w"> </span>pool0/repo/example
 </code></pre></div>
 <h3 id="new-repo">Create new repository<a class="headerlink" href="#new-repo" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>zfs<span class="w"> </span>create<span class="w"> </span>pool0/repo/example
@@ -3641,7 +3641,7 @@
 <li>We no longer install <code>zfs-dkms</code> from Debian backports. Instead we run <code>proxmox-default-kernel</code> from the corresponding Proxmox VE release (e.g. PVE 9 = Debian Trixie), with additial AppArmor profile tweaks to allow <code>rsync</code> to run normally (see the "AppArmor" section in the writeup articles).</li>
 <li><code>recordsize</code> has been further increased to 4 MiB. However, minimal differences have been observed.</li>
 <li><code>secondarycache</code> has been reduced from <code>all</code> to <code>metadata</code> on mirrors4 as it began serving Rsync traffic. L2ARC hit rate remained above 50%, though, which is surprisingly good.</li>
-<li>An additional ZFS module parameter has been added: <code>zfs_immediate_write_sz=16777216</code> (default value is 32 KiB).</li>
+<li>An additional ZFS module parameter has been added: <code>zfs_immediate_write_sz=16777216</code> (default value is 32 KiB). This gets every block written to ZIL first, before being re-written to the final location on disk. This allows ZFS to better coalesce small random writes into larger sequential writes, which may improve performance and reduce fragmentation..</li>
 <li>We have ditched the userspace deduplication solution (jdupes) in favor of OpenZFS 2.3 Fast Dedup feature. This is done by enabling <code>feature@fast_dedup</code> on the zpool level, <em>before</em> enabling <code>dedup</code> on each dedup'd dataset.<ul>
 <li>The datasets with <code>dedup</code> enabled are the same dataset listed in the writeup article, excluding <code>mysql-repo</code> (which was already excluded from the original jdupes plan) and <code>salt</code> (later structural changes in the repository rendered dedup ineffective), leaving 7 remaining.</li>
 </ul>
