@@ -2,8 +2,8 @@
 
 ## Connections (Users online)
 
-```toml title="/etc/telegraf/telegraf.d/exec.conf"
---8<-- "mirrors/telegraf-exec.conf"
+```toml title="ustclug/telegraf-config:mirrors-opt-monitor.conf"
+--8<-- "mirrors/mirrors-opt-monitor.conf"
 ```
 
 ```shell title="/opt/monitor/telegraf/connection.sh"

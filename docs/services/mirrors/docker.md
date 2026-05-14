@@ -1,14 +1,40 @@
 # Docker
 
-## Networking
-
-Docker 默认创建一个名为 bridge 的网络，主机界面为 `docker0`，IP 地址段为 172.17.0.0/16。这个默认地址段过于浪费，因此我们给它配置一个更小的地址段：
+## Configuration
 
 ```json title="/etc/docker/daemon.json"
 {
-  "bip": "172.17.0.0/22"
+    "bip": "172.17.0.1/22",
+    "cgroup-parent": "system-docker.slice",
+    "iptables": false,
+    "ip6tables": false,
+    "log-driver": "json-file",
+    "log-opts": {
+        "max-size": "16m",
+        "max-file": "5"
+    },
+    "storage-driver": "overlay2"
 }
 ```
+
+其中 `cgroup-parent` 是为了让 Docker 容器的资源能够被 systemd 管理，也方便我们配置监控，否则所有容器都在 `system.slice` 下，不易和其他系统服务区分。
+
+```ini title="/etc/systemd/system/system-docker.slice"
+[Unit]
+Description=Slice for Docker containers
+StopWhenUnneeded=yes
+
+[Slice]
+MemoryMax=32G
+MemoryHigh=28G
+
+[Install]
+WantedBy=docker.service
+```
+
+## Networking
+
+Docker 默认创建一个名为 bridge 的网络，主机界面为 `docker0`，IP 地址段为 172.17.0.0/16。这个默认地址段过于浪费，因此我们给它配置一个更小的地址段（`bip`）：
 
 我们将 Docker Registry 的反代挂在另外一个子网下，需要先行创建。
 

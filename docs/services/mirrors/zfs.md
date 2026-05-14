@@ -18,7 +18,7 @@ zpool replace pool0 old-disk new-disk
 zfs create [-o option=value ...] <filesystem>
 
 # Example
-zfs create pool0/repo/debian
+zfs create pool0/repo/example
 ```
 
 If `mountpoint` is not specified, then it's inherited from the parent with a subpath appended. E.g. when `pool0/example` is mounted on `/mnt/haha` then `pool0/example/test` will by default mount on `/mnt/haha/test`.
@@ -27,7 +27,7 @@ If `mountpoint` is not specified, then it's inherited from the parent with a sub
 zfs destroy <filesystem>
 
 # Example
-zfs destroy pool0/repo/debian
+zfs destroy pool0/repo/example
 ```
 
 ### Create new repository {#new-repo}
@@ -222,6 +222,6 @@ Since our ZFS rebuild in mid-2024 (writeups: [English](https://ibug.io/p/74), [ä
 - We no longer install `zfs-dkms` from Debian backports. Instead we run `proxmox-default-kernel` from the corresponding Proxmox VE release (e.g. PVE 9 = Debian Trixie), with additial AppArmor profile tweaks to allow `rsync` to run normally (see the "AppArmor" section in the writeup articles).
 - `recordsize` has been further increased to 4 MiB. However, minimal differences have been observed.
 - `secondarycache` has been reduced from `all` to `metadata` on mirrors4 as it began serving Rsync traffic. L2ARC hit rate remained above 50%, though, which is surprisingly good.
-- An additional ZFS module parameter has been added: `zfs_immediate_write_sz=16777216` (default value is 32 KiB).
+- An additional ZFS module parameter has been added: `zfs_immediate_write_sz=16777216` (default value is 32 KiB). This gets every block written to ZIL first, before being re-written to the final location on disk. This allows ZFS to better coalesce small random writes into larger sequential writes, which may improve performance and reduce fragmentation..
 - We have ditched the userspace deduplication solution (jdupes) in favor of OpenZFS 2.3 Fast Dedup feature. This is done by enabling `feature@fast_dedup` on the zpool level, *before* enabling `dedup` on each dedup'd dataset.
     - The datasets with `dedup` enabled are the same dataset listed in the writeup article, excluding `mysql-repo` (which was already excluded from the original jdupes plan) and `salt` (later structural changes in the repository rendered dedup ineffective), leaving 7 remaining.
