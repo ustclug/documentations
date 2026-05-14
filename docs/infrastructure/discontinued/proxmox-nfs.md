@@ -36,7 +36,7 @@ vdp 的内网连接依赖于 gateway-el。
 
 其中，根据 PVE 的要求，虚拟机磁盘文件需要放在 `images/<vmid>` 目录下才会被自动检测到。若一开始没有按要求放置文件或添加了新文件，可以使用 `qm rescan` 扫描新的磁盘文件。也可以直接使用 `qm set` 命令或手动编辑虚拟机配置文件指定磁盘文件的路径，这两种方法没有此限制。
 
-另外，由于整个 storage.cfg 文件在集群中共享，需要手动指定 `nodes` 以免 NIC 的两台 PVE 主机尝试挂载。
+另外，由于整个 `storage.cfg` 文件在集群中共享，需要手动指定 `nodes` 以免 NIC 的两台 PVE 主机尝试挂载。
 
 ```text title="/etc/pve/storage.cfg"
 nfs: nfs-el
@@ -50,4 +50,4 @@ nfs: nfs-el
         prune-backups keep-all=1
 ```
 
-storage.cfg 的全部配置内容可以参考 <https://pve.proxmox.com/wiki/Storage>。
+`storage.cfg` 的全部配置内容可以参考 <https://pve.proxmox.com/wiki/Storage>。

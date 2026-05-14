@@ -1,5 +1,5 @@
 # Project information
-site_name: "LUG @ USTC"
+site_name: "LUG @ USTC Documentation"
 site_description: "Documentation for LUG service maintenance"
 site_author: "USTC Linux User Group"
 site_url: "https://docs.ustclug.org/"
@@ -94,7 +94,6 @@ nav:
     - Proxmox Cluster:
       - Proxmox VE: "infrastructure/proxmox/pve.md"
       - Proxmox Backup Server: "infrastructure/proxmox/pbs.md"
-      - NFS: "infrastructure/proxmox/nfs.md"
     - Automation: "infrastructure/automation.md"
     - "LDAP: Servers Unified Authentication": "infrastructure/ldap.md"
     - SSH Certificate Authority: "infrastructure/sshca.md"
@@ -110,6 +109,7 @@ nav:
     - Discontinued Infrastructure:
       - infrastructure/discontinued/index.md
       - Office 365 and Mail: "infrastructure/office.md"
+      - NFS for PVE: "infrastructure/discontinued/proxmox-nfs.md"
       - vSphere Cluster:
         - ESXi: "infrastructure/discontinued/vsphere/esxi.md"
         - vCenter: "infrastructure/discontinued/vsphere/vcenter.md"
