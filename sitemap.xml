@@ -97,6 +97,10 @@
          <lastmod>2026-05-14</lastmod>
     </url>
     <url>
+         <loc>https://docs.ustclug.org/infrastructure/discontinued/proxmox-nfs/</loc>
+         <lastmod>2026-05-14</lastmod>
+    </url>
+    <url>
          <loc>https://docs.ustclug.org/infrastructure/discontinued/vsphere/esxi/</loc>
          <lastmod>2026-05-14</lastmod>
     </url>
@@ -118,10 +122,6 @@
     </url>
     <url>
          <loc>https://docs.ustclug.org/infrastructure/intranet/lugivpn/</loc>
-         <lastmod>2026-05-14</lastmod>
-    </url>
-    <url>
-         <loc>https://docs.ustclug.org/infrastructure/proxmox/nfs/</loc>
          <lastmod>2026-05-14</lastmod>
     </url>
     <url>
