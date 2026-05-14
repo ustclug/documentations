@@ -134,6 +134,8 @@ fastcgi_param   GIT_PROJECT_ROOT    /srv/git;
 fastcgi_param   PATH_INFO           $uri;
 fastcgi_param   NO_BUFFERING "";
 fastcgi_param   GIT_PROTOCOL $http_git_protocol;
+fastcgi_param   GIT_CONFIG_GLOBAL "/dev/null";
+fastcgi_param   GIT_CONFIG_SYSTEM "/etc/gitconfig.cgi";
 
 # https://github.com/ustclug/discussions/issues/432
 client_max_body_size 16m;
@@ -156,7 +158,7 @@ MemoryHigh=28G
 IOAccounting=true
 ```
 
-此外，`/etc/gitconfig` 中的配置也会影响 Git 服务的行为，相关介绍在 [Repositories](repos.md#git) 中。
+此外，Git 服务的专用配置位于 `/etc/gitconfig.cgi` 中，相关介绍在 [Repositories](repos.md#git)。
 
 ## FTP 服务（已废弃）
 

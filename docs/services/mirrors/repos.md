@@ -46,28 +46,32 @@
 
     通过 `http(s)://` 协议访问 Git 仓库无需此软链接，因此 `/srv/git` 目录现在是已经淘汰的配置了。
 
-!!! info "Git 仓库服务的其他相关配置"
+由于 Git 服务相比于系统中日常使用的 Git 需要一些额外的配置，为了避免全局 Git 配置（`/etc/gitconfig`）对日常使用 Git 产生影响，我们将 Git 服务专用配置放在了 `/etc/gitconfig.cgi` 中。
 
-    部分克隆配置 (See <https://github.com/ustclug/discussions/issues/432>)：
+利用 `fcgiwrap` 会将 `fastcgi_params` 中的参数变成 CGI 程序的环境变量这一特点，我们[在 Nginx 中设置](services.md#git) `fastcgi_params GIT_CONFIG_SYSTEM` 参数指定该配置文件的位置，即可让 `git-http-backend` 使用该配置。
 
-    ```ini title="/etc/gitconfig"
+- 部分克隆配置 ([discussions#432](https://github.com/ustclug/discussions/issues/432))：
+
+    ```ini title="/etc/gitconfig.cgi"
     [uploadpack]
         allowfilter = true
     ```
 
-    由于 git daemon/fcgiwrap 的用户不是 mirror，所以需要设置绕过 git 新的安全限制：
+- 由于 git daemon/fcgiwrap 的用户不是 mirror，所以需要设置绕过 Git 新的安全限制：
 
-    ```ini title="/etc/gitconfig"
+    ```ini title="/etc/gitconfig.cgi"
     [safe]
-        directory = *
+        directory = /srv/repo/*
     ```
 
-    为了限制 pack object 的内存使用，根据 [GitLab gitaly 的参数](https://gitlab.com/gitlab-org/gitaly/-/blob/7b6c44c6d5df11072c7e87b8e85beb773bba8765/internal/git/gitcmd/command_description.go#L541)，添加了以下配置：
+- 为了限制 pack object 的内存使用，根据 [GitLab gitaly 的参数](https://gitlab.com/gitlab-org/gitaly/-/blob/7b6c44c6d5df11072c7e87b8e85beb773bba8765/internal/git/gitcmd/command_description.go#L541)，添加了以下配置：
 
-    ```ini title="/etc/gitconfig"
+    ```ini title="/etc/gitconfig.cgi"
     [pack]
         threads = 6
         windowMemory = 100m
+        allowPackReuse = multi
+        window = 0
     ```
 
 ## 移动（删除）一个仓库
