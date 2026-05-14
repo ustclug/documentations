@@ -3634,11 +3634,13 @@
 <a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="k">fastcgi_param</span><span class="w">   </span><span class="s">PATH_INFO</span><span class="w">           </span><span class="nv">$uri</span><span class="p">;</span>
 <a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="k">fastcgi_param</span><span class="w">   </span><span class="s">NO_BUFFERING</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p">;</span>
 <a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="k">fastcgi_param</span><span class="w">   </span><span class="s">GIT_PROTOCOL</span><span class="w"> </span><span class="nv">$http_git_protocol</span><span class="p">;</span>
-<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a>
-<a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a><span class="c1"># https://github.com/ustclug/discussions/issues/432</span>
-<a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a><span class="k">client_max_body_size</span><span class="w"> </span><span class="mi">16m</span><span class="p">;</span>
-<a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a>
-<a id="__codelineno-6-15" name="__codelineno-6-15" href="#__codelineno-6-15"></a><span class="k">include</span><span class="w">         </span><span class="n">fastcgi_params</span>;
+<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a><span class="k">fastcgi_param</span><span class="w">   </span><span class="s">GIT_CONFIG_GLOBAL</span><span class="w"> </span><span class="s">&quot;/dev/null&quot;</span><span class="p">;</span>
+<a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a><span class="k">fastcgi_param</span><span class="w">   </span><span class="s">GIT_CONFIG_SYSTEM</span><span class="w"> </span><span class="s">&quot;/etc/gitconfig.cgi&quot;</span><span class="p">;</span>
+<a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a>
+<a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a><span class="c1"># https://github.com/ustclug/discussions/issues/432</span>
+<a id="__codelineno-6-15" name="__codelineno-6-15" href="#__codelineno-6-15"></a><span class="k">client_max_body_size</span><span class="w"> </span><span class="mi">16m</span><span class="p">;</span>
+<a id="__codelineno-6-16" name="__codelineno-6-16" href="#__codelineno-6-16"></a>
+<a id="__codelineno-6-17" name="__codelineno-6-17" href="#__codelineno-6-17"></a><span class="k">include</span><span class="w">         </span><span class="n">fastcgi_params</span>;
 </code></pre></div>
 <p>在 git 仓库对应的 <code>location</code> 里面 <code>include</code> 这个配置片段即可。</p>
 <p>其中 <code>system-cgi.slice</code> 是我们自己定义的一个 slice，用于限制 CGI 服务的资源使用。</p>
@@ -3651,7 +3653,7 @@
 <a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>
 <a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="na">IOAccounting</span><span class="o">=</span><span class="s">true</span>
 </code></pre></div>
-<p>此外，<code>/etc/gitconfig</code> 中的配置也会影响 Git 服务的行为，相关介绍在 <a href="../repos/#git">Repositories</a> 中。</p>
+<p>此外，Git 服务的专用配置位于 <code>/etc/gitconfig.cgi</code> 中，相关介绍在 <a href="../repos/#git">Repositories</a>。</p>
 <h2 id="ftp">FTP 服务（已废弃）<a class="headerlink" href="#ftp" title="Permanent link">&para;</a></h2>
 <p>Mirrors 曾经提供 FTP 服务，由 vsftpd 提供。在将主力服务器从 mirrors2 迁移至 mirrors4 时废弃，即 mirrors4 上从未安装配置过 vsftpd（但 mirrors2 上还留存有配置文件）。</p>
 <p>由于年代久远且我们不再打算恢复 FTP 服务，这部分文档也就咕咕咕了。</p>
