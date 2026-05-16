@@ -36,43 +36,18 @@
 
 ### Git 类型仓库的额外配置 {#git}
 
-??? note "`git://` 协议服务已于 2025 年 12 月[停止服务](https://servers.ustclug.org/2025/10/mirrors-remove-git-protocol/)"
+Git 后端服务根据 `/srv/git` 下的内容对外提供 `git://` 协议服务。所以如果是 git 类型的仓库，需要添加软链接，否则无法从外部访问，例如：
 
-    `git-daemon.service` 根据 `/srv/git` 下的内容对外提供 `git://` 协议服务。所以如果是 git 类型的仓库，需要添加软链接，否则无法使用 `git://` 的协议访问，例如：
+```shell
+ln -s /srv/repo/linux.git /srv/git/
+```
 
-    ```shell
-    ln -s /srv/repo/linux.git /srv/git/
-    ```
+Git 后端服务分为两部分，共用 `/srv/git` 目录下的软链接：
 
-    通过 `http(s)://` 协议访问 Git 仓库无需此软链接，因此 `/srv/git` 目录现在是已经淘汰的配置了。
+- <s>`git-daemon.service` 提供 `git://` 协议服务</s>，已于 2025 年 12 月[停止服务](https://servers.ustclug.org/2025/10/mirrors-remove-git-protocol/)。
+- `fcgiwrap.service` 调用 `git-http-backend` 提供 `http(s)://` 协议服务，仍然在使用中。
 
-由于 Git 服务相比于系统中日常使用的 Git 需要一些额外的配置，为了避免全局 Git 配置（`/etc/gitconfig`）对日常使用 Git 产生影响，我们将 Git 服务专用配置放在了 `/etc/gitconfig.cgi` 中。
-
-利用 `fcgiwrap` 会将 `fastcgi_params` 中的参数变成 CGI 程序的环境变量这一特点，我们[在 Nginx 中设置](services.md#git) `fastcgi_params GIT_CONFIG_SYSTEM` 参数指定该配置文件的位置，即可让 `git-http-backend` 使用该配置。
-
-- 部分克隆配置 ([discussions#432](https://github.com/ustclug/discussions/issues/432))：
-
-    ```ini title="/etc/gitconfig.cgi"
-    [uploadpack]
-        allowfilter = true
-    ```
-
-- 由于 git daemon/fcgiwrap 的用户不是 mirror，所以需要设置绕过 Git 新的安全限制：
-
-    ```ini title="/etc/gitconfig.cgi"
-    [safe]
-        directory = /srv/repo/*
-    ```
-
-- 为了限制 pack object 的内存使用，根据 [GitLab gitaly 的参数](https://gitlab.com/gitlab-org/gitaly/-/blob/7b6c44c6d5df11072c7e87b8e85beb773bba8765/internal/git/gitcmd/command_description.go#L541)，添加了以下配置：
-
-    ```ini title="/etc/gitconfig.cgi"
-    [pack]
-        threads = 6
-        windowMemory = 100m
-        allowPackReuse = multi
-        window = 0
-    ```
+    由于 `fastcgi_param GIT_PROJECT_ROOT /srv/git;`，因此 `git-http-backend` 也会从 `/srv/git` 下寻找仓库。
 
 ## 移动（删除）一个仓库
 

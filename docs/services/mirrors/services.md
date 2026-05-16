@@ -128,7 +128,7 @@ fastcgi_read_timeout 5m;
 fastcgi_pass    unix:/var/run/fcgiwrap.socket;
 fastcgi_buffering off;
 
-fastcgi_param   SCRIPT_FILENAME /usr/lib/git-core/git-http-backend;
+fastcgi_param   SCRIPT_FILENAME /usr/local/bin/homebrew-git-http-backend;
 fastcgi_param   GIT_HTTP_EXPORT_ALL "";
 fastcgi_param   GIT_PROJECT_ROOT    /srv/git;
 fastcgi_param   PATH_INFO           $uri;
@@ -158,7 +158,49 @@ MemoryHigh=28G
 IOAccounting=true
 ```
 
-此外，Git 服务的专用配置位于 `/etc/gitconfig.cgi` 中，相关介绍在 [Repositories](repos.md#git)。
+### Git 服务配置 {#git-config}
+
+由于 Git 服务相比于系统中日常使用的 Git 需要一些额外的配置，为了避免全局 Git 配置（`/etc/gitconfig`）对日常使用 Git 产生影响，我们将 Git 服务专用配置放在了 `/etc/gitconfig.cgi` 中。
+
+利用 `fcgiwrap` 会将 `fastcgi_params` 中的参数变成 CGI 程序的环境变量这一特点，我们[在 Nginx 中设置](services.md#git) `fastcgi_params GIT_CONFIG_SYSTEM` 参数指定该配置文件的位置，即可让 `git-http-backend` 使用该配置。
+
+- 部分克隆配置 ([discussions#432](https://github.com/ustclug/discussions/issues/432))：
+
+    ```ini title="/etc/gitconfig.cgi"
+    [uploadpack]
+        allowfilter = true
+    ```
+
+- 由于 git daemon/fcgiwrap 的用户不是 mirror，所以需要设置绕过 Git 新的安全限制：
+
+    ```ini title="/etc/gitconfig.cgi"
+    [safe]
+        directory = /srv/repo/*
+    ```
+
+- 为了限制 pack object 的内存使用，根据 [GitLab gitaly 的参数](https://gitlab.com/gitlab-org/gitaly/-/blob/7b6c44c6d5df11072c7e87b8e85beb773bba8765/internal/git/gitcmd/command_description.go#L541)，添加了以下配置：
+
+    ```ini title="/etc/gitconfig.cgi"
+    [pack]
+        threads = 6
+        windowMemory = 100m
+        allowPackReuse = multi
+        window = 0
+    ```
+
+### Homebrew Git
+
+由于 Debian Trixie 提供的 Git 2.47 在处理 `crates.io-index` 仓库时会 segfault，因此我们以 mirror 用户安装了 Homebrew on Linux（a.k.a. Linuxbrew），并且通过 Homebrew 安装了最新版本的 Git。
+
+Homebrew 没有将 `git-http-backend` 软链接至固定的路径（例如 `/home/linuxbrew/.linuxbrew/libexec/git-core/git-http-backend`），而 Cellar 中的 Git 路径带有版本号，可能会因 `brew upgrade` 发生变化，因此我们编写了一个包装脚本，通过 Homebrew 的 `git` 命令来调用 `git-http-backend`：
+
+```shell title="/usr/local/bin/homebrew-git-http-backend"
+#!/bin/sh
+
+exec /home/linuxbrew/.linuxbrew/bin/git http-backend "$@"
+```
+
+对应地，Nginx 配置中的 `SCRIPT_FILENAME` 参数也改为指向这个包装脚本（见上文）。
 
 ## FTP 服务（已废弃）
 
