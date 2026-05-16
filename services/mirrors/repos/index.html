@@ -3514,36 +3514,15 @@
 </div>
 <p>写好新仓库的配置文件之后运行 <code>yuki reload</code>，然后 <code>yuki sync &lt;repo&gt;</code> 就可以开始初次同步了。</p>
 <h3 id="git">Git 类型仓库的额外配置<a class="headerlink" href="#git" title="Permanent link">&para;</a></h3>
-<details class="note">
-<summary><code>git://</code> 协议服务已于 2025 年 12 月<a href="https://servers.ustclug.org/2025/10/mirrors-remove-git-protocol/">停止服务</a></summary>
-<p><code>git-daemon.service</code> 根据 <code>/srv/git</code> 下的内容对外提供 <code>git://</code> 协议服务。所以如果是 git 类型的仓库，需要添加软链接，否则无法使用 <code>git://</code> 的协议访问，例如：</p>
+<p>Git 后端服务根据 <code>/srv/git</code> 下的内容对外提供 <code>git://</code> 协议服务。所以如果是 git 类型的仓库，需要添加软链接，否则无法从外部访问，例如：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>ln<span class="w"> </span>-s<span class="w"> </span>/srv/repo/linux.git<span class="w"> </span>/srv/git/
 </code></pre></div>
-<p>通过 <code>http(s)://</code> 协议访问 Git 仓库无需此软链接，因此 <code>/srv/git</code> 目录现在是已经淘汰的配置了。</p>
-</details>
-<p>由于 Git 服务相比于系统中日常使用的 Git 需要一些额外的配置，为了避免全局 Git 配置（<code>/etc/gitconfig</code>）对日常使用 Git 产生影响，我们将 Git 服务专用配置放在了 <code>/etc/gitconfig.cgi</code> 中。</p>
-<p>利用 <code>fcgiwrap</code> 会将 <code>fastcgi_params</code> 中的参数变成 CGI 程序的环境变量这一特点，我们<a href="../services/#git">在 Nginx 中设置</a> <code>fastcgi_params GIT_CONFIG_SYSTEM</code> 参数指定该配置文件的位置，即可让 <code>git-http-backend</code> 使用该配置。</p>
+<p>Git 后端服务分为两部分，共用 <code>/srv/git</code> 目录下的软链接：</p>
 <ul>
+<li><s><code>git-daemon.service</code> 提供 <code>git://</code> 协议服务</s>，已于 2025 年 12 月<a href="https://servers.ustclug.org/2025/10/mirrors-remove-git-protocol/">停止服务</a>。</li>
 <li>
-<p>部分克隆配置 (<a href="https://github.com/ustclug/discussions/issues/432">discussions#432</a>)：</p>
-<div class="highlight"><span class="filename">/etc/gitconfig.cgi</span><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="k">[uploadpack]</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">    </span><span class="na">allowfilter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">true</span>
-</code></pre></div>
-</li>
-<li>
-<p>由于 git daemon/fcgiwrap 的用户不是 mirror，所以需要设置绕过 Git 新的安全限制：</p>
-<div class="highlight"><span class="filename">/etc/gitconfig.cgi</span><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="k">[safe]</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">    </span><span class="na">directory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">/srv/repo/*</span>
-</code></pre></div>
-</li>
-<li>
-<p>为了限制 pack object 的内存使用，根据 <a href="https://gitlab.com/gitlab-org/gitaly/-/blob/7b6c44c6d5df11072c7e87b8e85beb773bba8765/internal/git/gitcmd/command_description.go#L541">GitLab gitaly 的参数</a>，添加了以下配置：</p>
-<div class="highlight"><span class="filename">/etc/gitconfig.cgi</span><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="k">[pack]</span>
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">    </span><span class="na">threads</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">6</span>
-<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">    </span><span class="na">windowMemory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">100m</span>
-<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">    </span><span class="na">allowPackReuse</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">multi</span>
-<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="w">    </span><span class="na">window</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">0</span>
-</code></pre></div>
+<p><code>fcgiwrap.service</code> 调用 <code>git-http-backend</code> 提供 <code>http(s)://</code> 协议服务，仍然在使用中。</p>
+<p>由于 <code>fastcgi_param GIT_PROJECT_ROOT /srv/git;</code>，因此 <code>git-http-backend</code> 也会从 <code>/srv/git</code> 下寻找仓库。</p>
 </li>
 </ul>
 <h2 id="_3">移动（删除）一个仓库<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
@@ -3557,10 +3536,10 @@
 <p>由于我们的例子是移动目录，可以直接使用 <code>mv</code> 命令（<code>sb</code> 仓库很小）。</p>
 <h3 id="yuki">修改 Yuki 配置<a class="headerlink" href="#yuki" title="Permanent link">&para;</a></h3>
 <p>修改 <code>/home/mirror/repos/sb.yaml</code>，将 <code>path</code> 修改为 <code>/srv/repo/sb</code>。然后重新加载：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="go">yukictl reload sb</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="go">yukictl reload sb</span>
 </code></pre></div>
 <h3 id="rsync-attrs">测试同步，并删除 rsync-attrs 中的旧目录<a class="headerlink" href="#rsync-attrs" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="go">yukictl sync --debug sb</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="go">yukictl sync --debug sb</span>
 </code></pre></div>
 <p>确认同步无误后，检查 <code>/srv/rsync-attrs</code> 的内容，并删除旧目录 <code>/srv/rsync-attrs/.private</code>。</p>
 <div class="admonition tip">
@@ -3571,17 +3550,17 @@
 <h3 id="nginx">修改 nginx 配置<a class="headerlink" href="#nginx" title="Permanent link">&para;</a></h3>
 <p>由于我们这里是移动仓库，为了保证旧用户能够正常使用，需要修改 nginx 配置，将旧的路径重定向到新的路径。</p>
 <p>相关的配置一般位于 <code>/etc/nginx/snippets/mirrors-locations</code>，本次我们新增的内容如下：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="k">location</span><span class="w"> </span><span class="s">/.private/sb/</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="w">    </span><span class="kn">rewrite</span><span class="w"> </span><span class="s">^/.private(/sb/.*</span>$<span class="s">)</span><span class="w"> </span><span class="nv">$1</span><span class="w"> </span><span class="s">permanent</span><span class="p">;</span>
-<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="p">}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="k">location</span><span class="w"> </span><span class="s">/.private/sb/</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">    </span><span class="kn">rewrite</span><span class="w"> </span><span class="s">^/.private(/sb/.*</span>$<span class="s">)</span><span class="w"> </span><span class="nv">$1</span><span class="w"> </span><span class="s">permanent</span><span class="p">;</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="p">}</span>
 </code></pre></div>
 <p>Nginx rewrite 相关的语法知识需读者自行学习。</p>
 <p>修改完成后，重载配置：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="go">nginx -t</span>
-<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="go">nginx -s reload  # 或者 systemctl reload nginx</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="go">nginx -t</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="go">nginx -s reload  # 或者 systemctl reload nginx</span>
 </code></pre></div>
 <p>并且 commit 有关修改：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="go">git -c user.name=你的名字 -c user.email=你的邮箱 commit -m &quot;...&quot;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="go">git -c user.name=你的名字 -c user.email=你的邮箱 commit -m &quot;...&quot;</span>
 </code></pre></div>
 <h3 id="rsync-proxy-rsyncd">修改 rsync-proxy 与 rsyncd 配置<a class="headerlink" href="#rsync-proxy-rsyncd" title="Permanent link">&para;</a></h3>
 <p><a href="https://github.com/ustclug/rsync-proxy">rsync-proxy</a> 为近年来我们自行编写的 rsync 反向代理服务。
@@ -3590,7 +3569,7 @@
 在 <code>/etc/rsyncd</code> 下执行 <code>python3 generate_common.py --write</code> 写入配置，使用 <code>git diff</code> 检查无误后 <code>git commit</code>。
 rsyncd 配置中包含不公开 rsync 的内容（如 git 目录）不会导致问题，因为所有用户接触到的都是 rsync-proxy。</p>
 <p>确认后重载 rsync-proxy:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="go">systemctl reload rsync-proxy</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="go">systemctl reload rsync-proxy</span>
 </code></pre></div>
 <p>Rsyncd 不需要重载：每个有效连接会启动新进程，而新进程会重新读取配置。</p>
 <h3 id="mirrors2">删除 mirrors2 上的仓库与相关项<a class="headerlink" href="#mirrors2" title="Permanent link">&para;</a></h3>
