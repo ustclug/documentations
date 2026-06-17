@@ -2260,6 +2260,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#mirrorlog" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Log backup
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -3226,6 +3237,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#mirrorlog" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Log backup
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -3276,6 +3298,37 @@
 <a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">  </span>sort<span class="w"> </span><span class="p">|</span><span class="w"> </span>uniq<span class="w"> </span>-c<span class="w"> </span><span class="p">|</span>
 <a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">  </span>awk<span class="w"> </span><span class="s1">&#39;{printf(&quot;process,state=%s,name=%s count=%ii\n&quot;,$2,$3,$1)}&#39;</span>
 </code></pre></div>
+<h2 id="mirrorlog">Log backup<a class="headerlink" href="#mirrorlog" title="Permanent link">&para;</a></h2>
+<p>mirrors 的日志会每日备份至 mirrorlog 虚拟机上，方式（方向）为 mirrorlog 从 mirrors4 上 rsync 拉取。</p>
+<ul>
+<li>
+<p>Nginx 日志：</p>
+<p>触发方式为同目录下的 <code>m4log.timer</code>。</p>
+<div class="highlight"><span class="filename">/etc/systemd/system/m4log.service</span><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c1"># [Unit] 部分省略</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="k">[Service]</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="na">Type</span><span class="o">=</span><span class="s">exec</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="na">User</span><span class="o">=</span><span class="s">mirror</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="na">Group</span><span class="o">=</span><span class="s">mirror</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="na">ExecStart</span><span class="o">=</span><span class="s">/usr/bin/rsync -rltpv --include=*/ --include=*.xz --include=*.zst --exclude=* m4log:/ /mnt/data/m4log/</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="na">Restart</span><span class="o">=</span><span class="s">on-failure</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="na">RestartSec</span><span class="o">=</span><span class="s">1000</span>
+</code></pre></div>
+</li>
+<li>
+<p>Rsync 日志：</p>
+<p>触发方式为同目录下的 <code>m4log-rsync.timer</code>。</p>
+<div class="highlight"><span class="filename">/etc/systemd/system/m4log-rsync.service</span><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c1"># [Unit] 部分省略</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="k">[Service]</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="na">Type</span><span class="o">=</span><span class="s">exec</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="na">User</span><span class="o">=</span><span class="s">mirror</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="na">Group</span><span class="o">=</span><span class="s">mirror</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="na">ExecStart</span><span class="o">=</span><span class="s">/usr/bin/rsync -rltpv --include=*/ --include=*.xz --include=*.zst --exclude=* m4log-rsync:/ /mnt/data/rsync-proxy/</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="na">Restart</span><span class="o">=</span><span class="s">on-failure</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="na">RestartSec</span><span class="o">=</span><span class="s">1000</span>
+</code></pre></div>
+</li>
+</ul>
+<p>存储路径 <code>/mnt/data</code> 为从 PVE host 上挂载的 virtiofs。</p>
 
 
 

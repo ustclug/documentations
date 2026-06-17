@@ -3723,11 +3723,11 @@
 </code></pre></div>
 <p>To whitelist any domain, add <code>include snippets/listen-80-alt</code> and <code>include snippets/listen-443-alt</code> to corresponding site's server block.</p>
 <p>We use iptables to redirect any traffic from outside USTCnet whose destination is TCP port 80/443 on local machine to TCP port 81/444 respectively.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>-A PREROUTING -m addrtype --dst-type LOCAL -j NGINX-REDIRECT
-<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>-A NGINX-REDIRECT -i lo -j RETURN
-<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a>-A NGINX-REDIRECT -m set --match-set ustcnet src -j RETURN
-<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a>-A NGINX-REDIRECT -p tcp --dport 80 -j REDIRECT --to-port 81
-<a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a>-A NGINX-REDIRECT -p tcp --dport 443 -j REDIRECT --to-port 444
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>-A<span class="w"> </span>PREROUTING<span class="w"> </span>-m<span class="w"> </span>addrtype<span class="w"> </span>--dst-type<span class="w"> </span>LOCAL<span class="w"> </span>-j<span class="w"> </span>NGINX-REDIRECT
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>-A<span class="w"> </span>NGINX-REDIRECT<span class="w"> </span>-i<span class="w"> </span>lo<span class="w"> </span>-j<span class="w"> </span>RETURN
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a>-A<span class="w"> </span>NGINX-REDIRECT<span class="w"> </span>-m<span class="w"> </span><span class="nb">set</span><span class="w"> </span>--match-set<span class="w"> </span>ustcnet<span class="w"> </span>src<span class="w"> </span>-j<span class="w"> </span>RETURN
+<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a>-A<span class="w"> </span>NGINX-REDIRECT<span class="w"> </span>-p<span class="w"> </span>tcp<span class="w"> </span>--dport<span class="w"> </span><span class="m">80</span><span class="w"> </span>-j<span class="w"> </span>REDIRECT<span class="w"> </span>--to-port<span class="w"> </span><span class="m">81</span>
+<a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a>-A<span class="w"> </span>NGINX-REDIRECT<span class="w"> </span>-p<span class="w"> </span>tcp<span class="w"> </span>--dport<span class="w"> </span><span class="m">443</span><span class="w"> </span>-j<span class="w"> </span>REDIRECT<span class="w"> </span>--to-port<span class="w"> </span><span class="m">444</span>
 </code></pre></div>
 
 
