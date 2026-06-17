@@ -3328,6 +3328,11 @@
 </code></pre></div>
 </li>
 </ul>
+<p>两个 service 类型均使用 <code>exec</code> 而非 <code>oneshot</code>，目的是：</p>
+<ul>
+<li>避免服务启动超时。<code>Type=oneshot</code> 的服务在 ExecStart 执行期间会被视为“启动中”，显然如果以这种方式运行 rsync 的话很容易 <code>Start operation timed out</code>。</li>
+<li>在 rsync 进程意外退出时自动重启，重新尝试同步。</li>
+</ul>
 <p>存储路径 <code>/mnt/data</code> 为从 PVE host 上挂载的 virtiofs。</p>
 
 
