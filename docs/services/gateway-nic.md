@@ -325,7 +325,7 @@ To whitelist any domain, add `include snippets/listen-80-alt` and `include snipp
 
 We use iptables to redirect any traffic from outside USTCnet whose destination is TCP port 80/443 on local machine to TCP port 81/444 respectively.
 
-```iptables
+```shell
 -A PREROUTING -m addrtype --dst-type LOCAL -j NGINX-REDIRECT
 -A NGINX-REDIRECT -i lo -j RETURN
 -A NGINX-REDIRECT -m set --match-set ustcnet src -j RETURN

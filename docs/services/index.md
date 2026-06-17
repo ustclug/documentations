@@ -28,7 +28,7 @@ icon: fontawesome/solid/certificate
     - mirrors3 连接的 SAN 的管理口已经损坏，需要定期线下检查磁盘状态。
 - [mirrors1](mirrors/1/index.md)
 
-镜像站日志会备份至 mirrorlog 虚拟机上。
+镜像站日志会[备份](mirrors/monitor.md#mirrorlog)至 mirrorlog 虚拟机上。
 
 ## [权威 DNS](../infrastructure/auth-dns.md) {#auth-dns}
 
