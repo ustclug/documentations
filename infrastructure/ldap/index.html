@@ -3719,8 +3719,8 @@
 <p>我们大部分现有的服务器仍在使用 <code>sudo-ldap</code>，在下次大版本升级前需要逐步迁移。以下提供使用 <code>sssd</code> 的配置方法。</p>
 <p>Ref: <a href="https://packages.debian.org/trixie/sudo-ldap">https://packages.debian.org/trixie/sudo-ldap</a></p>
 </div>
-<div class="admonition example">
-<p class="admonition-title">Ansible playbook</p>
+<div class="admonition ansible">
+<p class="admonition-title">Ansible: <code>sudo-migration.yml</code></p>
 <p>我们的 <a href="../automation/">infra</a> 仓库中含有 <code>sudo-migration.yml</code> Ansible playbook，可以帮助迁移 Debian 上的 <code>sudo-ldap</code> 到 <code>sssd</code>。</p>
 <p><strong>注意</strong>：该 playbook 不包含为 Debian bookworm 修改 AppArmor 配置的步骤。</p>
 </div>
