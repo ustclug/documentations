@@ -7,6 +7,10 @@ import material
 
 
 CUSTOM_ADMONITIONS = {
+    "ansible": {
+        "icon": "material/ansible",
+        "rgb": (239, 108, 0),
+    },
     "homepage-workflow": {
         "icon": "fontawesome/solid/wrench",
         "rgb": (241, 79, 33),
