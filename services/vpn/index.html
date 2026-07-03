@@ -2518,6 +2518,34 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#dns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DNS
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="DNS">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#querylog" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Querylog
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -3280,6 +3308,34 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#dns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DNS
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="DNS">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#querylog" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Querylog
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -3348,6 +3404,33 @@
 <a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a>cp<span class="w"> </span>-p<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">SSL_CERTS</span><span class="si">}</span><span class="s2">/lugvpn/fullchain.pem&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">VPN_CERTS</span><span class="si">}</span><span class="s2">/certs/vpn.ustclug.org.crt&quot;</span>
 <a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a>cp<span class="w"> </span>-p<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">SSL_CERTS</span><span class="si">}</span><span class="s2">/lugvpn/privkey.pem&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">VPN_CERTS</span><span class="si">}</span><span class="s2">/private/vpn.ustclug.org.key&quot;</span>
 <a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Cert Update Complete&quot;</span>
+</code></pre></div>
+<h2 id="dns">DNS<a class="headerlink" href="#dns" title="Permanent link">&para;</a></h2>
+<p>We use AdGuard Home to provide DNS service for the VPN intranet.
+The AdGuard Home instance runs in a Docker container (see <code>adguard-home.yml</code> in <code>docker-run-script</code> repo) and is started as:</p>
+<div class="highlight"><span class="filename">/root/docker</span><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>docker<span class="w"> </span>compose<span class="w"> </span>-f<span class="w"> </span>adguard-home.yml<span class="w"> </span>up<span class="w"> </span>-d
+</code></pre></div>
+<h3 id="querylog">Querylog<a class="headerlink" href="#querylog" title="Permanent link">&para;</a></h3>
+<p>AdGuard Home produces <em>a lot</em> of content in query log, so we add our custom logrotate configuration to avoid filling up the disk.</p>
+<div class="highlight"><span class="filename">/etc/logrotate.d/AdGuardHome</span><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>/mnt/vpnlog/AdGuardHome/*.json<span class="w"> </span><span class="o">{</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">    </span>daily
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">    </span>rotate<span class="w"> </span><span class="m">180</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">    </span>missingok
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">    </span>copytruncate
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">    </span>compress
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">    </span>delaycompress
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="w">    </span>sharedscripts
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="w">    </span><span class="c1"># use Zstd to compress logfiles</span>
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="w">    </span>compresscmd<span class="w"> </span>/usr/bin/zstd
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="w">    </span>uncompresscmd<span class="w"> </span>/usr/bin/unzstd
+<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="w">    </span><span class="c1"># compress options</span>
+<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="w">    </span>compressoptions<span class="w"> </span>-12<span class="w"> </span>--long<span class="w"> </span>-T0
+<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a><span class="w">    </span><span class="c1"># Let extension to be right</span>
+<a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a><span class="w">    </span>compressext<span class="w"> </span>.zst
+<a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a><span class="w">    </span>create<span class="w"> </span><span class="m">640</span><span class="w"> </span>root<span class="w"> </span>root
+<a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a><span class="w">    </span>postrotate
+<a id="__codelineno-4-18" name="__codelineno-4-18" href="#__codelineno-4-18"></a><span class="w">    </span>endscript
+<a id="__codelineno-4-19" name="__codelineno-4-19" href="#__codelineno-4-19"></a><span class="o">}</span>
 </code></pre></div>
 
 
