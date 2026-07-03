@@ -3817,6 +3817,11 @@
 </code></pre></div>
 <h3 id="virtiofs">VirtIO FS<a class="headerlink" href="#virtiofs" title="Permanent link">&para;</a></h3>
 <p>对于 mirrorlog 等重存储型的虚拟机，我们尝试把大量的数据文件放在 host 上，避免 ZFS（Zvol）和 ext4 的两层开销（以及在 ZFS 上也可以使用更大的 recordsize 获得更好的 I/O 体验和更低的 RAID-Z overhead），然后使用 virtiofs 供虚拟机访问。</p>
+<p>Proxmox VE 从 8.4 开始集成了 virtiofsd 的支持，在 Web UI 上的 Datacenter 层面配置 Directory Mapping 后就可以将 Directory Mapping 提供给虚拟机使用了。</p>
+<p><img alt="Directory Mapping example" src="../../img/virtiofs-dialog.png" /></p>
+<p>其中 Directory Mapping 的 Name 也用作虚拟机内 mount 时使用的 tag。</p>
+<details class="note">
+<summary>Pre-2026-07-03 的旧配置过程</summary>
 <p>Virtiofs 的配置过程主要参考了 <a href="https://forum.proxmox.com/threads/virtiofsd-in-pve-8-0-x.130531/">https://forum.proxmox.com/threads/virtiofsd-in-pve-8-0-x.130531/</a>：</p>
 <p>首先配置虚拟机：</p>
 <div class="highlight"><span class="filename">/etc/pve/qemu-server/230.conf</span><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="nt">args</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">-chardev socket,id=virtfs0,path=/run/virtiofsd-230.sock -device vhost-user-fs-pci,queue-size=1024,chardev=virtfs0,tag=mirrorlog -object memory-backend-file,id=mem,size=8192M,mem-path=/dev/shm,share=on -numa node,memdev=mem</span>
@@ -3868,6 +3873,7 @@
 <p>然后通过命令行配置使用：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>qm<span class="w"> </span><span class="nb">set</span><span class="w"> </span><span class="m">230</span><span class="w"> </span>--hookscript<span class="w"> </span>local:snippets/virtiofsd.sh
 </code></pre></div>
+</details>
 <p>然后将虚拟机关机，通过 <code>qm start</code> 或者 web 界面启动，即可在虚拟机内挂载 virtiofsd 提供的目录。</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="c1"># Manual</span>
 <a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>mount<span class="w"> </span>-t<span class="w"> </span>virtiofs<span class="w"> </span>mirrorlog<span class="w"> </span>/mnt/mirrorlog
