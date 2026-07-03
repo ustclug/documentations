@@ -35,3 +35,39 @@ Two services running in Docker (strongswan and ocserv) use the certificate, so a
 ```shell title="/usr/local/docker_sh/vpn-cert-updater.sh"
 --8<-- "vpn/vpn-cert-updater.sh"
 ```
+
+## DNS
+
+We use AdGuard Home to provide DNS service for the VPN intranet.
+The AdGuard Home instance runs in a Docker container (see `lugvpn` directory in `docker-run-script` repo) and is started as:
+
+```shell
+cd /root/docker
+docker compose up -d
+```
+
+### Querylog
+
+AdGuard Home produces *a lot* of content in query log, so we add our custom logrotate configuration to avoid filling up the disk.
+
+```shell title="/etc/logrotate.d/AdGuardHome"
+/mnt/vpnlog/AdGuardHome/*.json {
+    daily
+    rotate 180
+    missingok
+    copytruncate
+    compress
+    delaycompress
+    sharedscripts
+    # use Zstd to compress logfiles
+    compresscmd /usr/bin/zstd
+    uncompresscmd /usr/bin/unzstd
+    # compress options
+    compressoptions -12 --long -T0
+    # Let extension to be right
+    compressext .zst
+    create 640 root root
+    postrotate
+    endscript
+}
+```
