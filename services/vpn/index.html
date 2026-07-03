@@ -3407,8 +3407,9 @@
 </code></pre></div>
 <h2 id="dns">DNS<a class="headerlink" href="#dns" title="Permanent link">&para;</a></h2>
 <p>We use AdGuard Home to provide DNS service for the VPN intranet.
-The AdGuard Home instance runs in a Docker container (see <code>adguard-home.yml</code> in <code>docker-run-script</code> repo) and is started as:</p>
-<div class="highlight"><span class="filename">/root/docker</span><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>docker<span class="w"> </span>compose<span class="w"> </span>-f<span class="w"> </span>adguard-home.yml<span class="w"> </span>up<span class="w"> </span>-d
+The AdGuard Home instance runs in a Docker container (see <code>lugvpn</code> directory in <code>docker-run-script</code> repo) and is started as:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nb">cd</span><span class="w"> </span>/root/docker
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>-d
 </code></pre></div>
 <h3 id="querylog">Querylog<a class="headerlink" href="#querylog" title="Permanent link">&para;</a></h3>
 <p>AdGuard Home produces <em>a lot</em> of content in query log, so we add our custom logrotate configuration to avoid filling up the disk.</p>
