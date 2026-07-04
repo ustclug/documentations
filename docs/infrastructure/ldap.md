@@ -25,7 +25,7 @@ Users 是用来添加和配置用户信息的地方。最主要的功能位于�
         小心输出的顺序，最大的 UID 不一定是最后一个（而且事实上经常不是），建议配合 sed, awk, sort 之类的命令妥善处理，例如
 
         ```shell
-        getent -s ldap passwd | sort -t: -k 3n
+        getent -s sss passwd | sort -t: -k 3n
         ```
 
         同时还有若干 UID 很大但是离散的特殊账号，很容易分辨。显然新 UID 是 2000 开始连续的最大 UID + 1.
@@ -72,7 +72,7 @@ gosa 的配置文件在 `/etc/gosa/gosa.conf`，它是在第一次运行 gosa �
 
 #### 软件包安装
 
-Debian 系统安装 `libnss-ldapd`、`libpam-ldapd`、`sssd-ldap`、`libsss-sudo`
+Debian 系统安装 `sssd-ldap`、`libsss-sudo`。这两个软件包会依赖 `libnss-sss` 和 `libpam-sss`，如果没有的话需要手动补上。
 
 !!! note
 
@@ -89,77 +89,6 @@ Debian 系统安装 `libnss-ldapd`、`libpam-ldapd`、`sssd-ldap`、`libsss-sudo
 - LDAP 服务器地址是 `ldaps://ldap.lug.ustc.edu.cn`
 - Base DN 为 `dc=lug,dc=ustc,dc=edu,dc=cn`
     - 协议为版本 3
-    - 配置 libnss-ldapd 时有个选 Name services to configure 的，全部选上
-
-#### /etc/ldap/ldap.conf
-
-编辑内容如下：
-
-```shell title="/etc/ldap/ldap.conf"
-BASE dc=lug,dc=ustc,dc=edu,dc=cn
-URI ldaps://ldap.lug.ustc.edu.cn
-SSL yes
-TLS_CACERT /etc/ldap/slapd-ca-cert.pem
-TLS_REQCERT demand
-SUDOERS_BASE ou=sudoers,dc=lug,dc=ustc,dc=edu,dc=cn
-```
-
-为了安全性考虑，要以 ldaps 的方式连接 ldap 服务器，同时应配置好证书 (`/etc/ldap/slapd-ca-cert.pem`, 从其它服务器复制一个)
-
-#### /etc/nslcd.conf
-
-注意检查一下此配置文件是否与 `/etc/ldap/ldap.conf` 下的内容相一致，如
-
-```shell title="/etc/nslcd.conf"
-uid nslcd
-gid nslcd
-uri ldaps://ldap.lug.ustc.edu.cn
-base dc=lug,dc=ustc,dc=edu,dc=cn
-ssl on
-tls_reqcert demand
-tls_cacertfile /etc/ldap/slapd-ca-cert.pem
-```
-
-#### /etc/nsswitch.conf
-
-安装软件包时，安装脚本已经处理过该文件。检查一下内容，大致为：
-
-```yaml
-passwd:         compat ldap
-group:          compat ldap
-shadow:         compat ldap
-......
-sudoers:        files
-```
-
-注意每一项后面的 `ldap`（`sudoers` 一行除外），如果没有要手动加上。
-
-对于使用 sssd 的配置，**注意 `sudoers` 一行需要有 `sss`**，类似于下面这样：
-
-```yaml
-sudoers: files sss
-```
-
-而如果使用传统的 `sudo-ldap`，那么 `sudoers` 一行应该类似于这样：
-
-```yaml
-sudoers:        ldap [SUCCESS=return] files
-```
-
-重启一下 `nscd` 和 `nslcd` 服务，此时运行 `getent passwd -s ldap`，应该可以看到 LDAP 中的用户列表，这就说明配置正确了。
-
-#### PAM 配置
-
-如果 PAM 配置错误，可能导致用户无法使用 SSH 登录，甚至连 sudo 也可能挂掉。所以修改 PAM 配置时：
-
-1. 请做好文件备份；
-2. 请另开一个 root 终端以防万一。
-
-对于 Debian 7+，只需设置一处。为了登录时自动创建家目录，在 `/etc/pam.d/common-session` 中添加下面这句：
-
-```shell
-session required    pam_mkhomedir.so skel=/etc/skel umask=0022
-```
 
 #### SSSD 配置
 
@@ -185,7 +114,63 @@ session required    pam_mkhomedir.so skel=/etc/skel umask=0022
 
     然后 `sudo systemctl reload apparmor`。
 
-另外记得像前面在 Debian 中安装介绍到的那样修改 `/etc/nsswitch.conf` 以及 `/etc/nslcd.conf`.
+另外记得按下面的介绍检查 `/etc/nsswitch.conf`。
+
+#### /etc/ldap/ldap.conf
+
+编辑内容如下：
+
+```shell title="/etc/ldap/ldap.conf"
+BASE dc=lug,dc=ustc,dc=edu,dc=cn
+URI ldaps://ldap.lug.ustc.edu.cn
+SSL yes
+TLS_CACERT /etc/ldap/slapd-ca-cert.pem
+TLS_REQCERT demand
+SUDOERS_BASE ou=sudoers,dc=lug,dc=ustc,dc=edu,dc=cn
+```
+
+为了安全性考虑，要以 ldaps 的方式连接 ldap 服务器，同时应配置好证书 (`/etc/ldap/slapd-ca-cert.pem`, 从其它服务器复制一个)
+
+#### /etc/nsswitch.conf
+
+安装软件包时，安装脚本已经处理过该文件。检查一下内容，大致为：
+
+```yaml
+passwd:         files sss
+group:          files sss
+shadow:         files sss
+......
+sudoers:        files
+```
+
+注意每一项后面的 `sss`（`sudoers` 一行除外），如果没有要手动加上。
+
+对于使用 sssd 的配置，**注意 `sudoers` 一行需要有 `sss`**，类似于下面这样：
+
+```yaml
+sudoers: files sss
+```
+
+而如果使用传统的 `sudo-ldap`，那么 `sudoers` 一行应该类似于这样：
+
+```yaml
+sudoers:        ldap [SUCCESS=return] files
+```
+
+重启一下 `sssd` 服务，此时运行 `getent -s sss passwd`，应该可以看到 LDAP 中的用户列表，这就说明配置正确了。
+
+#### PAM 配置
+
+如果 PAM 配置错误，可能导致用户无法使用 SSH 登录，甚至连 sudo 也可能挂掉。所以修改 PAM 配置时：
+
+1. 请做好文件备份；
+2. 请另开一个 root 终端以防万一。
+
+对于 Debian 7+，只需设置一处。为了登录时自动创建家目录，在 `/etc/pam.d/common-session` 中添加下面这句：
+
+```shell
+session required    pam_mkhomedir.so skel=/etc/skel umask=0022
+```
 
 #### 通过 SSSD 从 LDAP 获取 SSH 公钥
 
@@ -198,6 +183,10 @@ AuthorizedKeysCommandUser nobody
 
 ### NSCD 使用说明
 
+!!! warning
+
+    在安装了 SSSD 的机器上不应该同时使用 NSCD，此时推荐删除 NSCD（和 NSLCD / `libnss-ldapd` / `libpam-ldapd`）以避免冲突。
+
 在 SSSD 未安装的情况下，NSCD 会提供 LDAP 缓存服务。如果在使用 NSCD 的机器上需要清空 LDAP 缓存，执行以下命令：
 
 ```shell
@@ -205,7 +194,7 @@ nscd -i passwd
 nscd -i group
 ```
 
-如果 SSSD 安装，`systemctl status sssd` 会显示 SSSD 与 NSCD 同时提供了相关缓存，可能存在冲突问题：
+如果安装 SSSD，`systemctl status sssd` 会显示 SSSD 与 NSCD 同时提供了相关缓存，可能存在冲突问题：
 
 ```log
 NSCD socket was detected and seems to be configured to cache some of the databases controlled by SSSD [passwd,group,netgroup,services].
