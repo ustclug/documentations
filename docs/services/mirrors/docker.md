@@ -34,17 +34,9 @@ WantedBy=docker.service
 
 ## Networking
 
-Docker 默认创建一个名为 bridge 的网络，主机界面为 `docker0`，IP 地址段为 172.17.0.0/16。这个默认地址段过于浪费，因此我们给它配置一个更小的地址段（`bip`）：
+Docker 默认创建一个名为 bridge 的网络，主机界面为 `docker0`，IP 地址段为 172.17.0.0/16。这个默认地址段过于浪费，因此我们给它配置一个更小的地址段（见上方 `bip`）。
 
-我们将 Docker Registry 的反代挂在另外一个子网下，需要先行创建。
-
-```shell
-docker network create \
-  --opt com.docker.network.bridge.name=docker1 \
-  --subnet=172.18.0.0/24 \
-  --gateway=172.18.0.1 \
-  docker-registry
-```
+我们将 Docker Registry 的反代挂在另外一个子网下，使用 `docker-compose.yml` 指定一个 /24 的地址段，具体配置见 `docker-run-script` 仓库中的 `mirrors` 目录。
 
 ### Routing
 
