@@ -166,11 +166,30 @@ sudoers:        ldap [SUCCESS=return] files
 1. 请做好文件备份；
 2. 请另开一个 root 终端以防万一。
 
-对于 Debian 7+，只需设置一处。为了登录时自动创建家目录，在 `/etc/pam.d/common-session` 中添加下面这句：
+对于 Debian 7+，只需设置一处：为了登录时自动创建家目录，运行 `pam-auth-update`，选中 `Create home directory on login`，如下所示（示例使用了 readline frontend）：
 
-```shell
-session required    pam_mkhomedir.so skel=/etc/skel umask=0022
+```text hl_lines="11"
+  1. Pwquality password strength checking
+  2. SSS required smart card authentication
+  3. SSS optional smart card authentication
+  4. Unix authentication
+  5. SSS authentication
+  6. Register user sessions in the systemd control group hierarchy
+  7. Create home directory on login
+  8. Inheritable Capabilities Management
+  9. none of the above
+
+PAM profiles to enable: 1 4 5 6 7 8
 ```
+
+对于一些旧机器，由于本文档曾经建议手动编辑 PAM conf，你可能会遇到以下提示：
+
+```yaml
+pam-auth-update: Local modifications to /etc/pam.d/common-*, not updating.
+pam-auth-update: Run pam-auth-update --force to override.
+```
+
+此时请按提示使用 `pam-auth-update --force`，并选中如上所述的 PAM profile 选项。
 
 #### 通过 SSSD 从 LDAP 获取 SSH 公钥
 
