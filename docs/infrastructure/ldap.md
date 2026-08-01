@@ -140,22 +140,24 @@ passwd:         files sss
 group:          files sss
 shadow:         files sss
 ......
-sudoers:        files
+sudoers:        files sss
 ```
 
-注意每一项后面的 `sss`（`sudoers` 一行除外），如果没有要手动加上。
+注意每一项后面的 `sss`，如果没有要手动加上。
 
-对于使用 sssd 的配置，**注意 `sudoers` 一行需要有 `sss`**，类似于下面这样：
+??? note "sudoers: sssd vs sudo-ldap"
 
-```yaml
-sudoers: files sss
-```
+    对于使用 sssd 的配置，**注意 `sudoers` 一行需要有 `sss`**，类似于下面这样：
 
-而如果使用传统的 `sudo-ldap`，那么 `sudoers` 一行应该类似于这样：
+    ```yaml
+    sudoers: files sss
+    ```
 
-```yaml
-sudoers:        ldap [SUCCESS=return] files
-```
+    而如果使用传统的 `sudo-ldap`，那么 `sudoers` 一行应该类似于这样：
+
+    ```yaml
+    sudoers:        ldap [SUCCESS=return] files
+    ```
 
 重启一下 `sssd` 服务，此时运行 `getent -s sss passwd`，应该可以看到 LDAP 中的用户列表，这就说明配置正确了。
 
@@ -198,7 +200,9 @@ AuthorizedKeysCommand /usr/bin/sss_ssh_authorizedkeys %u
 AuthorizedKeysCommandUser nobody
 ```
 
-当然你也可以直接加在 `ustclug.conf` 里。
+```shell
+systemctl reload ssh.service
+```
 
 ### NSCD 使用说明
 
@@ -215,7 +219,7 @@ nscd -i group
 
 如果安装 SSSD，`systemctl status sssd` 会显示 SSSD 与 NSCD 同时提供了相关缓存，可能存在冲突问题：
 
-```log
+```text
 NSCD socket was detected and seems to be configured to cache some of the databases controlled by SSSD [passwd,group,netgroup,services].
 ```
 
