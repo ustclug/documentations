@@ -2269,6 +2269,62 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Log backup">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#mirrorlog-file" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        文件级备份
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mirrorlog-clickhouse" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ClickHouse 与 Vector
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ClickHouse 与 Vector">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#mirrorlog-clickhouse-mirrorlog" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ClickHouse（mirrorlog）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mirrorlog-clickhouse-mirrors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Vector（mirrors）
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
     </ul>
@@ -3246,6 +3302,62 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Log backup">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#mirrorlog-file" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        文件级备份
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mirrorlog-clickhouse" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ClickHouse 与 Vector
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ClickHouse 与 Vector">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#mirrorlog-clickhouse-mirrorlog" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ClickHouse（mirrorlog）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mirrorlog-clickhouse-mirrors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Vector（mirrors）
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
     </ul>
@@ -3299,7 +3411,9 @@
 <a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">  </span>awk<span class="w"> </span><span class="s1">&#39;{printf(&quot;process,state=%s,name=%s count=%ii\n&quot;,$2,$3,$1)}&#39;</span>
 </code></pre></div>
 <h2 id="mirrorlog">Log backup<a class="headerlink" href="#mirrorlog" title="Permanent link">&para;</a></h2>
-<p>mirrors 的日志会每日备份至 mirrorlog 虚拟机上，方式（方向）为 mirrorlog 从 mirrors4 上 rsync 拉取。</p>
+<p>mirrors 的日志会以两种方式备份至 mirrorlog 虚拟机上。</p>
+<h3 id="mirrorlog-file">文件级备份<a class="headerlink" href="#mirrorlog-file" title="Permanent link">&para;</a></h3>
+<p>第一种方式为 mirrorlog 从 mirrors4 上通过 rsync over SSH 拉取 xz 或 zstd 压缩后的日志文件。</p>
 <ul>
 <li>
 <p>Nginx 日志：</p>
@@ -3333,7 +3447,29 @@
 <li>避免服务启动超时。<code>Type=oneshot</code> 的服务在 ExecStart 执行期间会被视为“启动中”，显然如果以这种方式运行 rsync 的话很容易 <code>Start operation timed out</code>。</li>
 <li>在 rsync 进程意外退出时自动重启，重新尝试同步。</li>
 </ul>
-<p>存储路径 <code>/mnt/data</code> 为从 PVE host 上挂载的 virtiofs。</p>
+<p>存储路径 <code>/mnt/data</code> 为从 PVE host 上 bind mount 的 ZFS dataset。</p>
+<h3 id="mirrorlog-clickhouse">ClickHouse 与 Vector<a class="headerlink" href="#mirrorlog-clickhouse" title="Permanent link">&para;</a></h3>
+<h4 id="mirrorlog-clickhouse-mirrorlog">ClickHouse（mirrorlog）<a class="headerlink" href="#mirrorlog-clickhouse-mirrorlog" title="Permanent link">&para;</a></h4>
+<p>ClickHouse 运行在 mirrorlog 虚拟机上，通过 Docker Compose 部署。
+Docker Compose 的 project 路径可以通过 <code>docker compose ls</code> 查看，或者使用以下命令：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>docker<span class="w"> </span>inspect<span class="w"> </span>--format<span class="o">=</span><span class="s1">&#39;{{ index .Config.Labels &quot;com.docker.compose.project.working_dir&quot; }}&#39;</span><span class="w"> </span>clickhouse
+</code></pre></div>
+<p>ClickHouse 的 Docker Compose 配置和 ClickHouse 的一些额外 XML 配置也在 <code>docker-run-script</code> 仓库中的 <code>mirrorlog/clickhouse</code> 目录中有 Git 追踪。
+例如，<code>config/users.xml</code> 定义了 <code>mirrors</code> 和 <code>grafana</code> 两个用户，包括访问权限、密码和来源 IP 限制等设置。</p>
+<div class="admonition warning">
+<p class="admonition-title">ClickHouse 初始化 SQL 参考</p>
+<p>Docker Compose project 中的 <a href="https://github.com/ustclug/docker-run-script/blob/master/mirrorlog/clickhouse/init/01-mirrors.sql"><code>init/01-mirrors.sql</code></a> 仅在第一次启动 ClickHouse 时执行，但为了方便参考和进行版本管理，每次更新 ClickHouse 配置时都应当将修改的部分<strong>手工同步</strong>进 <code>init/01-mirrors.sql</code> 中。</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">ZFS</p>
+<p>为了方便在 mirrorlog 容器内快速查看 ClickHouse 的磁盘占用量，<code>/mnt/data/clickhouse</code> 目录是在 PVE host 上创建的一个额外的 ZFS dataset。因此 <code>df</code>（<code>duf</code>）命令可以直接显示 ClickHouse 的磁盘占用量，但诸如 <code>compressratio</code> 等更多的 ZFS 属性仍然需要在 PVE host 上使用 <code>zfs</code> 命令查看。</p>
+</div>
+<h4 id="mirrorlog-clickhouse-mirrors">Vector（mirrors）<a class="headerlink" href="#mirrorlog-clickhouse-mirrors" title="Permanent link">&para;</a></h4>
+<p>mirrors4 上面通过 Docker 部署的 Vector 会将 Nginx JSON 日志实时采集到 mirrorlog 上的 ClickHouse 数据库中。</p>
+<p>Vector 的 Docker Compose 配置和 Vector 本身的 YAML 配置也在 <code>docker-run-script</code> 仓库中的 <code>mirrors/vector</code> 目录中有 Git 追踪。</p>
+<div class="highlight"><span class="filename">重新载入 Vector 配置</span><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>docker<span class="w"> </span><span class="nb">kill</span><span class="w"> </span>-s<span class="w"> </span>SIGHUP<span class="w"> </span>vector
+</code></pre></div>
+<p>有关 ClickHouse 和 Vector 的更多信息，可以参阅 Linux 201 关于 <a href="https://201.ustclug.org/advanced/clickhouse/">ClickHouse</a> 的内容。</p>
 
 
 
