@@ -63,9 +63,25 @@ etckeeper（不知道怎么配置的，装好即用？）
 
 ### Go
 
-从官方网站下载最新的 tar.gz 并解压到 `/usr/local/go`，然后将 `/usr/local/go/bin` 中的两个二进制文件软链接到 `/usr/local/bin`。
+使用 [iBug/godeb](https://github.com/iBug/godeb) 从 Go 官方 tar.gz 包生成 deb 包安装，安装路径为 `/usr`。
 
-更新 Go 的快捷脚本位于 `/root/go/update.sh`，内容见 [iBug/shGadgets](https://github.com/iBug/shGadgets/blob/master/go-update.sh)。
+```shell title="参考命令"
+go install github.com/iBug/godeb/cmd/godeb@latest
+godeb download
+scp go_*.deb mirrors.cernet.edu.cn:/tmp
+ssh mirrors.cernet.edu.cn "sudo dpkg -i /tmp/go_*.deb"
+```
+
+### Vector
+
+参考 [Vector.dev 的文档](https://vector.dev/docs/setup/installation/package-managers/apt/)，使用 APT 安装：
+
+```shell
+curl -fsSL https://setup.vector.dev | sudo bash
+sudo apt install vector
+```
+
+此安装方式提供了 `vector.service` systemd 服务，且有 `ExecReload=`。配置文件位于 `/etc/vector/vector.yaml`。
 
 ## 数据目录
 
