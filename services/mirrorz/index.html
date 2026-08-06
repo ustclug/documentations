@@ -2800,6 +2800,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#vector" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Vector
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -3383,6 +3394,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#vector" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Vector
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -3473,30 +3495,40 @@
 </code></pre></div>
 </div>
 <h3 id="go">Go<a class="headerlink" href="#go" title="Permanent link">&para;</a></h3>
-<p>从官方网站下载最新的 tar.gz 并解压到 <code>/usr/local/go</code>，然后将 <code>/usr/local/go/bin</code> 中的两个二进制文件软链接到 <code>/usr/local/bin</code>。</p>
-<p>更新 Go 的快捷脚本位于 <code>/root/go/update.sh</code>，内容见 <a href="https://github.com/iBug/shGadgets/blob/master/go-update.sh">iBug/shGadgets</a>。</p>
+<p>使用 <a href="https://github.com/iBug/godeb">iBug/godeb</a> 从 Go 官方 tar.gz 包生成 deb 包安装，安装路径为 <code>/usr</code>。</p>
+<div class="highlight"><span class="filename">参考命令</span><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>go<span class="w"> </span>install<span class="w"> </span>github.com/iBug/godeb/cmd/godeb@latest
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>godeb<span class="w"> </span>download
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>scp<span class="w"> </span>go_*.deb<span class="w"> </span>mirrors.cernet.edu.cn:/tmp
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>ssh<span class="w"> </span>mirrors.cernet.edu.cn<span class="w"> </span><span class="s2">&quot;sudo dpkg -i /tmp/go_*.deb&quot;</span>
+</code></pre></div>
+<h3 id="vector">Vector<a class="headerlink" href="#vector" title="Permanent link">&para;</a></h3>
+<p>参考 <a href="https://vector.dev/docs/setup/installation/package-managers/apt/">Vector.dev 的文档</a>，使用 APT 安装：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>curl<span class="w"> </span>-fsSL<span class="w"> </span>https://setup.vector.dev<span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>bash
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>vector
+</code></pre></div>
+<p>此安装方式提供了 <code>vector.service</code> systemd 服务，且有 <code>ExecReload=</code>。配置文件位于 <code>/etc/vector/vector.yaml</code>。</p>
 <h2 id="_1">数据目录<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <p>MirrorZ 主项目和帮助页面等可以通过浏览器访问的页面都在 <code>/var/www</code> 下。</p>
 <h3 id="_2">自动更新<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h3>
 <p>利用 GitHub 的 webhook 功能，部署了一份 <a href="https://github.com/iBug/uniAPI">iBug/uniAPI</a>。相关文件如下：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>/usr/bin/uniAPI
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>/etc/uniAPI.yml
-<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>/etc/systemd/system/uniAPI.service
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>/usr/bin/uniAPI
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>/etc/uniAPI.yml
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>/etc/systemd/system/uniAPI.service
 </code></pre></div>
 <p>配置样例如下：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="nt">services</span><span class="p">:</span>
-<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="w">  </span><span class="nt">uniAPI</span><span class="p">:</span>
-<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">server</span>
-<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="w">    </span><span class="nt">services</span><span class="p">:</span>
-<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="w">      </span><span class="nt">mirrorz-json-legacy</span><span class="p">:</span>
-<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="w">        </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">github.webhook</span>
-<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="w">        </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/home/mirrorz/mirrorz-org/mirrorz-json-legacy</span>
-<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a><span class="w">        </span><span class="nt">branch</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">master</span>
-<a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a><span class="w">        </span><span class="nt">secret</span><span class="p">:</span><span class="w"> </span><span class="c1"># empty</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="nt">services</span><span class="p">:</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="w">  </span><span class="nt">uniAPI</span><span class="p">:</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">server</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="w">    </span><span class="nt">services</span><span class="p">:</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="w">      </span><span class="nt">mirrorz-json-legacy</span><span class="p">:</span>
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="w">        </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">github.webhook</span>
+<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a><span class="w">        </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/home/mirrorz/mirrorz-org/mirrorz-json-legacy</span>
+<a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a><span class="w">        </span><span class="nt">branch</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">master</span>
+<a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a><span class="w">        </span><span class="nt">secret</span><span class="p">:</span><span class="w"> </span><span class="c1"># empty</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="k">location</span><span class="w"> </span><span class="s">^~</span><span class="w"> </span><span class="s">/uniAPI</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="w">    </span><span class="kn">proxy_pass</span><span class="w"> </span><span class="s">http://127.0.1.1:1024</span><span class="p">;</span>
-<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="p">}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="k">location</span><span class="w"> </span><span class="s">^~</span><span class="w"> </span><span class="s">/uniAPI</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="w">    </span><span class="kn">proxy_pass</span><span class="w"> </span><span class="s">http://127.0.1.1:1024</span><span class="p">;</span>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="p">}</span>
 </code></pre></div>
 
 
