@@ -3507,8 +3507,8 @@
 <p>另外，<code>bindIP</code> 不适用于所有的同步镜像（一部分程序不支持修改 <code>bind()</code> 的参数），此时可以使用基于 Docker Network 的 <code>network</code> 配置。</p>
 <div class="admonition example">
 <p class="admonition-title">使用 bestbind 找到最佳的 freebsd-pkg 上游</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>dig<span class="w"> </span>+short<span class="w"> </span>_http._tcp.pkg.all.freebsd.org<span class="w"> </span>srv<span class="w"> </span><span class="p">|</span><span class="w"> </span>cut<span class="w"> </span>-d<span class="w"> </span><span class="s1">&#39; &#39;</span><span class="w"> </span>-f<span class="w"> </span><span class="m">4</span><span class="w"> </span>&gt;<span class="w"> </span>freebsd
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="k">for</span><span class="w"> </span>i<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="k">$(</span>cat<span class="w"> </span>freebsd<span class="k">)</span><span class="p">;</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="nv">$i</span><span class="p">;</span><span class="w"> </span>bestbind<span class="w"> </span><span class="s2">&quot;http://</span><span class="nv">$i</span><span class="s2">/FreeBSD:15:amd64/quarterly/All/virtualbox-ose-71-7.1.12_1.pkg&quot;</span><span class="p">;</span><span class="w"> </span><span class="k">done</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>dig<span class="w"> </span>+short<span class="w"> </span>_http._tcp.pkg.all.freebsd.org<span class="w"> </span>srv<span class="w"> </span><span class="p">|</span><span class="w"> </span>cut<span class="w"> </span>-d<span class="w"> </span><span class="s1">' '</span><span class="w"> </span>-f<span class="w"> </span><span class="m">4</span><span class="w"> </span>&gt;<span class="w"> </span>freebsd
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="k">for</span><span class="w"> </span>i<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="k">$(</span>cat<span class="w"> </span>freebsd<span class="k">)</span><span class="p">;</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="nv">$i</span><span class="p">;</span><span class="w"> </span>bestbind<span class="w"> </span><span class="s2">"http://</span><span class="nv">$i</span><span class="s2">/FreeBSD:15:amd64/quarterly/All/virtualbox-ose-71-7.1.12_1.pkg"</span><span class="p">;</span><span class="w"> </span><span class="k">done</span>
 </code></pre></div>
 </div>
 </div>
@@ -3560,7 +3560,7 @@
 <a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="go">nginx -s reload  # 或者 systemctl reload nginx</span>
 </code></pre></div>
 <p>并且 commit 有关修改：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="go">git -c user.name=你的名字 -c user.email=你的邮箱 commit -m &quot;...&quot;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="go">git -c user.name=你的名字 -c user.email=你的邮箱 commit -m "..."</span>
 </code></pre></div>
 <h3 id="rsync-proxy-rsyncd">修改 rsync-proxy 与 rsyncd 配置<a class="headerlink" href="#rsync-proxy-rsyncd" title="Permanent link">&para;</a></h3>
 <p><a href="https://github.com/ustclug/rsync-proxy">rsync-proxy</a> 为近年来我们自行编写的 rsync 反向代理服务。

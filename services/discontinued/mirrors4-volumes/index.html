@@ -3443,7 +3443,7 @@
 <div class="admonition danger">
 <p class="admonition-title">坑</p>
 <p>直接使用 lvconvert(8) 尝试合并会导致吐槽，这是上面 lvreduce(8) 的原因。</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>Volume group &quot;ssd&quot; has insufficient free space (0 extents): 2048 required.
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>Volume group "ssd" has insufficient free space (0 extents): 2048 required.
 </code></pre></div>
 </div>
 <div class="admonition note">
@@ -3471,7 +3471,7 @@
 </code></pre></div>
 <p>在执行时，可以查看：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>sudo<span class="w"> </span>dmsetup<span class="w"> </span>status<span class="w"> </span>lug-repo
-<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="c1"># 在 &quot;metadata2&quot; 前面的前面的数字就是 dirty block 的数量</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="c1"># 在 "metadata2" 前面的前面的数字就是 dirty block 的数量</span>
 <a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="c1"># 如果不在执行 lvchange（没有进程抢占了 LVM 的锁），可以执行以下命令确认脏块数量以及其他一些参数。</span>
 <a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>sudo<span class="w"> </span>lvs<span class="w"> </span>-o<span class="w"> </span>name,cache_policy,cache_settings,chunk_size,cache_used_blocks,cache_dirty_blocks<span class="w"> </span>/dev/mapper/lug-repo
 </code></pre></div>

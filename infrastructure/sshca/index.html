@@ -3438,10 +3438,10 @@
 <a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="w">           </span>public_key_file
 </code></pre></div>
 <p>For example:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>ssh-keygen<span class="w"> </span>-s<span class="w"> </span>/path/to/ssh_ca<span class="w"> </span>-I<span class="w"> </span><span class="s2">&quot;Yifan Gao&quot;</span><span class="w"> </span>-n<span class="w"> </span>yifan<span class="w"> </span>-V<span class="w"> </span>-5m:+365d<span class="w"> </span>yifan.pub
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>ssh-keygen<span class="w"> </span>-s<span class="w"> </span>/path/to/ssh_ca<span class="w"> </span>-I<span class="w"> </span><span class="s2">"Yifan Gao"</span><span class="w"> </span>-n<span class="w"> </span>yifan<span class="w"> </span>-V<span class="w"> </span>-5m:+365d<span class="w"> </span>yifan.pub
 </code></pre></div>
 <p>In general, <em>certificate_identity</em> is the user's full name, and <em>principals</em> is the system username. The certificate identity is used to identify certificates and is logged in system logs. In addition, one certificate can carry multiply <em>principals</em>, like:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>ssh-keygen<span class="w"> </span>-s<span class="w"> </span>/path/to/ssh_ca<span class="w"> </span>-I<span class="w"> </span><span class="s2">&quot;Yifan Gao&quot;</span><span class="w"> </span>-n<span class="w"> </span>yifan,root,liims<span class="w"> </span>-V<span class="w"> </span>-5m:+365d<span class="w"> </span>yifan.pub
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>ssh-keygen<span class="w"> </span>-s<span class="w"> </span>/path/to/ssh_ca<span class="w"> </span>-I<span class="w"> </span><span class="s2">"Yifan Gao"</span><span class="w"> </span>-n<span class="w"> </span>yifan,root,liims<span class="w"> </span>-V<span class="w"> </span>-5m:+365d<span class="w"> </span>yifan.pub
 </code></pre></div>
 <p>It authorizes the certificate owner to login to any server as <code>yifan</code>, <code>root</code> or <code>liims</code> user.</p>
 <div class="admonition note">

@@ -3330,10 +3330,10 @@
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>Fatal error: Uncaught ArgumentCountError: Too few arguments to function userManagement::filterLockLabel(), 0 passed in /usr/share/gosa/include/class_listing.inc on line 856 and exactly 1 expected in /usr/share/gosa/plugins/admin/users/class_userManagement.inc:856
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>Stack trace:
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>#0 /usr/share/gosa/include/class_listing.inc(856): userManagement::filterLockLabel()
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>#1 /usr/share/gosa/include/class_listing.inc(980): listing-&gt;processElementFilter(&#39;%{filter:lockLa...&#39;, Array, 50)
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>#2 /usr/share/gosa/include/class_listing.inc(853): listing-&gt;filterActions(&#39;cn=...,ou=...&#39;, 50, Array)
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>#3 /usr/share/gosa/include/class_listing.inc(764): listing-&gt;processElementFilter(&#39;%{filter:action...&#39;, Array, 50)
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>#4 /usr/share/gosa/include/class_listing.inc(407): listing-&gt;renderCell(&#39;%{filter:action...&#39;, Array, 50)
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>#1 /usr/share/gosa/include/class_listing.inc(980): listing-&gt;processElementFilter('%{filter:lockLa...', Array, 50)
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>#2 /usr/share/gosa/include/class_listing.inc(853): listing-&gt;filterActions('cn=...,ou=...', 50, Array)
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>#3 /usr/share/gosa/include/class_listing.inc(764): listing-&gt;processElementFilter('%{filter:action...', Array, 50)
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>#4 /usr/share/gosa/include/class_listing.inc(407): listing-&gt;renderCell('%{filter:action...', Array, 50)
 <a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>#5 /usr/share/gosa/include/class_management.inc(233): listing-&gt;render()
 <a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>#6 /usr/share/gosa/include/class_management.inc(222): management-&gt;renderList()
 <a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>#7 /usr/share/gosa/plugins/admin/users/main.inc(44): management-&gt;execute()
@@ -3461,7 +3461,7 @@
 <a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="go">SASL/EXTERNAL authentication started</span>
 <a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="go">SASL username: gidNumber=0+uidNumber=0,cn=peercred,cn=external,cn=auth</span>
 <a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="go">SASL SSF: 0</span>
-<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="go">modifying entry &quot;cn=module{0},cn=config&quot;</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="go">modifying entry "cn=module{0},cn=config"</span>
 </code></pre></div>
 </li>
 <li>
@@ -3477,12 +3477,12 @@
 <a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="go">SASL/EXTERNAL authentication started</span>
 <a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="go">SASL username: gidNumber=0+uidNumber=0,cn=peercred,cn=external,cn=auth</span>
 <a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="go">SASL SSF: 0</span>
-<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="go">adding new entry &quot;olcOverlay=lastbind,olcDatabase={1}mdb,cn=config&quot;</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="go">adding new entry "olcOverlay=lastbind,olcDatabase={1}mdb,cn=config"</span>
 </code></pre></div>
 </li>
 </ol>
 <p>可以使用 <code>ldapsearch</code> 获取用户的 <code>authTimestamp</code>。从未登录过的用户无记录：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>sudo<span class="w"> </span>ldapsearch<span class="w"> </span>-x<span class="w"> </span>-LLL<span class="w"> </span>-H<span class="w"> </span>ldapi:///<span class="w"> </span>-b<span class="w"> </span><span class="s2">&quot;dc=lug,dc=ustc,dc=edu,dc=cn&quot;</span><span class="w"> </span><span class="s2">&quot;(authTimestamp=*)&quot;</span><span class="w"> </span>dn<span class="w"> </span>authTimestamp
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>sudo<span class="w"> </span>ldapsearch<span class="w"> </span>-x<span class="w"> </span>-LLL<span class="w"> </span>-H<span class="w"> </span>ldapi:///<span class="w"> </span>-b<span class="w"> </span><span class="s2">"dc=lug,dc=ustc,dc=edu,dc=cn"</span><span class="w"> </span><span class="s2">"(authTimestamp=*)"</span><span class="w"> </span>dn<span class="w"> </span>authTimestamp
 </code></pre></div>
 
 

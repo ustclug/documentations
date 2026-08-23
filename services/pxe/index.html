@@ -3339,8 +3339,8 @@
 <p>然后在容器中执行：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>apt<span class="w"> </span>update<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>grub-common<span class="w"> </span>grub-pc<span class="w"> </span>grub-efi-amd64-signed
 <a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>grub-mknetdir
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>grub-mkimage<span class="w"> </span>-d<span class="w"> </span>/usr/lib/grub/i386-pc<span class="w"> </span>-O<span class="w"> </span>i386-pc-pxe<span class="w"> </span>-o<span class="w"> </span>/srv/tftp/boot/grub/i386-pc/core.0<span class="w"> </span>-p<span class="w"> </span><span class="s1">&#39;(http,202.38.93.94)/boot/tftp/grub/&#39;</span><span class="w"> </span>pxe<span class="w"> </span>http
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>grub-mkimage<span class="w"> </span>-d<span class="w"> </span>/usr/lib/grub/x86_64-efi<span class="w"> </span>-O<span class="w"> </span>x86_64-efi<span class="w"> </span>-o<span class="w"> </span>/srv/tftp/boot/grub/x86_64-efi/core.efi<span class="w"> </span>-p<span class="w"> </span><span class="s1">&#39;(http,202.38.93.94)/boot/tftp/grub/&#39;</span><span class="w"> </span>efinet<span class="w"> </span>http
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>grub-mkimage<span class="w"> </span>-d<span class="w"> </span>/usr/lib/grub/i386-pc<span class="w"> </span>-O<span class="w"> </span>i386-pc-pxe<span class="w"> </span>-o<span class="w"> </span>/srv/tftp/boot/grub/i386-pc/core.0<span class="w"> </span>-p<span class="w"> </span><span class="s1">'(http,202.38.93.94)/boot/tftp/grub/'</span><span class="w"> </span>pxe<span class="w"> </span>http
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>grub-mkimage<span class="w"> </span>-d<span class="w"> </span>/usr/lib/grub/x86_64-efi<span class="w"> </span>-O<span class="w"> </span>x86_64-efi<span class="w"> </span>-o<span class="w"> </span>/srv/tftp/boot/grub/x86_64-efi/core.efi<span class="w"> </span>-p<span class="w"> </span><span class="s1">'(http,202.38.93.94)/boot/tftp/grub/'</span><span class="w"> </span>efinet<span class="w"> </span>http
 </code></pre></div>
 <p>最后两个 <code>grub-mkimage</code> 是因为 <code>grub-mknetdir</code> 生成的镜像使用 tftp 协议，在调试时可能会有问题。我们希望 GRUB2 能够全程使用 HTTP 做剩下的工作。</p>
 <p>更换文件的时候<strong>别把配置覆盖了</strong>。</p>
@@ -3356,12 +3356,12 @@
 <a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>iseq ${platform} efi &amp;&amp; goto uefi || goto bios
 <a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>
 <a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a>:uefi
-<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a>echo &quot;UEFI boot detected&quot;
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a>echo "UEFI boot detected"
 <a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a>chain ${210:string}bootx64.efi
 <a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a>exit
 <a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a>
 <a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a>:bios
-<a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a>echo &quot;BIOS boot detected&quot;
+<a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a>echo "BIOS boot detected"
 <a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a>chain ${210:string}pxelinux.0
 <a id="__codelineno-4-18" name="__codelineno-4-18" href="#__codelineno-4-18"></a>exit
 </code></pre></div>
