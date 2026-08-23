@@ -149,13 +149,9 @@ Thunderbird 维护了自己的文件夹，如果需要与云端的文件夹同�
 
 ### 垃圾邮件 {#tb-junk}
 
-!!! warning "本节写的是 Office 365 用法，需要更新成 G Suite"
+G Suite 云端已经带有了垃圾邮件分类功能，不需要 Thunderbird 自己的垃圾邮件分类功能。
 
-Outlook 云端已经带有了垃圾邮件分类功能，不需要 Thunderbird 自己的垃圾邮件分类功能。
-
-在账户设置的 *Local Folders* 下的 *Junk Settings* 中，取消选中 *Enable adaptive junk mail controls for this account*。
-
-请在上面的 Subscribe（见 [文件夹](#tb-folders)）中将垃圾邮件选中以同步。此外，由于 Outlook 目前会将几乎所有邮件都扔进垃圾邮件箱（原因似乎是 M365 的机器学习模型会把所有科大的邮件扔进垃圾箱），因此设置拉取邮件时总是检查垃圾邮件箱。设置方法为在垃圾邮件目录上点击右键 → 属性，然后选择这里第二个勾：
+部分正常邮件可能会被 G Suite 误判为垃圾邮件。为避免遗漏，可将邮件客户端设置为在拉取邮件时始终检查垃圾邮件箱。设置方法为在垃圾邮件目录上点击右键 → 属性，然后选择这里第二个勾：
 
 ![Always check spam](img/thunderbird-spam-always-check.png)
 
