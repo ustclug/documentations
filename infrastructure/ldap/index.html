@@ -1053,6 +1053,17 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#sudo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sudo 相关配置
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#debian" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3503,6 +3514,17 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#sudo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sudo 相关配置
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#debian" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3684,17 +3706,32 @@
 <h3 id="access-control">Access Control<a class="headerlink" href="#access-control" title="Permanent link">&para;</a></h3>
 <p>这里可以配置 GOsa 的编辑权限，现在这里面只有一个组，是完全权限的。另外，每个项可以设置专门针对这个项的 ACL。</p>
 <h3 id="sudo-rules">Sudo rules<a class="headerlink" href="#sudo-rules" title="Permanent link">&para;</a></h3>
-<p>这里配置 sudo 权限。这里的语法和 sudoers 一样（请无视 System trust）。特别要说的一点是通过在 System 中加入主机名可以针对每个主机配置权限，这里要填的是主机名而不是域名，具体范例请看里面的 lugsu wikimanager 等项。</p>
+<p><del>这里配置 sudo 权限。这里的语法和 sudoers 一样（请无视 System trust）。特别要说的一点是通过在 System 中加入主机名可以针对每个主机配置权限，这里要填的是主机名而不是域名，具体范例请看里面的 lugsu wikimanager 等项。</del></p>
+<p>我们准备迁移到其他 LDAP 类方案，考虑到非全功能的 LDAP 服务器（例如 LLDAP/Kandim/Authentick）几乎都不支持 sudo rules，因此我们正在逐步从该方案迁移至直接修改主机的 sudoer，放行对应的 sudo 用户组。用户的组成员关系仍在 LDAP 中维护。</p>
 <p>其它我没提到的项我也没搞明白怎么用。。。</p>
 <p>gosa 的配置文件在 <code>/etc/gosa/gosa.conf</code>，它是在第一次运行 gosa 时候自动生成的，但在之后就只能通过手动编辑来修改。由于配置文件几乎没有文档，官方的 FAQ 有好多是错的，所以我基本没动 <code>:-D</code>。</p>
 <h3 id="_2">维护备注<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h3>
 <p>如果发现更新 GOsa 之后，<code>/gosa</code> 没有正常工作（比如说直接显示了 PHP 的源代码），可以尝试删除 <code>/var/spool/gosa/</code> 中的所有文件，详见 <a href="https://github.com/gosa-project/gosa-core/issues/10">Gosa broken in Debian stretch</a>。</p>
 <h2 id="ldap_1">LDAP 客户端配置<a class="headerlink" href="#ldap_1" title="Permanent link">&para;</a></h2>
+<p>关于 LDAP 有两种配置方案：</p>
+<ul>
+<li>基于 SSSD 的配置</li>
+<li>基于 NSLCD + NSCD 的配置</li>
+</ul>
+<p>早期由于 <code>sudo-ldap</code> 在未来 Debian 版本将要消失，因此考虑从 NSLCD + NSCD 迁移到 SSSD。不过由于我们目前决定完全抛弃 LDAP 一侧的 sudo rules，因此目前两个方案都是可行的。考虑到 SSSD 的应用更广泛、一致性更好，我们目前仍然倾向于使用 SSSD 方案。</p>
+<h3 id="sudo">Sudo 相关配置<a class="headerlink" href="#sudo" title="Permanent link">&para;</a></h3>
+<div class="highlight"><span class="filename">/etc/sudoers.d/ldap</span><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>%super_manager ALL=(root) NOPASSWD: ALL
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a># sudo_gitlab 替换为具体服务器对应的组
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>%sudo_gitlab ALL=(root) ALL
+</code></pre></div>
+<div class="highlight"><span class="filename">/etc/nsswitch.conf</span><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a># 上面的内容省略
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>sudoers: files
+</code></pre></div>
 <h3 id="debian">Debian 配置方法<a class="headerlink" href="#debian" title="Permanent link">&para;</a></h3>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>Debian 13 Trixie 是最后一个支持 <code>sudo-ldap</code> 的版本，Debian 14 将完全移除 <code>sudo-ldap</code>，需要尽快迁移至 <code>sssd</code>。</p>
-<p>我们大部分现有的服务器仍在使用 <code>sudo-ldap</code>，在下次大版本升级前需要逐步迁移。以下提供使用 <code>sssd</code> 的配置方法。</p>
+<p><del>我们大部分现有的服务器仍在使用 <code>sudo-ldap</code>，在下次大版本升级前需要逐步迁移</del>。以下提供使用 <code>sssd</code> 的配置方法。</p>
 <p>Ref: <a href="https://packages.debian.org/trixie/sudo-ldap">https://packages.debian.org/trixie/sudo-ldap</a></p>
 </div>
 <div class="admonition ansible">
@@ -3703,7 +3740,7 @@
 <p><strong>注意</strong>：该 playbook 不包含为 Debian bookworm 修改 AppArmor 配置的步骤。</p>
 </div>
 <h4 id="_3">软件包安装<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h4>
-<p>Debian 系统安装 <code>sssd-ldap</code>、<code>libsss-sudo</code>。这两个软件包会依赖 <code>libnss-sss</code> 和 <code>libpam-sss</code>，如果没有的话需要手动补上。</p>
+<p>Debian 系统安装 <code>sssd-ldap</code>、<del><code>libsss-sudo</code></del>。这两个软件包会依赖 <code>libnss-sss</code> 和 <code>libpam-sss</code>，如果没有的话需要手动补上。</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>更新这些软件包时，注意保留一个 root 终端，更新后可能需要重启 daemon 进程。</p>
@@ -3722,67 +3759,65 @@
 </li>
 </ul>
 <h4 id="sssd">SSSD 配置<a class="headerlink" href="#sssd" title="Permanent link">&para;</a></h4>
-<p>由于 <code>sudo-ldap</code> 未来被废弃，sudo 的配置通过 sssd 实现，参考 <a href="https://access.redhat.com/site/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Deployment_Guide/sssd-ldap-sudo.html">https://access.redhat.com/site/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Deployment_Guide/sssd-ldap-sudo.html</a>。</p>
-<p>创建 <code>/etc/sssd/sssd.conf</code> 并<strong>修改权限为 600</strong>。</p>
-<div class="highlight"><span class="filename">/etc/sssd/sssd.conf</span><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="k">[sssd]</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="na">services</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">nss, pam, sudo</span>
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="na">domains</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">LDAP</span>
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="k">[sudo]</span>
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="k">[nss]</span>
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="k">[pam]</span>
-<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>
-<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="k">[domain/LDAP]</span>
-<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="na">id_provider</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">ldap</span>
-<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="na">auth_provider</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">ldap</span>
-<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="na">ldap_schema</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">rfc2307</span>
-<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="na">ldap_uri</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">ldaps://ldap.lug.ustc.edu.cn</span>
-<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="na">ldap_search_base</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">dc=lug,dc=ustc,dc=edu,dc=cn</span>
-<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="na">ldap_tls_reqcert</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">demand</span>
-<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a><span class="na">ldap_tls_cacert</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">/etc/ldap/slapd-ca-cert.pem</span>
-<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a><span class="na">cache_credentials</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">true</span>
-<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a><span class="na">enumerate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">true</span>
+<p>由于 <code>sudo-ldap</code> 未来被废弃，<del>sudo 的配置通过 sssd 实现，参考 <a href="https://access.redhat.com/site/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Deployment_Guide/sssd-ldap-sudo.html">https://access.redhat.com/site/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Deployment_Guide/sssd-ldap-sudo.html</a>。</del></p>
+<p>创建 <code>/etc/sssd/sssd.conf</code> 并<strong>修改权限为 600</strong>。以下的配置移除了 sudo。</p>
+<div class="highlight"><span class="filename">/etc/sssd/sssd.conf</span><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="k">[sssd]</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="na">services</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">nss, pam</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="na">domains</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">LDAP</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="k">[nss]</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="k">[pam]</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="k">[domain/LDAP]</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="na">id_provider</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">ldap</span>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="na">auth_provider</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">ldap</span>
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="na">ldap_schema</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">rfc2307</span>
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="na">ldap_uri</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">ldaps://ldap.lug.ustc.edu.cn</span>
+<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="na">ldap_search_base</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">dc=lug,dc=ustc,dc=edu,dc=cn</span>
+<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a><span class="na">ldap_tls_reqcert</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">demand</span>
+<a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a><span class="na">ldap_tls_cacert</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">/etc/ldap/slapd-ca-cert.pem</span>
+<a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a><span class="na">cache_credentials</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">true</span>
+<a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a><span class="na">enumerate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">true</span>
 </code></pre></div>
 <div class="admonition danger">
 <p class="admonition-title">坑</p>
-<p>需要加上 <code>[sudo]</code>，否则 sudo 配置不会生效，这个配置问题导致了修改前在 gateway-nic 上用户无法使用 sudo。</p>
+<p><del>需要加上 <code>[sudo]</code>，否则 sudo 配置不会生效，这个配置问题导致了修改前在 gateway-nic 上用户无法使用 sudo。</del></p>
 </div>
 <div class="admonition warning">
 <p class="admonition-title">AppArmor (Debian Bookworm)</p>
 <p>Debian Bookworm 打包中的 SSSD 存在一个小 bug，会导致在有 AppArmor 的系统上 kernel log 刷满 dmesg。解决方法是在 <code>/etc/apparmor.d/usr.sbin.sssd</code> 中，<code>@{PROC} r,</code> 后面加一行：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>@<span class="o">{</span>PROC<span class="o">}</span>/<span class="o">[</span><span class="m">0</span>-9<span class="o">]</span>*/cmdline<span class="w"> </span>r,
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>@<span class="o">{</span>PROC<span class="o">}</span>/<span class="o">[</span><span class="m">0</span>-9<span class="o">]</span>*/cmdline<span class="w"> </span>r,
 </code></pre></div>
 <p>然后 <code>sudo systemctl reload apparmor</code>。</p>
 </div>
 <p>另外记得按下面的介绍检查 <code>/etc/nsswitch.conf</code>。</p>
 <h4 id="etcldapldapconf">/etc/ldap/ldap.conf<a class="headerlink" href="#etcldapldapconf" title="Permanent link">&para;</a></h4>
 <p>编辑内容如下：</p>
-<div class="highlight"><span class="filename">/etc/ldap/ldap.conf</span><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>BASE<span class="w"> </span><span class="nv">dc</span><span class="o">=</span>lug,dc<span class="o">=</span>ustc,dc<span class="o">=</span>edu,dc<span class="o">=</span>cn
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>URI<span class="w"> </span>ldaps://ldap.lug.ustc.edu.cn
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>SSL<span class="w"> </span>yes
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>TLS_CACERT<span class="w"> </span>/etc/ldap/slapd-ca-cert.pem
-<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>TLS_REQCERT<span class="w"> </span>demand
-<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>SUDOERS_BASE<span class="w"> </span><span class="nv">ou</span><span class="o">=</span>sudoers,dc<span class="o">=</span>lug,dc<span class="o">=</span>ustc,dc<span class="o">=</span>edu,dc<span class="o">=</span>cn
+<div class="highlight"><span class="filename">/etc/ldap/ldap.conf</span><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>BASE<span class="w"> </span><span class="nv">dc</span><span class="o">=</span>lug,dc<span class="o">=</span>ustc,dc<span class="o">=</span>edu,dc<span class="o">=</span>cn
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>URI<span class="w"> </span>ldaps://ldap.lug.ustc.edu.cn
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>SSL<span class="w"> </span>yes
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>TLS_CACERT<span class="w"> </span>/etc/ldap/slapd-ca-cert.pem
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>TLS_REQCERT<span class="w"> </span>demand
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>SUDOERS_BASE<span class="w"> </span><span class="nv">ou</span><span class="o">=</span>sudoers,dc<span class="o">=</span>lug,dc<span class="o">=</span>ustc,dc<span class="o">=</span>edu,dc<span class="o">=</span>cn
 </code></pre></div>
 <p>为了安全性考虑，要以 ldaps 的方式连接 ldap 服务器，同时应配置好证书 (<code>/etc/ldap/slapd-ca-cert.pem</code>, 从其它服务器复制一个)</p>
 <h4 id="etcnsswitchconf">/etc/nsswitch.conf<a class="headerlink" href="#etcnsswitchconf" title="Permanent link">&para;</a></h4>
 <p>安装软件包时，安装脚本已经处理过该文件。检查一下内容，大致为：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nt">passwd</span><span class="p">:</span><span class="w">         </span><span class="l l-Scalar l-Scalar-Plain">files sss</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="nt">group</span><span class="p">:</span><span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">files sss</span>
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="nt">shadow</span><span class="p">:</span><span class="w">         </span><span class="l l-Scalar l-Scalar-Plain">files sss</span>
-<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="l l-Scalar l-Scalar-Plain">......</span>
-<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="nt">sudoers</span><span class="p">:</span><span class="w">        </span><span class="l l-Scalar l-Scalar-Plain">files sss</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="nt">passwd</span><span class="p">:</span><span class="w">         </span><span class="l l-Scalar l-Scalar-Plain">files sss</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="nt">group</span><span class="p">:</span><span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">files sss</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="nt">shadow</span><span class="p">:</span><span class="w">         </span><span class="l l-Scalar l-Scalar-Plain">files sss</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="l l-Scalar l-Scalar-Plain">......</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="nt">sudoers</span><span class="p">:</span><span class="w">        </span><span class="l l-Scalar l-Scalar-Plain">files</span>
 </code></pre></div>
-<p>注意每一项后面的 <code>sss</code>，如果没有要手动加上。</p>
+<p>注意每一项后面的 <code>sss</code>（除了 sudoers），如果没有要手动加上。</p>
 <details class="note">
 <summary>sudoers: sssd vs sudo-ldap</summary>
-<p>对于使用 sssd 的配置，<strong>注意 <code>sudoers</code> 一行需要有 <code>sss</code></strong>，类似于下面这样：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="nt">sudoers</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">files sss</span>
+<p><del>对于使用 sssd 的配置，<strong>注意 <code>sudoers</code> 一行需要有 <code>sss</code></strong>，类似于下面这样：</del></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="nt">sudoers</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">files sss</span>
 </code></pre></div>
-<p>而如果使用传统的 <code>sudo-ldap</code>，那么 <code>sudoers</code> 一行应该类似于这样：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="nt">sudoers</span><span class="p">:</span><span class="w">        </span><span class="l l-Scalar l-Scalar-Plain">ldap [SUCCESS=return] files</span>
+<p><del>而如果使用传统的 <code>sudo-ldap</code>，那么 <code>sudoers</code> 一行应该类似于这样：</del></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="nt">sudoers</span><span class="p">:</span><span class="w">        </span><span class="l l-Scalar l-Scalar-Plain">ldap [SUCCESS=return] files</span>
 </code></pre></div>
 </details>
 <p>重启一下 <code>sssd</code> 服务，此时运行 <code>getent -s sss passwd</code>，应该可以看到 LDAP 中的用户列表，这就说明配置正确了。</p>
@@ -3793,28 +3828,28 @@
 <li>请另开一个 root 终端以防万一。</li>
 </ol>
 <p>对于 Debian 7+，只需设置一处：为了登录时自动创建家目录，运行 <code>pam-auth-update</code>，选中 <code>Create home directory on login</code>，如下所示（示例使用了 readline frontend）：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>  1. Pwquality password strength checking
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>  2. SSS required smart card authentication
-<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>  3. SSS optional smart card authentication
-<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>  4. Unix authentication
-<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>  5. SSS authentication
-<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>  6. Register user sessions in the systemd control group hierarchy
-<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>  7. Create home directory on login
-<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>  8. Inheritable Capabilities Management
-<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a>  9. none of the above
-<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a>
-<a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a><span class="hll">PAM profiles to enable: 1 4 5 6 7 8
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>  1. Pwquality password strength checking
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>  2. SSS required smart card authentication
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>  3. SSS optional smart card authentication
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>  4. Unix authentication
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>  5. SSS authentication
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>  6. Register user sessions in the systemd control group hierarchy
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a>  7. Create home directory on login
+<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a>  8. Inheritable Capabilities Management
+<a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a>  9. none of the above
+<a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a>
+<a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a><span class="hll">PAM profiles to enable: 1 4 5 6 7 8
 </span></code></pre></div>
 <p>对于一些旧机器，由于本文档曾经建议手动编辑 PAM conf，你可能会遇到以下提示：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="nt">pam-auth-update</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Local modifications to /etc/pam.d/common-*, not updating.</span>
-<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="nt">pam-auth-update</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Run pam-auth-update --force to override.</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="nt">pam-auth-update</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Local modifications to /etc/pam.d/common-*, not updating.</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="nt">pam-auth-update</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Run pam-auth-update --force to override.</span>
 </code></pre></div>
 <p>此时请按提示使用 <code>pam-auth-update --force</code>，并选中如上所述的 PAM profile 选项。</p>
 <h4 id="sssd-ldap-ssh">通过 SSSD 从 LDAP 获取 SSH 公钥<a class="headerlink" href="#sssd-ldap-ssh" title="Permanent link">&para;</a></h4>
-<div class="highlight"><span class="filename">/etc/ssh/sshd_config.d/sss.conf</span><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>AuthorizedKeysCommand<span class="w"> </span>/usr/bin/sss_ssh_authorizedkeys<span class="w"> </span>%u
-<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>AuthorizedKeysCommandUser<span class="w"> </span>nobody
+<div class="highlight"><span class="filename">/etc/ssh/sshd_config.d/sss.conf</span><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>AuthorizedKeysCommand<span class="w"> </span>/usr/bin/sss_ssh_authorizedkeys<span class="w"> </span>%u
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>AuthorizedKeysCommandUser<span class="w"> </span>nobody
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>systemctl<span class="w"> </span>reload<span class="w"> </span>ssh.service
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>systemctl<span class="w"> </span>reload<span class="w"> </span>ssh.service
 </code></pre></div>
 <h3 id="nscd">NSCD 使用说明<a class="headerlink" href="#nscd" title="Permanent link">&para;</a></h3>
 <div class="admonition warning">
@@ -3822,25 +3857,25 @@
 <p>在安装了 SSSD 的机器上不应该同时使用 NSCD，此时推荐删除 NSCD（和 NSLCD / <code>libnss-ldapd</code> / <code>libpam-ldapd</code>）以避免冲突。</p>
 </div>
 <p>在 SSSD 未安装的情况下，NSCD 会提供 LDAP 缓存服务。如果在使用 NSCD 的机器上需要清空 LDAP 缓存，执行以下命令：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>nscd<span class="w"> </span>-i<span class="w"> </span>passwd
-<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>nscd<span class="w"> </span>-i<span class="w"> </span>group
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>nscd<span class="w"> </span>-i<span class="w"> </span>passwd
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>nscd<span class="w"> </span>-i<span class="w"> </span>group
 </code></pre></div>
 <p>如果安装 SSSD，<code>systemctl status sssd</code> 会显示 SSSD 与 NSCD 同时提供了相关缓存，可能存在冲突问题：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>NSCD socket was detected and seems to be configured to cache some of the databases controlled by SSSD [passwd,group,netgroup,services].
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>NSCD socket was detected and seems to be configured to cache some of the databases controlled by SSSD [passwd,group,netgroup,services].
 </code></pre></div>
 <p>需要修改 <code>/etc/nscd.conf</code>，将提及的 <code>passwd</code>, <code>group</code>, <code>netgroup</code> 和 <code>services</code> 的 <code>enable-cache</code> 设置为 <code>no</code>。</p>
 <h2 id="ldap-cli">LDAP CLI 工具使用说明<a class="headerlink" href="#ldap-cli" title="Permanent link">&para;</a></h2>
 <p>这里以 <code>ldappasswd</code> 为例，其余 ldap 系列指令与其大致相同：</p>
 <p>LDAP 利用 dn 来定位一个用户，以下指令可以列出所有用户及其 dn：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>ldapsearch<span class="w"> </span>-x<span class="w"> </span>-LLL<span class="w"> </span><span class="nv">uid</span><span class="o">=</span>*<span class="w"> </span>uid
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>ldapsearch<span class="w"> </span>-x<span class="w"> </span>-LLL<span class="w"> </span><span class="nv">uid</span><span class="o">=</span>*<span class="w"> </span>uid
 </code></pre></div>
 <p><code>-x</code> 指定使用 Simple authentication，即使用密码认证。</p>
 <p>如果要修改一个用户的密码，使用：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>ldappasswd<span class="w"> </span>-x<span class="w"> </span>-D<span class="w"> </span><span class="s1">'&lt;executor dn&gt;'</span><span class="w"> </span>-W<span class="w"> </span>-S<span class="w"> </span><span class="s1">'&lt;target user dn&gt;'</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>ldappasswd<span class="w"> </span>-x<span class="w"> </span>-D<span class="w"> </span><span class="s1">'&lt;executor dn&gt;'</span><span class="w"> </span>-W<span class="w"> </span>-S<span class="w"> </span><span class="s1">'&lt;target user dn&gt;'</span>
 </code></pre></div>
 <p><code>-D '&lt;executor dn&gt;'</code> 指定了执行者的身份，<code>-W</code>/<code>-S</code> 指定了接下来询问执行者/目标用户的密码/旧密码。</p>
 <p>需要额外注意的是，在 CLI 中添加/删除用户或更改用户密码时需要以 LDAP admin 执行，否则会有报错：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>Insufficient access (50) additional info: no write access to parent
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>Insufficient access (50) additional info: no write access to parent
 </code></pre></div>
 <p>或是其他的权限不足的错误。</p>
 <h2 id="_4">部署情况<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
@@ -4011,7 +4046,6 @@
 <ul>
 <li>从上文的规范来讲，应该从 2000 开始编号 GID，但有些组可能创建者没注意，不过后期再改就不方便了。</li>
 <li>ssh_* 这些组，是在每个主机的 sshd_config 里只允许相应的组登陆。</li>
-<li>sudo_* 这些组，是在 LDAP sudo rules 里允许了相应的组。</li>
 </ul>
 <div class="admonition warning">
 <p class="admonition-title">注意事项</p>
