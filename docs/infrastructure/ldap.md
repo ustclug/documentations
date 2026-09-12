@@ -42,7 +42,9 @@ Groups 中以 ssh 开头的组控制对应机器的 ssh 权限，sudo 开头同�
 
 ### Sudo rules
 
-这里配置 sudo 权限。这里的语法和 sudoers 一样（请无视 System trust）。特别要说的一点是通过在 System 中加入主机名可以针对每个主机配置权限，这里要填的是主机名而不是域名，具体范例请看里面的 lugsu wikimanager 等项。
+~~这里配置 sudo 权限。这里的语法和 sudoers 一样（请无视 System trust）。特别要说的一点是通过在 System 中加入主机名可以针对每个主机配置权限，这里要填的是主机名而不是域名，具体范例请看里面的 lugsu wikimanager 等项。~~
+
+我们准备迁移到其他 LDAP 类方案，考虑到非全功能的 LDAP 服务器（例如 LLDAP/Kandim/Authentick）几乎都不支持 sudo rules，因此我们正在逐步从该方案迁移至直接修改主机的 sudoer，放行对应的 sudo 用户组。用户的组成员关系仍在 LDAP 中维护。
 
 其它我没提到的项我也没搞明白怎么用。。。
 
@@ -54,13 +56,33 @@ gosa 的配置文件在 `/etc/gosa/gosa.conf`，它是在第一次运行 gosa �
 
 ## LDAP 客户端配置
 
+关于 LDAP 有两种配置方案：
+
+- 基于 SSSD 的配置
+- 基于 NSLCD + NSCD 的配置
+
+早期由于 `sudo-ldap` 在未来 Debian 版本将要消失，因此考虑从 NSLCD + NSCD 迁移到 SSSD。不过由于我们目前决定完全抛弃 LDAP 一侧的 sudo rules，因此目前两个方案都是可行的。考虑到 SSSD 的应用更广泛、一致性更好，我们目前仍然倾向于使用 SSSD 方案。
+
+### Sudo 相关配置
+
+```conf title="/etc/sudoers.d/ldap"
+%super_manager ALL=(root) NOPASSWD: ALL
+# sudo_gitlab 替换为具体服务器对应的组
+%sudo_gitlab ALL=(root) ALL
+```
+
+```conf title="/etc/nsswitch.conf"
+# 上面的内容省略
+sudoers: files
+```
+
 ### Debian 配置方法
 
 !!! warning
 
     Debian 13 Trixie 是最后一个支持 `sudo-ldap` 的版本，Debian 14 将完全移除 `sudo-ldap`，需要尽快迁移至 `sssd`。
 
-    我们大部分现有的服务器仍在使用 `sudo-ldap`，在下次大版本升级前需要逐步迁移。以下提供使用 `sssd` 的配置方法。
+    ~~我们大部分现有的服务器仍在使用 `sudo-ldap`，在下次大版本升级前需要逐步迁移~~。以下提供使用 `sssd` 的配置方法。
 
     Ref: <https://packages.debian.org/trixie/sudo-ldap>
 
@@ -72,7 +94,7 @@ gosa 的配置文件在 `/etc/gosa/gosa.conf`，它是在第一次运行 gosa �
 
 #### 软件包安装
 
-Debian 系统安装 `sssd-ldap`、`libsss-sudo`。这两个软件包会依赖 `libnss-sss` 和 `libpam-sss`，如果没有的话需要手动补上。
+Debian 系统安装 `sssd-ldap`、~~`libsss-sudo`~~。这两个软件包会依赖 `libnss-sss` 和 `libpam-sss`，如果没有的话需要手动补上。
 
 !!! note
 
@@ -92,9 +114,9 @@ Debian 系统安装 `sssd-ldap`、`libsss-sudo`。这两个软件包会依赖 `l
 
 #### SSSD 配置
 
-由于 `sudo-ldap` 未来被废弃，sudo 的配置通过 sssd 实现，参考 <https://access.redhat.com/site/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Deployment_Guide/sssd-ldap-sudo.html>。
+由于 `sudo-ldap` 未来被废弃，~~sudo 的配置通过 sssd 实现，参考 <https://access.redhat.com/site/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Deployment_Guide/sssd-ldap-sudo.html>。~~
 
-创建 `/etc/sssd/sssd.conf` 并**修改权限为 600**。
+创建 `/etc/sssd/sssd.conf` 并**修改权限为 600**。以下的配置移除了 sudo。
 
 ```ini title="/etc/sssd/sssd.conf"
 --8<-- "sssd.conf"
@@ -102,7 +124,7 @@ Debian 系统安装 `sssd-ldap`、`libsss-sudo`。这两个软件包会依赖 `l
 
 !!! danger "坑"
 
-    需要加上 `[sudo]`，否则 sudo 配置不会生效，这个配置问题导致了修改前在 gateway-nic 上用户无法使用 sudo。
+    ~~需要加上 `[sudo]`，否则 sudo 配置不会生效，这个配置问题导致了修改前在 gateway-nic 上用户无法使用 sudo。~~
 
 !!! warning "AppArmor (Debian Bookworm)"
 
@@ -140,20 +162,20 @@ passwd:         files sss
 group:          files sss
 shadow:         files sss
 ......
-sudoers:        files sss
+sudoers:        files
 ```
 
-注意每一项后面的 `sss`，如果没有要手动加上。
+注意每一项后面的 `sss`（除了 sudoers），如果没有要手动加上。
 
 ??? note "sudoers: sssd vs sudo-ldap"
 
-    对于使用 sssd 的配置，**注意 `sudoers` 一行需要有 `sss`**，类似于下面这样：
+    ~~对于使用 sssd 的配置，**注意 `sudoers` 一行需要有 `sss`**，类似于下面这样：~~
 
     ```yaml
     sudoers: files sss
     ```
 
-    而如果使用传统的 `sudo-ldap`，那么 `sudoers` 一行应该类似于这样：
+    ~~而如果使用传统的 `sudo-ldap`，那么 `sudoers` 一行应该类似于这样：~~
 
     ```yaml
     sudoers:        ldap [SUCCESS=return] files
@@ -296,7 +318,6 @@ GID 信息已过时，以 LDAP 实际配置为准。
 
 - 从上文的规范来讲，应该从 2000 开始编号 GID，但有些组可能创建者没注意，不过后期再改就不方便了。
 - ssh\_\* 这些组，是在每个主机的 sshd_config 里只允许相应的组登陆。
-- sudo\_\* 这些组，是在 LDAP sudo rules 里允许了相应的组。
 
 !!! warning "注意事项"
 
