@@ -3647,6 +3647,23 @@
 </div>
 <h3 id="rsync-proxy">rsync-proxy<a class="headerlink" href="#rsync-proxy" title="Permanent link">&para;</a></h3>
 <p>详参 <a href="https://github.com/ustclug/rsync-proxy">https://github.com/ustclug/rsync-proxy</a>。为了让服务器能够记录 IP 与访问路径的关系，我们为 rsyncd 打开了 proxy protocol 特性。</p>
+<div class="admonition warning">
+<p class="admonition-title">Rsync 3.5 后 proxy protocol 需要设置 proxy protocol hosts</p>
+<p>Debian changelog:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>rsync (3.5.0+ds1-0+deb13u1) trixie-security; urgency=medium
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>  In order to fix 33 CVEs, I have decided to bump the package to 3.5.0 rather
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>  than backporting all patches individually. After analysing the extra changes
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>  from the bump, not included in the CVE fixes, I have concluded this approach
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>  carries the lower amount of risk compared to the alternative.
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>  rsyncd changes that can change who gets in:
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>   * "proxy protocol = true" without "proxy protocol hosts" now rejects
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a>     every connection and warns at startup, instead of trusting a
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a>     client-supplied PROXY header.
+</code></pre></div>
+<p><code>proxy protocol hosts</code> 可以设置为 <code>*</code>（不检查），或者具体的 IP 地址。</p>
+</div>
 <h2 id="_4">反向代理服务<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
 <p>未完待续。</p>
 <h2 id="git">Git 服务<a class="headerlink" href="#git" title="Permanent link">&para;</a></h2>
@@ -3654,60 +3671,60 @@
 <details class="info">
 <summary>已停止服务：Git 协议（<code>git://</code>）</summary>
 <p>Git 协议（TCP 9418 端口）由 <code>git-daemon</code> 直接提供。Git daemon 由我们自己写的一个 systemd service 运行：</p>
-<div class="highlight"><span class="filename">/etc/systemd/system/git-daemon.service</span><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="k">[Unit]</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="na">Description</span><span class="o">=</span><span class="s">Git Daemon</span>
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="na">After</span><span class="o">=</span><span class="s">network.target</span>
-<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>
-<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="k">[Service]</span>
-<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="na">Type</span><span class="o">=</span><span class="s">exec</span>
-<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="na">Nice</span><span class="o">=</span><span class="s">19</span>
-<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="na">IOSchedulingClass</span><span class="o">=</span><span class="s">best-effort</span>
-<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="na">IOSchedulingPriority</span><span class="o">=</span><span class="s">6</span>
-<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="na">ExecStart</span><span class="o">=</span><span class="s">/usr/lib/git-core/git-daemon --user=gitdaemon --reuseaddr --verbose --export-all --forbid-override=receive-pack --timeout=180 --max-connections=32 --base-path=/srv/git</span>
-<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a>
-<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="na">Slice</span><span class="o">=</span><span class="s">system-cgi.slice</span>
-<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a>
-<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a><span class="k">[Install]</span>
-<a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a><span class="na">WantedBy</span><span class="o">=</span><span class="s">multi-user.target</span>
+<div class="highlight"><span class="filename">/etc/systemd/system/git-daemon.service</span><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="k">[Unit]</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="na">Description</span><span class="o">=</span><span class="s">Git Daemon</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="na">After</span><span class="o">=</span><span class="s">network.target</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="k">[Service]</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="na">Type</span><span class="o">=</span><span class="s">exec</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="na">Nice</span><span class="o">=</span><span class="s">19</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="na">IOSchedulingClass</span><span class="o">=</span><span class="s">best-effort</span>
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="na">IOSchedulingPriority</span><span class="o">=</span><span class="s">6</span>
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="na">ExecStart</span><span class="o">=</span><span class="s">/usr/lib/git-core/git-daemon --user=gitdaemon --reuseaddr --verbose --export-all --forbid-override=receive-pack --timeout=180 --max-connections=32 --base-path=/srv/git</span>
+<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a>
+<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a><span class="na">Slice</span><span class="o">=</span><span class="s">system-cgi.slice</span>
+<a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a>
+<a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a><span class="k">[Install]</span>
+<a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a><span class="na">WantedBy</span><span class="o">=</span><span class="s">multi-user.target</span>
 </code></pre></div>
 </details>
-<div class="highlight"><span class="filename">systemctl edit fcgiwrap.service</span><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="k">[Service]</span>
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="na">Type</span><span class="o">=</span><span class="s">exec</span>
-<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="na">Nice</span><span class="o">=</span><span class="s">19</span>
-<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="na">IOSchedulingClass</span><span class="o">=</span><span class="s">best-effort</span>
-<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="na">IOSchedulingPriority</span><span class="o">=</span><span class="s">6</span>
-<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>
-<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="na">Slice</span><span class="o">=</span><span class="s">system-cgi.slice</span>
+<div class="highlight"><span class="filename">systemctl edit fcgiwrap.service</span><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="k">[Service]</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="na">Type</span><span class="o">=</span><span class="s">exec</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="na">Nice</span><span class="o">=</span><span class="s">19</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="na">IOSchedulingClass</span><span class="o">=</span><span class="s">best-effort</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="na">IOSchedulingPriority</span><span class="o">=</span><span class="s">6</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="na">Slice</span><span class="o">=</span><span class="s">system-cgi.slice</span>
 </code></pre></div>
 <p>Nginx 配置如下：</p>
-<div class="highlight"><span class="filename">snippets/git-http</span><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="k">fastcgi_read_timeout</span><span class="w"> </span><span class="mi">5m</span><span class="p">;</span>
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="k">fastcgi_pass</span><span class="w">    </span><span class="s">unix:/var/run/fcgiwrap.socket</span><span class="p">;</span>
-<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="k">fastcgi_buffering</span><span class="w"> </span><span class="no">off</span><span class="p">;</span>
-<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>
-<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="k">fastcgi_param</span><span class="w">   </span><span class="s">SCRIPT_FILENAME</span><span class="w"> </span><span class="s">/usr/local/bin/homebrew-git-http-backend</span><span class="p">;</span>
-<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="k">fastcgi_param</span><span class="w">   </span><span class="s">GIT_HTTP_EXPORT_ALL</span><span class="w"> </span><span class="s">""</span><span class="p">;</span>
-<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="k">fastcgi_param</span><span class="w">   </span><span class="s">GIT_PROJECT_ROOT</span><span class="w">    </span><span class="s">/srv/git</span><span class="p">;</span>
-<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="k">fastcgi_param</span><span class="w">   </span><span class="s">PATH_INFO</span><span class="w">           </span><span class="nv">$uri</span><span class="p">;</span>
-<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="k">fastcgi_param</span><span class="w">   </span><span class="s">NO_BUFFERING</span><span class="w"> </span><span class="s">""</span><span class="p">;</span>
-<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="k">fastcgi_param</span><span class="w">   </span><span class="s">GIT_PROTOCOL</span><span class="w"> </span><span class="nv">$http_git_protocol</span><span class="p">;</span>
-<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a><span class="k">fastcgi_param</span><span class="w">   </span><span class="s">GIT_CONFIG_GLOBAL</span><span class="w"> </span><span class="s">"/dev/null"</span><span class="p">;</span>
-<a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a><span class="k">fastcgi_param</span><span class="w">   </span><span class="s">GIT_CONFIG_SYSTEM</span><span class="w"> </span><span class="s">"/etc/gitconfig.cgi"</span><span class="p">;</span>
-<a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a>
-<a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a><span class="c1"># https://github.com/ustclug/discussions/issues/432</span>
-<a id="__codelineno-6-15" name="__codelineno-6-15" href="#__codelineno-6-15"></a><span class="k">client_max_body_size</span><span class="w"> </span><span class="mi">16m</span><span class="p">;</span>
-<a id="__codelineno-6-16" name="__codelineno-6-16" href="#__codelineno-6-16"></a>
-<a id="__codelineno-6-17" name="__codelineno-6-17" href="#__codelineno-6-17"></a><span class="k">include</span><span class="w">         </span><span class="n">fastcgi_params</span>;
+<div class="highlight"><span class="filename">snippets/git-http</span><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="k">fastcgi_read_timeout</span><span class="w"> </span><span class="mi">5m</span><span class="p">;</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="k">fastcgi_pass</span><span class="w">    </span><span class="s">unix:/var/run/fcgiwrap.socket</span><span class="p">;</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="k">fastcgi_buffering</span><span class="w"> </span><span class="no">off</span><span class="p">;</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="k">fastcgi_param</span><span class="w">   </span><span class="s">SCRIPT_FILENAME</span><span class="w"> </span><span class="s">/usr/local/bin/homebrew-git-http-backend</span><span class="p">;</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="k">fastcgi_param</span><span class="w">   </span><span class="s">GIT_HTTP_EXPORT_ALL</span><span class="w"> </span><span class="s">""</span><span class="p">;</span>
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="k">fastcgi_param</span><span class="w">   </span><span class="s">GIT_PROJECT_ROOT</span><span class="w">    </span><span class="s">/srv/git</span><span class="p">;</span>
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="k">fastcgi_param</span><span class="w">   </span><span class="s">PATH_INFO</span><span class="w">           </span><span class="nv">$uri</span><span class="p">;</span>
+<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a><span class="k">fastcgi_param</span><span class="w">   </span><span class="s">NO_BUFFERING</span><span class="w"> </span><span class="s">""</span><span class="p">;</span>
+<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a><span class="k">fastcgi_param</span><span class="w">   </span><span class="s">GIT_PROTOCOL</span><span class="w"> </span><span class="nv">$http_git_protocol</span><span class="p">;</span>
+<a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a><span class="k">fastcgi_param</span><span class="w">   </span><span class="s">GIT_CONFIG_GLOBAL</span><span class="w"> </span><span class="s">"/dev/null"</span><span class="p">;</span>
+<a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a><span class="k">fastcgi_param</span><span class="w">   </span><span class="s">GIT_CONFIG_SYSTEM</span><span class="w"> </span><span class="s">"/etc/gitconfig.cgi"</span><span class="p">;</span>
+<a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a>
+<a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a><span class="c1"># https://github.com/ustclug/discussions/issues/432</span>
+<a id="__codelineno-7-15" name="__codelineno-7-15" href="#__codelineno-7-15"></a><span class="k">client_max_body_size</span><span class="w"> </span><span class="mi">16m</span><span class="p">;</span>
+<a id="__codelineno-7-16" name="__codelineno-7-16" href="#__codelineno-7-16"></a>
+<a id="__codelineno-7-17" name="__codelineno-7-17" href="#__codelineno-7-17"></a><span class="k">include</span><span class="w">         </span><span class="n">fastcgi_params</span>;
 </code></pre></div>
 <p>在 git 仓库对应的 <code>location</code> 里面 <code>include</code> 这个配置片段即可。</p>
 <p>其中 <code>system-cgi.slice</code> 是我们自己定义的一个 slice，用于限制 CGI 服务的资源使用。</p>
-<div class="highlight"><span class="filename">/etc/systemd/system/system-cgi.slice</span><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="k">[Unit]</span>
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="na">Description</span><span class="o">=</span><span class="s">Slice for CGI services (notably Git daemon)</span>
-<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>
-<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="k">[Slice]</span>
-<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="na">MemoryMax</span><span class="o">=</span><span class="s">32G</span>
-<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="na">MemoryHigh</span><span class="o">=</span><span class="s">28G</span>
-<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>
-<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="na">IOAccounting</span><span class="o">=</span><span class="s">true</span>
+<div class="highlight"><span class="filename">/etc/systemd/system/system-cgi.slice</span><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="k">[Unit]</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="na">Description</span><span class="o">=</span><span class="s">Slice for CGI services (notably Git daemon)</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="k">[Slice]</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="na">MemoryMax</span><span class="o">=</span><span class="s">32G</span>
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="na">MemoryHigh</span><span class="o">=</span><span class="s">28G</span>
+<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a>
+<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a><span class="na">IOAccounting</span><span class="o">=</span><span class="s">true</span>
 </code></pre></div>
 <h3 id="git-config">Git 服务配置<a class="headerlink" href="#git-config" title="Permanent link">&para;</a></h3>
 <p>由于 Git 服务相比于系统中日常使用的 Git 需要一些额外的配置，为了避免全局 Git 配置（<code>/etc/gitconfig</code>）对日常使用 Git 产生影响，我们将 Git 服务专用配置放在了 <code>/etc/gitconfig.cgi</code> 中。</p>
@@ -3715,32 +3732,32 @@
 <ul>
 <li>
 <p>部分克隆配置 (<a href="https://github.com/ustclug/discussions/issues/432">discussions#432</a>)：</p>
-<div class="highlight"><span class="filename">/etc/gitconfig.cgi</span><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="k">[uploadpack]</span>
-<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="w">    </span><span class="na">allowfilter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">true</span>
+<div class="highlight"><span class="filename">/etc/gitconfig.cgi</span><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="k">[uploadpack]</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="w">    </span><span class="na">allowfilter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">true</span>
 </code></pre></div>
 </li>
 <li>
 <p>由于 git daemon/fcgiwrap 的用户不是 mirror，所以需要设置绕过 Git 新的安全限制：</p>
-<div class="highlight"><span class="filename">/etc/gitconfig.cgi</span><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="k">[safe]</span>
-<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="w">    </span><span class="na">directory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">/srv/repo/*</span>
+<div class="highlight"><span class="filename">/etc/gitconfig.cgi</span><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="k">[safe]</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="w">    </span><span class="na">directory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">/srv/repo/*</span>
 </code></pre></div>
 </li>
 <li>
 <p>为了限制 pack object 的内存使用，根据 <a href="https://gitlab.com/gitlab-org/gitaly/-/blob/7b6c44c6d5df11072c7e87b8e85beb773bba8765/internal/git/gitcmd/command_description.go#L541">GitLab gitaly 的参数</a>，添加了以下配置：</p>
-<div class="highlight"><span class="filename">/etc/gitconfig.cgi</span><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="k">[pack]</span>
-<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="w">    </span><span class="na">threads</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">6</span>
-<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="w">    </span><span class="na">windowMemory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">100m</span>
-<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="w">    </span><span class="na">allowPackReuse</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">multi</span>
-<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="w">    </span><span class="na">window</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">0</span>
+<div class="highlight"><span class="filename">/etc/gitconfig.cgi</span><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="k">[pack]</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="w">    </span><span class="na">threads</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">6</span>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="w">    </span><span class="na">windowMemory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">100m</span>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="w">    </span><span class="na">allowPackReuse</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">multi</span>
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="w">    </span><span class="na">window</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">0</span>
 </code></pre></div>
 </li>
 </ul>
 <h3 id="homebrew-git">Homebrew Git<a class="headerlink" href="#homebrew-git" title="Permanent link">&para;</a></h3>
 <p>由于 Debian Trixie 提供的 Git 2.47 在处理 <code>crates.io-index</code> 仓库时会 segfault，因此我们以 mirror 用户安装了 Homebrew on Linux（a.k.a. Linuxbrew），并且通过 Homebrew 安装了最新版本的 Git。</p>
 <p>Homebrew 没有将 <code>git-http-backend</code> 软链接至固定的路径（例如 <code>/home/linuxbrew/.linuxbrew/libexec/git-core/git-http-backend</code>），而 Cellar 中的 Git 路径带有版本号，可能会因 <code>brew upgrade</code> 发生变化，因此我们编写了一个包装脚本，通过 Homebrew 的 <code>git</code> 命令来调用 <code>git-http-backend</code>：</p>
-<div class="highlight"><span class="filename">/usr/local/bin/homebrew-git-http-backend</span><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="ch">#!/bin/sh</span>
-<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>
-<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="nb">exec</span><span class="w"> </span>/home/linuxbrew/.linuxbrew/bin/git<span class="w"> </span>http-backend<span class="w"> </span><span class="s2">"</span><span class="nv">$@</span><span class="s2">"</span>
+<div class="highlight"><span class="filename">/usr/local/bin/homebrew-git-http-backend</span><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="ch">#!/bin/sh</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="nb">exec</span><span class="w"> </span>/home/linuxbrew/.linuxbrew/bin/git<span class="w"> </span>http-backend<span class="w"> </span><span class="s2">"</span><span class="nv">$@</span><span class="s2">"</span>
 </code></pre></div>
 <p>对应地，Nginx 配置中的 <code>SCRIPT_FILENAME</code> 参数也改为指向这个包装脚本（见上文）。</p>
 <h2 id="ftp">FTP 服务（已废弃）<a class="headerlink" href="#ftp" title="Permanent link">&para;</a></h2>
