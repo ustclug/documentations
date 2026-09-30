@@ -81,6 +81,26 @@ endscript
 
 详参 <https://github.com/ustclug/rsync-proxy>。为了让服务器能够记录 IP 与访问路径的关系，我们为 rsyncd 打开了 proxy protocol 特性。
 
+!!! warning "Rsync 3.5 后 proxy protocol 需要设置 proxy protocol hosts"
+
+    Debian changelog:
+
+    ```
+    rsync (3.5.0+ds1-0+deb13u1) trixie-security; urgency=medium
+
+      In order to fix 33 CVEs, I have decided to bump the package to 3.5.0 rather
+      than backporting all patches individually. After analysing the extra changes
+      from the bump, not included in the CVE fixes, I have concluded this approach
+      carries the lower amount of risk compared to the alternative.
+
+      rsyncd changes that can change who gets in:
+       * "proxy protocol = true" without "proxy protocol hosts" now rejects
+         every connection and warns at startup, instead of trusting a
+         client-supplied PROXY header.
+    ```
+
+    `proxy protocol hosts` 可以设置为 `*`（不检查），或者具体的 IP 地址。
+
 ## 反向代理服务
 
 未完待续。

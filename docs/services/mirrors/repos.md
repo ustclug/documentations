@@ -71,18 +71,11 @@ Git 后端服务分为两部分，共用 `/srv/git` 目录下的软链接：
 yukictl reload sb
 ```
 
-### 测试同步，并删除 rsync-attrs 中的旧目录
+### 测试同步
 
 ```console
 yukictl sync --debug sb
 ```
-
-确认同步无误后，检查 `/srv/rsync-attrs` 的内容，并删除旧目录 `/srv/rsync-attrs/.private`。
-
-!!! tip "/srv/rsync-attrs"
-
-    该目录的用途是为坏人修改版的 rsyncd（即 rsyncd-huai）提供快速的文件属性查询（对应使用 Reiserfs 格式化，挂载在 SSD 上）。
-    同时该目录也用于主页生成。
 
 ### 修改 nginx 配置
 
@@ -133,5 +126,3 @@ Rsyncd 不需要重载：每个有效连接会启动新进程，而新进程会�
 执行 `yukictl repo rm sb`，然后删除 Yuki 同步配置（`~mirror/repos-etc/sb.yaml`），同样也需要 git commit。
 
 之后删除存储的内容：执行 `/sbin/zfs list` 确认要下手删除的存储池，然后 `sudo zfs destroy pool0/repo/对应的名字` 删除。
-
-同样，`/srv/rsync-attrs/.private` 的内容也需要删除。
