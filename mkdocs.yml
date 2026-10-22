@@ -48,9 +48,6 @@ extra:
     - icon: octicons/mark-github-16
       link: "https://github.com/ustclug"
 
-extra_css:
-  - /css/extra.css
-
 # Extensions
 markdown_extensions:
   - admonition

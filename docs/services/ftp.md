@@ -8,24 +8,25 @@ Git repository: [ustclug/lugftp](https://github.com/ustclug/lugftp)
 
 Docker Hub: [ustclug/ftp](https://hub.docker.com/r/ustclug/ftp/)
 
-Server: ftp.s.ustclug.org (management SSH port 2222)
+Server: `ftp.s.ustclug.org` (management SSH port 2222)
 
-Theme: [h5ai](https://larsjung.de/h5ai/)
+Theme: See page footer.
 
-Deploy: [ftp.sh](https://github.com/ustclug/docker-run-script/blob/master/ftp/ftp.sh)
+Deploy: [Docker Compose](https://github.com/ustclug/docker-run-script/blob/master/ftp/docker-compose.yml)
 
-Docker network (in case of need):
-
-```shell
-docker network create \
-  -d macvlan \
-  -o parent=ustclug-master \
-  --subnet=10.254.1.0/24 \
-  ustclug
-```
+- Use `docker compose ls` to find the on-server path.
+- Docker network `ustclug` is also managed by the Docker Compose project.
 
 Note that the name `ustclug-master` is fixed by udev.
 Inspect `/etc/udev/rules.d/*.rules` for details.
+
+## Thumbnail service
+
+Source: [YaTeX](https://github.com/ustclug/yatex)
+
+Generates thumbnails for images in the form of `/path/to/image@1920x1080.jpg`, while also accepting an optional quality parameter.
+
+Refer to [`config.yml`](https://github.com/ustclug/yatex/blob/master/config.yml) for the initial format, dimension & quality whitelists.
 
 ## Notes
 

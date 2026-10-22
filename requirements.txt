@@ -1,2 +1,2 @@
-mkdocs-material>=9.7.5
+https://github.com/ustclug/mkdocs-material/releases/download/9.7.7%2Bustclug.8/mkdocs_material-9.7.7+ustclug.8-py3-none-any.whl
 jieba
