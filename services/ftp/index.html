@@ -33,7 +33,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ca2066a4.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -49,13 +49,16 @@
       
         
         
+        
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <link rel="preload" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback" as="style">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback" media="print" onload='this.media="all"'>
+        <noscript>
+          <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        </noscript>
         <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
       
     
-    
-      <link rel="stylesheet" href="/css/extra.css">
     
     <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
@@ -2668,6 +2671,17 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#thumbnail-service" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Thumbnail service
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#notes" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3214,6 +3228,17 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#thumbnail-service" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Thumbnail service
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#notes" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3251,18 +3276,19 @@
 </ul>
 <p>Git repository: <a href="https://github.com/ustclug/lugftp">ustclug/lugftp</a></p>
 <p>Docker Hub: <a href="https://hub.docker.com/r/ustclug/ftp/">ustclug/ftp</a></p>
-<p>Server: ftp.s.ustclug.org (management SSH port 2222)</p>
-<p>Theme: <a href="https://larsjung.de/h5ai/">h5ai</a></p>
-<p>Deploy: <a href="https://github.com/ustclug/docker-run-script/blob/master/ftp/ftp.sh">ftp.sh</a></p>
-<p>Docker network (in case of need):</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>docker<span class="w"> </span>network<span class="w"> </span>create<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">  </span>-d<span class="w"> </span>macvlan<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">  </span>-o<span class="w"> </span><span class="nv">parent</span><span class="o">=</span>ustclug-master<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">  </span>--subnet<span class="o">=</span><span class="m">10</span>.254.1.0/24<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">  </span>ustclug
-</code></pre></div>
+<p>Server: <code>ftp.s.ustclug.org</code> (management SSH port 2222)</p>
+<p>Theme: See page footer.</p>
+<p>Deploy: <a href="https://github.com/ustclug/docker-run-script/blob/master/ftp/docker-compose.yml">Docker Compose</a></p>
+<ul>
+<li>Use <code>docker compose ls</code> to find the on-server path.</li>
+<li>Docker network <code>ustclug</code> is also managed by the Docker Compose project.</li>
+</ul>
 <p>Note that the name <code>ustclug-master</code> is fixed by udev.
 Inspect <code>/etc/udev/rules.d/*.rules</code> for details.</p>
+<h2 id="thumbnail-service">Thumbnail service<a class="headerlink" href="#thumbnail-service" title="Permanent link">&para;</a></h2>
+<p>Source: <a href="https://github.com/ustclug/yatex">YaTeX</a></p>
+<p>Generates thumbnails for images in the form of <code>/path/to/image@1920x1080.jpg</code>, while also accepting an optional quality parameter.</p>
+<p>Refer to <a href="https://github.com/ustclug/yatex/blob/master/config.yml"><code>config.yml</code></a> for the initial format, dimension &amp; quality whitelists.</p>
 <h2 id="notes">Notes<a class="headerlink" href="#notes" title="Permanent link">&para;</a></h2>
 <ol>
 <li>SSL cert is required when running LUG FTP.</li>
@@ -3361,10 +3387,10 @@ Inspect <code>/etc/udev/rules.d/*.rules</code> for details.</p>
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["content.code.annotate", "content.code.copy", "navigation.indexes", "navigation.sections", "navigation.top"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["content.code.annotate", "content.code.copy", "navigation.indexes", "navigation.sections", "navigation.top"], "search": "../../assets/javascripts/workers/search.aaeb62fc.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      <script src="../../assets/javascripts/bundle.4081185e.min.js"></script>
       
     
   </body>

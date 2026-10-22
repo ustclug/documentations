@@ -33,7 +33,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.ca2066a4.min.css">
       
         
         <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -49,13 +49,16 @@
       
         
         
+        
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <link rel="preload" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback" as="style">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback" media="print" onload='this.media="all"'>
+        <noscript>
+          <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        </noscript>
         <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
       
     
-    
-      <link rel="stylesheet" href="/css/extra.css">
     
     <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
@@ -1078,8 +1081,30 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#esxi-5-syslog-zfs-error-cannot-open-rpool-no-such-pool" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        esxi-5 的 syslog 一直出现 zfs error: cannot open 'rpool': no such pool
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#why-proxmox" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        备注：我们为什么从 VMware vSphere 迁移到 Proxmox VE
+      
+    </span>
+  </a>
   
 </li>
       
@@ -3609,8 +3634,30 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#esxi-5-syslog-zfs-error-cannot-open-rpool-no-such-pool" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        esxi-5 的 syslog 一直出现 zfs error: cannot open 'rpool': no such pool
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#why-proxmox" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        备注：我们为什么从 VMware vSphere 迁移到 Proxmox VE
+      
+    </span>
+  </a>
   
 </li>
       
@@ -3958,9 +4005,38 @@
 </div>
 <h2 id="records">工作记录<a class="headerlink" href="#records" title="Permanent link">&para;</a></h2>
 <h3 id="migrate-docker2">2021-12-31 迁移 docker2<a class="headerlink" href="#migrate-docker2" title="Permanent link">&para;</a></h3>
-<p>docker2 原先使用 QEMU 直接运行在 mirrors2 上，下层存储为 ZFS Zvol（<code>pool0/qemu/docker2</code>），由于 ZFS 调参不当使其占用了 3 倍的硬盘空间（见[这个 Reddit 贴子][1]），加上 mirrors2 本身对外提供 Rsync 服务，硬盘负载极高，所以长期以来 docker2 的 I/O 性能<em>十分</em>低下。正好借这次全闪的新宿主机将其迁移过去。</p>
+<p>docker2 原先使用 QEMU 直接运行在 mirrors2 上，下层存储为 ZFS Zvol（<code>pool0/qemu/docker2</code>），由于 ZFS 调参不当使其占用了 3 倍的硬盘空间（见<a href="https://www.reddit.com/r/zfs/comments/i2ypyy/til_zfs_ashift12_raidz2_zvol_with_4k_blocksize/">这个 Reddit 贴子</a>），加上 mirrors2 本身对外提供 Rsync 服务，硬盘负载极高，所以长期以来 docker2 的 I/O 性能<em>十分</em>低下。正好借这次全闪的新宿主机将其迁移过去。</p>
 <p>迁移时需要保证完整性的主要内容就是虚拟机内的业务，因此需要在主机间传输的内容就是虚拟磁盘，其他配置（CPU、内存、网卡等）都可以直接在新平台上创建新虚拟机时修改。原本我们打算使用 rsync 或者 dd 的方式复制磁盘，但是考虑到两边都是 ZFS，使用 <code>zfs send</code> 是一个更好的方案。</p>
-<p>我们在 pve-5 上运行 `nc -l -p 9999 </p>
+<p>我们在 pve-5 上运行 <code>nc -l -p 9999 &lt;/dev/null | pv | zfs recv rpool/data/docker2</code>，然后在 mirrors2 上对 zvol 先打个快照，运行 <code>zfs send pool0/qemu/docker2@20211230 &gt; /dev/tcp/{pve-5}/9999</code> 将快照内容发送到 pve-5 上（300 GiB 的数据花费了 16 小时），然后再将 docker2 关机并增量传输，<code>zfs send -i @20211230 pool0/qemu/docker2 &gt; /dev/tcp/{pve-5}/9999</code>（增量传输只发送了 10 GB 数据）。同时我们在 Proxmox 的 web 界面上创建一个新虚拟机，配好 CPU 内存网卡等，分配 300 GiB 的硬盘。</p>
+<p>由于 zfs send 是原样发送的，因此接收到的 zvol 硬盘占用量仍然有 712 GB。Proxmox 新建的 zvol 参数就比较合理（<code>volblocksize=16k</code>），没有严重放大的问题，因此我们再将接收到的 zvol 给 dd 进新虚拟机的 zvol 而不是直接使用。dd 结果约 345 GiB（十分合理），开机进系统运行 fstrim 之后占用量约为 240 GiB（更加合理了）。</p>
+<p>迁移过程没有遇到任何坑，仅有的注意事项就是 zvol 调参需要重新 dd 而不能直接改，以及创建网卡的顺序（会影响虚拟机内部 eth0 和 eth1 的顺序，除非虚拟机内部使用 udev persistent net 方式根据 MAC 地址将网卡改名）。</p>
+<h3 id="esxi-5-syslog-zfs-error-cannot-open-rpool-no-such-pool">esxi-5 的 syslog 一直出现 zfs error: cannot open 'rpool': no such pool<a class="headerlink" href="#esxi-5-syslog-zfs-error-cannot-open-rpool-no-such-pool" title="Permanent link">&para;</a></h3>
+<p>这是因为 esxi-5 上面根本就没有使用 ZFS，而加入 pve-5 的集群时虚拟机的存储信息（<code>/etc/pve/storage.cfg</code>）也从 pve-5 同步过来合并了，因此 esxi-5 在根据 pve-5 的配置尝试启用 zfs 存储。</p>
+<p><strong>解决办法</strong>：由于 <code>/etc/pve</code> 下大多数内容在集群间是同步的，打开 <code>storage.cfg</code>，在 <code>zfspool: local-zfs</code> 下面加入一行，缩进一个 Tab 并加上 <code>nodes pve-5</code>，表示这个 storage 只在 pve-5 上使用。</p>
+<h2 id="why-proxmox">备注：我们为什么从 VMware vSphere 迁移到 Proxmox VE<a class="headerlink" href="#why-proxmox" title="Permanent link">&para;</a></h2>
+<p>我们原先跑着一个集群的 ESXi 6.0，并且还在 esxi-5 上运行着 vCenter 和 vSphereDataProtection，但是我们决定迁移到 Proxmox VE 上。主要原因有：</p>
+<ul>
+<li>ESXi 6.0 已 EOL，而能够原地升级的 ESXi 6.5 和 6.7 也即将（2022 年）EOL，并且 ESXi 7 无法原地升级 / 需要购买许可（ESXi 6 在一定规模以内可以免费使用）。</li>
+<li>vCenter 的界面还在用 Flash，很快我们就没法用了（现代的浏览器已经淘汰了 Flash）。</li>
+<li>为了备份业务虚拟机，我们必须装 vDP 这一大坨厚重的东西（它自己就占了 4C 8G + 将近 1 TB 的硬盘），而且 vDP 也即将与 ESXi 6.x 一同 EOL。<ul>
+<li>而且 vDP 还是很难用（</li>
+</ul>
+</li>
+<li>ESXi 是一套私有的系统，不方便使用各种成熟的工具（如 <code>smartctl</code>）和不得不用的其他工具（如戴尔阵列卡的 <code>MegaCli</code>），也难以接入我们现有的 InfluxDB + Telegraf 监控系统，甚至有些东西还需要我们自己编译（如 <code>ipmitool</code>），编译环境又很难整。</li>
+</ul>
+<p>相比之下：</p>
+<ul>
+<li>Proxmox VE 是基于 Debian 的，所有 Linux 软件和工具都可以直接使用，即使在最坏情况下我们也可以把它当作一个普通的 Debian 服务器来管理。<ul>
+<li>配置 RAID 和监控等功能更加方便，不需要单独为 ESXi 整一套方案，直接把我们已经在 Debian 上配好的方案搬过来就行。</li>
+</ul>
+</li>
+<li>利用 Linux 下成熟的 QEMU/KVM 虚拟化方案，与 Linux 虚拟机无缝集成，各种诸如 VirtIO 等技术都可以直接使用。</li>
+<li>比 ESXi 更轻量，所有功能都可以在一个主机上完成，不需要额外开个虚拟机跑厚重的 vCenter。即使有 web 界面不方便/无法完成的任务，我们也可以 SSH 处理。</li>
+<li>Host 上可以用 ZFS 等高端存储方案。</li>
+<li>结合 Proxmox Backup Server，可以实现自动备份虚拟机，而且 PBS 与 Linux 相关功能集成也更好，比如可以直接查看备份中的文件内容等。</li>
+<li>与 Debian 发行周期一致，可以像 Debian 一样长期维护和版本升级。</li>
+<li>最重要的是，它是全套开源软件（AGPLv3），必要的时候我们可以看代码自己进行需要的 patch。</li>
+</ul>
 
 
 
@@ -4047,10 +4123,10 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["content.code.annotate", "content.code.copy", "navigation.indexes", "navigation.sections", "navigation.top"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["content.code.annotate", "content.code.copy", "navigation.indexes", "navigation.sections", "navigation.top"], "search": "../../../assets/javascripts/workers/search.aaeb62fc.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.4081185e.min.js"></script>
       
     
   </body>
