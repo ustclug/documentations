@@ -3529,17 +3529,17 @@
 
 <h1 id="_1">镜像服务<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
 <h2 id="_2">首页生成<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
-<p>镜像站主页是静态的，由 <a href="https://git.lug.ustc.edu.cn/mirrors/mirrors-index">https://git.lug.ustc.edu.cn/mirrors/mirrors-index</a> 脚本生成。</p>
+<p>镜像站主页是静态的，由 <a href="https://git.ustc.edu.cn/mirrors/mirrors-index">https://git.ustc.edu.cn/mirrors/mirrors-index</a> 脚本生成。</p>
 <p>crontab 会定时运行该脚本，生成首页和 <a href="https://mirrorz.org/">mirrorz 项目</a>需要的数据。</p>
 <p>在首页展示的「获取安装镜像」、「获取开源软件」、「反向代理列表」分别由 config 内配置指定，「文件列表」内容则会从<a href="https://github.com/ustclug/yuki">同步程序 yuki</a> 的 API 中获取。</p>
 <h2 id="http">HTTP 服务<a class="headerlink" href="#http" title="Permanent link">&para;</a></h2>
 <p>Mirrors 使用 OpenResty（一个打包 Nginx 和一堆有用的 Lua 模块的软件包）提供 HTTP 服务。</p>
-<p>配置文件位于 LUG GitLab 上的 <a href="https://git.lug.ustc.edu.cn/mirrors/nginx-config"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M128 96v64h128V96c0-35.3-28.7-64-64-64s-64 28.7-64 64m-64 64V96c0-70.7 57.3-128 128-128S320 25.3 320 96v64c35.3 0 64 28.7 64 64v224c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V224c0-35.3 28.7-64 64-64"/></svg></span> nginx-config</a> 仓库中，此仓库对应 mirrors 上的 <code>/etc/nginx</code> 目录。</p>
+<p>配置文件位于 LUG GitLab 上的 <a href="https://git.ustc.edu.cn/mirrors/nginx-config"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M128 96v64h128V96c0-35.3-28.7-64-64-64s-64 28.7-64 64m-64 64V96c0-70.7 57.3-128 128-128S320 25.3 320 96v64c35.3 0 64 28.7 64 64v224c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V224c0-35.3 28.7-64 64-64"/></svg></span> nginx-config</a> 仓库中，此仓库对应 mirrors 上的 <code>/etc/nginx</code> 目录。</p>
 <h3 id="_3">请求限制策略<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h3>
 <p>见<a href="../limiter/">限制策略</a>。</p>
 <h3 id="repo-stats">每日流量统计<a class="headerlink" href="#repo-stats" title="Permanent link">&para;</a></h3>
 <p>访问路径：<a href="https://mirrors.ustc.edu.cn/status/stats.json">https://mirrors.ustc.edu.cn/status/stats.json</a></p>
-<p>脚本位于 <a href="https://git.lug.ustc.edu.cn/mirrors/sync/-/blob/scripts/repo_stats.py">https://git.lug.ustc.edu.cn/mirrors/sync/-/blob/scripts/repo_stats.py</a></p>
+<p>脚本位于 <a href="https://git.ustc.edu.cn/mirrors/sync/-/blob/scripts/repo_stats.py">https://git.ustc.edu.cn/mirrors/sync/-/blob/scripts/repo_stats.py</a></p>
 <p>每天在 logrotate 滚完 nginx 日志后，通过分析刚滚出来的日志文件，统计每个仓库的访问量与输出流量（因此仅包含 HTTP 流量统计），然后输出到 json 文件，并且额外输出一份 json 到 <code>/var/log/nginx/stats</code> 作为归档存储，方便以后分析。</p>
 <p>需要注意的是这个脚本是由 logrotate 在 nginx 的 postrotate script 里运行的，而不是由 cron 或者 systemd timer，因此调用入口在这里：</p>
 <div class="highlight"><span class="filename">/etc/logrotate.d/nginx</span><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>postrotate

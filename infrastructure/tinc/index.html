@@ -3331,10 +3331,10 @@
 <p>Tinc VPN 是 LUG 内网的主要构成软件，LDAP 需要用到它（因为 ldap 服务器是个内网服务器）</p>
 <h2 id="_1">安装<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <p>Debian 9+ 可以直接从 apt 源安装 <code>tinc</code> 包。</p>
-<p><em>不早说这玩意有个 Git 仓库？？</em><a href="https://git.lug.ustc.edu.cn/ustclug/tinc-configure">https://git.lug.ustc.edu.cn/ustclug/tinc-configure</a></p>
+<p><em>不早说这玩意有个 Git 仓库？？</em><a href="https://git.ustc.edu.cn/ustclug/tinc-configure">https://git.ustc.edu.cn/ustclug/tinc-configure</a></p>
 <p>既然有仓库所以要做的事情比较简单，进入 <code>/etc/tinc</code> 目录准备和 Git 仓库同步配置：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>git<span class="w"> </span>init
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>git<span class="w"> </span>remote<span class="w"> </span>add<span class="w"> </span>origin<span class="w"> </span>https://git.lug.ustc.edu.cn/ustclug/tinc-configure.git
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>git<span class="w"> </span>remote<span class="w"> </span>add<span class="w"> </span>origin<span class="w"> </span>https://git.ustc.edu.cn/ustclug/tinc-configure.git
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>git<span class="w"> </span>fetch<span class="w"> </span>origin<span class="w"> </span>master
 <a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>git<span class="w"> </span>reset<span class="w"> </span>--hard<span class="w"> </span>FETCH_HEAD
 </code></pre></div>
