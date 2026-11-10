@@ -45,7 +45,7 @@
 
 ### Nginx Lua 组件 {#nginx-mod-lua}
 
-代码位于 [/etc/nginx/lua/module/access_limiter.lua](https://git.lug.ustc.edu.cn/mirrors/nginx-config/blob/master/lua/module/access_limiter.lua)
+代码位于 [/etc/nginx/lua/module/access_limiter.lua](https://git.ustc.edu.cn/mirrors/nginx-config/blob/master/lua/module/access_limiter.lua)
 
 目前使用了 Nginx 的 Lua 语言扩展实现对请求的限制。主要有以下三类限制方式：
 
@@ -115,7 +115,7 @@
 
 ### 大文件下载速度限制 {#large-files}
 
-代码位于 [/etc/nginx/lua/header_filter.lua](https://git.lug.ustc.edu.cn/mirrors/nginx-config/blob/master/lua/header_filter.lua)
+代码位于 [/etc/nginx/lua/header_filter.lua](https://git.ustc.edu.cn/mirrors/nginx-config/blob/master/lua/header_filter.lua)
 
 针对大文件下载，限制每个文件的总带宽为 1 Gbps，以避免大文件流量占满总带宽。
 
@@ -131,11 +131,11 @@
 
 ### Nginx JavaScript 挑战 {#nginx-js-challenge}
 
-代码位于 [/etc/nginx/lua/access-with-challenge.lua](https://git.lug.ustc.edu.cn/mirrors/nginx-config/blob/master/lua/access-with-challenge.lua)
+代码位于 [/etc/nginx/lua/access-with-challenge.lua](https://git.ustc.edu.cn/mirrors/nginx-config/blob/master/lua/access-with-challenge.lua)
 
 为了抵抗“迅雷攻击”。对于特定类型的文件，开启了 JS 挑战。如果客户端 User-Agent 为 Mozilla（即浏览器），则发送一段包含 JS 脚本的页面，检验运行的结果。如果挑战失败，则禁止访问。
 
-被保护的文件类型参见 [/etc/nginx/conf.d/map_access.conf](https://git.lug.ustc.edu.cn/mirrors/nginx-config/blob/master/conf.d/map_access.conf)，部分内容节选如下：
+被保护的文件类型参见 [/etc/nginx/conf.d/map_access.conf](https://git.ustc.edu.cn/mirrors/nginx-config/blob/master/conf.d/map_access.conf)，部分内容节选如下：
 
 ```nginx
 map $uri $access_url_type {
@@ -148,7 +148,7 @@ map $uri $access_url_type {
 
 ### 爬虫限制 {#robots}
 
-代码位于 `map_access.conf`（见上）和 [/etc/nginx/snippets/robots](https://git.lug.ustc.edu.cn/mirrors/nginx-config/blob/master/snippets/robots)，利用 nginx 的 `map` 实现组合逻辑，进行如下限制：
+代码位于 `map_access.conf`（见上）和 [/etc/nginx/snippets/robots](https://git.ustc.edu.cn/mirrors/nginx-config/blob/master/snippets/robots)，利用 nginx 的 `map` 实现组合逻辑，进行如下限制：
 
 - 如果客户端 User-Agent 包含 Spider、Robot 等关键字，或者符合一些恶意流量的 pattern，则禁止其访问仓库内容。
 - 如果客户端 User-Agent 符合另一些 pattern，则禁止其访问大文件（定义同上）。
@@ -251,7 +251,7 @@ add ustcnet 202.38.64.0/19
 
 目前 mirrors4 将来源 IP 属于 `blacklist` 或 `blacklist6` 集合且目标端口为 80 或 443 的连接重定向至 403 端口。403 页面位于 `/var/www/html/403.html`。
 
-相关 nginx 配置位于 [/etc/nginx/sites-available/mirrors.ustc.edu.cn-403](https://git.lug.ustc.edu.cn/mirrors/nginx-config/-/blob/master/sites-available/mirrors.ustc.edu.cn-403)。
+相关 nginx 配置位于 [/etc/nginx/sites-available/mirrors.ustc.edu.cn-403](https://git.ustc.edu.cn/mirrors/nginx-config/-/blob/master/sites-available/mirrors.ustc.edu.cn-403)。
 
 我们使用 `ip{,6}tables` 将对 80 或 443 端口的访问重定向至 403 端口，在 `nat` 表的 `PREROUTING` 链添加规则：
 

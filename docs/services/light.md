@@ -7,7 +7,7 @@ Git Repository:
 * [Server Daemon](https://github.com/ustclug/light-server)
 * [Web UI](https://github.com/ustclug/lug-vpn-web/tree/light)
 * [Accelerate list](https://github.com/ustclug/light-list)
-* [Documentation](https://git.lug.ustc.edu.cn/lug-light/light-doc)
+* [Documentation](https://git.ustc.edu.cn/lug-light/light-doc)
 
 Docker Hub:
 

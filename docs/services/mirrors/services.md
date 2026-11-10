@@ -2,7 +2,7 @@
 
 ## 首页生成
 
-镜像站主页是静态的，由 <https://git.lug.ustc.edu.cn/mirrors/mirrors-index> 脚本生成。
+镜像站主页是静态的，由 <https://git.ustc.edu.cn/mirrors/mirrors-index> 脚本生成。
 
 crontab 会定时运行该脚本，生成首页和 [mirrorz 项目](https://mirrorz.org/)需要的数据。
 
@@ -12,7 +12,7 @@ crontab 会定时运行该脚本，生成首页和 [mirrorz 项目](https://mirr
 
 Mirrors 使用 OpenResty（一个打包 Nginx 和一堆有用的 Lua 模块的软件包）提供 HTTP 服务。
 
-配置文件位于 LUG GitLab 上的 [:fontawesome-solid-lock: nginx-config](https://git.lug.ustc.edu.cn/mirrors/nginx-config) 仓库中，此仓库对应 mirrors 上的 `/etc/nginx` 目录。
+配置文件位于 LUG GitLab 上的 [:fontawesome-solid-lock: nginx-config](https://git.ustc.edu.cn/mirrors/nginx-config) 仓库中，此仓库对应 mirrors 上的 `/etc/nginx` 目录。
 
 ### 请求限制策略
 
@@ -22,7 +22,7 @@ Mirrors 使用 OpenResty（一个打包 Nginx 和一堆有用的 Lua 模块的�
 
 访问路径：<https://mirrors.ustc.edu.cn/status/stats.json>
 
-脚本位于 <https://git.lug.ustc.edu.cn/mirrors/sync/-/blob/scripts/repo_stats.py>
+脚本位于 <https://git.ustc.edu.cn/mirrors/sync/-/blob/scripts/repo_stats.py>
 
 每天在 logrotate 滚完 nginx 日志后，通过分析刚滚出来的日志文件，统计每个仓库的访问量与输出流量（因此仅包含 HTTP 流量统计），然后输出到 json 文件，并且额外输出一份 json 到 `/var/log/nginx/stats` 作为归档存储，方便以后分析。
 

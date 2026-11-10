@@ -21,4 +21,4 @@ server {
 }
 ```
 
-The authoritative copy is on [LUG GitLab](https://git.lug.ustc.edu.cn/ustclug/nginx-config/blob/master/sites-available/204.ustclug.org).
+The authoritative copy is on [LUG GitLab](https://git.ustc.edu.cn/ustclug/nginx-config/blob/master/sites-available/204.ustclug.org).

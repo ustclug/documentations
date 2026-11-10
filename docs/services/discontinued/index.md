@@ -18,7 +18,7 @@ icon: material/cancel
 
 ## USTC Blog
 
-Refer to [Gitlab Wiki](https://git.lug.ustc.edu.cn/ustc-blog/ustc-blog/wikis/home).
+Refer to [Gitlab Wiki](https://git.ustc.edu.cn/ustc-blog/ustc-blog/wikis/home).
 
 ## Telegram Web
 
@@ -28,7 +28,7 @@ Repository：[github.com/ustclug/telegram-web](https://github.com/ustclug/telegr
 
 DockerHub：[ustclug/telegram-web](https://hub.docker.com/r/ustclug/telegram-web)
 
-Deployment：[telegram-web.sh](https://git.lug.ustc.edu.cn/ustclug/docker-run-script/blob/master/telegram-web/telegram-web.sh)
+Deployment：[telegram-web.sh](https://git.ustc.edu.cn/ustclug/docker-run-script/blob/master/telegram-web/telegram-web.sh)
 
 Servers：
 

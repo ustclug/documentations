@@ -6,13 +6,13 @@ Tinc VPN 是 LUG 内网的主要构成软件，LDAP 需要用到它（因为 lda
 
 Debian 9+ 可以直接从 apt 源安装 `tinc` 包。
 
-*不早说这玩意有个 Git 仓库？？*<https://git.lug.ustc.edu.cn/ustclug/tinc-configure>
+*不早说这玩意有个 Git 仓库？？*<https://git.ustc.edu.cn/ustclug/tinc-configure>
 
 既然有仓库所以要做的事情比较简单，进入 `/etc/tinc` 目录准备和 Git 仓库同步配置：
 
 ```shell
 git init
-git remote add origin https://git.lug.ustc.edu.cn/ustclug/tinc-configure.git
+git remote add origin https://git.ustc.edu.cn/ustclug/tinc-configure.git
 git fetch origin master
 git reset --hard FETCH_HEAD
 ```
